@@ -1,0 +1,15 @@
+bin
+.settings
+.project
+.classpath
+target
+*.class
+*.jar
+*.war
+*.ear
+*.pom
+*.log
+gen
+dependency-reduced-pom.xml
+.idea
+*.iml

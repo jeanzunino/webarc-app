@@ -7,6 +7,11 @@ import { FormsModule }    from '@angular/forms';
 import { HeroesComponent }      from './heroes/heroes.component';
 import { MessagesComponent } from './messages/messages.component';
 import { HeroDetailComponent } from './hero-detail/hero-detail.component';
+import { PeopleComponent } from './people/people.component';
+import { UsersComponent } from './users/users.component';
+import { PermissionsComponent } from './permissions/permissions.component';
+import { ProductsComponent } from './products/products.component';
+import { ServicesComponent } from './services/services.component';
 
 @NgModule({
   imports: [
@@ -18,7 +23,12 @@ import { HeroDetailComponent } from './hero-detail/hero-detail.component';
     AppComponent,
     HeroesComponent,
     MessagesComponent,
-    HeroDetailComponent
+    HeroDetailComponent,
+    PeopleComponent,
+    UsersComponent,
+    PermissionsComponent,
+    ProductsComponent,
+    ServicesComponent
   ],
   bootstrap: [ AppComponent ]
 })

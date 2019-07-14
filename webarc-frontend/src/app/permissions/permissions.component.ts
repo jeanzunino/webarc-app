@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { PermissionsService } from '../services/permissions.service';
-import { Person } from '../model/person';
+import { Permission } from '../model/permission';
 
 @Component({
   selector: 'app-permissions',
@@ -20,7 +20,7 @@ export class PermissionsComponent implements OnInit {
     this.getAll();
   }
 
-  onSelect(item: Person): void {
+  onSelect(item: Permission): void {
     this.selected = item;
   }
 

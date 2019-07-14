@@ -4,14 +4,19 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FormsModule }    from '@angular/forms';
-import { HeroesComponent }      from './heroes/heroes.component';
 import { MessagesComponent } from './messages/messages.component';
-import { HeroDetailComponent } from './hero-detail/hero-detail.component';
+
 import { PeopleComponent } from './people/people.component';
 import { UsersComponent } from './users/users.component';
 import { PermissionsComponent } from './permissions/permissions.component';
 import { ProductsComponent } from './products/products.component';
-import { ServicesComponent } from './services/services.component';
+import { ServiceTypesComponent } from './service-types/service-types.component';
+
+import { PersonDetailComponent } from './people/person-detail/person-detail.component';
+import { ProductDetailComponent } from './products/product-detail/product-detail.component';
+import { ServiceTypeDetailComponent } from './service-types/service-type-detail/service-type-detail.component';
+import { UserDetailComponent } from './users/user-detail/user-detail.component';
+import { PermissionDetailComponent } from './permissions/permission-detail/permission-detail.component';
 
 @NgModule({
   imports: [
@@ -21,14 +26,18 @@ import { ServicesComponent } from './services/services.component';
   ],
   declarations: [
     AppComponent,
-    HeroesComponent,
     MessagesComponent,
-    HeroDetailComponent,
+    PersonDetailComponent,
     PeopleComponent,
     UsersComponent,
     PermissionsComponent,
     ProductsComponent,
-    ServicesComponent
+    ServiceTypesComponent,
+    PersonDetailComponent,
+    ProductDetailComponent,
+    ServiceTypeDetailComponent,
+    UserDetailComponent,
+    PermissionDetailComponent
   ],
   bootstrap: [ AppComponent ]
 })

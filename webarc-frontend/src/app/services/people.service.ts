@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 
 import { Observable, of } from 'rxjs';
 
-import { Person } from './model/person';
-import { LIST } from './mocks/mock-people';
-import { MessageService } from './message.service';
+import { Person } from '../model/person';
+import { LIST } from '../mocks/mock-people';
+import { MessageService } from '../message.service';
 
 @Injectable({
   providedIn: 'root'

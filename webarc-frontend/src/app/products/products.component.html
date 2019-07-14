@@ -1,3 +1,8 @@
-<p>
-  products works!
-</p>
+<h2>Products</h2>
+<ul class="products">
+  <li *ngFor="let item of list">
+    <a routerLink="/products/{{item.id}}">
+      <span class="badge">{{item.id}}</span> {{item.name}}
+    </a>
+  </li>
+</ul>

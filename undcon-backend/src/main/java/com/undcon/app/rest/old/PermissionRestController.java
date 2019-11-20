@@ -1,4 +1,4 @@
-package com.undcon.app.rest;
+package com.undcon.app.rest.old;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
@@ -13,34 +13,34 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.undcon.app.model.old.Product;
-import com.undcon.app.service.ProductService;
+import com.undcon.app.model.old.Permission;
+import com.undcon.app.old.service.PermissionService;
 
 @RestController
-@RequestMapping("/product")
-public class ProductRestController {
+@RequestMapping("/permission")
+public class PermissionRestController {
 
-	private static final Logger log = LoggerFactory.getLogger(ProductRestController.class);
+	private static final Logger log = LoggerFactory.getLogger(PermissionRestController.class);
 	private static final String DEFAULT_PAGE_NUM = "0";
 	private static final String DEFAULT_PAGE_SIZE = "100";
 
 	@Autowired
-	private ProductService service;
+	private PermissionService service;
 
 	@RequestMapping(method = GET)
-	public Page<Product>  page(
+	public Page<Permission>  page(
 			@RequestParam(value = "page", required = false, defaultValue = DEFAULT_PAGE_NUM) final Integer page,
 			@RequestParam(value = "size", required = false, defaultValue = DEFAULT_PAGE_SIZE) final Integer size) {
 		return service.getAll(page, size);
 	}
 
 	@RequestMapping(method = POST)
-	Product save(@RequestBody final Product reading) {
+	Permission save(@RequestBody final Permission reading) {
 		return service.save(reading);
 	}
 
 	@RequestMapping(method = PUT)
-	Product update(@RequestBody final Product reading) {
+	Permission update(@RequestBody final Permission reading) {
 		return service.save(reading);
 	}
 }

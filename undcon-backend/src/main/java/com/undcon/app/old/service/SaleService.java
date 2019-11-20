@@ -1,4 +1,4 @@
-package com.undcon.app.service;
+package com.undcon.app.old.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -6,7 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.undcon.app.model.old.Sale;
-import com.undcon.app.repository.VendaRepository;
+import com.undcon.app.old.repository.VendaRepository;
 
 @Service
 public class SaleService {

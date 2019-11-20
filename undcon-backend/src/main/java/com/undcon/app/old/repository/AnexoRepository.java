@@ -1,14 +1,14 @@
-package com.undcon.app.repository;
+package com.undcon.app.old.repository;
 
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
-import com.undcon.app.model.old.Permission;
+import com.undcon.app.model.old.Anexo;
 
 /**
  * DAO for {@link User}.
  */
 @Repository
-public interface ServicoRepository extends PagingAndSortingRepository<Permission, Long> {
+public interface AnexoRepository extends PagingAndSortingRepository<Anexo, Long> {
     
 }

@@ -1,4 +1,4 @@
-package com.undcon.app.rest;
+package com.undcon.app.rest.old;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.undcon.app.model.old.Sale;
-import com.undcon.app.service.SaleService;
+import com.undcon.app.old.service.SaleService;
 
 @RestController
 @RequestMapping("/sale")

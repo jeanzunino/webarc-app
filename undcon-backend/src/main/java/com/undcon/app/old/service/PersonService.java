@@ -1,29 +1,28 @@
-package com.undcon.app.service;
+package com.undcon.app.old.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import com.undcon.app.model.old.Product;
-import com.undcon.app.repository.ProdutoRepository;
+import com.undcon.app.model.old.Person;
+import com.undcon.app.old.repository.PessoaRepository;
 
 @Service
-public class ProductService {
+public class PersonService {
 
-    @Autowired
-    private ProdutoRepository repo;
+	@Autowired
+    private PessoaRepository repo;
 
-    public Product save(Product produto) {
+    public Person save(Person produto) {
         return repo.save(produto);
     }
     
-    public Product getReading(long id) {
+    public Person getReading(long id) {
         return repo.findOne(id);
     }
 
-    public Page<Product>  getAll(Integer page, Integer size) {
+    public Page<Person>  getAll(Integer page, Integer size) {
         return repo.findAll(new PageRequest(page, size));
     }
-
 }

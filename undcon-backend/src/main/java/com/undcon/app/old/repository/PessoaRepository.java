@@ -1,4 +1,4 @@
-package com.undcon.app.repository;
+package com.undcon.app.old.repository;
 
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;

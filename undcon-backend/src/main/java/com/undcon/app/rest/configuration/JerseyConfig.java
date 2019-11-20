@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import com.undcon.app.rest.apis.CustomerApi;
 import com.undcon.app.rest.apis.EmployeeApi;
+import com.undcon.app.rest.apis.ServiceApi;
 import com.undcon.app.rest.apis.TenantApi;
 import com.undcon.app.rest.apis.UserApi;
 import com.undcon.app.rest.filters.TenantNameFilter;
@@ -23,7 +24,7 @@ public class JerseyConfig extends ResourceConfig {
         register(TenantApi.class);
         register(EmployeeApi.class);
         register(UserApi.class);
-
+        register(ServiceApi.class);
         // Uncomment to disable WADL Generation:
         //property("jersey.config.server.wadl.disableWadl", true);
 

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.undcon.app.model.old.Product;
+import com.undcon.app.model.ProductEntity;
 import com.undcon.app.old.service.ProductService;
 
 @RestController
@@ -28,19 +28,19 @@ public class ProductRestController {
 	private ProductService service;
 
 	@RequestMapping(method = GET)
-	public Page<Product>  page(
+	public Page<ProductEntity>  page(
 			@RequestParam(value = "page", required = false, defaultValue = DEFAULT_PAGE_NUM) final Integer page,
 			@RequestParam(value = "size", required = false, defaultValue = DEFAULT_PAGE_SIZE) final Integer size) {
 		return service.getAll(page, size);
 	}
 
 	@RequestMapping(method = POST)
-	Product save(@RequestBody final Product reading) {
+	ProductEntity save(@RequestBody final ProductEntity reading) {
 		return service.save(reading);
 	}
 
 	@RequestMapping(method = PUT)
-	Product update(@RequestBody final Product reading) {
+	ProductEntity update(@RequestBody final ProductEntity reading) {
 		return service.save(reading);
 	}
 }

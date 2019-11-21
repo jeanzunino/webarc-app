@@ -1,37 +1,86 @@
 package com.undcon.app.rest.filters;
 
 import java.io.IOException;
+import java.text.ParseException;
 
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
+import com.nimbusds.jose.JOSEException;
+import com.nimbusds.jose.JWSObject;
+import com.nimbusds.jose.JWSVerifier;
+import com.nimbusds.jose.Payload;
+import com.nimbusds.jose.crypto.MACVerifier;
 import com.undcon.app.multitenancy.ThreadLocalStorage;
+import com.undcon.app.services.LoginService;
+
+import net.minidev.json.JSONObject;
 
 @Provider
 public class TenantNameFilter implements ContainerRequestFilter {
 
-    @Override
-    public void filter(ContainerRequestContext ctx) throws IOException {
+	@Override
+	public void filter(ContainerRequestContext ctx) throws IOException {
 
-        MultivaluedMap<String, String> headers = ctx.getHeaders();
+		MultivaluedMap<String, String> headers = ctx.getHeaders();
 
-        if(headers == null) {
-            return;
-        }
+		if (headers == null) {
+			return;
+		}
 
-        if(!headers.containsKey("X-TenantID")) {
-            return;
-        }
+		if (!headers.containsKey("Authorization")) {
+			return;
+		}
 
-        String tenantName = headers.getFirst("X-TenantID");
+		String token = headers.getFirst("Authorization");
 
-        if(tenantName == null) {
-            return;
-        }
+		if (token == null && !ctx.getUriInfo().getAbsolutePath().getPath().contains("login")) {
+			throw new WebApplicationException("Token não informado", Response.Status.UNAUTHORIZED);
+		}
+		if(ctx.getUriInfo().getAbsolutePath().getPath().contains("login")) {
+			return;
+		}
+		
+		String tenant = verifyTokenAndGetTenant(token);
+		
+		ThreadLocalStorage.setTenantName(tenant);
+	}
 
-        // Set in the Thread Context of the Request:
-        ThreadLocalStorage.setTenantName(tenantName);
-    }
+	private String verifyTokenAndGetTenant(String token) {
+		JWSObject jwsObject;
+		try {
+			jwsObject = JWSObject.parse(token);
+		} catch (ParseException e) {
+			throw new RuntimeException("Erro parsear o Token", e);
+		}
+
+		JWSVerifier verifier = null;
+		try {
+			verifier = new MACVerifier(LoginService.SHARED_KEY.getBytes());
+		} catch (JOSEException e1) {
+			throw new RuntimeException("Erro ao verificar o Token", e1);
+		}
+
+		boolean verifiedSignature = false;
+
+		try {
+			verifiedSignature = jwsObject.verify(verifier);
+		} catch (JOSEException e) {
+			throw new RuntimeException("Erro ao verificar o Token", e);
+		}
+
+		if (!verifiedSignature) {
+			System.out.println("Bad JWS signature!");
+			throw new WebApplicationException("Token inválido", Response.Status.UNAUTHORIZED);
+		}
+
+		Payload payload = jwsObject.getPayload();
+		JSONObject jsonObject = payload.toJSONObject();
+		
+		return (String) jsonObject.get("tenant");
+	}
 }

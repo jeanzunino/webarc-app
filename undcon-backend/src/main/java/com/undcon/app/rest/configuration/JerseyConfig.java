@@ -4,8 +4,10 @@ package com.undcon.app.rest.configuration;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.springframework.stereotype.Component;
 
+import com.undcon.app.rest.apis.ConfigApi;
 import com.undcon.app.rest.apis.CustomerApi;
 import com.undcon.app.rest.apis.EmployeeApi;
+import com.undcon.app.rest.apis.LoginApi;
 import com.undcon.app.rest.apis.ServiceApi;
 import com.undcon.app.rest.apis.TenantApi;
 import com.undcon.app.rest.apis.UserApi;
@@ -25,6 +27,8 @@ public class JerseyConfig extends ResourceConfig {
         register(EmployeeApi.class);
         register(UserApi.class);
         register(ServiceApi.class);
+        register(LoginApi.class);
+        register(ConfigApi.class);
         // Uncomment to disable WADL Generation:
         //property("jersey.config.server.wadl.disableWadl", true);
 

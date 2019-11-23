@@ -9,6 +9,7 @@ import java.util.stream.StreamSupport;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -29,18 +30,19 @@ public class UserApi {
 
 	@Autowired
 	private IUserRepository repository;
-	
+
 	@Autowired
 	private UserService service;
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<UserEntity> getAll() {
-		return StreamSupport.stream(repository.findAll().spliterator(), false).collect(Collectors.toList());
+		Iterable<UserEntity> findAll = repository.findAll();
+		return StreamSupport.stream(findAll.spliterator(), false).collect(Collectors.toList());
 	}
 
 	@GET
-	@Path("{id}")
+	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public UserEntity get(@PathParam("id") long id) {
 		UserEntity customer = repository.findOne(id);
@@ -58,8 +60,24 @@ public class UserApi {
 		}
 	}
 
+	@PUT
+	@Path("/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public UserEntity put(UserEntity customer) {
+		try {
+			UserEntity find = repository.findOne(customer.getId());
+			find.setLogin(customer.getLogin());
+			if (find.getPassword() == null || find.getPassword().isEmpty()) {
+				find.setPassword(customer.getPassword());
+			}
+			return service.save(find);
+		} catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
+			throw new WebApplicationException(e, Response.Status.INTERNAL_SERVER_ERROR);
+		}
+	}
+
 	@DELETE
-	@Path("{id}")
+	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public void delete(@PathParam("id") long id) {
 		repository.delete(id);

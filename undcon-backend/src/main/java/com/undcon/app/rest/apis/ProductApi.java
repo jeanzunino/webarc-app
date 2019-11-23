@@ -16,41 +16,40 @@ import javax.ws.rs.core.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.undcon.app.model.TenantEntity;
-import com.undcon.app.repositories.ITenantRepository;
+import com.undcon.app.model.ProductEntity;
+import com.undcon.app.repositories.IProductRepository;
 
 @Component
-@Path("/tenants")
-public class TenantApi {
+@Path("/products")
+public class ProductApi {
 
 	@Autowired
-	private ITenantRepository repository;
+	private IProductRepository repository;
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<TenantEntity> getAll() {
-		// Return the DTO List:
-		return StreamSupport.stream(repository.findAll().spliterator(), false)
-                .collect(Collectors.toList());
+	public List<ProductEntity> getAll() {
+		return StreamSupport.stream(repository.findAll().spliterator(), false).collect(Collectors.toList());
 	}
 
 	@GET
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public TenantEntity get(@PathParam("id") long id) {
-		return repository.findOne(id);
+	public ProductEntity get(@PathParam("id") long id) {
+		ProductEntity entity = repository.findOne(id);
+		return entity;
 	}
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	public TenantEntity post(TenantEntity tenant) {
-		return repository.save(tenant);
+	public ProductEntity post(ProductEntity entity) {
+		return repository.save(entity);
 	}
-	
+
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
-	public TenantEntity put(TenantEntity tenant) {
-		return repository.save(tenant);
+	public ProductEntity put(ProductEntity entity) {
+		return repository.save(entity);
 	}
 
 	@DELETE

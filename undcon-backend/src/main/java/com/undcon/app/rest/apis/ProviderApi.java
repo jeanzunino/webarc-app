@@ -16,41 +16,43 @@ import javax.ws.rs.core.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.undcon.app.model.TenantEntity;
-import com.undcon.app.repositories.ITenantRepository;
+import com.undcon.app.model.ProviderEntity;
+import com.undcon.app.repositories.IProviderRepository;
 
 @Component
-@Path("/tenants")
-public class TenantApi {
+@Path("/providers")
+public class ProviderApi {
 
 	@Autowired
-	private ITenantRepository repository;
+	private IProviderRepository repository;
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<TenantEntity> getAll() {
+	public List<ProviderEntity> getAll() {
 		// Return the DTO List:
-		return StreamSupport.stream(repository.findAll().spliterator(), false)
-                .collect(Collectors.toList());
+		return StreamSupport.stream(repository.findAll().spliterator(), false).collect(Collectors.toList());
 	}
 
 	@GET
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public TenantEntity get(@PathParam("id") long id) {
-		return repository.findOne(id);
+	public ProviderEntity get(@PathParam("id") long id) {
+		ProviderEntity Provider = repository.findOne(id);
+
+		return Provider;
 	}
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	public TenantEntity post(TenantEntity tenant) {
-		return repository.save(tenant);
+	public ProviderEntity post(ProviderEntity Provider) {
+		return repository.save(Provider);
 	}
 	
 	@PUT
+	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public TenantEntity put(TenantEntity tenant) {
-		return repository.save(tenant);
+	public ProviderEntity put(ProviderEntity provider) {
+		return repository.save(provider);
 	}
 
 	@DELETE

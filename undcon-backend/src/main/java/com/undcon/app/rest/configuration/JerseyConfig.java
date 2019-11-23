@@ -8,6 +8,8 @@ import com.undcon.app.rest.apis.ConfigApi;
 import com.undcon.app.rest.apis.CustomerApi;
 import com.undcon.app.rest.apis.EmployeeApi;
 import com.undcon.app.rest.apis.LoginApi;
+import com.undcon.app.rest.apis.ProductApi;
+import com.undcon.app.rest.apis.ProviderApi;
 import com.undcon.app.rest.apis.ServiceApi;
 import com.undcon.app.rest.apis.TenantApi;
 import com.undcon.app.rest.apis.UserApi;
@@ -22,13 +24,15 @@ public class JerseyConfig extends ResourceConfig {
         register(TenantNameFilter.class);
 
         // Register the Resources:
-        register(CustomerApi.class);
-        register(TenantApi.class);
-        register(EmployeeApi.class);
-        register(UserApi.class);
-        register(ServiceApi.class);
-        register(LoginApi.class);
         register(ConfigApi.class);
+        register(CustomerApi.class);
+        register(EmployeeApi.class);
+        register(LoginApi.class);
+        register(ProductApi.class);
+        register(ProviderApi.class);
+        register(ServiceApi.class);
+        register(TenantApi.class);
+        register(UserApi.class);
         // Uncomment to disable WADL Generation:
         //property("jersey.config.server.wadl.disableWadl", true);
 

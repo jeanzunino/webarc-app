@@ -39,6 +39,10 @@ public class UserEntity {
 	public String getLogin() {
 		return login;
 	}
+	
+	public void setLogin(String login) {
+		this.login = login;
+	}
 
 	public EmployeeEntity getEmployee() {
 		return employee;

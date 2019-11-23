@@ -51,7 +51,7 @@ public class ConfigApi {
 		Iterator<ConfigurationEntity> iterator = repository.findAll().iterator();
 		if (iterator.hasNext()) {
 			config = iterator.next();
-			return Response.ok(config.getLogo()).build();
+			return Response.ok(config.getLogo(), MediaType.APPLICATION_OCTET_STREAM).build();
 		} 
 		throw new WebApplicationException("Configuração não encontrada", Response.Status.NOT_FOUND);
 	}

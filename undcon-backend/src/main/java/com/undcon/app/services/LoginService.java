@@ -30,18 +30,19 @@ import net.minidev.json.JSONObject;
 public class LoginService {
 
 	public static String SHARED_KEY = "a0a2abd8-6162-41c3-83d6-1cf559b46afc";
-	
+
 	@Autowired
 	private IUserRepository userRepository;
-	
+
 	@Autowired
 	private UserService userService;
 
-	public LoginResponseDto login(LoginRequestDto dto) throws LoginException, NoSuchAlgorithmException, UnsupportedEncodingException {
+	public LoginResponseDto login(LoginRequestDto dto)
+			throws LoginException, NoSuchAlgorithmException, UnsupportedEncodingException {
 
 		String tenantByLogin = getTenantByLogin(dto.getLogin());
 		ThreadLocalStorage.setTenantName(tenantByLogin);
-		
+
 		String pass = userService.criptyPassword(dto.getPassword());
 		UserEntity user = userRepository.findAllByLoginAndPassword(dto.getLogin(), pass);
 		if (user == null) {
@@ -66,7 +67,6 @@ public class LoginService {
 		JWSObject jwsObject = new JWSObject(header, payload);
 
 		// Create HMAC signer
-		
 
 		JWSSigner signer = null;
 		try {
@@ -90,17 +90,17 @@ public class LoginService {
 
 		UserDto userDto = new UserDto(user.getLogin(), user.getEmployee().getName());
 		LoginResponseDto response = new LoginResponseDto(ThreadLocalStorage.getTenantName(), token, userDto);
-		
+
 		return response;
 	}
-	
-	private static String getTenantByLogin(String login) throws LoginException{
+
+	private static String getTenantByLogin(String login) throws LoginException {
 		String[] split = login.trim().split("@");
-		if(split.length != 2){
+		if (split.length != 2) {
 			throw new LoginException("Usuário no fomato inválido");
 		}
 		String tenant = split[1];
 		return tenant;
 	}
-	
+
 }

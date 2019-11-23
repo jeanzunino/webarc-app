@@ -28,8 +28,10 @@ public class LoginApi {
 		try {
 			return service.login(dto);
 		} catch (LoginException e) {
+			e.printStackTrace();
 			throw new WebApplicationException(e.getMessage(), Response.Status.UNAUTHORIZED);
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new WebApplicationException(e.getMessage(), Response.Status.INTERNAL_SERVER_ERROR);
 		}
 	} 

@@ -40,6 +40,9 @@ public class UserService {
 	}
 	
 	public String criptyPassword(String password) throws NoSuchAlgorithmException, UnsupportedEncodingException{
+		if(password == null){
+			return null;
+		}
 		MessageDigest algorithm = MessageDigest.getInstance("SHA-256");
         byte messageDigest[] = algorithm.digest(password.getBytes("UTF-8"));
         StringBuilder hexString = new StringBuilder();
@@ -48,4 +51,6 @@ public class UserService {
         }
         return hexString.toString(); 
 	}
+	
+	
 }

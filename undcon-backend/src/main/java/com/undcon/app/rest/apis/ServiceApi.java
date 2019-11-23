@@ -7,6 +7,7 @@ import java.util.stream.StreamSupport;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -28,17 +29,15 @@ public class ServiceApi {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<ServiceEntity> getAll() {
-		// Return the DTO List:
 		return StreamSupport.stream(repository.findAll().spliterator(), false).collect(Collectors.toList());
 	}
 
 	@GET
-	@Path("{id}")
+	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public ServiceEntity get(@PathParam("id") long id) {
-		ServiceEntity customer = repository.findOne(id);
-
-		return customer;
+		ServiceEntity entity = repository.findOne(id);
+		return entity;
 	}
 
 	@POST
@@ -46,9 +45,16 @@ public class ServiceApi {
 	public ServiceEntity post(ServiceEntity customer) {
 		return repository.save(customer);
 	}
+	
+	@PUT
+	@Path("/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ServiceEntity put(ServiceEntity customer) {
+		return repository.save(customer);
+	}
 
 	@DELETE
-	@Path("{id}")
+	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public void delete(@PathParam("id") long id) {
 		repository.delete(id);

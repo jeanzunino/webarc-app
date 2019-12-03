@@ -5,35 +5,35 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="servico")
-public class ServiceEntity {
+@Table(name = "categoria_produto")
+public class ProductCategoryEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id", nullable = false, unique = true)
 	private Long id;
-	
+
 	@Column(name = "nome")
 	private String name;
 	
-	@Column(name = "descricao")
-	private String description;
+	@ManyToOne
+	@JoinColumn(name = "categoria_pai_id", nullable = true)
+	private ProductCategoryEntity parent;
 	
-	@Column(name = "preco")
-	private double price;
-
-	protected ServiceEntity() {
+	public ProductCategoryEntity() {
+		// TODO Auto-generated constructor stub
 	}
-	
-	public ServiceEntity(Long id, String name, String description, double price) {
+
+	public ProductCategoryEntity(Long id, String name, ProductCategoryEntity parent) {
 		super();
 		this.id = id;
 		this.name = name;
-		this.description = description;
-		this.price = price;
+		this.parent = parent;
 	}
 
 	public Long getId() {
@@ -44,13 +44,10 @@ public class ServiceEntity {
 		return name;
 	}
 
-	public String getDescription() {
-		return description;
+	public ProductCategoryEntity getParent() {
+		return parent;
 	}
+	
+	
 
-	public double getPrice() {
-		return price;
-	}
-	
-	
 }

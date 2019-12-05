@@ -1,7 +1,7 @@
 // Copyright (c) Philipp Wagner. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-package com.undcon.app.multitenancy;
+package com.undcon.app.config.multitenancy;
 
 public class ThreadLocalStorage {
 

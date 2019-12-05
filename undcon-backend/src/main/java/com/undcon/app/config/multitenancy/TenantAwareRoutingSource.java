@@ -1,4 +1,4 @@
-package com.undcon.app.multitenancy;
+package com.undcon.app.config.multitenancy;
 
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 

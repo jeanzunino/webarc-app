@@ -15,7 +15,7 @@ import com.nimbusds.jose.JWSObject;
 import com.nimbusds.jose.JWSVerifier;
 import com.nimbusds.jose.Payload;
 import com.nimbusds.jose.crypto.MACVerifier;
-import com.undcon.app.multitenancy.ThreadLocalStorage;
+import com.undcon.app.config.multitenancy.ThreadLocalStorage;
 import com.undcon.app.services.LoginService;
 
 import net.minidev.json.JSONObject;

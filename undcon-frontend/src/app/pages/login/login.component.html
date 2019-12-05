@@ -1,0 +1,34 @@
+
+
+<div class="container">
+    <!--bgColor="bg-dark"-->
+    <mdb-card bgColor="bg-dark" class="text-center text-white mb-3" style="max-width: 20rem">
+        <mdb-card-header>Login</mdb-card-header>
+        <mdb-card-body>
+            <form [formGroup]="group" (ngSubmit)="signin()">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="user">
+                        <mdb-icon fas icon="user"></mdb-icon>
+                        </span>
+                    </div>
+                    <input formControlName="login" type="text" class="form-control" placeholder="Usuário" aria-label="Usuário" aria-describedby="user">
+                    
+                </div>
+                
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="password">
+                        <mdb-icon fas icon="lock"></mdb-icon>
+                        </span>
+                    </div>
+                    <input formControlName="password" type="password" class="form-control" placeholder="Senha" aria-label="Senha" aria-describedby="password">
+                </div>
+
+                <div class="flex-row">
+                    <button mdbBtn color="primary" mdbWavesEffect>Entrar</button>
+                </div>
+            </form>
+        </mdb-card-body>
+    </mdb-card>
+</div>

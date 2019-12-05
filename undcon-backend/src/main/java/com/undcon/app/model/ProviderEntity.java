@@ -3,7 +3,7 @@ package com.undcon.app.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "fornecedores")
+@Table(name = "fornecedor")
 public class ProviderEntity {
 
 	@Id

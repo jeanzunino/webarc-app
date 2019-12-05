@@ -15,6 +15,7 @@ mvn clean package
 
 ## Run
 
+- Create database with name db
 - Create schema with name cliente1
 - Execute the scripts of diretory [/script/migration/public](https://github.com/jeanzunino/webarc-app/tree/master/undcon-backend/script/migration/public)
 - Execute the scripts of diretory [/script/migration/tenants](https://github.com/jeanzunino/webarc-app/tree/master/undcon-backend/script/migration/tenants)

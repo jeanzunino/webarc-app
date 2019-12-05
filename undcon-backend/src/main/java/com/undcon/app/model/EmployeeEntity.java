@@ -3,7 +3,7 @@ package com.undcon.app.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "empregados")
+@Table(name = "empregado")
 public class EmployeeEntity {
 
 	@Id

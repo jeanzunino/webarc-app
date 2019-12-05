@@ -21,11 +21,14 @@ import com.undcon.app.services.LoginService;
 import net.minidev.json.JSONObject;
 
 @Provider
-public class TenantNameFilter implements ContainerRequestFilter {
+public class RequestFilter implements ContainerRequestFilter {
 
 	@Override
 	public void filter(ContainerRequestContext ctx) throws IOException {
 
+		if (ctx.getMethod().equals("OPTIONS")) {
+			return;
+		}
 		MultivaluedMap<String, String> headers = ctx.getHeaders();
 
 		if (headers == null) {
@@ -41,12 +44,12 @@ public class TenantNameFilter implements ContainerRequestFilter {
 		if (token == null && !ctx.getUriInfo().getAbsolutePath().getPath().contains("login")) {
 			throw new WebApplicationException("Token não informado", Response.Status.UNAUTHORIZED);
 		}
-		if(ctx.getUriInfo().getAbsolutePath().getPath().contains("login")) {
+		if (ctx.getUriInfo().getAbsolutePath().getPath().contains("login")) {
 			return;
 		}
-		
+
 		String tenant = verifyTokenAndGetTenant(token);
-		
+
 		ThreadLocalStorage.setTenantName(tenant);
 	}
 
@@ -80,7 +83,7 @@ public class TenantNameFilter implements ContainerRequestFilter {
 
 		Payload payload = jwsObject.getPayload();
 		JSONObject jsonObject = payload.toJSONObject();
-		
+
 		return (String) jsonObject.get("tenant");
 	}
 }

@@ -16,7 +16,8 @@ import com.undcon.app.rest.apis.ProviderApi;
 import com.undcon.app.rest.apis.ServiceApi;
 import com.undcon.app.rest.apis.TenantApi;
 import com.undcon.app.rest.apis.UserApi;
-import com.undcon.app.rest.filters.TenantNameFilter;
+import com.undcon.app.rest.filters.RequestFilter;
+import com.undcon.app.rest.filters.ResponseFilter;
 
 @Component
 public class JerseyConfig extends ResourceConfig {
@@ -24,7 +25,8 @@ public class JerseyConfig extends ResourceConfig {
 	public JerseyConfig() {
 
 		// Register the Filters e Login:
-		register(TenantNameFilter.class);
+		register(RequestFilter.class);
+		register(ResponseFilter.class);
 		register(LoginApi.class);
 		
 		// Register the Resources:

@@ -1,3 +1,4 @@
 .metadata/
 .recommenders/index/http___download_eclipse_org_recommenders_models_neon_/_2.frq
 .recommenders/
+undcon-frontend/node_modules/

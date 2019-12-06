@@ -4,8 +4,8 @@ REST API for UNDCON Project from [UNDCON](https://github.com/jeanzunino/webarc-a
 
 ## Pre-requisites
 
-1. JDK 8 or higher
-2. Maven 4.0.0 or newer
+1. JDK 12 or higher
+2. Eclipse 2019-09 (4.13.0) or higher.
 
 ## Build
 

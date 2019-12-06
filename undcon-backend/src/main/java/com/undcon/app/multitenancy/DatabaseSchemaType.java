@@ -1,4 +1,4 @@
-package com.undcon.app.old;
+package com.undcon.app.multitenancy;
 
 /**
  * Tipos de schema da base de dados.

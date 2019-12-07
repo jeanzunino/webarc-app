@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { UserDetail } from '@models/user/user-detail';
 
 @Injectable({
   providedIn: 'root'
@@ -8,14 +9,18 @@ export class StorageService {
   constructor() { }
 
   private keys = {
-    token: 'nin.token'
+    user: 'nin.user'
   }
 
-  public setToken(token: string) {
-    localStorage.setItem(this.keys.token, token);
+  public setUser(user: UserDetail) {
+    localStorage.setItem(this.keys.user, JSON.stringify(user));
   }
 
-  public getToken() {
-    localStorage.getItem(this.keys.token);
+  public getUser(): UserDetail {
+    return JSON.parse(localStorage.getItem(this.keys.user));
+  }
+ 
+  public clear() {
+    localStorage.clear();
   }
 }

@@ -1,34 +1,90 @@
+<section class="view login-template">
+    <div class="full-bg-img mask rgba-gradient">
+        <div class="container flex-center">
+            <div class="d-flex align-items-center content-height w-100">
 
+                <div class="row flex-center pt-5 mt-3 w-100">
+                    <div class="col-md-6 col-xl-5 offset-xl-1">
+                        <h2 class="h1 h1-reponsive white-text font-up font-bold mb-3 wow fadeInDown flex-center"
+                            data-wow-delay="0.3s"><strong>Undcon</strong></h2>
+                        <mdb-card class="wow fadeInRight" data-wow-delay="0.3s">
+
+                            <mdb-card-body>
+                                <form [formGroup]="loginGroup" (ngSubmit)="signin()">
+                                    <div class="text-center">
+                                        <h3 class="white-text">
+                                            Login</h3>
+                                        <hr class="hr-light">
+                                    </div>
+                                    <div class="md-form">
+                                        <mdb-icon fas icon="user" class="text-white active"></mdb-icon>
+                                        <input type="email" id="user" class="text-white form-control" formControlName="login" mdbInput mdbValidate>
+                                        <label for="user" class="text-white">Usuário</label>
+                                        <mdb-error *ngIf="loginForm.invalid && (loginForm.dirty || loginForm.touched)">
+                                            Usuário inválido
+                                        </mdb-error>
+                                        <mdb-success *ngIf="loginForm.valid && (loginForm.dirty || loginForm.touched)">
+                                            Usuário válido
+                                        </mdb-success>
+                                    </div>
+                                    <div class="md-form">
+                                        <mdb-icon fas icon="lock" class="text-white active"></mdb-icon>
+                                        <input type="password" id="password" class="text-white form-control" formControlName="password" mdbInput mdbValidate>
+                                        <label for="password" class="text-white">Senha</label>
+                                        <mdb-error *ngIf="passwordForm.invalid && (passwordForm.dirty || passwordForm.touched)">
+                                            Senha inválida
+                                        </mdb-error>
+                                        <mdb-success *ngIf="passwordForm.valid && (passwordForm.dirty || passwordForm.touched)">
+                                            Senha válida
+                                        </mdb-success>
+                                    </div>
+                                    <div class="text-center mt-4">
+                                        <button mdbBtn color="indigo" mdbWavesEffect>Entrar</button>
+                                    </div>
+                                </form>
+                            </mdb-card-body>
+
+                        </mdb-card>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!--
 
 <div class="container">
-    <!--bgColor="bg-dark"-->
-    <mdb-card bgColor="bg-dark" class="text-center text-white mb-3" style="max-width: 20rem">
-        <mdb-card-header>Login</mdb-card-header>
+    <mdb-card>
+        <mdb-card-header class="text-center">Login</mdb-card-header>
         <mdb-card-body>
-            <form [formGroup]="group" (ngSubmit)="signin()">
-                <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text" id="user">
-                        <mdb-icon fas icon="user"></mdb-icon>
-                        </span>
-                    </div>
-                    <input formControlName="login" type="text" class="form-control" placeholder="Usuário" aria-label="Usuário" aria-describedby="user">
-                    
+            <form [formGroup]="loginGroup" (ngSubmit)="signin()">
+                <div class="md-form">
+                    <mdb-icon fas icon="user" class="prefix"></mdb-icon>
+                    <input mdbInput mdbValidate type="email" class="form-control"  
+                           id="login" formControlName="login"
+                           minLength="8" maxLength="25">
+                    <label for="login">Usuário</label>
+                    <mdb-error *ngIf="loginForm.invalid && (loginForm.dirty || loginForm.touched)">Usuário inválido</mdb-error>
+                    <mdb-success *ngIf="loginForm.valid && (loginForm.dirty || loginForm.touched)">Usuário válido</mdb-success>
                 </div>
                 
-                <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text" id="password">
-                        <mdb-icon fas icon="lock"></mdb-icon>
-                        </span>
-                    </div>
-                    <input formControlName="password" type="password" class="form-control" placeholder="Senha" aria-label="Senha" aria-describedby="password">
+                <div class="md-form">
+                    <mdb-icon fas icon="lock" class="prefix"></mdb-icon>
+                    <input mdbInput mdbValidate type="password" class="form-control"
+                           id="password" formControlName="password" 
+                           minLength="10" maxLength="25">
+                    <label for="password">Senha</label>
+                    <mdb-error *ngIf="passwordForm.invalid && (passwordForm.dirty || passwordForm.touched)">Senha inválida</mdb-error>
+                    <mdb-success *ngIf="passwordForm.valid && (passwordForm.dirty || passwordForm.touched)">Senha válida</mdb-success>
                 </div>
 
-                <div class="flex-row">
+                <div class="flex-row text-center">
                     <button mdbBtn color="primary" mdbWavesEffect>Entrar</button>
                 </div>
             </form>
         </mdb-card-body>
     </mdb-card>
 </div>
+
+-->

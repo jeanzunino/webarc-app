@@ -131,6 +131,12 @@
           }
         }
       }
-    }},
-  "defaultProject": "webarc-frontend"
+    }
+  },
+  "defaultProject": "webarc-frontend",
+  "schematics": {
+    "@schematics/angular:component": {
+      "styleext": "scss"
+    }
+  }
 }

@@ -1,33 +1,47 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../../services/auth/auth.service';
-import { User } from '../../models/user';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+
+import { AuthService } from '@services/auth/auth.service';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
 
   
-  group: FormGroup;
+  loginGroup: FormGroup;
 
-  constructor(private fb: FormBuilder,
-              private authService: AuthService) { }
+  constructor(private formBuilder: FormBuilder,
+              private authService: AuthService,
+              private router: Router) { }
 
   ngOnInit() {
-    this.group = this.fb.group({
-      login: ['', Validators.email],
+    if (this.authService.getAuthenticatedUser()) {
+      this.router.navigate(['/home'])
+    }
+
+    this.loginGroup = this.formBuilder.group({
+      login: ['', Validators.compose([Validators.email, Validators.required])],
       password: ['', Validators.required]
     })
   }
 
   get f() { 
-    return this.group.controls; 
+    return this.loginGroup.controls; 
+  }
+
+  get loginForm() { 
+    return this.loginGroup.get('login'); 
+  }
+
+  get passwordForm() {
+    return this.loginGroup.get('password'); 
   }
 
   signin() {
-    this.authService.signin(this.group.value)
+    this.authService.signin(this.loginGroup.value)
   }
 }

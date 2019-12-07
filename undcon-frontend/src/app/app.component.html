@@ -1,7 +1,17 @@
-<div *ngIf="mostra">
+<html lang="en" class="full-height"></html>
+
+<div *ngIf="displayMenu">
     <app-navbar></app-navbar>
 </div>
 
-<div class="container">
+<div>
     <router-outlet></router-outlet>
+</div>
+
+<div class="fixed-bottom">
+    <footer class="page-footer font-small bg-primary">
+        <div class="footer-copyright text-center py-3">© 2019 Copyright:
+            <a href="https://mdbootstrap.com/education/angular/"> Nin.com</a>
+        </div>
+    </footer>
 </div>

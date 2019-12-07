@@ -1,37 +1,41 @@
 import { Injectable } from '@angular/core';
-import { User } from '../../models/user';
+import { User } from '@models/user/user';
 import { EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
-import { UrlService } from '../url/url.service';
+import { UrlService } from '@services/url/url.service';
+import { StorageService } from '@services/storage/storage.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  private authenticatedUser: boolean = false;
-
   displayMenuEmitter = new EventEmitter<boolean>();
 
   constructor(
     private router: Router,
-    private urlService: UrlService
+    private urlService: UrlService,
+    private storageService: StorageService
   ) { }
 
   signin(user: User) {
-    var teste = this.urlService.post('login', user).subscribe(a => {
-      console.log(a);
+    this.urlService.post('login', user).subscribe(userDetail => {
+      if (userDetail.token) {
+        this.storageService.setUser(userDetail);
+        this.displayMenuEmitter.emit(true);
+        this.router.navigate(['/home'])
+      }
     });
-    if (user.login === 'a@teste' && user.password === '123') {
-      this.authenticatedUser = true;
-      this.displayMenuEmitter.emit(true);
-      this.router.navigate(['/home'])
-    } else {
-      this.displayMenuEmitter.emit(true);
-    }
   }
 
-  getAuthenticatedUser() {
-    return this.authenticatedUser;
+  signout() {
+    this.storageService.clear();
+    this.router.navigate(['/login'])
+    this.displayMenuEmitter.emit(false);
+  }
+
+  public getAuthenticatedUser() {
+    const user = this.storageService.getUser();
+    return user != null && user.token;
   }
 }

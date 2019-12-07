@@ -19,8 +19,12 @@
       "dom"
     ],
     "paths": {
-      "@app": ["app"],
-      "@environment/*": ["environments/*"]
+      "@app/*": ["src/app/*"],
+      "@pages/*": ["src/app/pages/*"],
+      "@environment/*": ["src/environments/*"],
+      "@services/*": ["src/app/services/*"],
+      "@guards/*": ["src/app/guards/*"],
+      "@models/*": ["src/app/models/*"]
     }
   },
   "angularCompilerOptions": {

@@ -3,19 +3,19 @@ import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
 import { HttpClientModule } from '@angular/common/http';
+import { FormBuilder, ReactiveFormsModule, FormsModule } from '@angular/forms';
 
-import { AppComponent } from './app.component';
-import { OutraComponent } from './pages/outra/outra.component';
-import { HomeComponent } from './pages/home/home.component';
-import { NavbarComponent } from './pages/navbar/navbar.component';
-import { AppRoutingModule } from './app-routing.module';
-import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
-import { LoginComponent } from './pages/login/login.component';
+import { AppComponent } from '@app/app.component';
+import { AppRoutingModule } from '@app/app-routing.module';
+import { HomeComponent } from '@pages/home/home.component';
+import { OutraComponent } from '@pages/outra/outra.component';
+import { NavbarComponent } from '@pages/navbar/navbar.component';
+import { PageNotFoundComponent } from '@pages/page-not-found/page-not-found.component';
+import { LoginComponent } from '@pages/login/login.component';
 
-import { StorageService } from './services/storage/storage.service';
-import { AuthService } from './services/auth/auth.service';
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { AuthGuard } from './guards/auth/auth.guard';
+import { StorageService } from '@services/storage/storage.service';
+import { AuthService } from '@services/auth/auth.service';
+import { AuthGuard } from '@guards/auth/auth.guard';
 
 @NgModule({
   declarations: [
@@ -31,8 +31,9 @@ import { AuthGuard } from './guards/auth/auth.guard';
     AppRoutingModule,
     BrowserAnimationsModule,
     MDBBootstrapModule.forRoot(),
+    HttpClientModule,
     ReactiveFormsModule,
-    HttpClientModule
+    FormsModule
   ],
   providers: [
     FormBuilder,

@@ -11,6 +11,7 @@ import com.undcon.app.rest.apis.ExpenseApi;
 import com.undcon.app.rest.apis.IncomeApi;
 import com.undcon.app.rest.apis.LoginApi;
 import com.undcon.app.rest.apis.MenuTemplateApi;
+import com.undcon.app.rest.apis.PermissionApi;
 import com.undcon.app.rest.apis.ProductApi;
 import com.undcon.app.rest.apis.ProviderApi;
 import com.undcon.app.rest.apis.ServiceApi;
@@ -32,6 +33,8 @@ public class JerseyConfig extends ResourceConfig {
 		// Register the Resources:
 		register(ConfigApi.class);
 		
+		register(IncomeApi.class);
+		
 		register(CustomerApi.class);
 		register(ProviderApi.class);
 		register(EmployeeApi.class);
@@ -43,7 +46,9 @@ public class JerseyConfig extends ResourceConfig {
 		register(ServiceApi.class);
 		register(TenantApi.class);
 		register(UserApi.class);
+
 		register(MenuTemplateApi.class);
+		register(PermissionApi.class);
 		
 		register(ExpenseApi.class);
 		register(IncomeApi.class);

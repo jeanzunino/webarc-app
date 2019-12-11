@@ -47,6 +47,7 @@ public class ProductApi {
 	}
 
 	@PUT
+	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public ProductEntity put(ProductEntity entity) {
 		return repository.save(entity);

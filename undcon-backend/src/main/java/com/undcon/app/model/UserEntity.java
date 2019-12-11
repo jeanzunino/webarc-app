@@ -27,17 +27,24 @@ public class UserEntity {
 	@OneToOne
 	@JoinColumn(name = "empregado_id", nullable = true)
 	private EmployeeEntity employee;
+	
+	@OneToOne
+	@JoinColumn(name = "permissao_id", nullable = true)
+	private PermissionEntity permission;
 
 	protected UserEntity() {
 	}
 
-	public UserEntity(Long id, String login,String password, EmployeeEntity employee) {
+
+	public UserEntity(Long id, String login, String password, EmployeeEntity employee, PermissionEntity permission) {
 		super();
 		this.id = id;
 		this.login = login;
-		this.employee = employee;
 		this.password = password;
+		this.employee = employee;
+		this.permission = permission;
 	}
+
 
 	public Long getId() {
 		return id;
@@ -61,6 +68,10 @@ public class UserEntity {
 	
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	
+	public PermissionEntity getPermission() {
+		return permission;
 	}
 	
 }

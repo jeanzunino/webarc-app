@@ -1,0 +1,1 @@
+ALTER TABLE usuario ADD	column permissao_id bigint;

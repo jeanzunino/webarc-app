@@ -12,8 +12,8 @@ import javax.persistence.Table;
 import com.undcon.app.enums.ResourseType;
 
 @Entity
-@Table(schema = "public", name = "menu_template_item")
-public class MenuTemplateItemEntity {
+@Table(name = "permissao_item")
+public class PermissionItenEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,40 +21,32 @@ public class MenuTemplateItemEntity {
 	private Long id;
 
 	@ManyToOne
-	@JoinColumn(name = "menu_template_id", nullable = false)
-	private MenuTemplateEntity menu;
-
-	@Column(name = "menu_item", nullable = false)
+	@JoinColumn(name = "permissao_id", nullable = false)
+	private PermissionEntity permission;
+	
+	@Column(name = "tipo", nullable = false)
 	private ResourseType resourceType;
-
-	@Column(name = "ordem", nullable = false)
-	private int order;
-
-	public MenuTemplateItemEntity() {
+	
+	public PermissionItenEntity() {
 	}
 
-	public MenuTemplateItemEntity(Long id, MenuTemplateEntity menu, ResourseType resourceType, int order) {
+	public PermissionItenEntity(Long id, PermissionEntity permission, ResourseType resourceType) {
 		super();
 		this.id = id;
-		this.menu = menu;
+		this.permission = permission;
 		this.resourceType = resourceType;
-		this.order = order;
 	}
 
 	public Long getId() {
 		return id;
 	}
 
-	public MenuTemplateEntity getMenu() {
-		return menu;
+	public PermissionEntity getPermission() {
+		return permission;
 	}
 
 	public ResourseType getResourceType() {
 		return resourceType;
-	}
-
-	public int getOrder() {
-		return order;
 	}
 
 }

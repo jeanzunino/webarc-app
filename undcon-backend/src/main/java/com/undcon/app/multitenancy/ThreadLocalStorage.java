@@ -1,11 +1,9 @@
-// Copyright (c) Philipp Wagner. All rights reserved.
-// Licensed under the MIT license. See LICENSE file in the project root for full license information.
-
 package com.undcon.app.multitenancy;
 
 public class ThreadLocalStorage {
 
     private static ThreadLocal<String> tenant = new ThreadLocal<>();
+    private static ThreadLocal<Long> userId = new ThreadLocal<>();
 
     public static void setTenantName(String tenantName) {
         tenant.set(tenantName);
@@ -13,6 +11,16 @@ public class ThreadLocalStorage {
 
     public static String getTenantName() {
         return tenant.get();
+    }
+    
+    
+    public static void setUserId(Long id) {
+        userId.set(id);
+    }
+    
+    
+    public static Long getUser() {
+        return userId.get();
     }
 
 }

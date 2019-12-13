@@ -3,28 +3,17 @@ package com.undcon.app.services;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-
-import javax.security.auth.login.LoginException;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.nimbusds.jose.JOSEException;
-import com.nimbusds.jose.JWSAlgorithm;
-import com.nimbusds.jose.JWSHeader;
-import com.nimbusds.jose.JWSObject;
-import com.nimbusds.jose.JWSSigner;
-import com.nimbusds.jose.KeyLengthException;
-import com.nimbusds.jose.Payload;
-import com.nimbusds.jose.crypto.MACSigner;
-import com.undcon.app.dtos.LoginRequestDto;
-import com.undcon.app.dtos.LoginResponseDto;
-import com.undcon.app.dtos.UserDto;
+import com.undcon.app.enums.ResourseType;
 import com.undcon.app.model.UserEntity;
 import com.undcon.app.multitenancy.ThreadLocalStorage;
 import com.undcon.app.repositories.IUserRepository;
-
-import net.minidev.json.JSONObject;
+import com.undcon.app.utils.LongUtils;
 
 @Component
 public class UserService {
@@ -34,10 +23,34 @@ public class UserService {
 	@Autowired
 	private IUserRepository userRepository;
 	
-	public UserEntity save(UserEntity user) throws NoSuchAlgorithmException, UnsupportedEncodingException{
-		user.setPassword(criptyPassword(user.getPassword()));
-		return userRepository.save(user);
-	}
+	@Autowired
+    private PermissionService permissionService;
+	
+	public List<UserEntity> getAll() {
+        return userRepository.findAll();
+    }
+	
+	public UserEntity findById(Long id) {
+        return userRepository.findOne(id);
+    }
+	
+	public UserEntity persist(UserEntity user) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+	    if(LongUtils.longIsPositiveValue(user.getId())) {
+	        throw new IllegalArgumentException("O novo registro a ser salvo não pode ter o id preenchido.");
+	    }
+	    user.setPassword(criptyPassword(user.getPassword()));
+        return userRepository.save(user);
+    }
+    
+    public UserEntity update(UserEntity user) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+        UserEntity find = findById(user.getId());
+        find.setLogin(user.getLogin());
+        find.setEmployee(user.getEmployee());
+        if (find.getPassword() == null || find.getPassword().isEmpty()) {
+            find.setPassword(criptyPassword(user.getPassword()));
+        }
+        return userRepository.save(find);
+    }
 	
 	public String criptyPassword(String password) throws NoSuchAlgorithmException, UnsupportedEncodingException{
 		if(password == null){
@@ -51,6 +64,20 @@ public class UserService {
         }
         return hexString.toString(); 
 	}
+
+    public void delete(long id) {
+        userRepository.delete(id);
+    }
+
+    @Transactional
+    public void resetPassword(long id) throws IllegalAccessException {
+        permissionService.checkPermission(ResourseType.CONFIGURATION);
+        UserEntity find = findById(id);
+        find.setPassword("");
+        userRepository.save(find);
+    }
+
+    
 	
 	
 }

@@ -24,5 +24,7 @@ public enum ResourseType {
 	
 	EXPENSE,
 	
-	INCOME
+	INCOME,
+	
+	Permission
 }

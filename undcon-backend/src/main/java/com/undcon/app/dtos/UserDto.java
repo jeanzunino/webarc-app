@@ -2,21 +2,27 @@ package com.undcon.app.dtos;
 
 public class UserDto {
 
-	private String login;
-	private String name;
+    private Long id;
+    private String login;
+    private EmployeeDto employee;
 
-	public UserDto(String login, String name) {
-		super();
-		this.login = login;
-		this.name = name;
-	}
+    public UserDto(Long id, String login, EmployeeDto employee) {
+        super();
+        this.id = id;
+        this.login = login;
+        this.employee = employee;
+    }
 
-	public String getLogin() {
-		return login;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getLogin() {
+        return login;
+    }
+
+    public EmployeeDto getEmployee() {
+        return employee;
+    }
 
 }

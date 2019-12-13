@@ -1,59 +1,79 @@
 package com.undcon.app.model;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "usuario")
 public class UserEntity {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
 
-	@Column(name = "login")
-	private String login;
-	
-	@Column(name = "senha")
-	private String password;
+    @Column(name = "login")
+    private String login;
 
-	@OneToOne
-	@JoinColumn(name = "empregado_id", nullable = true)
-	private EmployeeEntity employee;
+    @Column(name = "senha")
+    private String password;
 
-	protected UserEntity() {
-	}
+    @OneToOne
+    @JoinColumn(name = "empregado_id", nullable = true)
+    private EmployeeEntity employee;
 
-	public UserEntity(Long id, String login,String password, EmployeeEntity employee) {
-		super();
-		this.id = id;
-		this.login = login;
-		this.employee = employee;
-		this.password = password;
-	}
+    @OneToOne
+    @JoinColumn(name = "permissao_id", nullable = true)
+    private PermissionEntity permission;
 
-	public Long getId() {
-		return id;
-	}
+    protected UserEntity() {
+    }
 
-	public String getLogin() {
-		return login;
-	}
-	
-	public void setLogin(String login) {
-		this.login = login;
-	}
+    public UserEntity(Long id, String login, String password, EmployeeEntity employee, PermissionEntity permission) {
+        super();
+        this.id = id;
+        this.login = login;
+        this.password = password;
+        this.employee = employee;
+        this.permission = permission;
+    }
 
-	public EmployeeEntity getEmployee() {
-		return employee;
-	}
-	
-	public String getPassword() {
-		return password;
-	}
-	
-	public void setPassword(String password) {
-		this.password = password;
-	}
-	
+    public Long getId() {
+        return id;
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public EmployeeEntity getEmployee() {
+        return employee;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public PermissionEntity getPermission() {
+        return permission;
+    }
+
+    public void setEmployee(EmployeeEntity employee) {
+        this.employee = employee;
+    }
+
 }

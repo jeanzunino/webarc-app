@@ -3,8 +3,6 @@ package com.undcon.app.rest.apis;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -20,8 +18,9 @@ import javax.ws.rs.core.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.undcon.app.dtos.UserDto;
+import com.undcon.app.mappers.UserMapper;
 import com.undcon.app.model.UserEntity;
-import com.undcon.app.repositories.IUserRepository;
 import com.undcon.app.services.UserService;
 
 @Component
@@ -29,32 +28,31 @@ import com.undcon.app.services.UserService;
 public class UserApi {
 
 	@Autowired
-	private IUserRepository repository;
+    private UserMapper mapper;
 
 	@Autowired
 	private UserService service;
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<UserEntity> getAll() {
-		Iterable<UserEntity> findAll = repository.findAll();
-		return StreamSupport.stream(findAll.spliterator(), false).collect(Collectors.toList());
+	public List<UserDto> getAll() {
+		List<UserEntity> findAll = service.getAll();
+		return mapper.toDto(findAll);
 	}
 
 	@GET
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public UserEntity get(@PathParam("id") long id) {
-		UserEntity customer = repository.findOne(id);
-
-		return customer;
+	public UserDto get(@PathParam("id") long id) {
+		UserEntity customer = service.findById(id);
+		return mapper.toDto(customer);
 	}
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	public UserEntity post(UserEntity customer) {
+	public UserDto post(UserEntity user) {
 		try {
-			return service.save(customer);
+			return  mapper.toDto(service.persist(user));
 		} catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
 			throw new WebApplicationException(e, Response.Status.INTERNAL_SERVER_ERROR);
 		}
@@ -63,14 +61,9 @@ public class UserApi {
 	@PUT
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public UserEntity put(UserEntity customer) {
+	public UserDto put(UserEntity user) {
 		try {
-			UserEntity find = repository.findOne(customer.getId());
-			find.setLogin(customer.getLogin());
-			if (find.getPassword() == null || find.getPassword().isEmpty()) {
-				find.setPassword(customer.getPassword());
-			}
-			return service.save(find);
+			return mapper.toDto(service.update(user));
 		} catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
 			throw new WebApplicationException(e, Response.Status.INTERNAL_SERVER_ERROR);
 		}
@@ -80,6 +73,17 @@ public class UserApi {
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public void delete(@PathParam("id") long id) {
-		repository.delete(id);
+	    service.delete(id);
 	}
+	
+	@PUT
+    @Path("/{id}/resetPassword")
+    @Produces(MediaType.APPLICATION_JSON)
+    public void resetPassword(@PathParam("id") long id) {
+        try {
+            service.resetPassword(id);
+        } catch (IllegalAccessException e) {
+            throw new WebApplicationException(e.getMessage(), Response.Status.FORBIDDEN);
+        }
+    }
 }

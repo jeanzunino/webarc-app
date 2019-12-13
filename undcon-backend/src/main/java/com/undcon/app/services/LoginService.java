@@ -19,6 +19,7 @@ import com.nimbusds.jose.crypto.MACSigner;
 import com.undcon.app.dtos.LoginRequestDto;
 import com.undcon.app.dtos.LoginResponseDto;
 import com.undcon.app.dtos.UserDto;
+import com.undcon.app.mappers.UserMapper;
 import com.undcon.app.model.UserEntity;
 import com.undcon.app.multitenancy.ThreadLocalStorage;
 import com.undcon.app.repositories.IUserRepository;
@@ -28,78 +29,88 @@ import net.minidev.json.JSONObject;
 @Component
 public class LoginService {
 
-	public static String SHARED_KEY = "a0a2abd8-6162-41c3-83d6-1cf559b46afc";
+    public static String SHARED_KEY = "a0a2abd8-6162-41c3-83d6-1cf559b46afc";
 
-	@Autowired
-	private IUserRepository userRepository;
+    @Autowired
+    private IUserRepository userRepository;
 
-	@Autowired
-	private UserService userService;
+    @Autowired
+    private UserMapper userMapper;
 
-	public LoginResponseDto login(LoginRequestDto dto)
-			throws LoginException, NoSuchAlgorithmException, UnsupportedEncodingException {
+    @Autowired
+    private UserService userService;
 
-		String tenantByLogin = getTenantByLogin(dto.getLogin());
-		ThreadLocalStorage.setTenantName(tenantByLogin);
+    public LoginResponseDto login(LoginRequestDto dto) throws LoginException, NoSuchAlgorithmException, UnsupportedEncodingException {
 
-		String pass = userService.criptyPassword(dto.getPassword());
-		UserEntity user = userRepository.findAllByLoginAndPassword(dto.getLogin(), pass);
-		if (user == null) {
-			throw new LoginException("Usuário/Senha inválido");
-		}
+        String tenantByLogin = getTenantByLogin(dto.getLogin());
 
-		// Create payload
-		JSONObject jsonObject = new JSONObject();
-		jsonObject.put("id", user.getId());
-		jsonObject.put("login", user.getLogin());
-		jsonObject.put("tenant", getTenantByLogin(user.getLogin()));
-		Payload payload = new Payload(jsonObject);
+        ThreadLocalStorage.setTenantName(tenantByLogin);
 
-		System.out.println("JWS payload message: " + user);
+        String pass = userService.criptyPassword(dto.getPassword());
+        UserEntity user = userRepository.findAllByLoginAndPassword(dto.getLogin(), pass);
+        boolean resetPassword = false;
+        if (user == null) {
+            user = userRepository.findAllByLoginAndPassword(dto.getLogin(), "");
+            if (user == null) {
+                throw new LoginException("Usuário/Senha inválido");
+            }
+            resetPassword = true;
+        }
 
-		// Create JWS header with HS256 algorithm
-		JWSHeader header = new JWSHeader(JWSAlgorithm.HS256);
+        // Create payload
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("userId", user.getId());
+        jsonObject.put("login", user.getLogin());
+        jsonObject.put("name", user.getEmployee().getName());
+        jsonObject.put("resetPassword", resetPassword);
+        jsonObject.put("tenant", tenantByLogin);
+        Payload payload = new Payload(jsonObject);
 
-		System.out.println("JWS header: " + header.toJSONObject());
+        System.out.println("JWS payload message: " + user);
 
-		// Create JWS object
-		JWSObject jwsObject = new JWSObject(header, payload);
+        // Create JWS header with HS256 algorithm
+        JWSHeader header = new JWSHeader(JWSAlgorithm.HS256);
 
-		// Create HMAC signer
+        System.out.println("JWS header: " + header.toJSONObject());
 
-		JWSSigner signer = null;
-		try {
-			signer = new MACSigner(SHARED_KEY.getBytes());
-		} catch (KeyLengthException e1) {
-			e1.printStackTrace();
-		}
+        // Create JWS object
+        JWSObject jwsObject = new JWSObject(header, payload);
 
-		try {
-			jwsObject.sign(signer);
-		} catch (JOSEException e) {
+        // Create HMAC signer
 
-			System.err.println("Couldn't sign JWS object: " + e.getMessage());
-			throw new RuntimeException("Erro ao gerar o Token", e);
-		}
+        JWSSigner signer = null;
+        try {
+            signer = new MACSigner(SHARED_KEY.getBytes());
+        } catch (KeyLengthException e1) {
+            e1.printStackTrace();
+        }
 
-		// Serialise JWS object to compact format
-		String token = jwsObject.serialize();
+        try {
+            jwsObject.sign(signer);
+        } catch (JOSEException e) {
 
-		System.out.println("Serialised JWS object: " + token);
+            System.err.println("Couldn't sign JWS object: " + e.getMessage());
+            throw new RuntimeException("Erro ao gerar o Token", e);
+        }
 
-		UserDto userDto = new UserDto(user.getLogin(), user.getEmployee().getName());
-		LoginResponseDto response = new LoginResponseDto(ThreadLocalStorage.getTenantName(), token, userDto);
+        // Serialise JWS object to compact format
+        String token = jwsObject.serialize();
 
-		return response;
-	}
+        System.out.println("Serialised JWS object: " + token);
 
-	private static String getTenantByLogin(String login) throws LoginException {
-		String[] split = login.trim().split("@");
-		if (split.length != 2) {
-			throw new LoginException("Usuário no fomato inválido");
-		}
-		String tenant = split[1];
-		return tenant;
-	}
+        UserDto userDto = userMapper.toDto(user);
+        LoginResponseDto response = new LoginResponseDto(ThreadLocalStorage.getTenantName(), token, resetPassword, userDto);
+
+        return response;
+    }
+
+    private static String getTenantByLogin(String login) throws LoginException {
+        String[] split = login.trim().split("@");
+        if (split.length != 2) {
+            throw new LoginException("Usuário no fomato inválido");
+        }
+        String tenant = split[1];
+        return tenant;
+    }
 
 }

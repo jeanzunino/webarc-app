@@ -61,7 +61,7 @@ public class Application extends SpringBootServletInitializer {
 		targetDataSources.put("cliente1", createDataSource("cliente1"));
 		
 		dataSource.setTargetDataSources(targetDataSources);
-
+		dataSource.setDefaultTargetDataSource(createDataSource(null));
 		dataSource.afterPropertiesSet();
 
 		return dataSource;

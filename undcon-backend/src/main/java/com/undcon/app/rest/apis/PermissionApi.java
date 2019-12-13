@@ -44,7 +44,7 @@ public class PermissionApi {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<PermissionEntity> getAll() {
-		return StreamSupport.stream(repository.findAll().spliterator(), false).collect(Collectors.toList());
+		return permissionService.getAll();
 	}
 
 	@GET

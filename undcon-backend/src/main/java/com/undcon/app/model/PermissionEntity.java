@@ -1,39 +1,44 @@
 package com.undcon.app.model;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "permissao")
 public class PermissionEntity {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
 
-	@Column(name = "nome", nullable = true)
-	private String name;
-	
-	public PermissionEntity() {
-	}
+    @Column(name = "nome", nullable = true)
+    private String name;
 
-	public PermissionEntity(Long id, String name) {
-		super();
-		this.id = id;
-		this.name = name;
-	}
+    public PermissionEntity() {
+    }
 
-	public Long getId() {
-		return id;
-	}
+    public PermissionEntity(Long id, String name) {
+        super();
+        this.id = id;
+        this.name = name;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
 
 }

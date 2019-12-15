@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { User } from '@models/user/user';
+import { User } from '@app/models/user';
 import { EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { UrlService } from '@services/url/url.service';
@@ -21,6 +21,7 @@ export class AuthService {
   signin(user: User) {
     this.urlService.post('login', user).subscribe(userDetail => {
       if (userDetail.token) {
+        console.log(userDetail)
         this.storageService.setUser(userDetail);
         this.displayMenuEmitter.emit(true);
         this.router.navigate(['/home'])

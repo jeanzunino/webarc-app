@@ -1,15 +1,15 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { HomeComponent } from '@pages/home/home.component';
-import { OutraComponent } from '@pages/outra/outra.component';
-import { PageNotFoundComponent } from '@pages/page-not-found/page-not-found.component';
-import { LoginComponent } from '@pages/login/login.component';
+import { HomeComponent } from '@app/home/home.component';
+import { PageNotFoundComponent } from '@app/page-not-found/page-not-found.component';
+import { LoginComponent } from '@app/login/login.component';
 import { AuthGuard } from '@guards/auth/auth.guard';
+import { UserComponent } from '@app/user/user.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
-  { path: 'outra', component: OutraComponent, canActivate: [AuthGuard]},
+  { path: 'user', component: UserComponent, canActivate: [AuthGuard] },
   { path: '**', component: PageNotFoundComponent, canActivate: [AuthGuard]}
 ];
 

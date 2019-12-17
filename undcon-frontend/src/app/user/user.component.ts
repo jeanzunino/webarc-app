@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { UserService } from '@app/services/user/user.service';
-import { User } from '@app/models/user';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+
+import { UserService } from '@service/user/user.service';
+import { User } from '@model/user';
 
 @Component({
   selector: 'app-user',
@@ -9,12 +12,16 @@ import { User } from '@app/models/user';
 })
 export class UserComponent implements OnInit {
 
+  private ngUnsubscribe = new Subject();
+
   constructor(private userService: UserService) { }
 
   users: User[];
 
   ngOnInit() {
-    this.userService.getUsers().subscribe(users => {
+    this.userService.getUsers()
+    .pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe(users => {
       this.users = users;
     });
   }

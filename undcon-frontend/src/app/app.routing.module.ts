@@ -1,15 +1,17 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { HomeComponent } from '@app/home/home.component';
+
 import { PageNotFoundComponent } from '@app/page-not-found/page-not-found.component';
 import { LoginComponent } from '@app/login/login.component';
-import { AuthGuard } from '@guards/auth/auth.guard';
-import { UserComponent } from '@app/user/user.component';
+import { AuthGuard } from '@guard/auth/auth.guard';
+import { PageEnum } from '@enum/page-enum';
 
 const routes: Routes = [
-  { path: 'login', component: LoginComponent },
-  { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
-  { path: 'user', component: UserComponent, canActivate: [AuthGuard] },
+  { path: '', redirectTo: '/home', pathMatch: 'full', canActivate: [AuthGuard] },
+  { path: PageEnum.LOGIN, component: LoginComponent },
+  { path: PageEnum.HOME, loadChildren: '@app/home/home.module#HomeModule' },
+  { path: PageEnum.USER, loadChildren: '@app/user/user.module#UserModule'},
+  { path: PageEnum.EMPLOYEE, loadChildren: '@app/employee/employee.module#EmployeeModule'},
   { path: '**', component: PageNotFoundComponent, canActivate: [AuthGuard]}
 ];
 

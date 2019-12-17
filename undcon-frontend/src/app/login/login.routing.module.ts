@@ -1,17 +1,17 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { HomeComponent } from '@app/home/home.component';
 import { AuthGuard } from '@guard/auth/auth.guard';
+import { LoginComponent } from '@app/login/login.component';
 
-const homeRoutes: Routes = [
-    { path: '', component: HomeComponent, canActivate: [AuthGuard] }
+const loginRoutes: Routes = [
+    { path: '', component: LoginComponent, canActivate: [AuthGuard] }
     //{ path: 'naoEncontrado', component: CursoNaoEncontradoComponent },
     //{ path: ':id', component: CursoDetalheComponent }
 ];
 
 @NgModule({
-    imports: [RouterModule.forChild(homeRoutes)],
+    imports: [RouterModule.forChild(loginRoutes)],
     exports: [RouterModule]
 })
-export class HomeRoutingModule {}
+export class LoginRoutingModule {}

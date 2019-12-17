@@ -20,11 +20,12 @@
     ],
     "paths": {
       "@app/*": ["src/app/*"],
-      "@pages/*": ["src/app/pages/*"],
       "@environment/*": ["src/environments/*"],
-      "@services/*": ["src/app/services/*"],
-      "@guards/*": ["src/app/guards/*"],
-      "@models/*": ["src/app/models/*"]
+      "@core/*": ["src/app/core/*"],
+      "@service/*": ["src/app/core/service/*"],
+      "@guard/*": ["src/app/core/guard/*"],
+      "@model/*": ["src/app/core/model/*"],
+      "@enum/*": ["src/app/core/enum/*"]
     }
   },
   "angularCompilerOptions": {

@@ -2,9 +2,9 @@ import { NgModule } from '@angular/core';
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
 import { HttpClientModule } from '@angular/common/http';
 
-import { LoginComponent } from '@app/login/login.component';
-import { AppComponent } from '@app/app.component';
 import { SharedModule } from '@app/shared/shared.module';
+import { LoginComponent } from '@app/login/login.component';
+import { LoginRoutingModule } from '@app/login/login.routing.module';
 
 @NgModule({
   declarations: [
@@ -13,8 +13,11 @@ import { SharedModule } from '@app/shared/shared.module';
   imports: [
     SharedModule,
     HttpClientModule,
-    MDBBootstrapModule.forRoot()
+    MDBBootstrapModule.forRoot(),
+    LoginRoutingModule
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [
+    LoginComponent
+  ]
 })
 export class LoginModule { }

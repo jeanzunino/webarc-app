@@ -10,8 +10,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     BrowserAnimationsModule,
     ReactiveFormsModule,
     FormsModule
-  ],
-  providers: [
   ]
 })
 export class SharedModule { }

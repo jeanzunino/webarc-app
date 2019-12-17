@@ -1,4 +1,4 @@
-import { User } from '@app/models/user';
+import { User } from '@model/user';
 
 export class LoginUser {
     tenant: string;

@@ -1,4 +1,4 @@
-import { Employee } from '@app/models/employee';
+import { Employee } from '@model/employee';
 
 export class User {
     id: number;

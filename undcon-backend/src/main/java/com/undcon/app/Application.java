@@ -74,10 +74,10 @@ public class Application extends SpringBootServletInitializer {
 		dataSource.setInitializationFailTimeout(0);
 		dataSource.setMaximumPoolSize(5);
 		dataSource.setDataSourceClassName("org.postgresql.ds.PGSimpleDataSource");
-		dataSource.addDataSourceProperty("url", "jdbc:postgresql://127.0.0.1:5432/db");
+		dataSource.addDataSourceProperty("url", "jdbc:postgresql://127.0.0.1:5432/postgres");
 		dataSource.setSchema(schema);
 		dataSource.addDataSourceProperty("user", "postgres");
-		dataSource.addDataSourceProperty("password", "198706");
+		dataSource.addDataSourceProperty("password", "postgres");
 		ThreadLocalStorage.setTenantName(schema);
 		return dataSource;
 	}

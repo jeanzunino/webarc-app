@@ -1,0 +1,47 @@
+<div class="container-fluid" style="margin-top: 80px;">
+    <div class="card">
+      <div class="card-header">
+        Filtros
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="md-form col-12 col-md-6">
+            <input type="text" id="user" class="form-control" mdbInput mdbValidate>
+            <label for="user">Usuário</label>
+          </div>
+          <div class="md-form col-12 col-md-6">
+            <input type="text" id="other" class="form-control" mdbInput mdbValidate>
+            <label for="other">Other</label>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <ul class="nav nav-pills card-header-pills">
+          <li class="nav-item">
+            <button mdbBtn class="btn btn-primary" mdbWavesEffect>Entrar</button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  
+    <div class="card">
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Login</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let employee of employees">
+                <div (click)="teste(employee)">
+                  <th scope="row">{{ employee.name }}</th>
+                </div>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>

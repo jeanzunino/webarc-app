@@ -36,17 +36,18 @@ public class RequestFilter implements ContainerRequestFilter {
             return;
         }
 
-        if (!headers.containsKey("Authorization")) {
+        if (ctx.getUriInfo().getAbsolutePath().getPath().contains("login")) {
             return;
+        }
+        
+        if (!headers.containsKey("Authorization")) {
+        	throw new WebApplicationException("Token não informado", Response.Status.UNAUTHORIZED);
         }
 
         String token = headers.getFirst("Authorization");
 
         if (token == null && !ctx.getUriInfo().getAbsolutePath().getPath().contains("login")) {
             throw new WebApplicationException("Token não informado", Response.Status.UNAUTHORIZED);
-        }
-        if (ctx.getUriInfo().getAbsolutePath().getPath().contains("login")) {
-            return;
         }
 
         JSONObject payloadAsJsonObject = verifyTokenAndGetTenant(token);

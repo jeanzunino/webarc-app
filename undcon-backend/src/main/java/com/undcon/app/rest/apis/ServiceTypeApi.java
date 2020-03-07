@@ -18,35 +18,36 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.undcon.app.exceptions.UndconException;
-import com.undcon.app.model.TenantEntity;
+import com.undcon.app.model.ServiceTypeEntity;
 import com.undcon.app.rest.models.ErrorMessageModel;
-import com.undcon.app.services.TenantService;
+import com.undcon.app.services.ServiceTypeService;
 
 @Component
-@Path("/tenants")
-public class TenantApi {
+@Path("/serviceTypes")
+public class ServiceTypeApi {
 
 	@Autowired
-	private TenantService service;
+	private ServiceTypeService serviceTypeService;
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<TenantEntity> getAll(@QueryParam("page") Integer page, @QueryParam("size") Integer size) {
-		return service.getAll(page, size);
+	public List<ServiceTypeEntity> getAll(@QueryParam("page") Integer page, @QueryParam("size") Integer size) {
+		return serviceTypeService.getAll(page, size);
 	}
 
 	@GET
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public TenantEntity get(@PathParam("id") long id) {
-		return service.findById(id);
+	public ServiceTypeEntity get(@PathParam("id") long id) {
+		ServiceTypeEntity entity = serviceTypeService.findById(id);
+		return entity;
 	}
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	public TenantEntity post(TenantEntity tenant) {
+	public ServiceTypeEntity post(ServiceTypeEntity service) {
 		try {
-			return service.persist(tenant);
+			return serviceTypeService.persist(service);
 		} catch (UndconException e) {
 			throw new WebApplicationException(
 					Response.status(Response.Status.BAD_REQUEST).entity(new ErrorMessageModel(e.getError())).build());
@@ -54,15 +55,21 @@ public class TenantApi {
 	}
 
 	@PUT
+	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public TenantEntity put(TenantEntity tenant) {
-		return service.update(tenant);
+	public ServiceTypeEntity put(ServiceTypeEntity service) {
+		try {
+			return serviceTypeService.update(service);
+		} catch (UndconException e) {
+			throw new WebApplicationException(
+					Response.status(Response.Status.BAD_REQUEST).entity(new ErrorMessageModel(e.getError())).build());
+		}
 	}
 
 	@DELETE
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public void delete(@PathParam("id") long id) {
-		service.delete(id);
+		serviceTypeService.delete(id);
 	}
 }

@@ -11,6 +11,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -35,9 +36,10 @@ public class UserApi {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<UserDto> getAll() {
-		List<UserEntity> findAll = service.getAll();
-		return mapper.toDto(findAll);
+	public List<UserDto> getAll(@QueryParam("page") Integer page, @QueryParam("size") Integer size) {
+		List<UserEntity> findAll = service.getAll(page, size);
+		List<UserDto> dtos = mapper.toDto(findAll);
+		return dtos;
 	}
 
 	@GET

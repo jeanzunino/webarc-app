@@ -14,7 +14,7 @@ import com.undcon.app.rest.apis.MenuTemplateApi;
 import com.undcon.app.rest.apis.PermissionApi;
 import com.undcon.app.rest.apis.ProductApi;
 import com.undcon.app.rest.apis.ProviderApi;
-import com.undcon.app.rest.apis.ServiceApi;
+import com.undcon.app.rest.apis.ServiceTypeApi;
 import com.undcon.app.rest.apis.TenantApi;
 import com.undcon.app.rest.apis.UserApi;
 import com.undcon.app.rest.filters.RequestFilter;
@@ -43,7 +43,7 @@ public class JerseyConfig extends ResourceConfig {
 		register(ProductCategoryEntity.class);
 		register(ProductApi.class);
 		
-		register(ServiceApi.class);
+		register(ServiceTypeApi.class);
 		register(TenantApi.class);
 		register(UserApi.class);
 

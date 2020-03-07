@@ -11,9 +11,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.undcon.app.enums.ResourseType;
 import com.undcon.app.model.UserEntity;
-import com.undcon.app.multitenancy.ThreadLocalStorage;
 import com.undcon.app.repositories.IUserRepository;
 import com.undcon.app.utils.LongUtils;
+import com.undcon.app.utils.PageUtils;
 
 @Component
 public class UserService {
@@ -26,8 +26,8 @@ public class UserService {
 	@Autowired
     private PermissionService permissionService;
 	
-	public List<UserEntity> getAll() {
-        return userRepository.findAll();
+	public List<UserEntity> getAll(Integer page, Integer size) {
+        return userRepository.findAll(PageUtils.createPageRequest(page, size)).getContent();
     }
 	
 	public UserEntity findById(Long id) {
@@ -35,6 +35,7 @@ public class UserService {
     }
 	
 	public UserEntity persist(UserEntity user) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+		permissionService.checkPermission(ResourseType.USER);
 	    if(LongUtils.longIsPositiveValue(user.getId())) {
 	        throw new IllegalArgumentException("O novo registro a ser salvo não pode ter o id preenchido.");
 	    }
@@ -43,6 +44,7 @@ public class UserService {
     }
     
     public UserEntity update(UserEntity user) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+    	permissionService.checkPermission(ResourseType.USER);
         UserEntity find = findById(user.getId());
         find.setLogin(user.getLogin());
         find.setEmployee(user.getEmployee());
@@ -66,6 +68,7 @@ public class UserService {
 	}
 
     public void delete(long id) {
+    	permissionService.checkPermission(ResourseType.USER);
         userRepository.delete(id);
     }
 

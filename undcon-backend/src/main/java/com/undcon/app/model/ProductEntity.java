@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -33,12 +35,16 @@ public class ProductEntity {
 
 	@Column(name = "estoque_minimo")
 	private long stockMin;
+	
+	@ManyToOne
+	@JoinColumn(name = "categoria_produto", nullable = false)
+	private ProductCategoryEntity productCategory;
 
 	public ProductEntity() {
 	}
 
 	public ProductEntity(Long id, String name, String unit, double purchasePrice, double salePrice, long stock,
-			long stockMin) {
+			long stockMin, ProductCategoryEntity productCategory) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -47,6 +53,7 @@ public class ProductEntity {
 		this.salePrice = salePrice;
 		this.stock = stock;
 		this.stockMin = stockMin;
+		this.productCategory = productCategory;
 	}
 
 	public Long getId() {
@@ -77,4 +84,7 @@ public class ProductEntity {
 		return stockMin;
 	}
 
+	public ProductCategoryEntity getProductCategory() {
+		return productCategory;
+	}
 }

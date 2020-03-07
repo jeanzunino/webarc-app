@@ -29,3 +29,26 @@ mvn clean package
 - Save the token.
 - In new Request, Put in the HEADER a parameter "Authorization" with value of token.
 
+## API's
+
+/login
+
+API's de cadastro
+Todas as API's de cadastro abaixo possuirão um método GET com paginação. Exemplo: GET /users?page=0&size=20
+
+/users 
+/providers
+/productCategories
+/products
+/permissions
+/incomes - FALTA PADRONIZAR PARA UTILIZAR O SERVICE (FALTA PAGINAR, FALTA PERMISSÂO)
+/expenses - FALTA PADRONIZAR PARA UTILIZAR O SERVICE (FALTA PAGINAR, FALTA PERMISSÂO)
+/employees - FALTA PADRONIZAR PARA UTILIZAR O SERVICE (FALTA PAGINAR, FALTA PERMISSÂO)
+/customers - FALTA PADRONIZAR PARA UTILIZAR O SERVICE (FALTA PAGINAR, FALTA PERMISSÂO)
+/serviceTypes
+
+API's de Configurações
+
+/tenants
+/configuration FALTA PERMISSÂO
+/menus - FALTA PAGINAR, FALTA PERMISSÂO

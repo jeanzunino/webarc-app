@@ -16,7 +16,7 @@ public enum ResourseType {
 	
 	PRODUCT,
 	
-	SERVICE,
+	SERVICE_TYPE,
 	
 	TENANT,
 	

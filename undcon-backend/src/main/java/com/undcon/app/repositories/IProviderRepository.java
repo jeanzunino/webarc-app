@@ -1,8 +1,12 @@
 package com.undcon.app.repositories;
 
-import org.springframework.data.repository.PagingAndSortingRepository;
+import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.undcon.app.model.ProviderEntity;
 
-public interface IProviderRepository extends PagingAndSortingRepository<ProviderEntity, Long> {
+public interface IProviderRepository extends JpaRepository<ProviderEntity, Long> {
+	
+	public List<ProviderEntity> findByIdNotAndName(Long id, String name);
 }

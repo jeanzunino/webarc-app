@@ -9,7 +9,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="servico")
-public class ServiceEntity {
+public class ServiceTypeEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,10 +25,10 @@ public class ServiceEntity {
 	@Column(name = "preco")
 	private double price;
 
-	protected ServiceEntity() {
+	protected ServiceTypeEntity() {
 	}
 	
-	public ServiceEntity(Long id, String name, String description, double price) {
+	public ServiceTypeEntity(Long id, String name, String description, double price) {
 		super();
 		this.id = id;
 		this.name = name;

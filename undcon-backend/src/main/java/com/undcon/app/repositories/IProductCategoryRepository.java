@@ -1,8 +1,13 @@
 package com.undcon.app.repositories;
 
-import org.springframework.data.repository.PagingAndSortingRepository;
+import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.undcon.app.model.ProductCategoryEntity;
+import com.undcon.app.model.ProductEntity;
 
-public interface IProductCategoryRepository extends PagingAndSortingRepository<ProductCategoryEntity, Long> {
+public interface IProductCategoryRepository extends JpaRepository<ProductCategoryEntity, Long> {
+	
+	public List<ProductCategoryEntity> findByIdNotAndName(Long id, String name);
 }

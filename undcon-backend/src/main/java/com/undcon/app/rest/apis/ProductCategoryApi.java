@@ -1,8 +1,6 @@
 package com.undcon.app.rest.apis;
 
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -21,7 +19,6 @@ import org.springframework.stereotype.Component;
 
 import com.undcon.app.exceptions.UndconException;
 import com.undcon.app.model.ProductCategoryEntity;
-import com.undcon.app.repositories.IProductCategoryRepository;
 import com.undcon.app.rest.models.ErrorMessageModel;
 import com.undcon.app.services.ProductCategoryService;
 

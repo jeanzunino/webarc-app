@@ -1,8 +1,6 @@
 package com.undcon.app.rest.apis;
 
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -12,54 +10,66 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.undcon.app.exceptions.UndconException;
 import com.undcon.app.model.CustomerEntity;
-import com.undcon.app.repositories.ICustomerRepository;
+import com.undcon.app.rest.models.ErrorMessageModel;
+import com.undcon.app.services.CustomerService;
 
 @Component
 @Path("/customers")
 public class CustomerApi {
 
 	@Autowired
-	private ICustomerRepository repository;
+	private CustomerService service;
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<CustomerEntity> getAll(@QueryParam("page") Integer page, @QueryParam("size") Integer size) {
-		// Return the DTO List:
-		return StreamSupport.stream(repository.findAll().spliterator(), false).collect(Collectors.toList());
+		return service.getAll(page, size);
 	}
 
 	@GET
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public CustomerEntity get(@PathParam("id") long id) {
-		CustomerEntity customer = repository.findOne(id);
-
+		CustomerEntity customer = service.findById(id);
 		return customer;
 	}
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	public CustomerEntity post(CustomerEntity customer) {
-		return repository.save(customer);
+		try {
+			return service.persist(customer);
+		} catch (UndconException e) {
+			throw new WebApplicationException(
+					Response.status(Response.Status.BAD_REQUEST).entity(new ErrorMessageModel(e.getError())).build());
+		}
 	}
-	
+
 	@PUT
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public CustomerEntity put(CustomerEntity customer) {
-		return repository.save(customer);
+		try {
+			return service.update(customer);
+		} catch (UndconException e) {
+			throw new WebApplicationException(
+					Response.status(Response.Status.BAD_REQUEST).entity(new ErrorMessageModel(e.getError())).build());
+		}
 	}
 
 	@DELETE
 	@Path("{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public void delete(@PathParam("id") long id) {
-		repository.delete(id);
+		service.delete(id);
 	}
 }

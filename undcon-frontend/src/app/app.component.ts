@@ -23,6 +23,6 @@ export class AppComponent {
   }
 
   showSuccess() {
-    this.toastr.success('Hello world!', 'Toastr fun!');
+    this.toastr.warning('Hello world!', 'Toastr fun!');
   }
 }

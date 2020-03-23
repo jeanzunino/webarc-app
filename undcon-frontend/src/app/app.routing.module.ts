@@ -9,9 +9,9 @@ import { PageEnum } from '@enum/page-enum';
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full', canActivate: [AuthGuard] },
   { path: PageEnum.LOGIN, component: LoginComponent },
-  { path: PageEnum.HOME, loadChildren: '@app/home/home.module#HomeModule' },
-  { path: PageEnum.USER, loadChildren: '@app/user/user.module#UserModule'},
-  { path: PageEnum.EMPLOYEE, loadChildren: '@app/employee/employee.module#EmployeeModule'},
+  { path: PageEnum.HOME, loadChildren: () => import('@app/home/home.module').then(m => m.HomeModule) },
+  { path: PageEnum.USER, loadChildren: () => import('@app/user/user.module').then(m => m.UserModule)},
+  { path: PageEnum.EMPLOYEE, loadChildren: () => import('@app/employee/employee.module').then(m => m.EmployeeModule)},
   { path: '**', component: PageNotFoundComponent, canActivate: [AuthGuard]}
 ];
 

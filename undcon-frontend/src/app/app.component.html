@@ -1,6 +1,6 @@
 <html lang="en" class="full-height"></html>
 
-<button mdbBtn color="indigo" onclick="showSuccess()" mdbWavesEffect>Entrar</button>
+<a class="dropdown-item waves-light" mdbWavesEffect (click)="showSuccess()">Log out</a>
 
 <div *ngIf="displayMenu">
     <app-navbar></app-navbar>

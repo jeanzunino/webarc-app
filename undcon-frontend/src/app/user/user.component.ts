@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 
 import { UserService } from '@service/user/user.service';
 import { User } from '@model/user';
@@ -14,16 +15,13 @@ export class UserComponent implements OnInit, OnDestroy {
 
   private ngUnsubscribe = new Subject();
 
-  constructor(private userService: UserService) { }
+  constructor(private userService: UserService,
+              private activatedRoute: ActivatedRoute) { }
 
-  users: User[];
+  users: User[] = [];
 
   ngOnInit() {
-    this.userService.getUsers()
-    .pipe(takeUntil(this.ngUnsubscribe))
-    .subscribe(users => {
-      this.users = users;
-    });
+    this.users = this.activatedRoute.snapshot.data.users;
   }
 
   ngOnDestroy() {

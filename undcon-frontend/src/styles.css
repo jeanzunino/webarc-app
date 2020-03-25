@@ -1,0 +1,11 @@
+.screen-top {
+    margin-top: 80px;
+}
+
+.screen-bottom {
+    margin-bottom: 68px;
+}
+
+.btn-primary {
+    background-color: red !important;
+}

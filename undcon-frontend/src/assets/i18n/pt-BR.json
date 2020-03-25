@@ -1,0 +1,6 @@
+{
+    "error": {
+        "authentication.title": "Erro de autenticação",
+        "authentication.message": "Usuário ou senha inválido."
+    }
+}

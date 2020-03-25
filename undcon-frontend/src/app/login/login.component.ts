@@ -1,10 +1,12 @@
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-
-import { AuthService } from '@service/auth/auth.service';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
+import { TranslateService } from '@ngx-translate/core';
+
+import { AuthService } from '@service/auth/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -15,11 +17,12 @@ export class LoginComponent implements OnInit {
 
   private ngUnsubscribe = new Subject();
   loginGroup: FormGroup;
-  hasError;
 
   constructor(private formBuilder: FormBuilder,
               private authService: AuthService,
-              private router: Router) { }
+              private router: Router,
+              private toastr: ToastrService,
+              private translate: TranslateService) { }
 
   ngOnInit() {
     if (this.authService.getAuthenticatedUser()) {
@@ -55,7 +58,9 @@ export class LoginComponent implements OnInit {
           }
         },
         error => {
-          this.hasError = true
+          if (error.status === 401)
+            this.toastr.error(this.translate.instant('error.authentication.message'),
+                              this.translate.instant('error.authentication.title'));
         }
       );
   }

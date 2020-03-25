@@ -1,18 +1,19 @@
 import { NgModule } from '@angular/core';
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
 import { CommonModule } from '@angular/common';
-import { UserRoutingModule } from '@app/user/user.routing.module';
-import { UserComponent } from '@app/user/user.component';
+
+import { ServiceTypeComponent } from '@app/service-type/service-type.component';
+import { ServiceTypeRoutingModule } from '@app/service-type/service-type.routing.module';
 
 @NgModule({
   declarations: [
-    UserComponent
+    ServiceTypeComponent
   ],
   imports: [
     CommonModule,
     MDBBootstrapModule.forRoot(),
-    UserRoutingModule
+    ServiceTypeRoutingModule
     //SharedModule
   ]
 })
-export class UserModule { }
+export class ServiceTypeModule { }

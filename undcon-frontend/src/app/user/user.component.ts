@@ -16,17 +16,17 @@ export class UserComponent implements OnInit {
 
   constructor(private userService: UserService) { }
 
-  users: User[];
+  items: User[];
 
   ngOnInit() {
     this.userService.getUsers()
     .pipe(takeUntil(this.ngUnsubscribe))
-    .subscribe(users => {
-      this.users = users;
+    .subscribe(items => {
+      this.items = items;
     });
   }
 
-  teste(user) {
-    console.log(user)
+  onClickItem(item) {
+    console.log(item)
   }
 }

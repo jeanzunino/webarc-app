@@ -1,24 +1,25 @@
+
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
-import { Employee } from '@core/model/employee';
+import { ServiceType } from '@core/model/service-type';
 import { EntityService } from '@service/entity/entity.service';
 import { StorageService } from '@service/storage/storage.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class EmployeeService extends EntityService<Employee> {
+export class ServiceTypeService extends EntityService<ServiceType> {
 
   constructor(
     protected http: HttpClient,
     protected storageService: StorageService
   ) {
-    super(http, storageService, 'employees')
+    super(http, storageService, 'serviceTypes')
   }
 
-  getUsers(): Observable<Employee[]> {
+  getServiceTypes(): Observable<ServiceType[]> {
     return this.getAll();
   }
 }

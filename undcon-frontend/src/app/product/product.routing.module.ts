@@ -2,16 +2,16 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { AuthGuard } from '@guard/auth/auth.guard';
-import { UserComponent } from '@app/user/user.component';
+import { ProductComponent } from '@app/product/product.component';
 
-const routes: Routes = [
-    { path: '', component: UserComponent, canActivate: [AuthGuard] }
+const employeeRoutes: Routes = [
+    { path: '', component: ProductComponent, canActivate: [AuthGuard] }
     //{ path: 'naoEncontrado', component: CursoNaoEncontradoComponent },
     //{ path: ':id', component: CursoDetalheComponent }
 ];
 
 @NgModule({
-    imports: [RouterModule.forChild(routes)],
+    imports: [RouterModule.forChild(employeeRoutes)],
     exports: [RouterModule]
 })
-export class UserRoutingModule {}
+export class ProductRoutingModule {}

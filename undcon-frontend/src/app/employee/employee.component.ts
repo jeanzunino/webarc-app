@@ -16,18 +16,18 @@ export class EmployeeComponent implements OnInit {
 
   constructor(private employeeService: EmployeeService) { }
 
-  employees: Employee[];
+  items: Employee[];
 
   ngOnInit() {
     this.employeeService.getUsers()
     .pipe(takeUntil(this.ngUnsubscribe))
-    .subscribe(employee => {
-      this.employees = employee;
+    .subscribe(items => {
+      this.items = items;
     });
   }
 
-  teste(employee) {
-    console.log(employee)
+  onClickItem(item) {
+    console.log(item)
   }
 
 }

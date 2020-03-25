@@ -12,6 +12,19 @@ const routes: Routes = [
   { path: PageEnum.HOME, loadChildren: '@app/home/home.module#HomeModule' },
   { path: PageEnum.USER, loadChildren: '@app/user/user.module#UserModule'},
   { path: PageEnum.EMPLOYEE, loadChildren: '@app/employee/employee.module#EmployeeModule'},
+  { path: PageEnum.CUSTOMER, loadChildren: '@app/customer/customer.module#CustomerModule'},
+  { path: PageEnum.PROVIDER, loadChildren: '@app/provider/provider.module#ProviderModule'},
+  { path: PageEnum.PRODUCT, loadChildren: '@app/product/product.module#ProductModule'},
+  { path: PageEnum.PRODUCT_CATEGORY, loadChildren: '@app/product-category/product-category.module#ProductCategoryModule'},
+  { path: PageEnum.PERMISSION, loadChildren: '@app/permission/permission.module#PermissionModule'},
+  { path: PageEnum.SERVICE_TYPE, loadChildren: '@app/service-type/service-type.module#ServiceTypeModule'},
+  //{ path: PageEnum.FINANCIAL, loadChildren: '@app/financial/financial.module#FinancialModule'},
+  //{ path: PageEnum.SALE, loadChildren: '@app/sale/sale.module#SaleModule'},
+  //{ path: PageEnum.PURCHASE, loadChildren: '@app/purchase/purchase.module#PurchaseModule'},
+
+  //{ path: PageEnum.MENU_TEMPLATE, loadChildren: '@app/menuTemplate/menuTemplate.module#ManuTemplateModule'},
+  //{ path: PageEnum.CONFIG, loadChildren: '@app/config/config.module#ConfigModule'},
+  //{ path: PageEnum.TENANT, loadChildren: '@app/tenant/tenant.module#TenantModule'},
   { path: '**', component: PageNotFoundComponent, canActivate: [AuthGuard]}
 ];
 

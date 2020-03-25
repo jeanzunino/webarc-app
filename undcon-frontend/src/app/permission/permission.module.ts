@@ -1,18 +1,19 @@
 import { NgModule } from '@angular/core';
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
 import { CommonModule } from '@angular/common';
-import { UserRoutingModule } from '@app/user/user.routing.module';
-import { UserComponent } from '@app/user/user.component';
+
+import { PermissionComponent } from '@app/permission/permission.component';
+import { PermissionRoutingModule } from '@app/permission/permission.routing.module';
 
 @NgModule({
   declarations: [
-    UserComponent
+    PermissionComponent
   ],
   imports: [
     CommonModule,
     MDBBootstrapModule.forRoot(),
-    UserRoutingModule
+    PermissionRoutingModule
     //SharedModule
   ]
 })
-export class UserModule { }
+export class PermissionModule { }

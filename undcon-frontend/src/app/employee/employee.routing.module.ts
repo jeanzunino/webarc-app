@@ -13,5 +13,5 @@ const employeeRoutes: Routes = [
 @NgModule({
     imports: [RouterModule.forChild(employeeRoutes)],
     exports: [RouterModule]
-})                  
+})
 export class EmployeeRoutingModule {}

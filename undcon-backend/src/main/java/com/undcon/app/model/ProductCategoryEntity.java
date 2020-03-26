@@ -47,6 +47,9 @@ public class ProductCategoryEntity {
 	public ProductCategoryEntity getParent() {
 		return parent;
 	}
+	public void setParent(ProductCategoryEntity parent) {
+		this.parent = parent;
+	}
 	
 	
 

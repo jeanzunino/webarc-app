@@ -18,17 +18,17 @@ export class UserComponent implements OnInit, OnDestroy {
   constructor(private userService: UserService,
               private activatedRoute: ActivatedRoute) { }
 
-  items: User[];
+  itens: User[] = [];
 
   ngOnInit() {
-    this.userService.getUsers()
-    .pipe(takeUntil(this.ngUnsubscribe))
-    .subscribe(items => {
-      this.items = items;
-    });
+    this.itens = this.activatedRoute.snapshot.data.users;
   }
 
   onClickItem(item) {
     console.log(item)
+  }
+  ngOnDestroy() {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 }

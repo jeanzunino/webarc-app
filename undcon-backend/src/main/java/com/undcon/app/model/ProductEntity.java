@@ -37,7 +37,7 @@ public class ProductEntity {
 	private long stockMin;
 	
 	@ManyToOne
-	@JoinColumn(name = "categoria_produto", nullable = false)
+	@JoinColumn(name = "categoria_produto_id", nullable = false)
 	private ProductCategoryEntity productCategory;
 
 	public ProductEntity() {
@@ -91,4 +91,34 @@ public class ProductEntity {
 	public void setStock(long stock) {
 		this.stock = stock;
 	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setUnit(String unit) {
+		this.unit = unit;
+	}
+
+	public void setPurchasePrice(double purchasePrice) {
+		this.purchasePrice = purchasePrice;
+	}
+
+	public void setSalePrice(double salePrice) {
+		this.salePrice = salePrice;
+	}
+
+	public void setStockMin(long stockMin) {
+		this.stockMin = stockMin;
+	}
+
+	public void setProductCategory(ProductCategoryEntity productCategory) {
+		this.productCategory = productCategory;
+	}
+	
+	
 }

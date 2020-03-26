@@ -3,7 +3,6 @@ package com.undcon.app.rest.configuration;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.springframework.stereotype.Component;
 
-import com.undcon.app.model.ProductCategoryEntity;
 import com.undcon.app.rest.apis.ConfigApi;
 import com.undcon.app.rest.apis.CustomerApi;
 import com.undcon.app.rest.apis.EmployeeApi;
@@ -13,7 +12,10 @@ import com.undcon.app.rest.apis.LoginApi;
 import com.undcon.app.rest.apis.MenuTemplateApi;
 import com.undcon.app.rest.apis.PermissionApi;
 import com.undcon.app.rest.apis.ProductApi;
+import com.undcon.app.rest.apis.ProductCategoryApi;
 import com.undcon.app.rest.apis.ProviderApi;
+import com.undcon.app.rest.apis.PurchaseApi;
+import com.undcon.app.rest.apis.SaleApi;
 import com.undcon.app.rest.apis.ServiceTypeApi;
 import com.undcon.app.rest.apis.TenantApi;
 import com.undcon.app.rest.apis.UserApi;
@@ -40,7 +42,7 @@ public class JerseyConfig extends ResourceConfig {
 		register(EmployeeApi.class);
 		
 		
-		register(ProductCategoryEntity.class);
+		register(ProductCategoryApi.class);
 		register(ProductApi.class);
 		
 		register(ServiceTypeApi.class);
@@ -53,6 +55,8 @@ public class JerseyConfig extends ResourceConfig {
 		register(ExpenseApi.class);
 		register(IncomeApi.class);
 
+		register(PurchaseApi.class);
+		register(SaleApi.class);
 		// Uncomment to disable WADL Generation:
 		// property("jersey.config.server.wadl.disableWadl", true);
 

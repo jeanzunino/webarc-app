@@ -36,8 +36,8 @@ public class UserApi {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<UserDto> getAll(@QueryParam("page") Integer page, @QueryParam("size") Integer size) {
-		List<UserEntity> findAll = service.getAll(page, size);
+	public List<UserDto> getAll(@QueryParam("login") String login, @QueryParam("page") Integer page, @QueryParam("size") Integer size) {
+		List<UserEntity> findAll = service.getAll(page, size, login);
 		List<UserDto> dtos = mapper.toDto(findAll);
 		return dtos;
 	}

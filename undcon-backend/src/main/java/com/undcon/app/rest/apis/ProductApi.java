@@ -31,8 +31,8 @@ public class ProductApi {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<ProductEntity> getAll(@QueryParam("page") Integer page, @QueryParam("size") Integer size) {
-		return productService.getAll(page, size);
+	public List<ProductEntity> getAll(@QueryParam("name") String name, @QueryParam("page") Integer page, @QueryParam("size") Integer size) {
+		return productService.getAll(name, page, size);
 	}
 
 	@GET

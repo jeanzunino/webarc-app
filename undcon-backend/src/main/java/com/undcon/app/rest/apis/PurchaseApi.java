@@ -18,48 +18,49 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.undcon.app.exceptions.UndconException;
-import com.undcon.app.model.ProductCategoryEntity;
+import com.undcon.app.model.PurchaseEntity;
 import com.undcon.app.rest.models.ErrorMessageModel;
-import com.undcon.app.services.ProductCategoryService;
+import com.undcon.app.services.PurchaseService;
 
 @Component
-@Path("/productCategories")
-public class ProductCategoryApi {
+@Path("/purchases")
+public class PurchaseApi {
 
 	@Autowired
-	private ProductCategoryService service;
+	private PurchaseService service;
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<ProductCategoryEntity> getAll(@QueryParam("name") String name, @QueryParam("page") Integer page, @QueryParam("size") Integer size) {
-		return service.getAll(name, page, size);
+	public List<PurchaseEntity> getAll(@QueryParam("page") Integer page, @QueryParam("size") Integer size) {
+		return service.getAll(page, size);
 	}
-
+	
 	@GET
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ProductCategoryEntity get(@PathParam("id") long id) {
-		ProductCategoryEntity entity = service.findById(id);
-		return entity;
+	public PurchaseEntity get(@PathParam("id") long id) {
+		PurchaseEntity Provider = service.findById(id);
+		return Provider;
 	}
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	public ProductCategoryEntity post(ProductCategoryEntity entity) {
+	public PurchaseEntity post(PurchaseEntity Provider) {
 		try {
-			return service.persist(entity);
+			return service.persist(Provider);
 		} catch (UndconException e) {
 			throw new WebApplicationException(Response
 				     .status(Response.Status.BAD_REQUEST)
 				     .entity(new ErrorMessageModel(e.getError())).build());
 		}
 	}
-
+	
 	@PUT
+	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ProductCategoryEntity put(ProductCategoryEntity entity) {
+	public PurchaseEntity put(PurchaseEntity provider) {
 		try {
-			return service.update(entity);
+			return service.update(provider);
 		} catch (UndconException e) {
 			throw new WebApplicationException(Response
 				     .status(Response.Status.BAD_REQUEST)

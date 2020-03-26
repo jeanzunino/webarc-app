@@ -87,4 +87,8 @@ public class ProductEntity {
 	public ProductCategoryEntity getProductCategory() {
 		return productCategory;
 	}
+	
+	public void setStock(long stock) {
+		this.stock = stock;
+	}
 }

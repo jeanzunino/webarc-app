@@ -41,14 +41,20 @@ Todas as API's de cadastro abaixo possuirão um método GET com paginação. Exe
 /productCategories
 /products
 /permissions
-/incomes - FALTA PADRONIZAR PARA UTILIZAR O SERVICE (FALTA PAGINAR, FALTA PERMISSÂO)
-/expenses - FALTA PADRONIZAR PARA UTILIZAR O SERVICE (FALTA PAGINAR, FALTA PERMISSÂO)
-/employees - FALTA PADRONIZAR PARA UTILIZAR O SERVICE (FALTA PAGINAR, FALTA PERMISSÂO)
-/customers - FALTA PADRONIZAR PARA UTILIZAR O SERVICE (FALTA PAGINAR, FALTA PERMISSÂO)
+/incomes
+/expenses
+/employees
+/customers
 /serviceTypes
+/sales
+/purchases
 
 API's de Configurações
 
 /tenants
 /configuration FALTA PERMISSÂO
 /menus - FALTA PAGINAR, FALTA PERMISSÂO
+
+## Diagrama do Backend
+
+https://www.draw.io/?libs=general;uml#G1C5a8u6Br4ehIjp8Lc5je38PEOxvmqC7m

@@ -31,8 +31,8 @@ public class EmployeeApi {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<EmployeeEntity> getAll(@QueryParam("page") Integer page, @QueryParam("size") Integer size) {
-		return service.getAll(page, size);
+	public List<EmployeeEntity> getAll(@QueryParam("name") String name, @QueryParam("page") Integer page, @QueryParam("size") Integer size) {
+		return service.getAll(name, page, size);
 	}
 
 	@GET

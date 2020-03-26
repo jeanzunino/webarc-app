@@ -38,8 +38,8 @@ public class PermissionApi {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<PermissionEntity> getAll(@QueryParam("page") Integer page, @QueryParam("size") Integer size) {
-		return permissionService.getAll(page, size);
+	public List<PermissionEntity> getAll(@QueryParam("name") String name, @QueryParam("page") Integer page, @QueryParam("size") Integer size) {
+		return permissionService.getAll(name, page, size);
 	}
 
 	@GET

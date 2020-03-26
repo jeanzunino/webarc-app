@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import com.undcon.app.enums.ResourseType;
 import com.undcon.app.enums.UndconError;
@@ -21,8 +22,11 @@ public class EmployeeService {
 	@Autowired
 	private PermissionService permissionService;
 
-	public List<EmployeeEntity> getAll(Integer page, Integer size) {
-        return repository.findAll(PageUtils.createPageRequest(page, size)).getContent();
+	public List<EmployeeEntity> getAll(String name, Integer page, Integer size) {
+		if(StringUtils.isEmpty(name)) {
+			return repository.findAll(PageUtils.createPageRequest(page, size)).getContent();
+		}
+        return repository.findAllByName(name, PageUtils.createPageRequest(page, size)).getContent();
     }
 	
 	public EmployeeEntity findById(Long id) {

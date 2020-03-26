@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.undcon.app.model.ProviderEntity;
 import com.undcon.app.model.ServiceTypeEntity;
 
 public interface IServiceTypeRepository extends JpaRepository<ServiceTypeEntity, Long> {

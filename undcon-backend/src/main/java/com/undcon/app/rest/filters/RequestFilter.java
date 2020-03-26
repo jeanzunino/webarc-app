@@ -15,7 +15,6 @@ import com.nimbusds.jose.JWSObject;
 import com.nimbusds.jose.JWSVerifier;
 import com.nimbusds.jose.Payload;
 import com.nimbusds.jose.crypto.MACVerifier;
-import com.undcon.app.dtos.UserDto;
 import com.undcon.app.multitenancy.ThreadLocalStorage;
 import com.undcon.app.services.LoginService;
 

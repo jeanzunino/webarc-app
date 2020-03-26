@@ -2,8 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { EventEmitter } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 import { User } from '@model/user';
 import { StorageService } from '@service/storage/storage.service';
@@ -15,7 +14,6 @@ import { LoginUser } from '@app/core/model/login-user';
 })
 export class AuthService extends EntityService<LoginUser> {
 
-  private ngUnsubscribe = new Subject();
   displayMenuEmitter = new EventEmitter<boolean>();
 
   constructor(
@@ -27,16 +25,12 @@ export class AuthService extends EntityService<LoginUser> {
   }
 
   signinValidate(user: User) {
-    this.signin(user)
-    .pipe(takeUntil(this.ngUnsubscribe))
-    .subscribe(userDetail => {
-      if (userDetail.token) {
-        console.log(userDetail)
-        this.storageService.setUser(userDetail);
-        this.displayMenuEmitter.emit(true);
-        this.router.navigate(['/home'])
-      }
-    });
+    return this.signin(user);
+  }
+
+  setValuesAfterSigninValidate(userDetail: LoginUser) {
+    this.storageService.setUser(userDetail);
+    this.displayMenuEmitter.emit(true);
   }
 
   /**
@@ -46,7 +40,7 @@ export class AuthService extends EntityService<LoginUser> {
    * @param user 
    */
   private signin(user: User): Observable<LoginUser> {
-    return this.http.post<LoginUser>(`${this.baseUrl}/${this.entityUrl}`, JSON.stringify(user), this.httpOptions);
+    return this.http.post<LoginUser>(`${this.baseUrl}/${this.entityUrl}`, JSON.stringify(user));
   }
 
   signout() {

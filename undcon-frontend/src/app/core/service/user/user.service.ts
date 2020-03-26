@@ -10,10 +10,9 @@ import { StorageService } from '@service/storage/storage.service';
   providedIn: 'root'
 })
 export class UserService extends EntityService<User> {
-
-  constructor(
-    protected http: HttpClient,
-    protected storageService: StorageService) {
+  
+  constructor(protected http: HttpClient,
+              protected storageService: StorageService) {
     super(http, storageService, 'users')
   }
 

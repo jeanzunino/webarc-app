@@ -1,6 +1,9 @@
 
 import { NgModule } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { ToastrModule } from 'ngx-toastr';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 import { AppComponent } from '@app/app.component';
 import { AppRoutingModule } from '@app/app.routing.module';
@@ -11,6 +14,11 @@ import { AuthService } from '@service/auth/auth.service';
 import { AuthGuard } from '@guard/auth/auth.guard';
 import { SharedModule } from '@app/shared/shared.module';
 import { LoginModule } from '@app/login/login.module';
+import { InterceptorModule } from './auth/interceptor/interceptor.module';
+
+export function HttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http);
+}
 
 @NgModule({
   declarations: [
@@ -22,7 +30,16 @@ import { LoginModule } from '@app/login/login.module';
     HttpClientModule,
     PageNotFoundModule,
     NavbarModule,
-    LoginModule
+    LoginModule,
+    InterceptorModule,
+    ToastrModule.forRoot(),
+    TranslateModule.forRoot({
+      loader: {
+          provide: TranslateLoader,
+          useFactory: HttpLoaderFactory,
+          deps: [HttpClient]
+      }
+    })
   ],
   providers: [
     StorageService,

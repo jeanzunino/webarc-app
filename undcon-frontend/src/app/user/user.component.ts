@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 
 import { UserService } from '@service/user/user.service';
 import { User } from '@model/user';
@@ -10,11 +11,12 @@ import { User } from '@model/user';
   templateUrl: './user.component.html',
   styleUrls: ['./user.component.scss']
 })
-export class UserComponent implements OnInit {
+export class UserComponent implements OnInit, OnDestroy {
 
   private ngUnsubscribe = new Subject();
 
-  constructor(private userService: UserService) { }
+  constructor(private userService: UserService,
+              private activatedRoute: ActivatedRoute) { }
 
   items: User[];
 

@@ -17,7 +17,7 @@
                                         <hr class="hr-light">
                                     </div>
                                     <div class="md-form">
-                                        <mdb-icon fas icon="user" class="text-white active"></mdb-icon>
+                                        <mdb-icon fas icon="user" class="text-white active prefix"></mdb-icon>
                                         <input type="email" id="user" class="text-white form-control" formControlName="login" mdbInput mdbValidate>
                                         <label for="user" class="text-white">Usuário</label>
                                         <mdb-error *ngIf="loginForm.invalid && (loginForm.dirty || loginForm.touched)">
@@ -28,7 +28,7 @@
                                         </mdb-success>
                                     </div>
                                     <div class="md-form">
-                                        <mdb-icon fas icon="lock" class="text-white active"></mdb-icon>
+                                        <mdb-icon fas icon="lock" class="text-white active prefix"></mdb-icon>
                                         <input type="password" id="password" class="text-white form-control" formControlName="password" mdbInput mdbValidate>
                                         <label for="password" class="text-white">Senha</label>
                                         <mdb-error *ngIf="passwordForm.invalid && (passwordForm.dirty || passwordForm.touched)">

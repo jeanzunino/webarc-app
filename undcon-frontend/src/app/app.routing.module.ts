@@ -9,9 +9,9 @@ import { PageEnum } from '@enum/page-enum';
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full', canActivate: [AuthGuard] },
   { path: PageEnum.LOGIN, component: LoginComponent },
-  { path: PageEnum.HOME, loadChildren: '@app/home/home.module#HomeModule' },
-  { path: PageEnum.USER, loadChildren: '@app/user/user.module#UserModule'},
-  { path: PageEnum.EMPLOYEE, loadChildren: '@app/employee/employee.module#EmployeeModule'},
+  { path: PageEnum.HOME, loadChildren: () => import('@app/home/home.module').then(m => m.HomeModule },
+  { path: PageEnum.USER, loadChildren: () => import('@app/user/user.module').then(m => m.UserModule)},
+  { path: PageEnum.EMPLOYEE, loadChildren: () => import('@app/employee/employee.module').then(m => m.EmployeeModule)},
   { path: PageEnum.CUSTOMER, loadChildren: '@app/customer/customer.module#CustomerModule'},
   { path: PageEnum.PROVIDER, loadChildren: '@app/provider/provider.module#ProviderModule'},
   { path: PageEnum.PRODUCT, loadChildren: '@app/product/product.module#ProductModule'},
@@ -25,6 +25,7 @@ const routes: Routes = [
   //{ path: PageEnum.MENU_TEMPLATE, loadChildren: '@app/menuTemplate/menuTemplate.module#ManuTemplateModule'},
   //{ path: PageEnum.CONFIG, loadChildren: '@app/config/config.module#ConfigModule'},
   //{ path: PageEnum.TENANT, loadChildren: '@app/tenant/tenant.module#TenantModule'},
+
   { path: '**', component: PageNotFoundComponent, canActivate: [AuthGuard]}
 ];
 

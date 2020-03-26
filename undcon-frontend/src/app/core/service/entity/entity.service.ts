@@ -7,8 +7,8 @@ export class EntityService<T> {
 
   public baseUrl = environment.url;
 
-  constructor(protected http: HttpClient, 
-              protected storageService: StorageService, 
+  constructor(protected http: HttpClient,
+              protected storageService: StorageService,
               protected entityUrl: string) {
   }
 

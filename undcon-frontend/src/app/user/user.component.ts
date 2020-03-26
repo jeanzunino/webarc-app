@@ -21,7 +21,7 @@ export class UserComponent implements OnInit, OnDestroy {
   itens: User[] = [];
 
   ngOnInit() {
-    this.itens = this.activatedRoute.snapshot.data.users;
+    this.itens = this.activatedRoute.snapshot.data.itens;
   }
 
   onClickItem(item) {

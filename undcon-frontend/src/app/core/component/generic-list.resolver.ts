@@ -1,8 +1,7 @@
 import { Resolve, ActivatedRouteSnapshot } from '@angular/router';
 import { Injectable } from '@angular/core';
 
-import { User } from '@app/core/model/user';
-import { UserService } from '@app/core/service/user/user.service';
+import { EntityService } from '@app/core/service/entity/entity.service';
 
 export class GenericListResolver<T> implements Resolve<T[]> {
   constructor(private entityService: EntityService<T>) {}
@@ -12,10 +11,6 @@ export class GenericListResolver<T> implements Resolve<T[]> {
   }
 
   private async getAll() {
-    let itens: T[];
-    await this.entityService.getAll().toPromise().then(response => {
-        itens = response;
-    })
-    return itens;
+    return await this.entityService.getAll().toPromise();
   }
 }

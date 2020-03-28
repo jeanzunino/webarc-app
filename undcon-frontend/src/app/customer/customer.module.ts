@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
 import { CommonModule } from '@angular/common';
+import { CustomerRoutingModule } from '@app/customer/customer.routing.module';
 
 import { CustomerComponent } from '@app/customer/customer.component';
 
@@ -10,7 +11,8 @@ import { CustomerComponent } from '@app/customer/customer.component';
   ],
   imports: [
     CommonModule,
-    MDBBootstrapModule.forRoot()
+    MDBBootstrapModule.forRoot(),
+    CustomerRoutingModule
     //SharedModule
   ]
 })

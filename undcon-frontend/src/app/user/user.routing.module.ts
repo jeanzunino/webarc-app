@@ -10,11 +10,9 @@ const routes: Routes = [
       component: UserComponent,
       canActivate: [AuthGuard],
       resolve: {
-        itens: UserResolver
+        items: UserResolver
       }
     }
-    //{ path: 'naoEncontrado', component: CursoNaoEncontradoComponent },
-    //{ path: ':id', component: CursoDetalheComponent }
 ];
 
 @NgModule({

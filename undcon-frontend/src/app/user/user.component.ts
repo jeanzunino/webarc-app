@@ -5,30 +5,21 @@ import { ActivatedRoute } from '@angular/router';
 
 import { UserService } from '@service/user/user.service';
 import { User } from '@model/user';
+import { GenericListComponent } from '@app/core/component/generic-list.component';
 
 @Component({
-  selector: 'app-user',
+  selector: 'app-generic-list',
   templateUrl: './user.component.html',
-  styleUrls: ['./user.component.scss']
+  styleUrls: ['../core/component/generic-list.component.scss']
 })
-export class UserComponent implements OnInit, OnDestroy {
+export class UserComponent extends GenericListComponent<User> {
 
-  private ngUnsubscribe = new Subject();
-
-  constructor(private userService: UserService,
-              private activatedRoute: ActivatedRoute) { }
-
-  itens: User[] = [];
-
-  ngOnInit() {
-    this.itens = this.activatedRoute.snapshot.data.itens;
+  constructor(private service: UserService,
+              activatedRoute: ActivatedRoute) {
+      super(service, activatedRoute)
   }
 
-  onClickItem(item) {
-    console.log(item)
-  }
-  ngOnDestroy() {
-    this.ngUnsubscribe.next();
-    this.ngUnsubscribe.complete();
+  getFieldsOfTable() {
+    return ['login'];
   }
 }

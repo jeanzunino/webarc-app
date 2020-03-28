@@ -1,32 +1,21 @@
 import { Component, OnInit } from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 
 import { ProductService } from '@service/product/product.service';
 import { Product } from '@model/product';
+import { GenericListComponent } from '@app/core/component/generic-list.component';
 
 @Component({
-  selector: 'app-product',
+  selector: 'app-generic-list',
   templateUrl: './product.component.html',
-  styleUrls: ['./product.component.scss']
+  styleUrls: ['../core/component/generic-list.component.scss']
 })
-export class ProductComponent implements OnInit {
+export class ProductComponent extends GenericListComponent<Product>  {
 
-  private ngUnsubscribe = new Subject();
-
-  constructor(private productService: ProductService) { }
-
-  items: Product[];
-
-  ngOnInit() {
-    this.productService.getProducts()
-    .pipe(takeUntil(this.ngUnsubscribe))
-    .subscribe(items => {
-      this.items = items;
-    });
-  }
-
-  onClickItem(item) {
-
+  constructor(private service: ProductService,
+              activatedRoute: ActivatedRoute) {
+      super(service, activatedRoute)
   }
 }

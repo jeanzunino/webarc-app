@@ -16,8 +16,5 @@ export class CustomerService extends EntityService<Customer> {
     protected storageService: StorageService) {
     super(http, storageService, 'customers')
   }
-
-  getCustomers(): Observable<Customer[]> {
-    return this.getAll();
-  }
+  
 }

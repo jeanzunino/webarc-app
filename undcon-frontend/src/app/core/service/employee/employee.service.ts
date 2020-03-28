@@ -18,7 +18,4 @@ export class EmployeeService extends EntityService<Employee> {
     super(http, storageService, 'employees')
   }
 
-  getUsers(): Observable<Employee[]> {
-    return this.getAll();
-  }
 }

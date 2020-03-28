@@ -2,15 +2,15 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { AuthGuard } from '@guard/auth/auth.guard';
-import { ProviderComponent } from '@app/provider/provider.component';
-import { ProviderResolver } from '@app/provider/provider.resolver';
+import { CustomerComponent } from '@app/customer/customer.component';
+import { CustomerResolver } from '@app/customer/customer.resolver';
 
 const routes: Routes = [
   {
-    path: '', component: ProviderComponent,
+    path: '', component: CustomerComponent,
     canActivate: [AuthGuard],
     resolve: {
-      items: ProviderResolver
+      items: CustomerResolver
     }
   }
 ];
@@ -18,6 +18,6 @@ const routes: Routes = [
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
-  providers: [ProviderResolver]
+  providers: [CustomerResolver]
 })
-export class ProviderRoutingModule {}
+export class CustomerRoutingModule {}

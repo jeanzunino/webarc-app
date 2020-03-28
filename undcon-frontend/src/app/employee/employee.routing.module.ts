@@ -3,15 +3,21 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { AuthGuard } from '@guard/auth/auth.guard';
 import { EmployeeComponent } from '@app/employee/employee.component';
+import { EmployeeResolver } from '@app/employee/employee.resolver';
 
-const employeeRoutes: Routes = [
-    { path: '', component: EmployeeComponent, canActivate: [AuthGuard] }
-    //{ path: 'naoEncontrado', component: CursoNaoEncontradoComponent },
-    //{ path: ':id', component: CursoDetalheComponent }
+const routes: Routes = [
+  {
+    path: '', component: EmployeeComponent,
+    canActivate: [AuthGuard],
+    resolve: {
+      items: EmployeeResolver
+    }
+  }
 ];
 
 @NgModule({
-    imports: [RouterModule.forChild(employeeRoutes)],
-    exports: [RouterModule]
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule],
+  providers: [EmployeeResolver]
 })
 export class EmployeeRoutingModule {}

@@ -17,7 +17,4 @@ export class ProductService extends EntityService<Product> {
     super(http, storageService, 'products')
   }
 
-  getProducts(): Observable<Product[]> {
-    return this.getAll();
-  }
 }

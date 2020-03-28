@@ -17,7 +17,9 @@ import javax.ws.rs.core.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.undcon.app.dtos.ProductSimpleDto;
 import com.undcon.app.exceptions.UndconException;
+import com.undcon.app.mappers.ProductMapper;
 import com.undcon.app.model.ProductEntity;
 import com.undcon.app.rest.models.ErrorMessageModel;
 import com.undcon.app.services.ProductService;
@@ -28,6 +30,9 @@ public class ProductApi {
 
 	@Autowired
 	private ProductService productService;
+	
+	@Autowired
+	private ProductMapper productMapper;
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -45,9 +50,9 @@ public class ProductApi {
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	public ProductEntity post(ProductEntity entity) {
+	public ProductEntity post(ProductSimpleDto dto) {
 		try {
-			return productService.persist(entity);
+			return productService.persist(productMapper.toEntity(dto));
 		} catch (UndconException e) {
 			throw new WebApplicationException(Response
 				     .status(Response.Status.BAD_REQUEST)
@@ -58,9 +63,9 @@ public class ProductApi {
 	@PUT
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ProductEntity put(ProductEntity entity) {
+	public ProductEntity put(ProductSimpleDto dto) {
 		try {
-			return productService.update(entity);
+			return productService.update(productMapper.toEntity(dto));
 		} catch (UndconException e) {
 			throw new WebApplicationException(Response
 				     .status(Response.Status.BAD_REQUEST)

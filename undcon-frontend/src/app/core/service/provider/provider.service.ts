@@ -17,7 +17,4 @@ export class ProviderService extends EntityService<Provider> {
     super(http, storageService, 'providers')
   }
 
-  getProviders(): Observable<Provider[]> {
-    return this.getAll();
-  }
 }

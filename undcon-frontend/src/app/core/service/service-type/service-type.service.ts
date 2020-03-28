@@ -19,7 +19,4 @@ export class ServiceTypeService extends EntityService<ServiceType> {
     super(http, storageService, 'serviceTypes')
   }
 
-  getServiceTypes(): Observable<ServiceType[]> {
-    return this.getAll();
-  }
 }

@@ -19,7 +19,4 @@ export class PermissionService extends EntityService<Permission> {
     super(http, storageService, 'permissions')
   }
 
-  getPermissions(): Observable<Permission[]> {
-    return this.getAll();
-  }
 }

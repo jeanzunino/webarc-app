@@ -17,7 +17,4 @@ export class  ProductCategoryService extends EntityService< ProductCategory> {
     super(http, storageService, 'productCategories')
   }
 
-  getProductCategories(): Observable< ProductCategory[]> {
-    return this.getAll();
-  }
 }

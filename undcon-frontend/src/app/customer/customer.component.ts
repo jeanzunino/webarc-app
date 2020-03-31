@@ -5,12 +5,12 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CustomerService } from '@service/customer/customer.service';
 import { Customer } from '@model/customer';
-import { GenericListComponent } from '@app/core/component/generic-list.component';
+import { GenericListComponent } from '@component-generic-list/generic-list.component';
 
 @Component({
   selector: 'app-generic-list',
-  templateUrl: './customer.component.html',
-  styleUrls: ['../core/component/generic-list.component.scss']
+  templateUrl: '../core/component/generic-list/generic-list.component.html',
+  styleUrls: ['../core/component/generic-list/generic-list.component.scss']
 })
 export class CustomerComponent extends GenericListComponent<Customer>  {
 

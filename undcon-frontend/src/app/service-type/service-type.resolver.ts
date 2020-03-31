@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 
 import { ServiceType } from '@app/core/model/service-type';
 import { ServiceTypeService } from '@app/core/service/service-type/service-type.service';
-import { GenericListResolver } from '@app/core/component/generic-list.resolver';
+import { GenericListResolver } from '@component-generic-list/generic-list.resolver';
 
 
 @Injectable()

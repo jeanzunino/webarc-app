@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 
 import { Permission } from '@app/core/model/permission';
 import { PermissionService } from '@app/core/service/permission/permission.service';
-import { GenericListResolver } from '@app/core/component/generic-list.resolver';
+import { GenericListResolver } from '@component-generic-list/generic-list.resolver';
 
 
 @Injectable()

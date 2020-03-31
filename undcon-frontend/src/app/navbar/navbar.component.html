@@ -1,62 +1,79 @@
 <!--Navbar-->
 <mdb-navbar SideClass="navbar navbar-expand-lg navbar-dark fixed-top scrolling-navbar bg-primary" [containerInside]="false">
 
-    <mdb-navbar-brand>
-      <a class="navbar-brand" href="#">
+  <mdb-navbar-brand>
+    <a class="navbar-brand" href="#">
           <img src="../../assets/imgs/logo.png" height="30" alt="">
       </a>
-    </mdb-navbar-brand>
+  </mdb-navbar-brand>
 
-    <links>
+  <links>
 
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item active">
-          <a class="nav-link waves-light" mdbWavesEffect>Home<span class="sr-only" href="/outra">(current)</span></a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link waves-light" mdbWavesEffect>Features</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link waves-light" mdbWavesEffect>Pricing</a>
-        </li>
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link waves-light" mdbWavesEffect>Home<span class="sr-only" href="/outra">(current)</span></a>
+      </li>
 
-        <li class="nav-item dropdown" dropdown>
-          <a dropdownToggle mdbWavesEffect type="button" class="nav-link dropdown-toggle waves-light" mdbWavesEffect>
-            Basic dropdown<span class="caret"></span></a>
-          <div *dropdownMenu class="dropdown-menu dropdown dropdown-primary" role="menu">
-            <a class="dropdown-item waves-light" mdbWavesEffect href="user">Usuários OK</a>
-            <a class="dropdown-item waves-light" mdbWavesEffect href="productcategory">Categorias de Produtos OK</a>
-            <a class="dropdown-item waves-light" mdbWavesEffect href="product">Produtos OK</a>
+
+      <li class="nav-item dropdown" dropdown>
+        <a dropdownToggle mdbWavesEffect type="button" class="nav-link dropdown-toggle waves-light" mdbWavesEffect>
+          <mdb-icon fas icon="user"></mdb-icon> Compras <span class="caret"></span></a>
+        <div *dropdownMenu class="dropdown-menu dropdown-menu-right dropdown dropdown-primary" role="menu">
+            <a class="dropdown-item waves-light" mdbWavesEffect href="provider">Fornecedores</a>
+            <a class="dropdown-item waves-light" mdbWavesEffect href="purchase">Compras</a>
+        </div>
+      </li>
+
+      <li class="nav-item dropdown" dropdown>
+        <a dropdownToggle mdbWavesEffect type="button" class="nav-link dropdown-toggle waves-light" mdbWavesEffect>
+          <mdb-icon fas icon="user"></mdb-icon> Vendas <span class="caret"></span></a>
+        <div *dropdownMenu class="dropdown-menu dropdown-menu-right dropdown dropdown-primary" role="menu">
             <a class="dropdown-item waves-light" mdbWavesEffect href="customer">Clientes</a>
-            <a class="dropdown-item waves-light" mdbWavesEffect href="provider">Fornecedores OK</a>
-            <a class="dropdown-item waves-light" mdbWavesEffect href="employee">Funcionários OK</a>
-            <a class="dropdown-item waves-light" mdbWavesEffect href="permission">Permissões OK</a>
+            <a class="dropdown-item waves-light" mdbWavesEffect href="sale">Vendas</a>
+        </div>
+      </li>
+
+      <li class="nav-item dropdown" dropdown>
+        <a dropdownToggle mdbWavesEffect type="button" class="nav-link dropdown-toggle waves-light" mdbWavesEffect>
+          <mdb-icon fas icon="user"></mdb-icon> Gerais <span class="caret"></span></a>
+        <div *dropdownMenu class="dropdown-menu dropdown-menu-right dropdown dropdown-primary" role="menu">
             <a class="dropdown-item waves-light" mdbWavesEffect href="service-type">Tipos de Serviços</a>
-            <div class="divider dropdown-divider"></div>
-            <a class="dropdown-item waves-light" mdbWavesEffect href="#">Separated link</a>
-          </div>
-        </li>
-      </ul>
+            <a class="dropdown-item waves-light" mdbWavesEffect href="productcategory">Categorias de Produtos</a>
+            <a class="dropdown-item waves-light" mdbWavesEffect href="product">Produtos</a>
+        </div>
+      </li>
+    </ul>
 
-      <ul class="navbar-nav ml-auto">
-          <li class="nav-item active">
-            <a class="nav-link waves-light" mdbWavesEffect><mdb-icon fas icon="envelope"></mdb-icon> Contact<span class="sr-only">(current)</span></a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link waves-light" mdbWavesEffect routerLink="/user"><mdb-icon fas icon="cog"></mdb-icon> Settings</a>
-          </li>
-          <li class="nav-item dropdown" dropdown>
-            <a dropdownToggle mdbWavesEffect type="button" class="nav-link dropdown-toggle waves-light" mdbWavesEffect>
-              <mdb-icon fas icon="user"></mdb-icon> Profile<span class="caret"></span></a>
-            <div *dropdownMenu class="dropdown-menu dropdown-menu-right dropdown dropdown-primary" role="menu">
-              <a class="dropdown-item waves-light" mdbWavesEffect href="../user">My account</a>
-              <a class="dropdown-item waves-light" mdbWavesEffect (click)="logout()">Log out</a>
-            </div>
-          </li>
+    <ul class="navbar-nav ml-auto">
+      <!--
+      <li class="nav-item active">
+        <a class="nav-link waves-light" mdbWavesEffect>
+          <mdb-icon fas icon="envelope"></mdb-icon> Contact<span class="sr-only">(current)</span></a>
+      </li>-->
 
-        </ul>
+      <li class="nav-item dropdown" dropdown>
+        <a dropdownToggle mdbWavesEffect type="button" class="nav-link dropdown-toggle waves-light" mdbWavesEffect>
+          <mdb-icon fas icon="cog"></mdb-icon> Settings<span class="caret"></span></a>
+        <div *dropdownMenu class="dropdown-menu dropdown-menu-right dropdown dropdown-primary" role="menu">
+          <a class="dropdown-item waves-light" mdbWavesEffect href="tenant">Tenants</a>
+          <a class="dropdown-item waves-light" mdbWavesEffect href="permission">Permissões</a>
+          <a class="dropdown-item waves-light" mdbWavesEffect href="employee">Funcionários</a>
+          <a class="dropdown-item waves-light" mdbWavesEffect href="user">Usuários</a>
+        </div>
+      </li>
+
+      <li class="nav-item dropdown" dropdown>
+        <a dropdownToggle mdbWavesEffect type="button" class="nav-link dropdown-toggle waves-light" mdbWavesEffect>
+          <mdb-icon fas icon="user"></mdb-icon> Profile<span class="caret"></span></a>
+        <div *dropdownMenu class="dropdown-menu dropdown-menu-right dropdown dropdown-primary" role="menu">
+          <!-- <a class="dropdown-item waves-light" mdbWavesEffect href="../user">My account</a> -->
+          <a class="dropdown-item waves-light" mdbWavesEffect (click)="logout()">Log out</a>
+        </div>
+      </li>
+
+    </ul>
 
 
-    </links>
+  </links>
 
-  </mdb-navbar>
+</mdb-navbar>

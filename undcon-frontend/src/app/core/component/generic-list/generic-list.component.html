@@ -1,0 +1,46 @@
+<div class="container-fluid" style="margin-top: 80px;">
+  <div class="card">
+    <div class="card-header">
+      Filtros
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="md-form col-12 col-md-6">
+          <input type="text" id="user" class="form-control" mdbInput mdbValidate>
+          <label for="user">Nome</label>
+        </div>
+      </div>
+    </div>
+    <div class="card-footer">
+      <ul class="nav nav-pills card-header-pills">
+        <li class="nav-item">
+          <button mdbBtn class="btn btn-primary" mdbWavesEffect>Buscar</button>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      Registros Encontrados
+      <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th *ngFor="let field of getHeaderTitle()" >
+                  {{ field }}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of items">
+                <th *ngFor="let field of getHeaderTitle()">
+                  {{ getFieldsOfTable(item, field) }}
+                </th>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

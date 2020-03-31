@@ -8,15 +8,11 @@ enum DatabaseSchemaType {
         /**
          * Caminho dos cripts para o schema publico.
          */
-        PUBLIC("filesystem:script/migration/public"),
+        PUBLIC("script/migration/public"),
         /**
          * Caminho dos scripts para o schema de cada cliente.
          */
-        TENANTS("filesystem:script/migration/tenants"),
-        /**
-         * Caminho dos scripts do schema do Quartz.
-         */
-        QUARTZ_SCHEDULER("filesystem:script/migration/quartz-scheduler");
+        TENANTS("script/migration/tenants");
 
     private String location;
 

@@ -19,12 +19,12 @@ const routes: Routes = [
   { path: PageEnum.PERMISSION, loadChildren: () => import('@app/permission/permission.module').then(m => m.PermissionModule)},
   { path: PageEnum.SERVICE_TYPE, loadChildren: () => import('@app/service-type/service-type.module').then(m => m.ServiceTypeModule)},
   //{ path: PageEnum.FINANCIAL, loadChildren: '@app/financial/financial.module#FinancialModule'},
-  //{ path: PageEnum.SALE, loadChildren: '@app/sale/sale.module#SaleModule'},
-  //{ path: PageEnum.PURCHASE, loadChildren: '@app/purchase/purchase.module#PurchaseModule'},
+  { path: PageEnum.SALE, loadChildren: () => import('@app/sale/sale.module').then(m => m.SaleModule)},
+  { path: PageEnum.PURCHASE, loadChildren: () => import('@app/purchase/purchase.module').then(m => m.PurchaseModule)},
 
   //{ path: PageEnum.MENU_TEMPLATE, loadChildren: '@app/menuTemplate/menuTemplate.module#ManuTemplateModule'},
   //{ path: PageEnum.CONFIG, loadChildren: '@app/config/config.module#ConfigModule'},
-  //{ path: PageEnum.TENANT, loadChildren: '@app/tenant/tenant.module#TenantModule'},
+  { path: PageEnum.TENANT, loadChildren: () => import('@app/tenant/tenant.module').then(m => m.TenantModule)},
 
   { path: '**', component: PageNotFoundComponent, canActivate: [AuthGuard]}
 ];

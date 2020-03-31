@@ -1,4 +1,4 @@
-<div class="container-fluid" style="margin-top: 80px;">
+<div class="container-fluid screen-top screen-bottom">
   <div class="card">
     <div class="card-header">
       Filtros
@@ -7,7 +7,7 @@
       <div class="row">
         <div class="md-form col-12 col-md-6">
           <input type="text" id="user" class="form-control" mdbInput mdbValidate>
-          <label for="user">Nome</label>
+          <label for="user">Fornecedor</label>
         </div>
       </div>
     </div>
@@ -26,16 +26,13 @@
         <table class="table table-striped">
           <thead>
             <tr>
-              <th>Id</th>
-              <th>Nome</th>
+              <th>Vendas</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let item of items">
               <div (click)="onClickItem(item)">
-                <th *ngFor="let field of getFieldsOfTable()" scope="row">
-                  {{field}}
-                </th>
+                <th scope="row">{{ item.login }}</th>
               </div>
             </tr>
           </tbody>

@@ -6,7 +6,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.undcon.app.model.CustomerEntity;
 import com.undcon.app.model.ProviderEntity;
 
 public interface IProviderRepository extends JpaRepository<ProviderEntity, Long> {

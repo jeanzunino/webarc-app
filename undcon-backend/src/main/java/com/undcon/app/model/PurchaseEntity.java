@@ -23,7 +23,7 @@ public class PurchaseEntity {
 	private Long id;
 
 	@ManyToOne
-	@JoinColumn(name = "forncedor_id", nullable = false)
+	@JoinColumn(name = "fornecedor_id", nullable = false)
 	private ProviderEntity provider;
 
 	@Column(name = "data_compra", nullable = false)

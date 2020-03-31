@@ -9,7 +9,7 @@ export class GenericListComponent<T> implements OnInit {
   private ngUnsubscribe = new Subject();
 
   constructor(private entityService: EntityService<T>,
-              private activatedRoute: ActivatedRoute) { }
+    private activatedRoute: ActivatedRoute) { }
 
   items: T[];
 
@@ -21,8 +21,22 @@ export class GenericListComponent<T> implements OnInit {
     console.log(item)
   }
 
+  getHeaderTitle() {
+    return ['Id', 'Nome'];
+  }
+
   //Campos padrões caso a tela não implemente esse método
-  getFieldsOfTable() {
-    return ['item.id' , 'item.name'];
+  getFieldsOfTable(item, header) {
+    switch (header) {
+      case 'Id': {
+        return item.id;
+      }
+      case 'Nome': {
+        return item.name;
+      }
+      default: {
+        return '';
+      }
+    }
   }
 }

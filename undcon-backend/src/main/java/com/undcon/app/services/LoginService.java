@@ -3,8 +3,6 @@ package com.undcon.app.services;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 
-import javax.security.auth.login.LoginException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -19,6 +17,8 @@ import com.nimbusds.jose.crypto.MACSigner;
 import com.undcon.app.dtos.LoginRequestDto;
 import com.undcon.app.dtos.LoginResponseDto;
 import com.undcon.app.dtos.UserDto;
+import com.undcon.app.enums.UndconError;
+import com.undcon.app.exceptions.UndconException;
 import com.undcon.app.mappers.UserMapper;
 import com.undcon.app.model.UserEntity;
 import com.undcon.app.multitenancy.ThreadLocalStorage;
@@ -40,7 +40,7 @@ public class LoginService {
     @Autowired
     private UserService userService;
 
-    public LoginResponseDto login(LoginRequestDto dto) throws LoginException, NoSuchAlgorithmException, UnsupportedEncodingException {
+    public LoginResponseDto login(LoginRequestDto dto) throws NoSuchAlgorithmException, UnsupportedEncodingException, UndconException{
 
         String tenantByLogin = getTenantByLogin(dto.getLogin());
 
@@ -52,7 +52,7 @@ public class LoginService {
         if (user == null) {
             user = userRepository.findAllByLoginAndPassword(dto.getLogin(), "");
             if (user == null) {
-                throw new LoginException("Usuário/Senha inválido");
+                throw new UndconException(UndconError.INVALID_USER_OR_PASSWORD);
             }
             resetPassword = true;
         }
@@ -104,10 +104,10 @@ public class LoginService {
         return response;
     }
 
-    private static String getTenantByLogin(String login) throws LoginException {
+    private static String getTenantByLogin(String login) throws UndconException {
         String[] split = login.trim().split("@");
         if (split.length != 2) {
-            throw new LoginException("Usuário no fomato inválido");
+            throw new UndconException(UndconError.INVALID_LOGIN_FORMAT);
         }
         String tenant = split[1];
         return tenant;

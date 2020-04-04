@@ -2,6 +2,12 @@ package com.undcon.app.enums;
 
 public enum UndconError {
 
+	INVALID_USER_OR_PASSWORD("Usuário ou senha inválidos"),
+	
+	INVALID_USER_LOGGED("Usuário logado está inválido, inativo, ou foi excluído"),
+	
+	INVALID_LOGIN_FORMAT("Usuário inválido: o usuário deve estar no formato 'usuario@cliente'"),
+	
 	NAME_ALREADY_EXISTS("O nome informado já existe"),
 	
 	NEW_REGISTER_INVALID_ID("O novo registro a ser salvo não pode ter o id preenchido"),

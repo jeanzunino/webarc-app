@@ -95,7 +95,7 @@ public class SaleService {
 		return saleRepository.save(sale);
 	}
 
-	public void delete(long id) {
+	public void delete(long id) throws UndconException {
 		permissionService.checkPermission(ResourseType.SALE);
 		SaleEntity sale = findById(id);
 		sale.setStatus(SaleStatus.CANCELED);

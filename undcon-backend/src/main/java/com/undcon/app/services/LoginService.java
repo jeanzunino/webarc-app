@@ -56,7 +56,11 @@ public class LoginService {
             }
             resetPassword = true;
         }
-
+        
+        if(!user.isActive()) {
+        	throw new UndconException(UndconError.USER_BLOCKED);
+        }
+        
         // Create payload
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("userId", user.getId());

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.undcon.app.enums.ResourseType;
+import com.undcon.app.exceptions.UndconException;
 import com.undcon.app.model.UserEntity;
 import com.undcon.app.multitenancy.ThreadLocalStorage;
 import com.undcon.app.repositories.IUserRepository;
@@ -38,7 +39,7 @@ public class UserService {
 		return userRepository.findOne(id);
 	}
 
-	public UserEntity persist(UserEntity user) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+	public UserEntity persist(UserEntity user) throws NoSuchAlgorithmException, UnsupportedEncodingException, UndconException {
 		permissionService.checkPermission(ResourseType.USER);
 		if (LongUtils.longIsPositiveValue(user.getId())) {
 			throw new IllegalArgumentException("O novo registro a ser salvo não pode ter o id preenchido.");
@@ -47,7 +48,7 @@ public class UserService {
 		return userRepository.save(user);
 	}
 
-	public UserEntity update(UserEntity user) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+	public UserEntity update(UserEntity user) throws NoSuchAlgorithmException, UnsupportedEncodingException, UndconException {
 		permissionService.checkPermission(ResourseType.USER);
 		UserEntity find = findById(user.getId());
 		find.setLogin(user.getLogin());
@@ -71,13 +72,13 @@ public class UserService {
 		return hexString.toString();
 	}
 
-	public void delete(long id) {
+	public void delete(long id) throws UndconException {
 		permissionService.checkPermission(ResourseType.USER);
 		userRepository.delete(id);
 	}
 
 	@Transactional
-	public void resetPassword(long id) throws IllegalAccessException {
+	public void resetPassword(long id) throws IllegalAccessException, UndconException {
 		permissionService.checkPermission(ResourseType.CONFIGURATION);
 		UserEntity find = findById(id);
 		find.setPassword("");
@@ -85,8 +86,7 @@ public class UserService {
 	}
 
 	public UserEntity getCurrentUser() {
-		Long userId = ThreadLocalStorage.getUser();
-		return findById(userId);
+		return ThreadLocalStorage.getUser();
 	}
 
 }

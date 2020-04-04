@@ -38,7 +38,7 @@ public class ExpenseService {
 		return expenseRepository.save(entity);
 	}
 
-	public void delete(long id) {
+	public void delete(long id) throws UndconException {
 		permissionService.checkPermission(ResourseType.EXPENSE);
 		expenseRepository.delete(id);
 	}

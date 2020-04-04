@@ -38,7 +38,8 @@ public class PermissionApi {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<PermissionEntity> getAll(@QueryParam("name") String name, @QueryParam("page") Integer page, @QueryParam("size") Integer size) {
+	public List<PermissionEntity> getAll(@QueryParam("name") String name, @QueryParam("page") Integer page,
+			@QueryParam("size") Integer size) {
 		return permissionService.getAll(name, page, size);
 	}
 
@@ -63,9 +64,8 @@ public class PermissionApi {
 		try {
 			return permissionService.persist(entity);
 		} catch (UndconException e) {
-			throw new WebApplicationException(Response
-				     .status(Response.Status.BAD_REQUEST)
-				     .entity(new ErrorMessageModel(e.getError())).build());
+			throw new WebApplicationException(
+					Response.status(Response.Status.BAD_REQUEST).entity(new ErrorMessageModel(e.getError())).build());
 		}
 	}
 
@@ -92,9 +92,8 @@ public class PermissionApi {
 		try {
 			return permissionService.update(entity);
 		} catch (UndconException e) {
-			throw new WebApplicationException(Response
-				     .status(Response.Status.BAD_REQUEST)
-				     .entity(new ErrorMessageModel(e.getError())).build());
+			throw new WebApplicationException(
+					Response.status(Response.Status.BAD_REQUEST).entity(new ErrorMessageModel(e.getError())).build());
 		}
 	}
 
@@ -102,6 +101,11 @@ public class PermissionApi {
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public void delete(@PathParam("id") long id) {
-		permissionService.delete(id);
+		try {
+			permissionService.delete(id);
+		} catch (UndconException e) {
+			throw new WebApplicationException(
+					Response.status(Response.Status.BAD_REQUEST).entity(new ErrorMessageModel(e.getError())).build());
+		}
 	}
 }

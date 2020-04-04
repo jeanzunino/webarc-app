@@ -2,8 +2,6 @@ package com.undcon.app.services;
 
 import java.util.List;
 
-import javax.ws.rs.ForbiddenException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -24,17 +22,17 @@ public class TenantService {
 	@Autowired
 	private PermissionService permissionService;
 
-	public List<TenantEntity> getAll(Integer page, Integer size) {
+	public List<TenantEntity> getAll(Integer page, Integer size) throws UndconException {
 		permissionService.checkPermission(ResourseType.TENANT);
 		return tenantRepository.findAll(PageUtils.createPageRequest(page, size)).getContent();
 	}
 
-	public TenantEntity findById(Long id) {
+	public TenantEntity findById(Long id) throws UndconException {
 		permissionService.checkPermission(ResourseType.TENANT);
 		return tenantRepository.findOne(id);
 	}
 
-	public TenantEntity persist(TenantEntity tenant) throws UndconException, ForbiddenException {
+	public TenantEntity persist(TenantEntity tenant) throws UndconException {
 		permissionService.checkPermission(ResourseType.TENANT);
 		if (LongUtils.longIsPositiveValue(tenant.getId())) {
 			throw new UndconException(UndconError.NEW_REGISTER_INVALID_ID);
@@ -43,12 +41,13 @@ public class TenantService {
 		return tenantRepository.save(tenant);
 	}
 
-	public TenantEntity update(TenantEntity tenant) throws ForbiddenException {
+	public TenantEntity update(TenantEntity tenant) throws UndconException {
 		permissionService.checkPermission(ResourseType.TENANT);
 		return tenantRepository.save(tenant);
 	}
 
-	public void delete(long id) {
+	public void delete(long id) throws UndconException {
+		permissionService.checkPermission(ResourseType.TENANT);
 		tenantRepository.delete(id);
 	}
 

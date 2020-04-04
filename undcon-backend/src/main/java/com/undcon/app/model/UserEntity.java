@@ -13,67 +13,80 @@ import javax.persistence.Table;
 @Table(name = "usuario")
 public class UserEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
+	private Long id;
 
-    @Column(name = "login")
-    private String login;
+	@Column(name = "login")
+	private String login;
 
-    @Column(name = "senha")
-    private String password;
+	@Column(name = "senha")
+	private String password;
 
-    @OneToOne
-    @JoinColumn(name = "empregado_id", nullable = true)
-    private EmployeeEntity employee;
+	@Column(name = "ativo", nullable = false)
+	private boolean active;
 
-    @OneToOne
-    @JoinColumn(name = "permissao_id", nullable = true)
-    private PermissionEntity permission;
+	@OneToOne
+	@JoinColumn(name = "empregado_id", nullable = true)
+	private EmployeeEntity employee;
 
-    protected UserEntity() {
-    }
+	@OneToOne
+	@JoinColumn(name = "permissao_id", nullable = true)
+	private PermissionEntity permission;
 
-    public UserEntity(Long id, String login, String password, EmployeeEntity employee, PermissionEntity permission) {
-        super();
-        this.id = id;
-        this.login = login;
-        this.password = password;
-        this.employee = employee;
-        this.permission = permission;
-    }
+	protected UserEntity() {
+	}
 
-    public Long getId() {
-        return id;
-    }
+	public UserEntity(Long id, String login, String password, EmployeeEntity employee, PermissionEntity permission,
+			boolean active) {
+		super();
+		this.id = id;
+		this.login = login;
+		this.password = password;
+		this.employee = employee;
+		this.permission = permission;
+		this.active = active;
+	}
 
-    public String getLogin() {
-        return login;
-    }
+	public Long getId() {
+		return id;
+	}
 
-    public void setLogin(String login) {
-        this.login = login;
-    }
+	public String getLogin() {
+		return login;
+	}
 
-    public EmployeeEntity getEmployee() {
-        return employee;
-    }
+	public void setLogin(String login) {
+		this.login = login;
+	}
 
-    public String getPassword() {
-        return password;
-    }
+	public EmployeeEntity getEmployee() {
+		return employee;
+	}
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+	public String getPassword() {
+		return password;
+	}
 
-    public PermissionEntity getPermission() {
-        return permission;
-    }
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
-    public void setEmployee(EmployeeEntity employee) {
-        this.employee = employee;
-    }
+	public PermissionEntity getPermission() {
+		return permission;
+	}
+
+	public void setEmployee(EmployeeEntity employee) {
+		this.employee = employee;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+
+	public boolean isActive() {
+		return active;
+	}
 
 }

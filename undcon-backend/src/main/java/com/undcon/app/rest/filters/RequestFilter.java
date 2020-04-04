@@ -10,19 +10,28 @@ import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWSObject;
 import com.nimbusds.jose.JWSVerifier;
 import com.nimbusds.jose.Payload;
 import com.nimbusds.jose.crypto.MACVerifier;
+import com.undcon.app.enums.UndconError;
+import com.undcon.app.model.UserEntity;
 import com.undcon.app.multitenancy.ThreadLocalStorage;
+import com.undcon.app.rest.models.ErrorMessageModel;
 import com.undcon.app.services.LoginService;
+import com.undcon.app.services.UserService;
 
 import net.minidev.json.JSONObject;
 
 @Provider
 public class RequestFilter implements ContainerRequestFilter {
 
+	@Autowired
+	private UserService userService;
+	
     @Override
     public void filter(ContainerRequestContext ctx) throws IOException {
 
@@ -52,14 +61,27 @@ public class RequestFilter implements ContainerRequestFilter {
         JSONObject payloadAsJsonObject = verifyTokenAndGetTenant(token);
 
         ThreadLocalStorage.setTenantName((String) payloadAsJsonObject.get("tenant"));
-        ThreadLocalStorage.setUserId((Long) payloadAsJsonObject.get("userId"));
+        Long userId = (Long) payloadAsJsonObject.get("userId");
+        
+        UserEntity user = userService.findById(userId);
+        if(user == null || !user.isActive()) {
+        	throw new WebApplicationException(Response
+				     .status(Response.Status.UNAUTHORIZED)
+				     .entity(new ErrorMessageModel(UndconError.INVALID_USER_LOGGED)).build());
+        }
+
+        ThreadLocalStorage.setUser(user);
         
         Boolean resetPassword = (Boolean) payloadAsJsonObject.get("resetPassword");
         if(resetPassword == null) {
-            throw new WebApplicationException("Token inválido. Tente logar novamente.", Response.Status.UNAUTHORIZED);
+        	throw new WebApplicationException(Response
+				     .status(Response.Status.UNAUTHORIZED)
+				     .entity(new ErrorMessageModel(UndconError.INVALID_TOKEN_RETRY_LOGIN)).build());
         }
         if(resetPassword && !ctx.getUriInfo().getAbsolutePath().getPath().contains("user")) {
-            throw new WebApplicationException("Token foi gerado para alterar a senha. Altere a senha e tente logar novamente.", Response.Status.UNAUTHORIZED);
+        	throw new WebApplicationException(Response
+				     .status(Response.Status.UNAUTHORIZED)
+				     .entity(new ErrorMessageModel(UndconError.INVALID_TOKEN_UPDATE_PASSWORD)).build());
         }
     }
 

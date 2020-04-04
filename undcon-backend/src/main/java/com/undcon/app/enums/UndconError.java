@@ -4,7 +4,13 @@ public enum UndconError {
 
 	INVALID_USER_OR_PASSWORD("Usuário ou senha inválidos"),
 	
+	USER_BLOCKED("O usuário está bloqueado"),
+	
 	INVALID_USER_LOGGED("Usuário logado está inválido, inativo, ou foi excluído"),
+	
+	INVALID_TOKEN_RETRY_LOGIN("Token inválido. Tente logar novamente."),
+	
+	INVALID_TOKEN_UPDATE_PASSWORD("Token foi gerado para alterar a senha. Altere a senha e tente logar novamente."),
 	
 	INVALID_LOGIN_FORMAT("Usuário inválido: o usuário deve estar no formato 'usuario@cliente'"),
 	

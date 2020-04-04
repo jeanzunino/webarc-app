@@ -52,7 +52,7 @@ public class ProviderService {
 		}
 	}
 
-	public void delete(long id) {
+	public void delete(long id) throws UndconException {
 		permissionService.checkPermission(ResourseType.PROVIDER);
 		providerRepository.delete(id);
 	}

@@ -32,14 +32,24 @@ public class TenantApi {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<TenantEntity> getAll(@QueryParam("page") Integer page, @QueryParam("size") Integer size) {
-		return service.getAll(page, size);
+		try {
+			return service.getAll(page, size);
+		} catch (UndconException e) {
+			throw new WebApplicationException(
+					Response.status(Response.Status.BAD_REQUEST).entity(new ErrorMessageModel(e.getError())).build());
+		}
 	}
 
 	@GET
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public TenantEntity get(@PathParam("id") long id) {
-		return service.findById(id);
+		try {
+			return service.findById(id);
+		} catch (UndconException e) {
+			throw new WebApplicationException(
+					Response.status(Response.Status.BAD_REQUEST).entity(new ErrorMessageModel(e.getError())).build());
+		}
 	}
 
 	@POST
@@ -56,13 +66,23 @@ public class TenantApi {
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
 	public TenantEntity put(TenantEntity tenant) {
-		return service.update(tenant);
+		try {
+			return service.update(tenant);
+		} catch (UndconException e) {
+			throw new WebApplicationException(
+					Response.status(Response.Status.BAD_REQUEST).entity(new ErrorMessageModel(e.getError())).build());
+		}
 	}
 
 	@DELETE
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public void delete(@PathParam("id") long id) {
-		service.delete(id);
+		try {
+			service.delete(id);
+		} catch (UndconException e) {
+			throw new WebApplicationException(
+					Response.status(Response.Status.BAD_REQUEST).entity(new ErrorMessageModel(e.getError())).build());
+		}
 	}
 }

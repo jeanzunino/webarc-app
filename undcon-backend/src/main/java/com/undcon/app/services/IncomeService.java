@@ -38,7 +38,7 @@ public class IncomeService {
 		return incomeRepository.save(entity);
 	}
 
-	public void delete(long id) {
+	public void delete(long id) throws UndconException {
 		permissionService.checkPermission(ResourseType.INCOME);
 		incomeRepository.delete(id);
 	}

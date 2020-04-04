@@ -70,6 +70,11 @@ public class ServiceTypeApi {
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public void delete(@PathParam("id") long id) {
-		serviceTypeService.delete(id);
+		try {
+			serviceTypeService.delete(id);
+		} catch (UndconException e) {
+			throw new WebApplicationException(
+					Response.status(Response.Status.BAD_REQUEST).entity(new ErrorMessageModel(e.getError())).build());
+		}
 	}
 }

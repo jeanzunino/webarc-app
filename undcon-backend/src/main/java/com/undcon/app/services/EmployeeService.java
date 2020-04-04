@@ -52,7 +52,7 @@ public class EmployeeService {
 		}
 	}
 
-	public void delete(long id) {
+	public void delete(long id) throws UndconException {
 		permissionService.checkPermission(ResourseType.EMPLOYEE);
 		repository.delete(id);
 	}

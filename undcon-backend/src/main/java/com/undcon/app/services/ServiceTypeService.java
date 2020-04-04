@@ -48,7 +48,7 @@ public class ServiceTypeService {
 		}
 	}
 
-	public void delete(long id) {
+	public void delete(long id) throws UndconException {
 		permissionService.checkPermission(ResourseType.SERVICE_TYPE);
 		repository.delete(id);
 	}

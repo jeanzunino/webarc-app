@@ -59,7 +59,7 @@ public class PurchaseService {
 		return purchaseRepository.save(entity);
 	}
 
-	public void delete(long id) {
+	public void delete(long id) throws UndconException {
 		permissionService.checkPermission(ResourseType.PURCHASE);
 		PurchaseEntity sale = findById(id);
 		sale.setStatus(SaleStatus.CANCELED);

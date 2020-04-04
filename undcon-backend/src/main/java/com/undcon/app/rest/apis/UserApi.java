@@ -20,8 +20,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.undcon.app.dtos.UserDto;
+import com.undcon.app.exceptions.UndconException;
 import com.undcon.app.mappers.UserMapper;
 import com.undcon.app.model.UserEntity;
+import com.undcon.app.rest.models.ErrorMessageModel;
 import com.undcon.app.services.UserService;
 
 @Component
@@ -57,6 +59,9 @@ public class UserApi {
 			return  mapper.toDto(service.persist(user));
 		} catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
 			throw new WebApplicationException(e, Response.Status.INTERNAL_SERVER_ERROR);
+		} catch (UndconException e) {
+			throw new WebApplicationException(
+					Response.status(Response.Status.BAD_REQUEST).entity(new ErrorMessageModel(e.getError())).build());
 		}
 	}
 
@@ -68,6 +73,9 @@ public class UserApi {
 			return mapper.toDto(service.update(user));
 		} catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
 			throw new WebApplicationException(e, Response.Status.INTERNAL_SERVER_ERROR);
+		} catch (UndconException e) {
+			throw new WebApplicationException(
+					Response.status(Response.Status.BAD_REQUEST).entity(new ErrorMessageModel(e.getError())).build());
 		}
 	}
 
@@ -75,7 +83,12 @@ public class UserApi {
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public void delete(@PathParam("id") long id) {
-	    service.delete(id);
+	    try {
+			service.delete(id);
+		} catch (UndconException e) {
+			throw new WebApplicationException(
+					Response.status(Response.Status.BAD_REQUEST).entity(new ErrorMessageModel(e.getError())).build());
+		}
 	}
 	
 	@PUT
@@ -86,6 +99,9 @@ public class UserApi {
             service.resetPassword(id);
         } catch (IllegalAccessException e) {
             throw new WebApplicationException(e.getMessage(), Response.Status.FORBIDDEN);
-        }
+        } catch (UndconException e) {
+        	throw new WebApplicationException(
+					Response.status(Response.Status.BAD_REQUEST).entity(new ErrorMessageModel(e.getError())).build());
+		}
     }
 }

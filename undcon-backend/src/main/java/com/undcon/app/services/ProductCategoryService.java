@@ -52,7 +52,7 @@ public class ProductCategoryService {
 		}
 	}
 
-	public void delete(long id) {
+	public void delete(long id) throws UndconException {
 		permissionService.checkPermission(ResourseType.PRODUCT_CATEGORY);
 		productCategoryRepository.delete(id);
 	}

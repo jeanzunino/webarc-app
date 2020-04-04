@@ -1,9 +1,11 @@
 package com.undcon.app.multitenancy;
 
+import com.undcon.app.model.UserEntity;
+
 public class ThreadLocalStorage {
 
     private static ThreadLocal<String> tenant = new ThreadLocal<>();
-    private static ThreadLocal<Long> userId = new ThreadLocal<>();
+    private static ThreadLocal<UserEntity> user = new ThreadLocal<>();
 
     public static void setTenantName(String tenantName) {
         tenant.set(tenantName);
@@ -14,13 +16,13 @@ public class ThreadLocalStorage {
     }
     
     
-    public static void setUserId(Long id) {
-        userId.set(id);
+    public static void setUser(UserEntity id) {
+        user.set(id);
     }
     
     
-    public static Long getUser() {
-        return userId.get();
+    public static UserEntity getUser() {
+        return user.get();
     }
 
 }

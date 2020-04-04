@@ -16,10 +16,8 @@ import com.undcon.app.exceptions.UndconException;
 import com.undcon.app.model.PermissionEntity;
 import com.undcon.app.model.PermissionItenEntity;
 import com.undcon.app.model.UserEntity;
-import com.undcon.app.multitenancy.ThreadLocalStorage;
 import com.undcon.app.repositories.IPermissionItenRepository;
 import com.undcon.app.repositories.IPermissionRepository;
-import com.undcon.app.repositories.IUserRepository;
 import com.undcon.app.rest.models.ErrorPermissionModel;
 import com.undcon.app.utils.PageUtils;
 
@@ -30,16 +28,16 @@ public class PermissionService {
 	private IPermissionRepository permissionRepository;
 
 	@Autowired
-	private IUserRepository userRepository;
+	private UserService userService;
 
 	@Autowired
 	private IPermissionItenRepository permissionItenRepository;
 
 	public List<PermissionEntity> getAll(String name, Integer page, Integer size) {
-		if(StringUtils.isEmpty(name)) {
+		if (StringUtils.isEmpty(name)) {
 			return permissionRepository.findAll(PageUtils.createPageRequest(page, size)).getContent();
 		}
-        return permissionRepository.findAllByName(name, PageUtils.createPageRequest(page, size)).getContent();
+		return permissionRepository.findAllByName(name, PageUtils.createPageRequest(page, size)).getContent();
 	}
 
 	public PermissionEntity findById(Long id) {
@@ -58,7 +56,7 @@ public class PermissionService {
 		return permissionRepository.save(entity);
 	}
 
-	public void delete(long id) {
+	public void delete(long id) throws ForbiddenException, UndconException {
 		checkPermission(ResourseType.Permission);
 		permissionRepository.delete(id);
 	}
@@ -70,9 +68,8 @@ public class PermissionService {
 		}
 	}
 
-	public void checkPermission(ResourseType configuration) throws ForbiddenException {
-		Long currentUserId = ThreadLocalStorage.getUser();
-		UserEntity find = userRepository.findOne(currentUserId);
+	public void checkPermission(ResourseType configuration) throws UndconException {
+		UserEntity find = userService.getCurrentUser();
 		PermissionEntity permission = find.getPermission();
 		verifyPermissionHasResource(permission, configuration);
 	}
@@ -82,9 +79,9 @@ public class PermissionService {
 		List<PermissionItenEntity> itens = permissionItenRepository.findByPermission(permission);
 		boolean hasResource = itens.stream().filter(iten -> iten.getResourceType() == resource).count() > 0;
 		if (!hasResource) {
-			throw new WebApplicationException(Response
-				     .status(Response.Status.FORBIDDEN)
-				     .entity(new ErrorPermissionModel(resource, "Usuário não possui permissão para o recurso " + resource)).build());
+			throw new WebApplicationException(Response.status(Response.Status.FORBIDDEN).entity(
+					new ErrorPermissionModel(resource, "Usuário não possui permissão para o recurso " + resource))
+					.build());
 		}
 	}
 }

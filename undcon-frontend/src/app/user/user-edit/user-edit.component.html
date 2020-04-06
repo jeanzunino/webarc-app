@@ -1,0 +1,46 @@
+<div class="modal-header">
+  <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+    <span aria-hidden="true">×</span>
+  </button>
+  <h4 class="modal-title w-100" id="myModalLabel">Modal title</h4>
+</div>
+<form [formGroup]="userFormGroup">
+  <div class="modal-body container">
+    
+      <div class="md-form">
+        <input type="text" id="name" class="form-control" formControlName="name" mdbInput mdbValidate>
+        <label for="name">Usuário</label>
+        <mdb-error *ngIf="nameForm.invalid && (nameForm.dirty || nameForm.touched)">
+          Usuário inválido
+        </mdb-error>
+        <mdb-success *ngIf="nameForm.valid && (nameForm.dirty || nameForm.touched)">
+          Usuário válido
+        </mdb-success>
+      </div>
+      <div class="md-form">
+        <input type="password" id="password" class="form-control" formControlName="password" mdbInput mdbValidate>
+        <label for="password">Senha</label>
+        <mdb-error *ngIf="passwordForm.invalid && (passwordForm.dirty || passwordForm.touched)">
+          Senha inválida
+        </mdb-error>
+        <mdb-success *ngIf="passwordForm.valid && (passwordForm.dirty || passwordForm.touched)">
+          Senha válida
+        </mdb-success>
+      </div>
+      <div class="md-form">
+        <input type="password" id="confirmPassword" class="form-control" formControlName="confirmPassword" mdbInput mdbValidate>
+        <label for="confirmPassword">Confirmar Senha</label>
+        <mdb-error *ngIf="confirmPasswordForm.invalid && (confirmPasswordForm.dirty || confirmPasswordForm.touched)">
+          Senha inválida
+        </mdb-error>
+        <mdb-success *ngIf="confirmPasswordForm.valid && (confirmPasswordForm.dirty || confirmPasswordForm.touched)">
+          Senha válida
+        </mdb-success>
+      </div>
+  </div>
+  <div class="modal-footer">
+    <button mdbBtn type="button" color="secondary" class="waves-light" aria-label="Close" (click)="modalRef.hide()" mdbWavesEffect>Close</button>
+    <button mdbBtn color="danger" class="relative waves-light" (click)="onSave()" mdbWavesEffect>Save!</button>
+    <button mdbBtn type="submit" color="primary" class="relative waves-light" (click)="onSave()" mdbWavesEffect>Save!</button>
+  </div>
+</form>

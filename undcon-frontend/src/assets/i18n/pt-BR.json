@@ -1,6 +1,10 @@
 {
     "error": {
         "authentication.title": "Erro de autenticação",
-        "authentication.message": "Usuário ou senha inválido."
+        "authentication.message": "Usuário ou senha inválido.",
+        "save.title": "Não foi possível salvar o(a) {{entity}}"
+    },
+    "user": {
+        "entity": "Usuário"
     }
 }

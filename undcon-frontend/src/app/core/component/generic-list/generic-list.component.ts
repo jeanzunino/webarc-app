@@ -17,10 +17,6 @@ export class GenericListComponent<T> implements OnInit {
     this.items = this.activatedRoute.snapshot.data.items;
   }
 
-  onClickItem(item) {
-    console.log(item)
-  }
-
   getHeaderTitle() {
     return ['Id', 'Nome'];
   }

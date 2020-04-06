@@ -15,6 +15,9 @@ import { AuthGuard } from '@guard/auth/auth.guard';
 import { SharedModule } from '@app/shared/shared.module';
 import { LoginModule } from '@app/login/login.module';
 import { InterceptorModule } from './auth/interceptor/interceptor.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ReactiveFormsModule } from '@angular/forms';
+import { CollapseModule } from 'angular-bootstrap-md';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -32,6 +35,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     NavbarModule,
     LoginModule,
     InterceptorModule,
+    CollapseModule,
     ToastrModule.forRoot(),
     TranslateModule.forRoot({
       loader: {

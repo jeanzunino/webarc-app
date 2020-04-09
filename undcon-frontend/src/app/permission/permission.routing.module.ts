@@ -20,4 +20,4 @@ const routes: Routes = [
   exports: [RouterModule],
   providers: [PermissionResolver]
 })
-export class PermissionRoutingModule {}
+export class PermissionRoutingModule { }

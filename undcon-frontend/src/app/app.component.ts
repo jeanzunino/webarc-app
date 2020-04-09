@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { AuthService } from '@service/auth/auth.service';
 import { TranslateService } from '@ngx-translate/core';
+
+import { AuthService } from '@service/auth/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -21,5 +22,4 @@ export class AppComponent {
       display => this.displayMenu = display
     );
   }
-
 }

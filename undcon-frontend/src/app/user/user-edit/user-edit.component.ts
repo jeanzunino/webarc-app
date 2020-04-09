@@ -1,10 +1,11 @@
-import { Component, OnInit, AfterViewInit, AfterContentInit, OnChanges, SimpleChanges } from '@angular/core';
-import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MDBModalRef, ModalOptions } from 'angular-bootstrap-md';
-import { User } from '@app/core/model/user';
 import { ToastrService } from 'ngx-toastr';
 import { TranslateService } from '@ngx-translate/core';
-import { UserService } from '@app/core/service/user/user.service';
+
+import { User } from '@model/user';
+import { UserService } from '@service/user/user.service';
 
 export class Teste {
   user: User
@@ -19,7 +20,7 @@ export class UserEditComponent implements OnInit {
 
   userFormGroup: FormGroup;
 
-  constructor(public modalRef: MDBModalRef,
+  constructor(public userModalRef: MDBModalRef,
               public modalOptions: ModalOptions,
               private toastr: ToastrService,
               private translate: TranslateService,
@@ -62,8 +63,9 @@ export class UserEditComponent implements OnInit {
   }
 
   onSave() {
+    alert(this.passwordForm.value + ' ' + this.confirmPasswordForm.value + this.nameForm.value)
     if (this.validForm()) {
-      alert(this.modalRef.content.user.login) 
+      alert(this.userModalRef.content.user.login) 
     }
   }
 

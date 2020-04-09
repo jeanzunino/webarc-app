@@ -1,19 +1,18 @@
 import { NgModule } from '@angular/core';
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
-import { CommonModule } from '@angular/common';
-import { CustomerRoutingModule } from '@app/customer/customer.routing.module';
 
+import { CustomerRoutingModule } from '@app/customer/customer.routing.module';
 import { CustomerComponent } from '@app/customer/customer.component';
+import { SharedModule } from '@shared/shared.module';
 
 @NgModule({
   declarations: [
     CustomerComponent
   ],
   imports: [
-    CommonModule,
+    SharedModule,
     MDBBootstrapModule.forRoot(),
     CustomerRoutingModule
-    //SharedModule
   ]
 })
 export class CustomerModule { }

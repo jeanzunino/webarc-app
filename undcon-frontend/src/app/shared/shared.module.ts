@@ -1,15 +1,24 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CollapseModule, MDBBootstrapModule } from 'angular-bootstrap-md';
+import { CommonModule } from '@angular/common';
+
+import { DialogComponent } from '@component/dialog/dialog.component';
 
 @NgModule({
-  declarations: [],
+  declarations: [
+    DialogComponent
+  ],
   exports: [
     CommonModule,
-    BrowserAnimationsModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    CollapseModule,
+    DialogComponent
+  ],
+  imports: [
+    CommonModule,
+    MDBBootstrapModule.forRoot()
   ]
 })
 export class SharedModule { }

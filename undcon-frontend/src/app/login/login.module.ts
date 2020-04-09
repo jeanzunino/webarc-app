@@ -1,8 +1,7 @@
 import { NgModule } from '@angular/core';
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
-import { HttpClientModule } from '@angular/common/http';
 
-import { SharedModule } from '@app/shared/shared.module';
+import { SharedModule } from '@shared/shared.module';
 import { LoginComponent } from '@app/login/login.component';
 import { LoginRoutingModule } from '@app/login/login.routing.module';
 
@@ -12,7 +11,6 @@ import { LoginRoutingModule } from '@app/login/login.routing.module';
   ],
   imports: [
     SharedModule,
-    HttpClientModule,
     MDBBootstrapModule.forRoot(),
     LoginRoutingModule
   ],

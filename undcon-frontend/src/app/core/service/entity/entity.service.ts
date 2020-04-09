@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
-import { environment } from '@environment/environment';
 
+import { environment } from '@environment/environment';
 import { StorageService } from '@service/storage/storage.service';
 
 export class EntityService<T> {

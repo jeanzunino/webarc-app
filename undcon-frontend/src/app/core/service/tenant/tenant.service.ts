@@ -1,9 +1,8 @@
 
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
-import { Tenant } from '@core/model/tenant';
+import { Tenant } from '@model/tenant';
 import { EntityService } from '@service/entity/entity.service';
 import { StorageService } from '@service/storage/storage.service';
 

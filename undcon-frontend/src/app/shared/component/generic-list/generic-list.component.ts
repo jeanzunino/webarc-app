@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { takeUntil } from 'rxjs/operators';
+import { OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
-import { EntityService } from '@app/core/service/entity/entity.service';
+
+import { EntityService } from '@service/entity/entity.service';
 
 export class GenericListComponent<T> implements OnInit {
 
@@ -12,6 +12,7 @@ export class GenericListComponent<T> implements OnInit {
     private activatedRoute: ActivatedRoute) { }
 
   items: T[];
+  isTheFilterPanelExpanded = true;
 
   ngOnInit() {
     this.items = this.activatedRoute.snapshot.data.items;
@@ -19,6 +20,14 @@ export class GenericListComponent<T> implements OnInit {
 
   getHeaderTitle() {
     return ['Id', 'Nome'];
+  }
+
+  onClickItem(item) {
+    alert(item)
+  }
+
+  updateExpandedFlagPanel() {
+    this.isTheFilterPanelExpanded = !this.isTheFilterPanelExpanded;
   }
 
   //Campos padrões caso a tela não implemente esse método

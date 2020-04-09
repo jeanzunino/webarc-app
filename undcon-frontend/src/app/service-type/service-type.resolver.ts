@@ -1,9 +1,8 @@
-import { Resolve, ActivatedRouteSnapshot } from '@angular/router';
 import { Injectable } from '@angular/core';
 
-import { ServiceType } from '@app/core/model/service-type';
-import { ServiceTypeService } from '@app/core/service/service-type/service-type.service';
-import { GenericListResolver } from '@component-generic-list/generic-list.resolver';
+import { ServiceType } from '@model/service-type';
+import { ServiceTypeService } from '@service/service-type/service-type.service';
+import { GenericListResolver } from '@component/generic-list/generic-list.resolver';
 
 
 @Injectable()

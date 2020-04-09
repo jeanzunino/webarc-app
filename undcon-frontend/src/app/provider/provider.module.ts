@@ -1,18 +1,18 @@
 import { NgModule } from '@angular/core';
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
-import { CommonModule } from '@angular/common';
+
 import { ProviderRoutingModule } from '@app/provider/provider.routing.module';
 import { ProviderComponent } from '@app/provider/provider.component';
+import { SharedModule } from '@shared/shared.module';
 
 @NgModule({
   declarations: [
     ProviderComponent
   ],
   imports: [
-    CommonModule,
+    SharedModule,
     MDBBootstrapModule.forRoot(),
     ProviderRoutingModule
-    //SharedModule
   ]
 })
 export class ProviderModule { }

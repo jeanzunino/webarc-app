@@ -1,5 +1,5 @@
 .screen-top {
-    margin-top: 80px;
+    margin-top: 85px;
 }
 
 .screen-bottom {
@@ -8,4 +8,16 @@
 
 .btn-primary {
     background-color: red !important;
+}
+
+body {
+    background-color: #282a36;
+}
+
+.primary-system-color {
+    background-color: #21222c !important;
+}
+
+.secondary-system-color {
+    background-color: #282a36;
 }

@@ -1,9 +1,9 @@
 import { NgModule, Injectable } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { StorageService } from '@app/core/service/storage/storage.service';
 import { tap } from 'rxjs/operators';
+
+import { StorageService } from '@core/service/storage/storage.service';
 
 @Injectable()
 export class HttpsRequestInterceptor implements HttpInterceptor {

@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 import { User } from '@model/user';
 import { StorageService } from '@service/storage/storage.service';
 import { EntityService } from '@service/entity/entity.service';
-import { LoginUser } from '@app/core/model/login-user';
+import { LoginUser } from '@core/model/login-user';
 
 @Injectable({
   providedIn: 'root'

@@ -1,18 +1,16 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { takeUntil } from 'rxjs/operators';
-import { Subject } from 'rxjs';
+import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { MDBModalRef, MDBModalService } from 'angular-bootstrap-md';
 
 import { UserService } from '@service/user/user.service';
 import { User } from '@model/user';
-import { GenericListComponent } from '@component-generic-list/generic-list.component';
-import { MDBModalRef, MDBModalService } from 'angular-bootstrap-md';
+import { GenericListComponent } from '@component/generic-list/generic-list.component';
 import { UserEditComponent } from '@app/user/user-edit/user-edit.component';
 
 @Component({
   selector: 'app-generic-list',
-  templateUrl: '../core/component/generic-list/generic-list.component.html',
-  styleUrls: ['../core/component/generic-list/generic-list.component.scss']
+  templateUrl: '../shared/component/generic-list/generic-list.component.html',
+  styleUrls: ['../shared/component/generic-list/generic-list.component.scss']
 })
 export class UserComponent extends GenericListComponent<User> {
 

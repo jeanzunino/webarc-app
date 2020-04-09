@@ -1,18 +1,18 @@
 import { NgModule } from '@angular/core';
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
-import { CommonModule } from '@angular/common';
+
 import { PurchaseRoutingModule } from '@app/purchase/purchase.routing.module';
 import { PurchaseComponent } from '@app/purchase/purchase.component';
+import { SharedModule } from '@shared/shared.module';
 
 @NgModule({
   declarations: [
     PurchaseComponent
   ],
   imports: [
-    CommonModule,
+    SharedModule,
     MDBBootstrapModule.forRoot(),
     PurchaseRoutingModule
-    //SharedModule
   ]
 })
 export class PurchaseModule { }

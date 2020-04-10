@@ -1,5 +1,6 @@
 package com.undcon.app.services;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.ForbiddenException;
@@ -43,6 +44,14 @@ public class PermissionService {
 	public PermissionEntity findById(Long id) {
 		return permissionRepository.findOne(id);
 	}
+	
+	public PermissionEntity validateAndGet(Long id) throws UndconException {
+		PermissionEntity permission = findById(id);
+		if(permission == null) {
+			throw new UndconException(UndconError.PERMISSION_NOT_FOUND);
+		}
+		return permission;
+	}
 
 	public PermissionEntity persist(PermissionEntity entity) throws UndconException {
 		checkPermission(ResourseType.Permission);
@@ -68,20 +77,21 @@ public class PermissionService {
 		}
 	}
 
-	public void checkPermission(ResourseType configuration) throws UndconException {
+	public void checkPermission(ResourseType resource) throws UndconException {
 		UserEntity find = userService.getCurrentUser();
-		PermissionEntity permission = find.getPermission();
-		verifyPermissionHasResource(permission, configuration);
-	}
-
-	private void verifyPermissionHasResource(PermissionEntity permission, ResourseType resource)
-			throws ForbiddenException {
-		List<PermissionItenEntity> itens = permissionItenRepository.findByPermission(permission);
-		boolean hasResource = itens.stream().filter(iten -> iten.getResourceType() == resource).count() > 0;
+		List<ResourseType> resources = getResourcesOfUser(find);
+		boolean hasResource = resources.stream().filter(iten -> iten == resource).count() > 0;
 		if (!hasResource) {
 			throw new WebApplicationException(Response.status(Response.Status.FORBIDDEN).entity(
 					new ErrorPermissionModel(resource, "Usuário não possui permissão para o recurso " + resource))
 					.build());
 		}
+	}
+
+	public List<ResourseType> getResourcesOfUser(UserEntity user) {
+		List<ResourseType> resources = new ArrayList<ResourseType>();
+		List<PermissionItenEntity> itens = permissionItenRepository.findByPermission(user.getPermission());
+		itens.stream().forEach(resource -> resources.add(resource.getResourceType()));
+		return resources;
 	}
 }

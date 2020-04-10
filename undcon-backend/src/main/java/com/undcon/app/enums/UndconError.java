@@ -2,6 +2,10 @@ package com.undcon.app.enums;
 
 public enum UndconError {
 
+	API_ERROR_INVALID_PARAMETERS("Ocorreu um erro na API"),
+	
+	GENERIC_ERROR("Erro gerérico não tratado no Backend"),
+	
 	INVALID_USER_OR_PASSWORD("Usuário ou senha inválidos"),
 	
 	USER_BLOCKED("O usuário está bloqueado"),
@@ -16,6 +20,10 @@ public enum UndconError {
 	
 	NAME_ALREADY_EXISTS("O nome informado já existe"),
 	
+	LOGIN_ALREADY_EXISTS("O login informado já existe"),
+	
+	LOGIN_ALREADY_EXISTS_IN_EMPLOYEE("O login já foi informado para este colaborador"),
+	
 	NEW_REGISTER_INVALID_ID("O novo registro a ser salvo não pode ter o id preenchido"),
 	
 	PERMISSION_DENIED_TO_RESOURCE("Permissão negada para o recurso"),
@@ -23,6 +31,10 @@ public enum UndconError {
 	SALE_ENTITY_INVALID_CLIENT("Cliente inválido para a venda"),
 	
 	SALE_NOT_FOUND("Venda não encontrada"),
+	
+	PERMISSION_NOT_FOUND("Permissão não encontrada"),
+	
+	EMPLOYEE_NOT_FOUND("Funcionário não encontrado"),
 	
 	SALE_ITEM_NOT_FOUND("Item de venda não encontrado"),
 	

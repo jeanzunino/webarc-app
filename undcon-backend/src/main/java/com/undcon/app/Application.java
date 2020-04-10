@@ -40,19 +40,16 @@ public class Application extends SpringBootServletInitializer {
 
 	@Bean
 	public DataSourceBeanApplicationListener getContextRefreshedListener() {
-		System.err.println("Application getContextRefreshedListener");
 		return new DataSourceBeanApplicationListener();
 	}
 
 	@Bean
 	public DataSourceBeanApplicationListener getBootListener() {
-		System.err.println("Application getBootListener");
 		return new DataSourceBeanApplicationListener();
 	}
 
 	@Bean
 	public CommandLineRunner getRunner(ApplicationContext ctx) {
-		System.err.println("Application getRunner");
 		return (args) -> {
 			ctx.getBean(DataSource.class);
 		};

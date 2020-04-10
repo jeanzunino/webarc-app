@@ -81,6 +81,10 @@ public class UserEntity {
 		this.employee = employee;
 	}
 
+	public void setPermission(PermissionEntity permission) {
+		this.permission = permission;
+	}
+
 	public void setActive(boolean active) {
 		this.active = active;
 	}

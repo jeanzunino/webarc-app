@@ -18,8 +18,11 @@ import javax.ws.rs.core.Response;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 
 import com.undcon.app.dtos.UserDto;
+import com.undcon.app.enums.ResourseType;
+import com.undcon.app.enums.UndconError;
 import com.undcon.app.exceptions.UndconException;
 import com.undcon.app.mappers.UserMapper;
 import com.undcon.app.model.UserEntity;
@@ -31,14 +34,15 @@ import com.undcon.app.services.UserService;
 public class UserApi {
 
 	@Autowired
-    private UserMapper mapper;
+	private UserMapper mapper;
 
 	@Autowired
 	private UserService service;
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<UserDto> getAll(@QueryParam("login") String login, @QueryParam("page") Integer page, @QueryParam("size") Integer size) {
+	public List<UserDto> getAll(@QueryParam("login") String login, @QueryParam("page") Integer page,
+			@QueryParam("size") Integer size) {
 		List<UserEntity> findAll = service.getAll(page, size, login);
 		List<UserDto> dtos = mapper.toDto(findAll);
 		return dtos;
@@ -52,16 +56,32 @@ public class UserApi {
 		return mapper.toDto(customer);
 	}
 
+	@GET
+	@Path("/current/permissions")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<ResourseType> getPermissionOfLoggeduser() {
+		return service.getPermissionOfLoggeduser();
+	}
+
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	public UserDto post(UserEntity user) {
 		try {
-			return  mapper.toDto(service.persist(user));
-		} catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
-			throw new WebApplicationException(e, Response.Status.INTERNAL_SERVER_ERROR);
+			Assert.notNull(user.getEmployee(), "employee is required");
+			Assert.notNull(user.getEmployee().getId(), "employee.id is required");
+			Assert.notNull(user.getPermission(), "permission is required");
+			Assert.notNull(user.getPermission().getId(), "permission.id is required");
+			Assert.notNull(user.getPassword(), "password is required");
+			return mapper.toDto(service.persist(user));
 		} catch (UndconException e) {
 			throw new WebApplicationException(
 					Response.status(Response.Status.BAD_REQUEST).entity(new ErrorMessageModel(e.getError())).build());
+		} catch (IllegalArgumentException e) {
+			throw new WebApplicationException(Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+					.entity(new ErrorMessageModel(UndconError.API_ERROR_INVALID_PARAMETERS, e.getMessage())).build());
+		}catch (Exception e) {
+			throw new WebApplicationException(Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+					.entity(new ErrorMessageModel(UndconError.GENERIC_ERROR, e.getMessage())).build());
 		}
 	}
 
@@ -83,25 +103,25 @@ public class UserApi {
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public void delete(@PathParam("id") long id) {
-	    try {
+		try {
 			service.delete(id);
 		} catch (UndconException e) {
 			throw new WebApplicationException(
 					Response.status(Response.Status.BAD_REQUEST).entity(new ErrorMessageModel(e.getError())).build());
 		}
 	}
-	
+
 	@PUT
-    @Path("/{id}/resetPassword")
-    @Produces(MediaType.APPLICATION_JSON)
-    public void resetPassword(@PathParam("id") long id) {
-        try {
-            service.resetPassword(id);
-        } catch (IllegalAccessException e) {
-            throw new WebApplicationException(e.getMessage(), Response.Status.FORBIDDEN);
-        } catch (UndconException e) {
-        	throw new WebApplicationException(
+	@Path("/{id}/resetPassword")
+	@Produces(MediaType.APPLICATION_JSON)
+	public void resetPassword(@PathParam("id") long id) {
+		try {
+			service.resetPassword(id);
+		} catch (IllegalAccessException e) {
+			throw new WebApplicationException(e.getMessage(), Response.Status.FORBIDDEN);
+		} catch (UndconException e) {
+			throw new WebApplicationException(
 					Response.status(Response.Status.BAD_REQUEST).entity(new ErrorMessageModel(e.getError())).build());
 		}
-    }
+	}
 }

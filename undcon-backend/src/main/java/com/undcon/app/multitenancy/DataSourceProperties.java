@@ -10,7 +10,7 @@ import javax.sql.DataSource;
 
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.core.annotation.Order;
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 import org.springframework.stereotype.Component;
@@ -19,7 +19,7 @@ import com.zaxxer.hikari.HikariDataSource;
 
 @Component
 @Order(1)
-@ConfigurationProperties(prefix = "tenants")
+@EnableConfigurationProperties
 public class DataSourceProperties implements ApplicationRunner {
 
 	private Map<String, DataSource> datasources = new LinkedHashMap<>();
@@ -41,7 +41,7 @@ public class DataSourceProperties implements ApplicationRunner {
 	public Map<String, DataSource> getDatasources() {
 		return datasources;
 	}
-	
+
 	public AbstractRoutingDataSource configureDataSource() {
 		System.err.println("Configurando Datasources");
 		AbstractRoutingDataSource dataSource = new TenantAwareRoutingSource();
@@ -66,15 +66,23 @@ public class DataSourceProperties implements ApplicationRunner {
 
 		HikariDataSource dataSource = new HikariDataSource();
 
+		String dbUrl = System.getenv("db.url");
+		dbUrl = dbUrl == null ? "jdbc:postgresql://127.0.0.1:5432/db" : dbUrl;
+		
+		String dbUser = System.getenv("db.user");
+		dbUser = dbUser == null ? "postgres" : dbUser;
+		
+		String dbPassword = System.getenv("db.password");
+		dbPassword = dbPassword == null ? "postgres" : dbPassword;
+		
 		dataSource.setInitializationFailTimeout(0);
 		dataSource.setMaximumPoolSize(5);
 		dataSource.setDataSourceClassName("org.postgresql.ds.PGSimpleDataSource");
-		dataSource.addDataSourceProperty("url", "jdbc:postgresql://127.0.0.1:5432/postgres");
+		dataSource.addDataSourceProperty("url", dbUrl);
 		dataSource.setSchema(schema);
-		dataSource.addDataSourceProperty("user", "postgres");
-		dataSource.addDataSourceProperty("password", "postgres");
+		dataSource.addDataSourceProperty("user", dbUser);
+		dataSource.addDataSourceProperty("password", dbPassword);
 		ThreadLocalStorage.setTenantName(schema);
 		return dataSource;
 	}
-
 }

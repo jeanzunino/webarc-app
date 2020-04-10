@@ -10,7 +10,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.undcon.app.enums.ResourseType;
+import com.undcon.app.enums.UndconError;
 import com.undcon.app.exceptions.UndconException;
+import com.undcon.app.model.EmployeeEntity;
 import com.undcon.app.model.UserEntity;
 import com.undcon.app.multitenancy.ThreadLocalStorage;
 import com.undcon.app.repositories.IUserRepository;
@@ -27,6 +29,9 @@ public class UserService {
 
 	@Autowired
 	private PermissionService permissionService;
+	
+	@Autowired
+	private EmployeeService employeeService;
 
 	public List<UserEntity> getAll(Integer page, Integer size, String login) {
 		if (login == null) {
@@ -39,16 +44,38 @@ public class UserService {
 		return userRepository.findOne(id);
 	}
 
-	public UserEntity persist(UserEntity user) throws NoSuchAlgorithmException, UnsupportedEncodingException, UndconException {
+	public UserEntity persist(UserEntity user)
+			throws NoSuchAlgorithmException, UnsupportedEncodingException, UndconException {
 		permissionService.checkPermission(ResourseType.USER);
 		if (LongUtils.longIsPositiveValue(user.getId())) {
 			throw new IllegalArgumentException("O novo registro a ser salvo não pode ter o id preenchido.");
 		}
+		if(hasUserByLogin(user.getLogin())) {
+			throw new UndconException(UndconError.LOGIN_ALREADY_EXISTS);
+		}
+		
+		user.setPermission(permissionService.validateAndGet(user.getPermission().getId()));
+		
+		user.setEmployee(employeeService.validateAndGet(user.getEmployee().getId()));
+
+		if(hasUserByEmployee(user.getEmployee())) {
+			throw new UndconException(UndconError.LOGIN_ALREADY_EXISTS_IN_EMPLOYEE);
+		}
+		
 		user.setPassword(criptyPassword(user.getPassword()));
 		return userRepository.save(user);
 	}
 
-	public UserEntity update(UserEntity user) throws NoSuchAlgorithmException, UnsupportedEncodingException, UndconException {
+	public boolean hasUserByLogin(String login) {
+		return userRepository.findByLogin(login).size() > 0;
+	}
+	
+	public boolean hasUserByEmployee(EmployeeEntity employee) {
+		return userRepository.findByEmployee(employee).size() > 0;
+	}
+
+	public UserEntity update(UserEntity user)
+			throws NoSuchAlgorithmException, UnsupportedEncodingException, UndconException {
 		permissionService.checkPermission(ResourseType.USER);
 		UserEntity find = findById(user.getId());
 		find.setLogin(user.getLogin());
@@ -87,6 +114,10 @@ public class UserService {
 
 	public UserEntity getCurrentUser() {
 		return ThreadLocalStorage.getUser();
+	}
+
+	public List<ResourseType> getPermissionOfLoggeduser() {
+		return permissionService.getResourcesOfUser(getCurrentUser());
 	}
 
 }

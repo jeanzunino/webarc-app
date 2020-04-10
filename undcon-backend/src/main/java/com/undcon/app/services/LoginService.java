@@ -21,6 +21,7 @@ import com.undcon.app.enums.UndconError;
 import com.undcon.app.exceptions.UndconException;
 import com.undcon.app.mappers.UserMapper;
 import com.undcon.app.model.UserEntity;
+import com.undcon.app.multitenancy.DataSourceProperties;
 import com.undcon.app.multitenancy.ThreadLocalStorage;
 import com.undcon.app.repositories.IUserRepository;
 
@@ -29,92 +30,99 @@ import net.minidev.json.JSONObject;
 @Component
 public class LoginService {
 
-    public static String SHARED_KEY = "a0a2abd8-6162-41c3-83d6-1cf559b46afc";
+	public static String SHARED_KEY = "a0a2abd8-6162-41c3-83d6-1cf559b46afc";
 
-    @Autowired
-    private IUserRepository userRepository;
+	@Autowired
+	private IUserRepository userRepository;
 
-    @Autowired
-    private UserMapper userMapper;
+	@Autowired
+	private UserMapper userMapper;
 
-    @Autowired
-    private UserService userService;
+	@Autowired
+	private UserService userService;
 
-    public LoginResponseDto login(LoginRequestDto dto) throws NoSuchAlgorithmException, UnsupportedEncodingException, UndconException{
+	@Autowired
+	private DataSourceProperties dataSourceProperties;
 
-        String tenantByLogin = getTenantByLogin(dto.getLogin());
+	public LoginResponseDto login(LoginRequestDto dto)
+			throws NoSuchAlgorithmException, UnsupportedEncodingException, UndconException {
 
-        ThreadLocalStorage.setTenantName(tenantByLogin);
+		String tenantByLogin = getTenantByLogin(dto.getLogin());
 
-        String pass = userService.criptyPassword(dto.getPassword());
-        UserEntity user = userRepository.findAllByLoginAndPassword(dto.getLogin(), pass);
-        boolean resetPassword = false;
-        if (user == null) {
-            user = userRepository.findAllByLoginAndPassword(dto.getLogin(), "");
-            if (user == null) {
-                throw new UndconException(UndconError.INVALID_USER_OR_PASSWORD);
-            }
-            resetPassword = true;
-        }
-        
-        if(!user.isActive()) {
-        	throw new UndconException(UndconError.USER_BLOCKED);
-        }
-        
-        // Create payload
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("userId", user.getId());
-        jsonObject.put("login", user.getLogin());
-        jsonObject.put("name", user.getEmployee().getName());
-        jsonObject.put("resetPassword", resetPassword);
-        jsonObject.put("tenant", tenantByLogin);
-        Payload payload = new Payload(jsonObject);
+		if (!dataSourceProperties.getDatasources().containsKey(tenantByLogin)) {
+			throw new UndconException(UndconError.INVALID_USER_OR_PASSWORD);
+		}
+		ThreadLocalStorage.setTenantName(tenantByLogin);
 
-        System.out.println("JWS payload message: " + user);
+		String pass = userService.criptyPassword(dto.getPassword());
+		UserEntity user = userRepository.findAllByLoginAndPassword(dto.getLogin(), pass);
+		boolean resetPassword = false;
+		if (user == null) {
+			user = userRepository.findAllByLoginAndPassword(dto.getLogin(), "");
+			if (user == null) {
+				throw new UndconException(UndconError.INVALID_USER_OR_PASSWORD);
+			}
+			resetPassword = true;
+		}
 
-        // Create JWS header with HS256 algorithm
-        JWSHeader header = new JWSHeader(JWSAlgorithm.HS256);
+		if (!user.isActive()) {
+			throw new UndconException(UndconError.USER_BLOCKED);
+		}
 
-        System.out.println("JWS header: " + header.toJSONObject());
+		// Create payload
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put("userId", user.getId());
+		jsonObject.put("login", user.getLogin());
+		jsonObject.put("name", user.getEmployee().getName());
+		jsonObject.put("resetPassword", resetPassword);
+		jsonObject.put("tenant", tenantByLogin);
+		Payload payload = new Payload(jsonObject);
 
-        // Create JWS object
-        JWSObject jwsObject = new JWSObject(header, payload);
+		System.out.println("JWS payload message: " + user);
 
-        // Create HMAC signer
+		// Create JWS header with HS256 algorithm
+		JWSHeader header = new JWSHeader(JWSAlgorithm.HS256);
 
-        JWSSigner signer = null;
-        try {
-            signer = new MACSigner(SHARED_KEY.getBytes());
-        } catch (KeyLengthException e1) {
-            e1.printStackTrace();
-        }
+		System.out.println("JWS header: " + header.toJSONObject());
 
-        try {
-            jwsObject.sign(signer);
-        } catch (JOSEException e) {
+		// Create JWS object
+		JWSObject jwsObject = new JWSObject(header, payload);
 
-            System.err.println("Couldn't sign JWS object: " + e.getMessage());
-            throw new RuntimeException("Erro ao gerar o Token", e);
-        }
+		// Create HMAC signer
 
-        // Serialise JWS object to compact format
-        String token = jwsObject.serialize();
+		JWSSigner signer = null;
+		try {
+			signer = new MACSigner(SHARED_KEY.getBytes());
+		} catch (KeyLengthException e1) {
+			e1.printStackTrace();
+		}
 
-        System.out.println("Serialised JWS object: " + token);
+		try {
+			jwsObject.sign(signer);
+		} catch (JOSEException e) {
 
-        UserDto userDto = userMapper.toDto(user);
+			System.err.println("Couldn't sign JWS object: " + e.getMessage());
+			throw new RuntimeException("Erro ao gerar o Token", e);
+		}
+
+		// Serialise JWS object to compact format
+		String token = jwsObject.serialize();
+
+		System.out.println("Serialised JWS object: " + token);
+
+		UserDto userDto = userMapper.toDto(user);
         LoginResponseDto response = new LoginResponseDto(ThreadLocalStorage.getTenantName(), token, resetPassword, userDto);
 
-        return response;
-    }
+		return response;
+	}
 
-    private static String getTenantByLogin(String login) throws UndconException {
-        String[] split = login.trim().split("@");
-        if (split.length != 2) {
-            throw new UndconException(UndconError.INVALID_LOGIN_FORMAT);
-        }
-        String tenant = split[1];
-        return tenant;
-    }
+	private static String getTenantByLogin(String login) throws UndconException {
+		String[] split = login.trim().split("@");
+		if (split.length != 2) {
+			throw new UndconException(UndconError.INVALID_LOGIN_FORMAT);
+		}
+		String tenant = split[1];
+		return tenant;
+	}
 
 }

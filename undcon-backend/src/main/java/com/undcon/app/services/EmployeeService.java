@@ -56,4 +56,12 @@ public class EmployeeService {
 		permissionService.checkPermission(ResourseType.EMPLOYEE);
 		repository.delete(id);
 	}
+
+	public EmployeeEntity validateAndGet(Long id) throws UndconException {
+		EmployeeEntity entity = findById(id);
+		if(entity == null) {
+			throw new UndconException(UndconError.EMPLOYEE_NOT_FOUND);
+		}
+		return entity;
+	}
 }

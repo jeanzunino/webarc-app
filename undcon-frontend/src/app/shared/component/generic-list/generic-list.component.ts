@@ -3,11 +3,11 @@ import { ActivatedRoute } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 
 import { EntityService } from '@service/entity/entity.service';
-import { AppInjector } from '@app/app.component';
+import { SharedInjector } from '@app/shared/shared.module';
 
 export class GenericListComponent<T> implements OnInit {
 
-  private spinner = AppInjector.get(NgxSpinnerService);
+  private spinner = SharedInjector.get(NgxSpinnerService);
 
   constructor(private entityService: EntityService<T>,
               private activatedRoute: ActivatedRoute) { }

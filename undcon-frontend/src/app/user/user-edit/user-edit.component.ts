@@ -6,6 +6,7 @@ import { TranslateService } from '@ngx-translate/core';
 
 import { User } from '@model/user';
 import { UserService } from '@service/user/user.service';
+import { getTranslate } from '@shared/utils/utils'
 
 export class Teste {
   user: User
@@ -55,8 +56,8 @@ export class UserEditComponent implements OnInit {
 
   private validForm() {
     if (this.passwordForm.value !== this.confirmPasswordForm.value) {
-      this.toastr.error(this.getTranslate('error.authentication.message'),
-                        this.getTranslate('error.save.title', {entity: 'BATATA'}));
+      this.toastr.error(getTranslate('error.authentication.message'),
+                        getTranslate('error.save.title', {entity: 'BATATA'}));
       return false;
     }
     return true;
@@ -66,14 +67,6 @@ export class UserEditComponent implements OnInit {
     alert(this.passwordForm.value + ' ' + this.confirmPasswordForm.value + this.nameForm.value)
     if (this.validForm()) {
       alert(this.userModalRef.content.user.login) 
-    }
-  }
-
-  private getTranslate(key, params = null) {
-    if (params) {
-      return this.translate.instant(key, params)
-    } else {
-      return this.translate.instant(key);
     }
   }
 }

@@ -1,44 +1,58 @@
 <!--Navbar-->
-<mdb-navbar SideClass="navbar navbar-expand-lg navbar-dark fixed-top scrolling-navbar primary-system-color" [containerInside]="false">
+<mdb-navbar SideClass="navbar navbar-expand-lg navbar-dark fixed-top scrolling-navbar primary-system-color"
+  [containerInside]="false">
 
   <mdb-navbar-brand>
     <a class="navbar-brand" routerLink="#">
-          <img src="../../assets/imgs/logo.png" height="30" alt="">
-      </a>
+      <img src="../../assets/imgs/logo.png" height="30" alt="">
+    </a>
   </mdb-navbar-brand>
 
   <links>
 
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
-        <a class="nav-link waves-light" routerLink="/home" (click)="loadingPage()" mdbWavesEffect>Home</a>
+        <a class="nav-link waves-light" routerLink="/home" (click)="loadingPage()" mdbWavesEffect>{{ 'menu.home' | translate }}</a>
       </li>
-      
+
       <li class="nav-item dropdown" dropdown>
         <a dropdownToggle mdbWavesEffect type="button" class="nav-link dropdown-toggle waves-light" mdbWavesEffect>
-          <mdb-icon fas icon="user"></mdb-icon> Compras <span class="caret"></span></a>
-        <div *dropdownMenu class="dropdown-menu dropdown-menu-right dropdown dropdown-primary primary-system-color" role="menu">
-            <a class="dropdown-item waves-light text-light" mdbWavesEffect routerLink="/provider" (click)="loadingPage()">Fornecedores</a>
-            <a class="dropdown-item waves-light text-light" mdbWavesEffect routerLink="/purchase" (click)="loadingPage()">Compras</a>
+          <mdb-icon fas icon="user"></mdb-icon> {{ 'menu.compra.title' | translate }} <span class="caret"></span>
+        </a>
+        <div *dropdownMenu class="dropdown-menu dropdown-menu-right dropdown dropdown-primary primary-system-color"
+          role="menu">
+          <a class="dropdown-item waves-light text-light" mdbWavesEffect routerLink="/provider"
+            (click)="loadingPage()">{{ 'menu.compra.fornecedores' | translate }}</a>
+          <a class="dropdown-item waves-light text-light" mdbWavesEffect routerLink="/purchase"
+            (click)="loadingPage()">{{ 'menu.compra.compras' | translate }}</a>
         </div>
       </li>
 
       <li class="nav-item dropdown" dropdown>
         <a dropdownToggle mdbWavesEffect type="button" class="nav-link dropdown-toggle waves-light" mdbWavesEffect>
-          <mdb-icon fas icon="user"></mdb-icon> Vendas <span class="caret"></span></a>
-        <div *dropdownMenu class="dropdown-menu dropdown-menu-right dropdown dropdown-primary primary-system-color" role="menu">
-            <a class="dropdown-item waves-light text-light" mdbWavesEffect routerLink="/customer" (click)="loadingPage()">Clientes</a>
-            <a class="dropdown-item waves-light text-light" mdbWavesEffect routerLink="/sale" (click)="loadingPage()">Vendas</a>
+          <mdb-icon fas icon="user"></mdb-icon> {{ 'menu.venda.title' | translate }} <span class="caret"></span>
+        </a>
+        <div *dropdownMenu class="dropdown-menu dropdown-menu-right dropdown dropdown-primary primary-system-color"
+          role="menu">
+          <a class="dropdown-item waves-light text-light" mdbWavesEffect routerLink="/customer"
+            (click)="loadingPage()">{{ 'menu.venda.clientes' | translate }}</a>
+          <a class="dropdown-item waves-light text-light" mdbWavesEffect routerLink="/sale"
+            (click)="loadingPage()">{{ 'menu.venda.vendas' | translate }}</a>
         </div>
       </li>
 
       <li class="nav-item dropdown" dropdown>
         <a dropdownToggle mdbWavesEffect type="button" class="nav-link dropdown-toggle waves-light" mdbWavesEffect>
-          <mdb-icon fas icon="user"></mdb-icon> Gerais <span class="caret"></span></a>
-        <div *dropdownMenu class="dropdown-menu dropdown-menu-right dropdown dropdown-primary primary-system-color" role="menu">
-            <a class="dropdown-item waves-light text-light" mdbWavesEffect routerLink="/service-type" (click)="loadingPage()">Tipos de Serviços</a>
-            <a class="dropdown-item waves-light text-light" mdbWavesEffect routerLink="/productcategory" (click)="loadingPage()">Categorias de Produtos</a>
-            <a class="dropdown-item waves-light text-light" mdbWavesEffect routerLink="/product" (click)="loadingPage()">Produtos</a>
+          <mdb-icon fas icon="user"></mdb-icon> {{ 'menu.geral.title' | translate }} <span class="caret"></span>
+        </a>
+        <div *dropdownMenu class="dropdown-menu dropdown-menu-right dropdown dropdown-primary primary-system-color"
+          role="menu">
+          <a class="dropdown-item waves-light text-light" mdbWavesEffect routerLink="/service-type"
+            (click)="loadingPage()">{{ 'menu.geral.tipos-servicos' | translate }}</a>
+          <a class="dropdown-item waves-light text-light" mdbWavesEffect routerLink="/productcategory"
+            (click)="loadingPage()">{{ 'menu.geral.categorias-produtos' | translate }}</a>
+          <a class="dropdown-item waves-light text-light" mdbWavesEffect routerLink="/product"
+            (click)="loadingPage()">{{ 'menu.geral.produtos' | translate }}</a>
         </div>
       </li>
     </ul>
@@ -47,26 +61,28 @@
 
       <li class="nav-item dropdown" dropdown>
         <a dropdownToggle mdbWavesEffect type="button" class="nav-link dropdown-toggle waves-light" mdbWavesEffect>
-          <mdb-icon fas icon="cog"></mdb-icon> Settings<span class="caret"></span></a>
-        <div *dropdownMenu class="dropdown-menu dropdown-menu-right dropdown dropdown-primary primary-system-color" role="menu">
-          <a class="dropdown-item waves-light text-light" mdbWavesEffect routerLink="/tenant" (click)="loadingPage()">Tenants</a>
-          <a class="dropdown-item waves-light text-light" mdbWavesEffect routerLink="/permission" (click)="loadingPage()">Permissões</a>
-          <a class="dropdown-item waves-light text-light" mdbWavesEffect routerLink="/employee" (click)="loadingPage()">Funcionários</a>
-          <a class="dropdown-item waves-light text-light" mdbWavesEffect routerLink="/user" (click)="loadingPage()">Usuários</a>
+          <mdb-icon fas icon="cog"></mdb-icon> {{ 'menu.configuracao.title' | translate }} <span class="caret"></span>
+        </a>
+        <div *dropdownMenu class="dropdown-menu dropdown-menu-right dropdown dropdown-primary primary-system-color"
+          role="menu">
+          <a class="dropdown-item waves-light text-light" mdbWavesEffect routerLink="/tenant"
+            (click)="loadingPage()">{{ 'menu.configuracao.tenants' | translate }}</a>
+          <a class="dropdown-item waves-light text-light" mdbWavesEffect routerLink="/permission"
+            (click)="loadingPage()">{{ 'menu.configuracao.permissoes' | translate }}</a>
+          <a class="dropdown-item waves-light text-light" mdbWavesEffect routerLink="/employee"
+            (click)="loadingPage()">{{ 'menu.configuracao.funcionarios' | translate }}</a>
+          <a class="dropdown-item waves-light text-light" mdbWavesEffect routerLink="/user"
+            (click)="loadingPage()">{{ 'menu.configuracao.usuarios' | translate }}</a>
         </div>
       </li>
 
-      <li class="nav-item dropdown" dropdown>
-        <a dropdownToggle mdbWavesEffect type="button" class="nav-link dropdown-toggle waves-light" mdbWavesEffect>
-          <mdb-icon fas icon="user"></mdb-icon> Profile<span class="caret"></span></a>
-        <div *dropdownMenu class="dropdown-menu dropdown-menu-right dropdown dropdown-primary primary-system-color" role="menu">
-          <a class="dropdown-item waves-light text-light" mdbWavesEffect (click)="logout()">Log out</a>
-        </div>
+      <li class="nav-item">
+        <a class="nav-link waves-light" (click)="logout()" mdbWavesEffect>
+          <mdb-icon fas icon="sign-out-alt"></mdb-icon> {{ 'menu.sair' | translate }}<span class="caret"></span>
+        </a>
       </li>
 
     </ul>
-
-
   </links>
 
 </mdb-navbar>

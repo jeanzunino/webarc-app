@@ -3,7 +3,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { TranslateService } from '@ngx-translate/core';
 
 import { AuthService } from '@service/auth/auth.service';
-import { AppInjector } from '@app/app.component';
+import { SharedInjector } from '@app/shared/shared.module';
 
 @Component({
   selector: 'app-navbar',
@@ -12,7 +12,7 @@ import { AppInjector } from '@app/app.component';
 })
 export class NavbarComponent {
 
-  private spinner = AppInjector.get(NgxSpinnerService);
+  private spinner = SharedInjector.get(NgxSpinnerService);
 
   constructor(private authService: AuthService,
               public translate: TranslateService) { }

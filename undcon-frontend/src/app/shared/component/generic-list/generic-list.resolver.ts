@@ -3,6 +3,7 @@ import { Resolve, ActivatedRouteSnapshot } from '@angular/router';
 import { EntityService } from '@service/entity/entity.service';
 
 export class GenericListResolver<T> implements Resolve<T[]> {
+
   constructor(private entityService: EntityService<T>) {}
 
   resolve(route: ActivatedRouteSnapshot) {

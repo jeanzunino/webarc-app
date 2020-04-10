@@ -14,7 +14,7 @@ import { UserEditComponent } from '@app/user/user-edit/user-edit.component';
 })
 export class UserComponent extends GenericListComponent<User> {
 
-  constructor(private service: UserService,
+  constructor(service: UserService,
               activatedRoute: ActivatedRoute,
               private modalService: MDBModalService) {
       super(service, activatedRoute)

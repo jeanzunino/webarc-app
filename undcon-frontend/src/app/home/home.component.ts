@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MDBModalService, MDBModalRef } from 'angular-bootstrap-md';
-import { UserEditComponent } from '@app/user/user-edit/user-edit.component';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-home',
@@ -9,23 +8,9 @@ import { UserEditComponent } from '@app/user/user-edit/user-edit.component';
 })
 export class HomeComponent implements OnInit {
 
-  constructor(private modalService: MDBModalService) { }
+  constructor(private spinner: NgxSpinnerService) { }
 
   ngOnInit() {
+    this.spinner.hide();
   }
-  modalRef: MDBModalRef;
-  showDialog() {
-    alert('FOI')
-    this.modalRef = this.modalService.show(UserEditComponent, {
-      backdrop: true,
-      keyboard: true,
-      focus: true,
-      show: false,
-      ignoreBackdropClick: false,
-      class: 'modal-dialog-centered',
-      containerClass: '',
-      animated: true,
-    });
-  }
-
 }

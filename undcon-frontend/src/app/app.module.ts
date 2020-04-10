@@ -15,7 +15,7 @@ import { AuthService } from '@service/auth/auth.service';
 import { AuthGuard } from '@guard/auth/auth.guard';
 import { SharedModule } from '@shared/shared.module';
 import { LoginModule } from '@app/login/login.module';
-import { InterceptorModule } from '@app/auth/interceptor/interceptor.module';
+import { InterceptorModule } from '@interceptor/interceptor.module';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);

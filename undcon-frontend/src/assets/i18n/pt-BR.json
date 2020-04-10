@@ -6,5 +6,8 @@
     },
     "user": {
         "entity": "Usuário"
+    },
+    "menu": {
+        "home": "Home"
     }
 }

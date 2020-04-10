@@ -1,21 +1,23 @@
 import { OnInit } from '@angular/core';
-import { Subject } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 import { EntityService } from '@service/entity/entity.service';
+import { AppInjector } from '@app/app.component';
 
 export class GenericListComponent<T> implements OnInit {
 
-  private ngUnsubscribe = new Subject();
+  private spinner = AppInjector.get(NgxSpinnerService);
 
   constructor(private entityService: EntityService<T>,
-    private activatedRoute: ActivatedRoute) { }
+              private activatedRoute: ActivatedRoute) { }
 
   items: T[];
   isTheFilterPanelExpanded = true;
 
   ngOnInit() {
     this.items = this.activatedRoute.snapshot.data.items;
+    this.spinner.hide();
   }
 
   getHeaderTitle() {

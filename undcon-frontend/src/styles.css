@@ -6,10 +6,6 @@
     margin-bottom: 68px;
 }
 
-.btn-primary {
-    background-color: red !important;
-}
-
 body {
     background-color: #282a36;
 }
@@ -20,4 +16,12 @@ body {
 
 .secondary-system-color {
     background-color: #282a36;
+}
+
+.card-filter--margin-top {
+    margin-top: 25px;
+}
+
+.cursor-pointer {
+    cursor: pointer;
 }

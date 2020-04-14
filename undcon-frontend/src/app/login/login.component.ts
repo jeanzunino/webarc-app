@@ -7,6 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { TranslateService } from '@ngx-translate/core';
 
 import { AuthService } from '@service/auth/auth.service';
+import { Table } from '@app/shared/model/table';
 
 @Component({
   selector: 'app-login',
@@ -33,6 +34,15 @@ export class LoginComponent implements OnInit {
       login: ['', Validators.compose([Validators.email, Validators.required])],
       password: ['', Validators.required]
     })
+    
+    let table = new Table();
+    table.set('teste', 'teste').set('teste2', 'teste2');
+    console.log(table.get());
+
+    
+    let table2 = new Table();
+    table2.set('batata', 'batata').set('batata2', 'batata2');
+    console.log(table2.get());
   }
 
   get f() { 

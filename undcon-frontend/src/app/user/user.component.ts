@@ -1,55 +1,42 @@
-import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { MDBModalRef, MDBModalService } from 'angular-bootstrap-md';
+import { Component, OnInit } from '@angular/core';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { MDBModalService, MDBModalRef } from 'angular-bootstrap-md';
 
 import { UserService } from '@service/user/user.service';
-import { User } from '@model/user';
-import { GenericListComponent } from '@component/generic-list/generic-list.component';
 import { UserEditComponent } from '@app/user/user-edit/user-edit.component';
+import { Table } from '@shared/model/table';
 
 @Component({
-  selector: 'app-generic-list',
-  templateUrl: '../shared/component/generic-list/generic-list.component.html',
-  styleUrls: ['../shared/component/generic-list/generic-list.component.scss']
+  selector: 'app-user',
+  templateUrl: './user.component.html'
 })
-export class UserComponent extends GenericListComponent<User> {
+export class UserComponent implements OnInit {
 
-  constructor(service: UserService,
-              activatedRoute: ActivatedRoute,
-              private modalService: MDBModalService) {
-      super(service, activatedRoute)
+  items = [];
+  tableValues = new Table().set('id', 'user.id').set('login', 'user.login').set('permission.name', 'user.permission').get();
+
+  constructor(private spinner: NgxSpinnerService,
+              public service: UserService,
+              private modalService: MDBModalService) { }
+
+  modalRef: MDBModalRef;            
+
+  async ngOnInit() {
+    this.items = await this.service.getAll().toPromise();
+    this.spinner.hide();
   }
-  
-  modalRef: MDBModalRef;
 
-  openModal() {
-    this.showDialog();
+  async reloadItems(page) {
+    this.spinner.show()
+    this.items = await this.service.getAll(page).toPromise();
+    this.spinner.hide()
   }
 
   onClickItem(item) {
-    this.showDialog(item)
+    this.showDialog(item);
   }
 
-  getHeaderTitle() {
-    return ['Id', 'Login'];
-  }
-
-  //Campos padrões caso a tela não implemente esse método
-  getFieldsOfTable(item, header) {
-    switch (header) {
-      case 'Id': {
-        return item.id;
-      }
-      case 'Login': {
-        return item.login;
-      }
-      default: {
-        return '';
-      }
-    }
-  }
-
-  private showDialog(user = null) {
+  private showDialog(item = null) {
     this.modalRef = this.modalService.show(UserEditComponent, {
       backdrop: true,
       keyboard: true,
@@ -60,7 +47,7 @@ export class UserComponent extends GenericListComponent<User> {
       containerClass: '',
       animated: true,
       data: {
-        user: user
+        user: item
       }
     });
   }

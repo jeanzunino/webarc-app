@@ -1,19 +1,42 @@
-import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { MDBModalService, MDBModalRef } from 'angular-bootstrap-md';
 
 import { ServiceTypeService } from '@service/service-type/service-type.service';
-import { ServiceType } from '@model/service-type';
-import { GenericListComponent } from '@component/generic-list/generic-list.component';
+import { Table } from '@shared/model/table';
 
 @Component({
-  selector: 'app-generic-list',
-  templateUrl: '../shared/component/generic-list/generic-list.component.html',
-  styleUrls: ['../shared/component/generic-list/generic-list.component.scss']
+  selector: 'app-service-type',
+  templateUrl: './service-type.component.html'
 })
-export class ServiceTypeComponent extends GenericListComponent<ServiceType> {
+export class ServiceTypeComponent implements OnInit {
 
-  constructor(service: ServiceTypeService,
-              activatedRoute: ActivatedRoute) {
-      super(service, activatedRoute)
+  items = [];
+  tableValues = new Table().set('id', 'service-type.id').set('name', 'service-type.name')
+                           .set('description', 'service-type.description').set('price', 'service-type.price').get();
+
+  constructor(private spinner: NgxSpinnerService,
+              public service: ServiceTypeService,
+              private modalService: MDBModalService) { }
+
+  modalRef: MDBModalRef;            
+
+  async ngOnInit() {
+    this.items = await this.service.getAll().toPromise();
+    this.spinner.hide();
+  }
+
+  async reloadItems(page) {
+    this.spinner.show()
+    this.items = await this.service.getAll(page).toPromise();
+    this.spinner.hide()
+  }
+
+  onClickItem(item) {
+    this.showDialog(item);
+  }
+
+  private showDialog(item = null) {
+    alert(item);
   }
 }

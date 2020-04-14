@@ -6,8 +6,11 @@ import { NgxSpinnerModule } from "ngx-spinner";
 import { TranslateModule, TranslateService, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HttpClient } from '@angular/common/http';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 import { DialogComponent } from '@component/dialog/dialog.component';
+import { TableComponent } from './component/table/table.component';
+import { PanelComponent } from './component/panel/panel.component';
 
 export let SharedInjector: Injector;
 
@@ -17,7 +20,9 @@ export function HttpLoaderFactory(http: HttpClient) {
 
 @NgModule({
   declarations: [
-    DialogComponent
+    DialogComponent,
+    TableComponent,
+    PanelComponent
   ],
   exports: [
     CommonModule,
@@ -26,7 +31,10 @@ export function HttpLoaderFactory(http: HttpClient) {
     CollapseModule,
     NgxSpinnerModule,
     DialogComponent,
-    TranslateModule
+    TranslateModule,
+    NgxPaginationModule,
+    TableComponent,
+    PanelComponent
   ],
   imports: [
     CommonModule,
@@ -39,6 +47,7 @@ export function HttpLoaderFactory(http: HttpClient) {
         deps: [HttpClient]
       }
     }),
+    NgxPaginationModule
   ]
 })
 export class SharedModule {

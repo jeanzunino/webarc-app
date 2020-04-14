@@ -7,7 +7,11 @@
         "save.title": "Não foi possível salvar o(a) {{entity}}"
     },
     "user": {
-        "entity": "Usuário"
+        "entity": "Usuário",
+        "id": "Id",
+        "login": "Login",
+        "active": "Ativo",
+        "permission": "Permissões"
     },
     "menu": {
         "home": "Home",
@@ -35,5 +39,10 @@
             "usuarios": "Usuários"
         },
         "sair": "Sair"
-    }
+    },
+    "table": {
+        "anterior": "Anterior",
+        "proximo": "Próximo"
+    },
+    "filtros": "Filtros"
 }

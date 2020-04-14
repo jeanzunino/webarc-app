@@ -2,7 +2,7 @@ import { Resolve, ActivatedRouteSnapshot } from '@angular/router';
 
 import { EntityService } from '@service/entity/entity.service';
 
-export class GenericListResolver<T> implements Resolve<T[]> {
+export class GetAllResolver<T> implements Resolve<T[]> {
 
   constructor(private entityService: EntityService<T>) {}
 

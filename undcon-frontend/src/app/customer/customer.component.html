@@ -1,0 +1,11 @@
+<div class="container-fluid screen-top screen-bottom">
+  <app-panel [panelTitle]="'filtros'">
+    <div footer>
+      <button mdbBtn type="button" color="danger" outline="true" mdbWavesEffect>Danger</button>
+    </div>
+  </app-panel>
+  <div class="card-filter--margin-top">
+    <app-table [items]="items" [tableValues]="tableValues" [totalItems]="21" (reloadItems)="reloadItems($event)"
+      (onClickItem)="onClickItem($event)"></app-table>
+  </div>
+</div>

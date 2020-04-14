@@ -1,0 +1,34 @@
+<div class="card text-light primary-system-color">
+  <div class="card-body">
+    Total de registros encontrados: {{ totalItems }}
+    <div class="table-responsive">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th *ngFor="let tableValue of tableValues" class="text-light">
+              {{ getHeaders(tableValue) | translate }}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of tableItems | paginate: {itemsPerPage: 10, currentPage: pageActual, totalItems: totalItems}">
+            <th *ngFor="let tableValue of tableValues" class="text-light" (click)="clickItem(item)">
+              {{ getFieldsOfTable(item, tableValue) }}
+            </th>
+          </tr>
+        </tbody>
+        <tfoot class="primary-system-color">
+          <tr>
+            <td colspan="4">
+              <pagination-controls previousLabel="{{ 'table.anterior' | translate }}" 
+                                   nextLabel="{{ 'table.proximo' | translate }}"
+                                   responsive="true"
+                                   (pageChange)="updateItems($event)">
+              </pagination-controls>
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+</div>

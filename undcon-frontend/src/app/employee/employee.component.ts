@@ -1,19 +1,41 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { MDBModalService, MDBModalRef } from 'angular-bootstrap-md';
 
 import { EmployeeService } from '@service/employee/employee.service';
-import { Employee } from '@model/employee';
-import { GenericListComponent } from '@component/generic-list/generic-list.component';
+import { Table } from '@shared/model/table';
 
 @Component({
-  selector: 'app-generic-list',
-  templateUrl: '../shared/component/generic-list/generic-list.component.html',
-  styleUrls: ['../shared/component/generic-list/generic-list.component.scss']
+  selector: 'app-employee',
+  templateUrl: 'employee.component.html'
 })
-export class EmployeeComponent  extends GenericListComponent<Employee>  {
+export class EmployeeComponent implements OnInit {
 
-  constructor(service: EmployeeService,
-              activatedRoute: ActivatedRoute) {
-      super(service, activatedRoute)
+  items = [];
+  tableValues = new Table().set('id', 'employee.id').set('name', 'employee.name').set('phone', 'employee.phone').get();
+
+  constructor(private spinner: NgxSpinnerService,
+              public service: EmployeeService,
+              private modalService: MDBModalService) { }
+
+  modalRef: MDBModalRef;            
+
+  async ngOnInit() {
+    this.items = await this.service.getAll().toPromise();
+    this.spinner.hide();
+  }
+
+  async reloadItems(page) {
+    this.spinner.show()
+    this.items = await this.service.getAll(page).toPromise();
+    this.spinner.hide()
+  }
+
+  onClickItem(item) {
+    this.showDialog(item);
+  }
+
+  private showDialog(item = null) {
+    alert(item);
   }
 }

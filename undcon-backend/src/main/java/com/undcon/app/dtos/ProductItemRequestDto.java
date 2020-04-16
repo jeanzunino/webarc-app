@@ -5,18 +5,18 @@ public class ProductItemRequestDto {
 	private Long id;
 	private Long productId;
 	private Long quantity;
-	private Long salesmanId;
+	private Long employeeId;
 
 	public ProductItemRequestDto() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public ProductItemRequestDto(long id, long productId, long quantity, long salesmanId) {
+	public ProductItemRequestDto(long id, long productId, long quantity, long employeeId) {
 		super();
 		this.id = id;
 		this.productId = productId;
 		this.quantity = quantity;
-		this.salesmanId = salesmanId;
+		this.employeeId = employeeId;
 	}
 
 	public Long getId() {
@@ -43,12 +43,12 @@ public class ProductItemRequestDto {
 		this.quantity = quantity;
 	}
 
-	public Long getSalesmanId() {
-		return salesmanId;
+	public Long getEmployeeId() {
+		return employeeId;
 	}
 
-	public void setSalesmanId(Long salesmanId) {
-		this.salesmanId = salesmanId;
+	public void setEmployeeId(Long employeeId) {
+		this.employeeId = employeeId;
 	}
 
 }

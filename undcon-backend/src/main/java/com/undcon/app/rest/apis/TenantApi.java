@@ -1,7 +1,5 @@
 package com.undcon.app.rest.apis;
 
-import java.util.List;
-
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -10,16 +8,14 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import com.undcon.app.exceptions.UndconException;
 import com.undcon.app.model.TenantEntity;
-import com.undcon.app.rest.models.ErrorMessageModel;
 import com.undcon.app.services.TenantService;
 
 @Component
@@ -31,58 +27,34 @@ public class TenantApi {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<TenantEntity> getAll(@QueryParam("page") Integer page, @QueryParam("size") Integer size) {
-		try {
-			return service.getAll(page, size);
-		} catch (UndconException e) {
-			throw new WebApplicationException(
-					Response.status(Response.Status.BAD_REQUEST).entity(new ErrorMessageModel(e.getError())).build());
-		}
+	public Page<TenantEntity> getAll(@QueryParam("page") Integer page, @QueryParam("size") Integer size)
+			throws UndconException {
+		return service.getAll(page, size);
 	}
 
 	@GET
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public TenantEntity get(@PathParam("id") long id) {
-		try {
-			return service.findById(id);
-		} catch (UndconException e) {
-			throw new WebApplicationException(
-					Response.status(Response.Status.BAD_REQUEST).entity(new ErrorMessageModel(e.getError())).build());
-		}
+	public TenantEntity get(@PathParam("id") long id) throws UndconException {
+		return service.findById(id);
 	}
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	public TenantEntity post(TenantEntity tenant) {
-		try {
-			return service.persist(tenant);
-		} catch (UndconException e) {
-			throw new WebApplicationException(
-					Response.status(Response.Status.BAD_REQUEST).entity(new ErrorMessageModel(e.getError())).build());
-		}
+	public TenantEntity post(TenantEntity tenant) throws UndconException {
+		return service.persist(tenant);
 	}
 
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
-	public TenantEntity put(TenantEntity tenant) {
-		try {
-			return service.update(tenant);
-		} catch (UndconException e) {
-			throw new WebApplicationException(
-					Response.status(Response.Status.BAD_REQUEST).entity(new ErrorMessageModel(e.getError())).build());
-		}
+	public TenantEntity put(TenantEntity tenant) throws UndconException {
+		return service.update(tenant);
 	}
 
 	@DELETE
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public void delete(@PathParam("id") long id) {
-		try {
-			service.delete(id);
-		} catch (UndconException e) {
-			throw new WebApplicationException(
-					Response.status(Response.Status.BAD_REQUEST).entity(new ErrorMessageModel(e.getError())).build());
-		}
+	public void delete(@PathParam("id") long id) throws UndconException {
+		service.delete(id);
 	}
 }

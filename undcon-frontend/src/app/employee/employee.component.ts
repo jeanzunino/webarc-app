@@ -1,35 +1,27 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MDBModalService, MDBModalRef } from 'angular-bootstrap-md';
 
+import { Employee } from '@app/core/model/employee';
 import { EmployeeService } from '@service/employee/employee.service';
+import { GridViewComponent } from '@shared/component/grid-view/grid-view.component';
 import { Table } from '@shared/model/table';
+import { Page } from '@model/page';
 
 @Component({
   selector: 'app-employee',
   templateUrl: 'employee.component.html'
 })
-export class EmployeeComponent implements OnInit {
+export class EmployeeComponent extends GridViewComponent <Employee> {
 
-  items = [];
   tableValues = new Table().set('id', 'employee.id').set('name', 'employee.name').set('phone', 'employee.phone').get();
 
-  constructor(private spinner: NgxSpinnerService,
-              public service: EmployeeService,
-              private modalService: MDBModalService) { }
-
-  modalRef: MDBModalRef;            
-
-  async ngOnInit() {
-    this.items = await this.service.getAll().toPromise();
-    this.spinner.hide();
-  }
-
-  async reloadItems(page) {
-    this.spinner.show()
-    this.items = await this.service.getAll(page).toPromise();
-    this.spinner.hide()
-  }
+  constructor(spinner: NgxSpinnerService,
+              service: EmployeeService,
+              activatedRoute: ActivatedRoute) {
+                super(spinner, service, activatedRoute);
+            }
 
   onClickItem(item) {
     this.showDialog(item);

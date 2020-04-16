@@ -3,9 +3,10 @@ package com.undcon.app.services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
-import com.undcon.app.enums.ResourseType;
+import com.undcon.app.enums.ResourceType;
 import com.undcon.app.enums.UndconError;
 import com.undcon.app.exceptions.UndconException;
 import com.undcon.app.model.ServiceTypeEntity;
@@ -21,8 +22,8 @@ public class ServiceTypeService {
 	@Autowired
 	private PermissionService permissionService;
 
-	public List<ServiceTypeEntity> getAll(Integer page, Integer size) {
-        return repository.findAll(PageUtils.createPageRequest(page, size)).getContent();
+	public Page<ServiceTypeEntity> getAll(Integer page, Integer size) {
+        return repository.findAll(PageUtils.createPageRequest(page, size));
     }
 	
 	public ServiceTypeEntity findById(Long id) {
@@ -30,13 +31,13 @@ public class ServiceTypeService {
     }
 	
 	public ServiceTypeEntity persist(ServiceTypeEntity entity) throws UndconException {
-		permissionService.checkPermission(ResourseType.SERVICE_TYPE);
+		permissionService.checkPermission(ResourceType.SERVICE_TYPE);
 		validateName(0L, entity.getName());
 		return repository.save(entity);
 	}
 
 	public ServiceTypeEntity update(ServiceTypeEntity entity) throws UndconException {
-		permissionService.checkPermission(ResourseType.SERVICE_TYPE);
+		permissionService.checkPermission(ResourceType.SERVICE_TYPE);
 		validateName(entity.getId(), entity.getName());
 		return repository.save(entity);
 	}
@@ -49,7 +50,7 @@ public class ServiceTypeService {
 	}
 
 	public void delete(long id) throws UndconException {
-		permissionService.checkPermission(ResourseType.SERVICE_TYPE);
+		permissionService.checkPermission(ResourceType.SERVICE_TYPE);
 		repository.delete(id);
 	}
 }

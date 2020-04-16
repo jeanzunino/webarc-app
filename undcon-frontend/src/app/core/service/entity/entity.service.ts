@@ -15,7 +15,7 @@ export class EntityService<T> {
   public getAll(page?: number, size?: number) {
     let params = { params: new HttpParams().set('page', page ? page.toString() : '0')
                                            .set('size', size ? size.toString() : '10') }
-    return this.http.get<T[]>(`${this.baseUrl}/${this.entityUrl}`, params);
+    return this.http.get(`${this.baseUrl}/${this.entityUrl}`, params);
   }
 
   public get() {

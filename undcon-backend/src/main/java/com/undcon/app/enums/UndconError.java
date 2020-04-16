@@ -54,4 +54,8 @@ public enum UndconError {
 		return message;
 	}
 	
+	public String getTranslationKey(){
+		return "backend." + name().toLowerCase().replace("_", ".");
+	}
+	
 }

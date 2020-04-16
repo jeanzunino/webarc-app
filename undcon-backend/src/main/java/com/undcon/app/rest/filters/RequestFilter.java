@@ -64,7 +64,7 @@ public class RequestFilter implements ContainerRequestFilter {
         Long userId = (Long) payloadAsJsonObject.get("userId");
         
         UserEntity user = userService.findById(userId);
-        if(user == null || !user.isActive()) {
+        if(user == null || !user.isActive() || user.isResetPassword()) {
         	throw new WebApplicationException(Response
 				     .status(Response.Status.UNAUTHORIZED)
 				     .entity(new ErrorMessageModel(UndconError.INVALID_USER_LOGGED)).build());

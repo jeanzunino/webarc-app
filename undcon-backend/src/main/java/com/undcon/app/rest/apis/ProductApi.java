@@ -1,7 +1,5 @@
 package com.undcon.app.rest.apis;
 
-import java.util.List;
-
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -10,18 +8,16 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import com.undcon.app.dtos.ProductSimpleDto;
 import com.undcon.app.exceptions.UndconException;
 import com.undcon.app.mappers.ProductMapper;
 import com.undcon.app.model.ProductEntity;
-import com.undcon.app.rest.models.ErrorMessageModel;
 import com.undcon.app.services.ProductService;
 
 @Component
@@ -30,13 +26,14 @@ public class ProductApi {
 
 	@Autowired
 	private ProductService productService;
-	
+
 	@Autowired
 	private ProductMapper productMapper;
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<ProductEntity> getAll(@QueryParam("name") String name, @QueryParam("page") Integer page, @QueryParam("size") Integer size) {
+	public Page<ProductEntity> getAll(@QueryParam("name") String name, @QueryParam("page") Integer page,
+			@QueryParam("size") Integer size) {
 		return productService.getAll(name, page, size);
 	}
 
@@ -50,38 +47,21 @@ public class ProductApi {
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	public ProductEntity post(ProductSimpleDto dto) {
-		try {
-			return productService.persist(productMapper.toEntity(dto));
-		} catch (UndconException e) {
-			throw new WebApplicationException(Response
-				     .status(Response.Status.BAD_REQUEST)
-				     .entity(new ErrorMessageModel(e.getError())).build());
-		}
+	public ProductEntity post(ProductSimpleDto dto) throws UndconException {
+		return productService.persist(productMapper.toEntity(dto));
 	}
 
 	@PUT
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ProductEntity put(ProductSimpleDto dto) {
-		try {
-			return productService.update(productMapper.toEntity(dto));
-		} catch (UndconException e) {
-			throw new WebApplicationException(Response
-				     .status(Response.Status.BAD_REQUEST)
-				     .entity(new ErrorMessageModel(e.getError())).build());
-		}
+	public ProductEntity put(ProductSimpleDto dto) throws UndconException {
+		return productService.update(productMapper.toEntity(dto));
 	}
 
 	@DELETE
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public void delete(@PathParam("id") long id) {
-		try {
-			productService.delete(id);
-		} catch (UndconException e) {
-			throw new WebApplicationException(
-					Response.status(Response.Status.BAD_REQUEST).entity(new ErrorMessageModel(e.getError())).build());
-		}
+	public void delete(@PathParam("id") long id) throws UndconException {
+		productService.delete(id);
 	}
 }

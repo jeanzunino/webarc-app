@@ -9,7 +9,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.undcon.app.enums.ResourseType;
+import com.undcon.app.enums.ResourceType;
 
 @Entity
 @Table(name = "permissao_item")
@@ -25,12 +25,12 @@ public class PermissionItenEntity {
 	private PermissionEntity permission;
 	
 	@Column(name = "tipo", nullable = false)
-	private ResourseType resourceType;
+	private ResourceType resourceType;
 	
 	public PermissionItenEntity() {
 	}
 
-	public PermissionItenEntity(Long id, PermissionEntity permission, ResourseType resourceType) {
+	public PermissionItenEntity(Long id, PermissionEntity permission, ResourceType resourceType) {
 		super();
 		this.id = id;
 		this.permission = permission;
@@ -45,7 +45,7 @@ public class PermissionItenEntity {
 		return permission;
 	}
 
-	public ResourseType getResourceType() {
+	public ResourceType getResourceType() {
 		return resourceType;
 	}
 

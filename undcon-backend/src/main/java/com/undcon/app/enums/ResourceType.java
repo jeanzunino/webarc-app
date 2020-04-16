@@ -1,6 +1,6 @@
 package com.undcon.app.enums;
 
-public enum ResourseType {
+public enum ResourceType {
 
 	/** 0 - Configuração */
 	CONFIGURATION,

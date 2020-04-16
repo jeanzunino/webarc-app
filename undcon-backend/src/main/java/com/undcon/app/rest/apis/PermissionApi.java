@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import javax.ws.rs.DELETE;
+import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -11,19 +12,17 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
-import com.undcon.app.enums.ResourseType;
+import com.undcon.app.enums.ResourceType;
 import com.undcon.app.exceptions.UndconException;
 import com.undcon.app.model.PermissionEntity;
 import com.undcon.app.model.PermissionItenEntity;
 import com.undcon.app.repositories.IPermissionItenRepository;
-import com.undcon.app.rest.models.ErrorMessageModel;
 import com.undcon.app.services.PermissionService;
 
 @Component
@@ -38,7 +37,7 @@ public class PermissionApi {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<PermissionEntity> getAll(@QueryParam("name") String name, @QueryParam("page") Integer page,
+	public Page<PermissionEntity> getAll(@QueryParam("name") String name, @QueryParam("page") Integer page,
 			@QueryParam("size") Integer size) {
 		return permissionService.getAll(name, page, size);
 	}
@@ -54,19 +53,28 @@ public class PermissionApi {
 	@GET
 	@Path("/resources")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<ResourseType> getResources() {
-		return Arrays.asList(ResourseType.values());
+	public List<ResourceType> getResources() {
+		return Arrays.asList(ResourceType.values());
 	}
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	public PermissionEntity post(PermissionEntity entity) {
-		try {
-			return permissionService.persist(entity);
-		} catch (UndconException e) {
-			throw new WebApplicationException(
-					Response.status(Response.Status.BAD_REQUEST).entity(new ErrorMessageModel(e.getError())).build());
-		}
+	public PermissionEntity post(PermissionEntity entity) throws UndconException {
+		return permissionService.persist(entity);
+	}
+
+	@PUT
+	@Path("/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public PermissionEntity put(PermissionEntity entity) throws UndconException {
+		return permissionService.update(entity);
+	}
+
+	@DELETE
+	@Path("/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public void delete(@PathParam("id") long id) throws ForbiddenException, UndconException {
+		permissionService.delete(id);
 	}
 
 	@POST
@@ -85,27 +93,12 @@ public class PermissionApi {
 		return items;
 	}
 
-	@PUT
-	@Path("/{id}")
+	@DELETE
+	@Path("/{id}/itens/{itemId}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public PermissionEntity put(PermissionEntity entity) {
-		try {
-			return permissionService.update(entity);
-		} catch (UndconException e) {
-			throw new WebApplicationException(
-					Response.status(Response.Status.BAD_REQUEST).entity(new ErrorMessageModel(e.getError())).build());
-		}
+	public void postIten(@PathParam("itemId") long itemId) {
+		PermissionItenEntity findItenById = permissionService.findItenById(itemId);
+		repositoryIten.delete(findItenById);
 	}
 
-	@DELETE
-	@Path("/{id}")
-	@Produces(MediaType.APPLICATION_JSON)
-	public void delete(@PathParam("id") long id) {
-		try {
-			permissionService.delete(id);
-		} catch (UndconException e) {
-			throw new WebApplicationException(
-					Response.status(Response.Status.BAD_REQUEST).entity(new ErrorMessageModel(e.getError())).build());
-		}
-	}
 }

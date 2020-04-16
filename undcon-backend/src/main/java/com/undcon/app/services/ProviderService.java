@@ -3,10 +3,11 @@ package com.undcon.app.services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import com.undcon.app.enums.ResourseType;
+import com.undcon.app.enums.ResourceType;
 import com.undcon.app.enums.UndconError;
 import com.undcon.app.exceptions.UndconException;
 import com.undcon.app.model.ProviderEntity;
@@ -22,11 +23,11 @@ public class ProviderService {
 	@Autowired
 	private PermissionService permissionService;
 
-	public List<ProviderEntity> getAll(String name, Integer page, Integer size) {
+	public Page<ProviderEntity> getAll(String name, Integer page, Integer size) {
 		if (StringUtils.isEmpty(name)) {
-			return providerRepository.findAll(PageUtils.createPageRequest(page, size)).getContent();
+			return providerRepository.findAll(PageUtils.createPageRequest(page, size));
 		}
-		return providerRepository.findAllByName(name, PageUtils.createPageRequest(page, size)).getContent();
+		return providerRepository.findAllByName(name, PageUtils.createPageRequest(page, size));
     }
 	
 	public ProviderEntity findById(Long id) {
@@ -34,13 +35,13 @@ public class ProviderService {
     }
 	
 	public ProviderEntity persist(ProviderEntity entity) throws UndconException {
-		permissionService.checkPermission(ResourseType.PROVIDER);
+		permissionService.checkPermission(ResourceType.PROVIDER);
 		validateName(0L, entity.getName());
 		return providerRepository.save(entity);
 	}
 
 	public ProviderEntity update(ProviderEntity entity) throws UndconException {
-		permissionService.checkPermission(ResourseType.PROVIDER);
+		permissionService.checkPermission(ResourceType.PROVIDER);
 		validateName(entity.getId(), entity.getName());
 		return providerRepository.save(entity);
 	}
@@ -53,7 +54,7 @@ public class ProviderService {
 	}
 
 	public void delete(long id) throws UndconException {
-		permissionService.checkPermission(ResourseType.PROVIDER);
+		permissionService.checkPermission(ResourceType.PROVIDER);
 		providerRepository.delete(id);
 	}
 }

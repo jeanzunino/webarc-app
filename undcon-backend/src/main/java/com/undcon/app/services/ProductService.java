@@ -3,10 +3,11 @@ package com.undcon.app.services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import com.undcon.app.enums.ResourseType;
+import com.undcon.app.enums.ResourceType;
 import com.undcon.app.enums.UndconError;
 import com.undcon.app.exceptions.UndconException;
 import com.undcon.app.model.ProductEntity;
@@ -22,11 +23,11 @@ public class ProductService {
 	@Autowired
 	private PermissionService permissionService;
 
-	public List<ProductEntity> getAll(String name, Integer page, Integer size) {
+	public Page<ProductEntity> getAll(String name, Integer page, Integer size) {
 		if (StringUtils.isEmpty(name)) {
-			return productRepository.findAll(PageUtils.createPageRequest(page, size)).getContent();
+			return productRepository.findAll(PageUtils.createPageRequest(page, size));
 		}
-		return productRepository.findAllByName(name, PageUtils.createPageRequest(page, size)).getContent();
+		return productRepository.findAllByName(name, PageUtils.createPageRequest(page, size));
 	}
 
 	public ProductEntity findById(Long id) {
@@ -34,13 +35,13 @@ public class ProductService {
 	}
 
 	public ProductEntity persist(ProductEntity entity) throws UndconException {
-		permissionService.checkPermission(ResourseType.PRODUCT);
+		permissionService.checkPermission(ResourceType.PRODUCT);
 		validateName(0L, entity.getName());
 		return productRepository.save(entity);
 	}
 
 	public ProductEntity update(ProductEntity entity) throws UndconException {
-		permissionService.checkPermission(ResourseType.PRODUCT);
+		permissionService.checkPermission(ResourceType.PRODUCT);
 		validateName(entity.getId(), entity.getName());
 		return productRepository.save(entity);
 	}
@@ -53,7 +54,8 @@ public class ProductService {
 	}
 
 	public void delete(long id) throws UndconException {
-		permissionService.checkPermission(ResourseType.PRODUCT);
+		permissionService.checkPermission(ResourceType.PRODUCT);
 		productRepository.delete(id);
 	}
+	
 }

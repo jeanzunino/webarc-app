@@ -1,11 +1,10 @@
 package com.undcon.app.services;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
-import com.undcon.app.enums.ResourseType;
+import com.undcon.app.enums.ResourceType;
 import com.undcon.app.enums.UndconError;
 import com.undcon.app.exceptions.UndconException;
 import com.undcon.app.model.TenantEntity;
@@ -22,18 +21,18 @@ public class TenantService {
 	@Autowired
 	private PermissionService permissionService;
 
-	public List<TenantEntity> getAll(Integer page, Integer size) throws UndconException {
-		permissionService.checkPermission(ResourseType.TENANT);
-		return tenantRepository.findAll(PageUtils.createPageRequest(page, size)).getContent();
+	public Page<TenantEntity> getAll(Integer page, Integer size) throws UndconException {
+		permissionService.checkPermission(ResourceType.TENANT);
+		return tenantRepository.findAll(PageUtils.createPageRequest(page, size));
 	}
 
 	public TenantEntity findById(Long id) throws UndconException {
-		permissionService.checkPermission(ResourseType.TENANT);
+		permissionService.checkPermission(ResourceType.TENANT);
 		return tenantRepository.findOne(id);
 	}
 
 	public TenantEntity persist(TenantEntity tenant) throws UndconException {
-		permissionService.checkPermission(ResourseType.TENANT);
+		permissionService.checkPermission(ResourceType.TENANT);
 		if (LongUtils.longIsPositiveValue(tenant.getId())) {
 			throw new UndconException(UndconError.NEW_REGISTER_INVALID_ID);
 		}
@@ -42,12 +41,12 @@ public class TenantService {
 	}
 
 	public TenantEntity update(TenantEntity tenant) throws UndconException {
-		permissionService.checkPermission(ResourseType.TENANT);
+		permissionService.checkPermission(ResourceType.TENANT);
 		return tenantRepository.save(tenant);
 	}
 
 	public void delete(long id) throws UndconException {
-		permissionService.checkPermission(ResourseType.TENANT);
+		permissionService.checkPermission(ResourceType.TENANT);
 		tenantRepository.delete(id);
 	}
 

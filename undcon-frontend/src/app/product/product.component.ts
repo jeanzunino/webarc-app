@@ -1,37 +1,29 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MDBModalService, MDBModalRef } from 'angular-bootstrap-md';
 
+import { Product } from '@model/product';
 import { ProductService } from '@service/product/product.service';
+import { GridViewComponent } from '@shared/component/grid-view/grid-view.component';
 import { Table } from '@shared/model/table';
+import { Page } from '@model/page';
 
 @Component({
   selector: 'app-product',
   templateUrl: './product.component.html'
 })
-export class ProductComponent implements OnInit {
+export class ProductComponent extends GridViewComponent <Product> {
 
-  items = [];
   tableValues = new Table().set('id', 'product.id').set('name', 'product.name').set('unit', 'product.unit')
                            .set('purchasePrice', 'product.purchasePrice').set('salePrice', 'product.salePrice')
                            .set('stock', 'product.stock').set('stockMin', 'product.stockMin').get();
 
-  constructor(private spinner: NgxSpinnerService,
-              public service: ProductService,
-              private modalService: MDBModalService) { }
-
-  modalRef: MDBModalRef;            
-
-  async ngOnInit() {
-    this.items = await this.service.getAll().toPromise();
-    this.spinner.hide();
-  }
-
-  async reloadItems(page) {
-    this.spinner.show()
-    this.items = await this.service.getAll(page).toPromise();
-    this.spinner.hide()
-  }
+  constructor(spinner: NgxSpinnerService,
+              service: ProductService,
+              activatedRoute: ActivatedRoute) {
+                super(spinner, service, activatedRoute);
+            }
 
   onClickItem(item) {
     this.showDialog(item);

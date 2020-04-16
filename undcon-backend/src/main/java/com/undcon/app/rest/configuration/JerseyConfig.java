@@ -19,6 +19,7 @@ import com.undcon.app.rest.apis.SaleApi;
 import com.undcon.app.rest.apis.ServiceTypeApi;
 import com.undcon.app.rest.apis.TenantApi;
 import com.undcon.app.rest.apis.UserApi;
+import com.undcon.app.rest.exception.ErrorResponseHandler;
 import com.undcon.app.rest.filters.RequestFilter;
 import com.undcon.app.rest.filters.ResponseFilter;
 
@@ -57,6 +58,9 @@ public class JerseyConfig extends ResourceConfig {
 
 		register(PurchaseApi.class);
 		register(SaleApi.class);
+		
+		
+		register(ErrorResponseHandler.class);
 		// Uncomment to disable WADL Generation:
 		// property("jersey.config.server.wadl.disableWadl", true);
 

@@ -27,6 +27,9 @@ public class UserEntity {
 	@Column(name = "ativo", nullable = false)
 	private boolean active;
 
+	@Column(name = "resetar_senha", nullable = false)
+	private boolean resetPassword;
+
 	@OneToOne
 	@JoinColumn(name = "empregado_id", nullable = true)
 	private EmployeeEntity employee;
@@ -39,7 +42,7 @@ public class UserEntity {
 	}
 
 	public UserEntity(Long id, String login, String password, EmployeeEntity employee, PermissionEntity permission,
-			boolean active) {
+			boolean active, boolean resetPassword) {
 		super();
 		this.id = id;
 		this.login = login;
@@ -47,6 +50,7 @@ public class UserEntity {
 		this.employee = employee;
 		this.permission = permission;
 		this.active = active;
+		this.resetPassword = resetPassword;
 	}
 
 	public Long getId() {
@@ -91,6 +95,14 @@ public class UserEntity {
 
 	public boolean isActive() {
 		return active;
+	}
+
+	public void setResetPassword(boolean resetPassword) {
+		this.resetPassword = resetPassword;
+	}
+
+	public boolean isResetPassword() {
+		return resetPassword;
 	}
 
 }

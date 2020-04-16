@@ -6,10 +6,11 @@ import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.undcon.app.enums.ResourseType;
+import com.undcon.app.enums.ResourceType;
 import com.undcon.app.enums.UndconError;
 import com.undcon.app.exceptions.UndconException;
 import com.undcon.app.model.EmployeeEntity;
@@ -33,11 +34,12 @@ public class UserService {
 	@Autowired
 	private EmployeeService employeeService;
 
-	public List<UserEntity> getAll(Integer page, Integer size, String login) {
+	public Page<UserEntity> getAll(Integer page, Integer size, String login) throws UndconException {
+		permissionService.checkPermission(ResourceType.USER);
 		if (login == null) {
-			return userRepository.findAll(PageUtils.createPageRequest(page, size)).getContent();
+			return userRepository.findAll(PageUtils.createPageRequest(page, size));
 		}
-		return userRepository.findAllByLogin(login, PageUtils.createPageRequest(page, size)).getContent();
+		return userRepository.findAllByLogin(login, PageUtils.createPageRequest(page, size));
 	}
 
 	public UserEntity findById(Long id) {
@@ -46,7 +48,7 @@ public class UserService {
 
 	public UserEntity persist(UserEntity user)
 			throws NoSuchAlgorithmException, UnsupportedEncodingException, UndconException {
-		permissionService.checkPermission(ResourseType.USER);
+		permissionService.checkPermission(ResourceType.USER);
 		if (LongUtils.longIsPositiveValue(user.getId())) {
 			throw new IllegalArgumentException("O novo registro a ser salvo não pode ter o id preenchido.");
 		}
@@ -76,13 +78,17 @@ public class UserService {
 
 	public UserEntity update(UserEntity user)
 			throws NoSuchAlgorithmException, UnsupportedEncodingException, UndconException {
-		permissionService.checkPermission(ResourseType.USER);
+		permissionService.checkPermission(ResourceType.USER);
 		UserEntity find = findById(user.getId());
+		
+		//Validar se usuário tem permissão para alterar ResetPassword
+		find.setResetPassword(user.isResetPassword());
 		find.setLogin(user.getLogin());
 		find.setEmployee(user.getEmployee());
 		if (find.getPassword() == null || find.getPassword().isEmpty()) {
 			find.setPassword(criptyPassword(user.getPassword()));
 		}
+		
 		return userRepository.save(find);
 	}
 
@@ -100,15 +106,15 @@ public class UserService {
 	}
 
 	public void delete(long id) throws UndconException {
-		permissionService.checkPermission(ResourseType.USER);
+		permissionService.checkPermission(ResourceType.USER);
 		userRepository.delete(id);
 	}
 
 	@Transactional
-	public void resetPassword(long id) throws IllegalAccessException, UndconException {
-		permissionService.checkPermission(ResourseType.CONFIGURATION);
+	public void resetPassword(long id) throws UndconException {
+		permissionService.checkPermission(ResourceType.CONFIGURATION);
 		UserEntity find = findById(id);
-		find.setPassword("");
+		find.setResetPassword(true);
 		userRepository.save(find);
 	}
 
@@ -116,7 +122,7 @@ public class UserService {
 		return ThreadLocalStorage.getUser();
 	}
 
-	public List<ResourseType> getPermissionOfLoggeduser() {
+	public List<ResourceType> getPermissionOfLoggeduser() {
 		return permissionService.getResourcesOfUser(getCurrentUser());
 	}
 

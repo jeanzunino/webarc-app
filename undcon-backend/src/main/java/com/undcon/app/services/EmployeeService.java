@@ -3,10 +3,11 @@ package com.undcon.app.services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import com.undcon.app.enums.ResourseType;
+import com.undcon.app.enums.ResourceType;
 import com.undcon.app.enums.UndconError;
 import com.undcon.app.exceptions.UndconException;
 import com.undcon.app.model.EmployeeEntity;
@@ -22,11 +23,11 @@ public class EmployeeService {
 	@Autowired
 	private PermissionService permissionService;
 
-	public List<EmployeeEntity> getAll(String name, Integer page, Integer size) {
+	public Page<EmployeeEntity> getAll(String name, Integer page, Integer size) {
 		if(StringUtils.isEmpty(name)) {
-			return repository.findAll(PageUtils.createPageRequest(page, size)).getContent();
+			return repository.findAll(PageUtils.createPageRequest(page, size));
 		}
-        return repository.findAllByName(name, PageUtils.createPageRequest(page, size)).getContent();
+        return repository.findAllByName(name, PageUtils.createPageRequest(page, size));
     }
 	
 	public EmployeeEntity findById(Long id) {
@@ -34,13 +35,13 @@ public class EmployeeService {
     }
 	
 	public EmployeeEntity persist(EmployeeEntity entity) throws UndconException {
-		permissionService.checkPermission(ResourseType.EMPLOYEE);
+		permissionService.checkPermission(ResourceType.EMPLOYEE);
 		validateName(0L, entity.getName());
 		return repository.save(entity);
 	}
 
 	public EmployeeEntity update(EmployeeEntity entity) throws UndconException {
-		permissionService.checkPermission(ResourseType.EMPLOYEE);
+		permissionService.checkPermission(ResourceType.EMPLOYEE);
 		validateName(entity.getId(), entity.getName());
 		return repository.save(entity);
 	}
@@ -53,7 +54,7 @@ public class EmployeeService {
 	}
 
 	public void delete(long id) throws UndconException {
-		permissionService.checkPermission(ResourseType.EMPLOYEE);
+		permissionService.checkPermission(ResourceType.EMPLOYEE);
 		repository.delete(id);
 	}
 

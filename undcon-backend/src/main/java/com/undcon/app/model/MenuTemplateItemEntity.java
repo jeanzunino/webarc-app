@@ -9,7 +9,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.undcon.app.enums.ResourseType;
+import com.undcon.app.enums.ResourceType;
 
 @Entity
 @Table(schema = "public", name = "menu_template_item")
@@ -25,7 +25,7 @@ public class MenuTemplateItemEntity {
 	private MenuTemplateEntity menu;
 
 	@Column(name = "menu_item", nullable = false)
-	private ResourseType resourceType;
+	private ResourceType resourceType;
 
 	@Column(name = "ordem", nullable = false)
 	private int order;
@@ -33,7 +33,7 @@ public class MenuTemplateItemEntity {
 	public MenuTemplateItemEntity() {
 	}
 
-	public MenuTemplateItemEntity(Long id, MenuTemplateEntity menu, ResourseType resourceType, int order) {
+	public MenuTemplateItemEntity(Long id, MenuTemplateEntity menu, ResourceType resourceType, int order) {
 		super();
 		this.id = id;
 		this.menu = menu;
@@ -49,7 +49,7 @@ public class MenuTemplateItemEntity {
 		return menu;
 	}
 
-	public ResourseType getResourceType() {
+	public ResourceType getResourceType() {
 		return resourceType;
 	}
 

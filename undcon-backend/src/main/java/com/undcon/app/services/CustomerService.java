@@ -3,10 +3,11 @@ package com.undcon.app.services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import com.undcon.app.enums.ResourseType;
+import com.undcon.app.enums.ResourceType;
 import com.undcon.app.enums.UndconError;
 import com.undcon.app.exceptions.UndconException;
 import com.undcon.app.model.CustomerEntity;
@@ -22,11 +23,11 @@ public class CustomerService {
 	@Autowired
 	private PermissionService permissionService;
 
-	public List<CustomerEntity> getAll(String name, Integer page, Integer size) {
+	public Page<CustomerEntity> getAll(String name, Integer page, Integer size) {
 		if(StringUtils.isEmpty(name)) {
-			return customerRepository.findAll(PageUtils.createPageRequest(page, size)).getContent();
+			return customerRepository.findAll(PageUtils.createPageRequest(page, size));
 		}
-        return customerRepository.findAllByName(name, PageUtils.createPageRequest(page, size)).getContent();
+        return customerRepository.findAllByName(name, PageUtils.createPageRequest(page, size));
     }
 	
 	public CustomerEntity findById(Long id) {
@@ -34,13 +35,13 @@ public class CustomerService {
     }
 	
 	public CustomerEntity persist(CustomerEntity entity) throws UndconException {
-		permissionService.checkPermission(ResourseType.CUSTOMER);
+		permissionService.checkPermission(ResourceType.CUSTOMER);
 		validateName(0L, entity.getName());
 		return customerRepository.save(entity);
 	}
 
 	public CustomerEntity update(CustomerEntity entity) throws UndconException {
-		permissionService.checkPermission(ResourseType.CUSTOMER);
+		permissionService.checkPermission(ResourceType.CUSTOMER);
 		validateName(entity.getId(), entity.getName());
 		return customerRepository.save(entity);
 	}
@@ -53,7 +54,7 @@ public class CustomerService {
 	}
 
 	public void delete(long id) throws UndconException{
-		permissionService.checkPermission(ResourseType.CUSTOMER);
+		permissionService.checkPermission(ResourceType.CUSTOMER);
 		customerRepository.delete(id);
 	}
 }

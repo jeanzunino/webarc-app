@@ -15,8 +15,12 @@ public class StockService {
 		}
 	}
 	
-	public void updateStock(ProductEntity product, long quantity) throws UndconException {
+	public void discounProductOfStock(ProductEntity product, long quantity) throws UndconException {
 		product.setStock(getStockAvaiableFromProduct(product) - quantity);
+	}
+	
+	public void addProductInStock(ProductEntity product, long quantity) throws UndconException {
+		product.setStock(getStockAvaiableFromProduct(product) + quantity);
 	}
 	
 	public long getStockAvaiableFromProduct(ProductEntity product) {

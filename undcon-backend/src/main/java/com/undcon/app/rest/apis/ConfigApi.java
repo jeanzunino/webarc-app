@@ -23,13 +23,13 @@ public class ConfigApi {
 
 	@Autowired
 	private IConfigurationRepository repository;
-	
+
 	@POST
 	@Path("/logo")
 	@Consumes({ MediaType.APPLICATION_OCTET_STREAM, "image/png" })
 	@Produces(MediaType.TEXT_PLAIN)
 	public Response postImageFile(byte[] file) {
-		
+
 		ConfigurationEntity config = null;
 		Iterator<ConfigurationEntity> iterator = repository.findAll().iterator();
 		if (iterator.hasNext()) {
@@ -41,18 +41,18 @@ public class ConfigApi {
 		repository.save(config);
 		return Response.ok().build();
 	}
-	
+
 	@GET
 	@Path("/logo")
 	@Produces({ MediaType.APPLICATION_OCTET_STREAM, "image/png" })
 	public Response getLogo() {
-		
+
 		ConfigurationEntity config = null;
 		Iterator<ConfigurationEntity> iterator = repository.findAll().iterator();
 		if (iterator.hasNext()) {
 			config = iterator.next();
 			return Response.ok(config.getLogo(), MediaType.APPLICATION_OCTET_STREAM).build();
-		} 
+		}
 		throw new WebApplicationException("Configuração não encontrada", Response.Status.NOT_FOUND);
 	}
 }

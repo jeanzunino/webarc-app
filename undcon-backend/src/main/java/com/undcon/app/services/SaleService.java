@@ -1,15 +1,15 @@
 package com.undcon.app.services;
 
 import java.sql.Date;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.undcon.app.dtos.ProductItemRequestDto;
 import com.undcon.app.dtos.SaleRequestDto;
-import com.undcon.app.enums.ResourseType;
+import com.undcon.app.enums.ResourceType;
 import com.undcon.app.enums.SaleStatus;
 import com.undcon.app.enums.UndconError;
 import com.undcon.app.exceptions.UndconException;
@@ -52,8 +52,8 @@ public class SaleService {
 	@Autowired
 	private EmployeeService employeeService;
 
-	public List<SaleEntity> getAll(Integer page, Integer size) {
-		return saleRepository.findAll(PageUtils.createPageRequest(page, size)).getContent();
+	public Page<SaleEntity> getAll(Integer page, Integer size) {
+		return saleRepository.findAll(PageUtils.createPageRequest(page, size));
 	}
 
 	public SaleEntity findById(Long id) {
@@ -61,7 +61,7 @@ public class SaleService {
 	}
 
 	public SaleEntity persist(SaleRequestDto saleDto) throws UndconException {
-		permissionService.checkPermission(ResourseType.SALE);
+		permissionService.checkPermission(ResourceType.SALE);
 
 		UserEntity user = userService.getCurrentUser();
 
@@ -72,7 +72,7 @@ public class SaleService {
 		SaleStatus status = SaleStatus.CREATED;
 		
 		EmployeeEntity salesman = user.getEmployee();
-		// Se o Front não enviar o funciona´rio
+		// Se o Front não enviar o funcionário
 		if (LongUtils.longIsPositiveValue(saleDto.getSalesmanId())) {
 			salesman = employeeService.findById(saleDto.getSalesmanId());
 		}
@@ -87,7 +87,7 @@ public class SaleService {
 	}
 
 	public SaleEntity update(SaleRequestDto saleDto) throws UndconException {
-		permissionService.checkPermission(ResourseType.SALE);
+		permissionService.checkPermission(ResourceType.SALE);
 		SaleEntity sale = findById(saleDto.getId());
 
 		CustomerEntity customer = customerService.findById(saleDto.getCustomerId());
@@ -96,7 +96,7 @@ public class SaleService {
 	}
 
 	public void delete(long id) throws UndconException {
-		permissionService.checkPermission(ResourseType.SALE);
+		permissionService.checkPermission(ResourceType.SALE);
 		SaleEntity sale = findById(id);
 		sale.setStatus(SaleStatus.CANCELED);
 		saleRepository.save(sale);
@@ -104,7 +104,7 @@ public class SaleService {
 
 	@Transactional
 	public SaleItemEntity addItem(long saleId, ProductItemRequestDto itemDto) throws UndconException {
-		permissionService.checkPermission(ResourseType.SALE);
+		permissionService.checkPermission(ResourceType.SALE);
 		SaleEntity sale = findById(saleId);
 		if (sale == null) {
 			throw new UndconException(UndconError.SALE_NOT_FOUND);
@@ -119,21 +119,22 @@ public class SaleService {
 		EmployeeEntity employee = user.getEmployee();
 
 		// Se o Front não enviar o funciona´rio
-		if (LongUtils.longIsPositiveValue(itemDto.getSalesmanId())) {
-			employee = employeeService.findById(itemDto.getSalesmanId());
+		if (LongUtils.longIsPositiveValue(itemDto.getEmployeeId())) {
+			employee = employeeService.findById(itemDto.getEmployeeId());
 		}
 
 		SaleItemProductEntity item = new SaleItemProductEntity(null, product, sale, user, employee,
 				product.getSalePrice(), itemDto.getQuantity());
 		saleItemRepository.save(item);
 
-		stockService.updateStock(product, itemDto.getQuantity());
+		stockService.discounProductOfStock(product, itemDto.getQuantity());
 
 		return item;
 	}
 
+	@Transactional
 	public SaleItemEntity updateItem(long saleId, ProductItemRequestDto itemDto) throws UndconException {
-		permissionService.checkPermission(ResourseType.SALE);
+		permissionService.checkPermission(ResourceType.SALE);
 
 		SaleEntity sale = findById(saleId);
 		if (sale == null) {
@@ -149,13 +150,13 @@ public class SaleService {
 
 		saleItemRepository.save(item);
 
-		stockService.updateStock(product, itemDto.getQuantity());
+		stockService.discounProductOfStock(product, itemDto.getQuantity());
 
 		return item;
 	}
 
 	public void deleteItem(Long saleId, long itemId) throws UndconException {
-		permissionService.checkPermission(ResourseType.SALE);
+		permissionService.checkPermission(ResourceType.SALE);
 
 		SaleEntity sale = findById(saleId);
 		if (sale == null) {

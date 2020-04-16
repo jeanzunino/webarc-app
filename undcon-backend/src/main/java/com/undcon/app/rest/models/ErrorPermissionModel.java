@@ -2,28 +2,28 @@ package com.undcon.app.rest.models;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.undcon.app.enums.ResourseType;
+import com.undcon.app.enums.ResourceType;
 
 @XmlRootElement(name = "errorMessage")
 public class ErrorPermissionModel {
 
-	private ResourseType resoure;
+	private ResourceType resoure;
 	private String message;
 
 	public ErrorPermissionModel() {
 	}
 
-	public ErrorPermissionModel(ResourseType resoure, String message) {
+	public ErrorPermissionModel(ResourceType resoure, String message) {
 		super();
 		this.resoure = resoure;
 		this.message = message;
 	}
 
-	public ResourseType getResoure() {
+	public ResourceType getResoure() {
 		return resoure;
 	}
 
-	public void setResoure(ResourseType resoure) {
+	public void setResoure(ResourceType resoure) {
 		this.resoure = resoure;
 	}
 

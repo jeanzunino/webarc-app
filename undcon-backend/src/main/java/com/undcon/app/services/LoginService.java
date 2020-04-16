@@ -2,6 +2,7 @@ package com.undcon.app.services;
 
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -17,6 +18,7 @@ import com.nimbusds.jose.crypto.MACSigner;
 import com.undcon.app.dtos.LoginRequestDto;
 import com.undcon.app.dtos.LoginResponseDto;
 import com.undcon.app.dtos.UserDto;
+import com.undcon.app.enums.ResourceType;
 import com.undcon.app.enums.UndconError;
 import com.undcon.app.exceptions.UndconException;
 import com.undcon.app.mappers.UserMapper;
@@ -42,6 +44,9 @@ public class LoginService {
 	private UserService userService;
 
 	@Autowired
+	private PermissionService permissionService;
+
+	@Autowired
 	private DataSourceProperties dataSourceProperties;
 
 	public LoginResponseDto login(LoginRequestDto dto)
@@ -58,17 +63,16 @@ public class LoginService {
 		UserEntity user = userRepository.findAllByLoginAndPassword(dto.getLogin(), pass);
 		boolean resetPassword = false;
 		if (user == null) {
-			user = userRepository.findAllByLoginAndPassword(dto.getLogin(), "");
-			if (user == null) {
-				throw new UndconException(UndconError.INVALID_USER_OR_PASSWORD);
-			}
-			resetPassword = true;
+			throw new UndconException(UndconError.INVALID_USER_OR_PASSWORD);
 		}
 
 		if (!user.isActive()) {
 			throw new UndconException(UndconError.USER_BLOCKED);
 		}
 
+		if (user.isResetPassword()) {
+			resetPassword = true;
+		}
 		// Create payload
 		JSONObject jsonObject = new JSONObject();
 		jsonObject.put("userId", user.getId());
@@ -111,8 +115,9 @@ public class LoginService {
 		System.out.println("Serialised JWS object: " + token);
 
 		UserDto userDto = userMapper.toDto(user);
-        LoginResponseDto response = new LoginResponseDto(ThreadLocalStorage.getTenantName(), token, resetPassword, userDto);
-
+		List<ResourceType> resources = permissionService.getResourcesOfUser(user);
+		LoginResponseDto response = new LoginResponseDto(ThreadLocalStorage.getTenantName(), token, resetPassword,
+				userDto, resources);
 		return response;
 	}
 

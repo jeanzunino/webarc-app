@@ -1,16 +1,17 @@
-import { Resolve, ActivatedRouteSnapshot } from '@angular/router';
+import { Resolve} from '@angular/router';
 
 import { EntityService } from '@service/entity/entity.service';
 
-export class GetAllResolver<T> implements Resolve<T[]> {
+export class GetAllResolver<T> implements Resolve<any> {
 
   constructor(private entityService: EntityService<T>) {}
 
-  resolve(route: ActivatedRouteSnapshot) {
+  resolve() {
     return this.getAll();
   }
 
   private async getAll() {
     return await this.entityService.getAll().toPromise();
   }
+
 }

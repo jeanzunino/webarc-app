@@ -5,7 +5,6 @@
     </div>
   </app-panel>
   <div class="card-filter--margin-top">
-    <app-table [items]="items.content" [tableValues]="tableValues" [totalItems]="items.totalElements" (reloadItems)="reloadItems($event)"
-      (onClickItem)="onClickItem($event)"></app-table>
+    <app-table [pageValues]="items" [tableValues]="tableValues" (reloadItems)="reloadItems($event)" (onClickItem)="onClickItem($event)"></app-table>
   </div>
 </div>

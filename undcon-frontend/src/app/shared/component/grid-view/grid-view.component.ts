@@ -3,15 +3,16 @@ import { ActivatedRoute } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 
 import { EntityService } from '@service/entity/entity.service';
-import { SharedInjector } from '@app/shared/shared.module';
 import { Page } from '@model/page';
+import { SharedInjector } from '@shared/shared.module';
 
 export class GridViewComponent<T> implements OnInit {
 
+  private spinner = SharedInjector.get(NgxSpinnerService);
+
   items: Page<T>;
 
-  constructor(private spinner: NgxSpinnerService,
-              private service: EntityService<T>,
+  constructor(private service: EntityService<T>,
               private activatedRoute: ActivatedRoute) { }
 
   ngOnInit() {

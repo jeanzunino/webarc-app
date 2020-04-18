@@ -3,7 +3,7 @@
     Total de registros encontrados: {{ totalItems }}
     <div class="table-responsive">
       <table class="table table-striped">
-        <thead>
+        <thead class="secondary-system-color">
           <tr>
             <th *ngFor="let tableValue of tableValues" class="text-light">
               {{ getHeaders(tableValue) | translate }}
@@ -23,6 +23,7 @@
               <pagination-controls previousLabel="{{ 'table.anterior' | translate }}" 
                                    nextLabel="{{ 'table.proximo' | translate }}"
                                    responsive="true"
+                                   autoHide="true"
                                    (pageChange)="updateItems($event)">
               </pagination-controls>
             </td>

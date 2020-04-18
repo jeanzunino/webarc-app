@@ -1,5 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { TableValues, TableFieldCustomizationEmitter } from '@shared/model/table';
+
+import { TableValues } from '@shared/model/table';
+import { Page } from '@model/page';
 
 @Component({
   selector: 'app-table',
@@ -8,15 +10,16 @@ import { TableValues, TableFieldCustomizationEmitter } from '@shared/model/table
 })
 export class TableComponent implements OnInit {
 
-  pageActual: number = 0
-  tableItems = []
+  pageActual: number = 0;
+  tableItems = [];
+  totalItems = 0;
 
   @Output() reloadItems: EventEmitter<number> = new EventEmitter();
   @Output() onClickItem: EventEmitter<any> = new EventEmitter();
-  @Input() totalItems = 0;
   @Input() tableValues: TableValues[] = [];
-  @Input() set items(value: []) {
-    this.tableItems = value;
+  @Input() set pageValues(value: Page<any>) {
+    this.tableItems = value.content;
+    this.totalItems = value.totalElements;
   }
 
   constructor() { }
@@ -31,7 +34,11 @@ export class TableComponent implements OnInit {
   getFieldsOfTable(item, tableValue: TableValues) {
     const split = tableValue.field.split('.');
     if (split.length > 1) {
-      return item[split[0]][split[1]]
+      const value = item[split[0]];
+      if (value) {
+        return value[split[1]]
+      }
+      return '';
     }
     return item[tableValue.field]
   }

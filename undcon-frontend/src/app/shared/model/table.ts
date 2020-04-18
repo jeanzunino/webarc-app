@@ -1,13 +1,3 @@
-export class TableFieldCustomizationEmitter {
-  item: any[] = [];
-  field: string;
-
-  constructor(item, field) {
-    this.item = item;
-    this.field = field;
-  }
-}
-
 export class TableValues {
   field: string;
   columnTitle: string;

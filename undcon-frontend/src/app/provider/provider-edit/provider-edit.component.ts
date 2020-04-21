@@ -6,10 +6,7 @@ import { TranslateService } from '@ngx-translate/core';
 
 import { Provider } from '@model/provider';
 import { ProviderService } from '@service/provider/provider.service';
-
-export class Teste {
-  provider: Provider
-}
+import { Modal } from '@shared/model/modal';
 
 @Component({
   selector: 'app-provider-edit',
@@ -29,15 +26,24 @@ export class ProviderEditComponent implements OnInit {
 
   ngOnInit() {
     this.providerFormGroup = new FormGroup({
+      id: new FormControl(null),
       name: new FormControl('', Validators.required),
       phone: new FormControl('')
     });
-    let dados = this.modalOptions.data as Teste
-    if (dados.provider) {
-      this.nameForm.setValue(dados.provider.name);
-      this.phoneForm.setValue(dados.provider.phone);
-    }
+    this.onLoadValues();
 
+  }
+
+  async onLoadValues() {
+    this.data = this.modalOptions.data as Modal;
+    if (this.data.content != undefined) {
+      const provider = this.data.content;
+      this.providerFormGroup.patchValue({
+        id: provider.id,
+        name: provider.name,
+        phone: provider.phone,
+      });
+    }
   }
 
   get nameForm() {
@@ -55,7 +61,17 @@ export class ProviderEditComponent implements OnInit {
 
   onSave() {
     if (this.validForm()) {
-      alert(this.nameForm.value)
+      if (this.data.isNew) {
+        this.service.post(this.providerFormGroup.value).toPromise()
+        .then(teste => {
+          console.log(teste)
+        });
+      } else {
+        this.service.put(this.providerFormGroup.value, parseInt(this.providerFormGroup.get('id').value)).toPromise()
+        .then(teste => {
+          console.log(teste)
+        });
+      }
     }
   }
 }

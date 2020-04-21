@@ -1,0 +1,21 @@
+<app-dialog modalTitle="Teste3" [modalRef]="productCategoryModalRef">
+  <form body [formGroup]="productCategoryFormGroup">
+    <div class="md-form">
+      <input type="text" id="name" class="form-control" formControlName="name" mdbInput mdbValidate />
+      <label for="name">Nome</label>
+    </div>
+    <div class="md-form">
+      <select id="parent" class="primary-system-color browser-default custom-select text-light" formControlName="parent" mdbInput mdbValidate>
+        <option selected></option>
+        <option *ngFor="let parent of categories" [value]="parent">{{parent.name}}</option>
+      </select>
+      <label for="parent" class="text-light">Pertence a Categoria de Produto</label>
+    </div>
+  </form>
+
+  <div footer>
+    <button mdbBtn type="button" color="secondary" outline="true" aria-label="Close" (click)="productCategoryModalRef.hide()" mdbWavesEffect>Close</button>
+    <button mdbBtn type="button" color="danger" outline="true" mdbWavesEffect>Danger</button>
+    <button mdbBtn type="submit" color="primary" outline="true" (click)="onSave()" mdbWavesEffect>Save!</button>
+  </div>
+</app-dialog>

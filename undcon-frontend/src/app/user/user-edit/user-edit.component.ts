@@ -70,7 +70,10 @@ export class UserEditComponent implements OnInit {
   onSave() {
     if (this.validForm()) {
       if (this.data.isNew) {
-        this.userService.post(this.userFormGroup.value);
+        this.userService.post(this.userFormGroup.value).toPromise()
+        .then(teste => {
+          console.log(teste)
+        });
       } else {
         this.userService.put(this.userFormGroup.value, parseInt(this.userFormGroup.get('id').value)).toPromise()
         .then(teste => {

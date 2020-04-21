@@ -34,8 +34,12 @@ export class ProviderComponent extends GridViewComponent<Provider> {
       containerClass: '',
       animated: true,
       data: {
-        provider: item
+        content: item
       }
     });
+  }
+
+  open() {
+    this.onClickItem();
   }
 }

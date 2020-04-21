@@ -29,15 +29,23 @@ export class CustomerEditComponent implements OnInit {
 
   ngOnInit() {
     this.customerFormGroup = new FormGroup({
+      id: new FormControl(null),
       name: new FormControl('', Validators.required),
       phone: new FormControl('')
     });
-    let dados = this.modalOptions.data as Teste
-    if (dados.customer) {
-      this.nameForm.setValue(dados.customer.name);
-      this.phoneForm.setValue(dados.customer.phone);
-    }
+    this.onLoadValues();
+  }
 
+  async onLoadValues() {
+    this.data = this.modalOptions.data as Modal;
+    if (this.data.content != undefined) {
+      const customer = this.data.content;
+      this.customerFormGroup.patchValue({
+        id: customer.id,
+        name: customer.name,
+        phone: customer.phone,
+      });
+    }
   }
 
   get nameForm() {
@@ -55,7 +63,17 @@ export class CustomerEditComponent implements OnInit {
 
   onSave() {
     if (this.validForm()) {
-      alert(this.nameForm.value)
+      if (this.data.isNew) {
+        this.service.post(this.customerFormGroup.value).toPromise()
+        .then(teste => {
+          console.log(teste)
+        });
+      } else {
+        this.service.put(this.customerFormGroup.value, parseInt(this.customerFormGroup.get('id').value)).toPromise()
+        .then(teste => {
+          console.log(teste)
+        });
+      }
     }
   }
 }

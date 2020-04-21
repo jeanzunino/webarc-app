@@ -1,0 +1,1 @@
+UPDATE usuario SET login = replace(login,'@' || current_schema(),'');

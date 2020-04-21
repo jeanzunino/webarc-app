@@ -20,6 +20,7 @@ import com.undcon.app.dtos.LoginResponseDto;
 import com.undcon.app.dtos.UserDto;
 import com.undcon.app.enums.ResourceType;
 import com.undcon.app.enums.UndconError;
+import com.undcon.app.exceptions.LoginException;
 import com.undcon.app.exceptions.UndconException;
 import com.undcon.app.mappers.UserMapper;
 import com.undcon.app.model.UserEntity;
@@ -55,7 +56,7 @@ public class LoginService {
 		String tenantByLogin = getTenantByLoginAndDomain(dto.getLogin());
 		String login = getLoginByLoginAndDomain(dto.getLogin());
 		if (!dataSourceProperties.getDatasources().containsKey(tenantByLogin)) {
-			throw new UndconException(UndconError.INVALID_USER_OR_PASSWORD);
+			throw new LoginException(UndconError.INVALID_USER_OR_PASSWORD);
 		}
 		ThreadLocalStorage.setTenantName(tenantByLogin);
 
@@ -63,11 +64,11 @@ public class LoginService {
 		UserEntity user = userRepository.findAllByLoginAndPassword(login, pass);
 		boolean resetPassword = false;
 		if (user == null) {
-			throw new UndconException(UndconError.INVALID_USER_OR_PASSWORD);
+			throw new LoginException(UndconError.INVALID_USER_OR_PASSWORD);
 		}
 
 		if (!user.isActive()) {
-			throw new UndconException(UndconError.USER_BLOCKED);
+			throw new LoginException(UndconError.USER_BLOCKED);
 		}
 
 		if (user.isResetPassword()) {
@@ -124,7 +125,7 @@ public class LoginService {
 	private static String getTenantByLoginAndDomain(String loginAndDomain) throws UndconException {
 		String[] split = loginAndDomain.trim().split("@");
 		if (split.length != 2) {
-			throw new UndconException(UndconError.INVALID_LOGIN_FORMAT);
+			throw new LoginException(UndconError.INVALID_LOGIN_FORMAT);
 		}
 		String tenant = split[1];
 		return tenant;

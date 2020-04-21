@@ -34,8 +34,12 @@ export class CustomerComponent extends GridViewComponent<Customer> {
       containerClass: '',
       animated: true,
       data: {
-        customer: item
+        content: item
       }
     });
+  }
+
+  open() {
+    this.onClickItem();
   }
 }

@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { NgxSpinnerService } from 'ngx-spinner';
+import { MDBModalService, MDBModalRef } from 'angular-bootstrap-md';
 
 import { Customer } from '@model/customer';
 import { CustomerService } from '@service/customer/customer.service';
-import { GridViewComponent } from '@component/grid-view/grid-view.component';
+import { GridViewComponent } from '@shared/component/grid-view/grid-view.component';
+import { CustomerEditComponent } from '@app/customer/customer-edit/customer-edit.component';
 import { Table } from '@shared/model/table';
 
 @Component({
@@ -14,17 +15,27 @@ import { Table } from '@shared/model/table';
 export class CustomerComponent extends GridViewComponent<Customer> {
 
   tableValues = new Table().set('id', 'customer.id').set('name', 'customer.name').set('phone', 'customer.phone').get();
+  modalRef: MDBModalRef;
 
   constructor(service: CustomerService,
-              activatedRoute: ActivatedRoute) {
+    activatedRoute: ActivatedRoute,
+    private modalService: MDBModalService) {
     super(service, activatedRoute);
   }
 
   onClickItem(item) {
-    this.showDialog(item);
-  }
-
-  private showDialog(item = null) {
-    alert(item)
+    this.modalRef = this.modalService.show(CustomerEditComponent, {
+      backdrop: true,
+      keyboard: true,
+      focus: true,
+      show: false,
+      ignoreBackdropClick: false,
+      class: 'modal-dialog-centered',
+      containerClass: '',
+      animated: true,
+      data: {
+        customer: item
+      }
+    });
   }
 }

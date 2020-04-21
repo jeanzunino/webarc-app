@@ -52,15 +52,15 @@ public class LoginService {
 	public LoginResponseDto login(LoginRequestDto dto)
 			throws NoSuchAlgorithmException, UnsupportedEncodingException, UndconException {
 
-		String tenantByLogin = getTenantByLogin(dto.getLogin());
-
+		String tenantByLogin = getTenantByLoginAndDomain(dto.getLogin());
+		String login = getLoginByLoginAndDomain(dto.getLogin());
 		if (!dataSourceProperties.getDatasources().containsKey(tenantByLogin)) {
 			throw new UndconException(UndconError.INVALID_USER_OR_PASSWORD);
 		}
 		ThreadLocalStorage.setTenantName(tenantByLogin);
 
 		String pass = userService.criptyPassword(dto.getPassword());
-		UserEntity user = userRepository.findAllByLoginAndPassword(dto.getLogin(), pass);
+		UserEntity user = userRepository.findAllByLoginAndPassword(login, pass);
 		boolean resetPassword = false;
 		if (user == null) {
 			throw new UndconException(UndconError.INVALID_USER_OR_PASSWORD);
@@ -76,7 +76,7 @@ public class LoginService {
 		// Create payload
 		JSONObject jsonObject = new JSONObject();
 		jsonObject.put("userId", user.getId());
-		jsonObject.put("login", user.getLogin());
+		jsonObject.put("login", login);
 		jsonObject.put("name", user.getEmployee().getName());
 		jsonObject.put("resetPassword", resetPassword);
 		jsonObject.put("tenant", tenantByLogin);
@@ -121,13 +121,21 @@ public class LoginService {
 		return response;
 	}
 
-	private static String getTenantByLogin(String login) throws UndconException {
-		String[] split = login.trim().split("@");
+	private static String getTenantByLoginAndDomain(String loginAndDomain) throws UndconException {
+		String[] split = loginAndDomain.trim().split("@");
 		if (split.length != 2) {
 			throw new UndconException(UndconError.INVALID_LOGIN_FORMAT);
 		}
 		String tenant = split[1];
 		return tenant;
+	}
+	
+	private static String getLoginByLoginAndDomain(String loginAndDomain) throws UndconException {
+		String[] split = loginAndDomain.trim().split("@");
+		if (split.length != 2) {
+			throw new UndconException(UndconError.INVALID_LOGIN_FORMAT);
+		}
+		return split[0];
 	}
 
 }

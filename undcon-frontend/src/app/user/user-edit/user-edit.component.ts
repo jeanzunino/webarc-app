@@ -1,4 +1,4 @@
-import { Component, OnInit, ComponentRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MDBModalRef, ModalOptions } from 'angular-bootstrap-md';
 import { ToastrService } from 'ngx-toastr';
@@ -26,7 +26,7 @@ export class UserEditComponent implements OnInit {
               private toastr: ToastrService,
               private translate: TranslateService,
               private service: UserService) {
-            
+
   }
 
   ngOnInit() {
@@ -37,20 +37,20 @@ export class UserEditComponent implements OnInit {
     });
     let dados = this.modalOptions.data as Teste
     if (dados.user) {
-      this.nameForm.setValue(dados.user.login) 
+      this.nameForm.setValue(dados.user.login)
     }
   }
 
-  get nameForm() { 
-    return this.userFormGroup.get('name'); 
+  get nameForm() {
+    return this.userFormGroup.get('name');
   }
 
   get passwordForm() {
-    return this.userFormGroup.get('password'); 
+    return this.userFormGroup.get('password');
   }
 
   get confirmPasswordForm() {
-    return this.userFormGroup.get('confirmPassword'); 
+    return this.userFormGroup.get('confirmPassword');
   }
 
   private validForm() {
@@ -64,7 +64,7 @@ export class UserEditComponent implements OnInit {
 
   onSave() {
     if (this.validForm()) {
-      alert(this.userModalRef.content.user.login) 
+      alert(this.userModalRef.content.user.login)
     }
     console.warn(this.userFormGroup.value);
   }

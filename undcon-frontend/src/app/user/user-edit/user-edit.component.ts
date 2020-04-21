@@ -1,16 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ComponentRef } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MDBModalRef, ModalOptions } from 'angular-bootstrap-md';
 import { ToastrService } from 'ngx-toastr';
 import { TranslateService } from '@ngx-translate/core';
+import { NgxSpinnerService } from 'ngx-spinner';
 
-import { User } from '@model/user';
 import { UserService } from '@service/user/user.service';
 import { getTranslate } from '@shared/utils/utils'
-
-export class Teste {
-  user: User
-}
+import { EmployeeService } from '@service/employee/employee.service';
+import { Page } from '@model/page';
+import { Employee } from '@model/employee';
+import { PermissionService } from '@service/permission/permission.service';
+import { Permission } from '@model/permission';
+import { Modal } from '@shared/model/modal';
 
 @Component({
   selector: 'app-user-edit',
@@ -20,37 +22,62 @@ export class Teste {
 export class UserEditComponent implements OnInit {
 
   userFormGroup: FormGroup;
+  employees: Employee[];
+  permissions: Permission[];
+  data: Modal
 
   constructor(public userModalRef: MDBModalRef,
               public modalOptions: ModalOptions,
               private toastr: ToastrService,
               private translate: TranslateService,
-              private service: UserService) {
-
-  }
+              private userService: UserService,
+              private employeeService: EmployeeService,
+              private permissionService: PermissionService,
+              private spinner: NgxSpinnerService) { }
 
   ngOnInit() {
     this.userFormGroup = new FormGroup({
-      name: new FormControl('', Validators.required),
+      id: new FormControl(null),
+      login: new FormControl('', Validators.required),
       password: new FormControl('', Validators.required),
-      confirmPassword: new FormControl('', Validators.required)
+      confirmPassword: new FormControl('', Validators.required),
+      employee: new FormControl(null, Validators.required),
+      permission: new FormControl(null, Validators.required),
+      active: new FormControl(false)
     });
-    let dados = this.modalOptions.data as Teste
-    if (dados.user) {
-      this.nameForm.setValue(dados.user.login)
+    this.onLoadValues();
+    this.spinner.hide()
+  }
+
+  async onLoadValues() {
+    this.data = this.modalOptions.data as Modal;
+    if (!this.data.isNew) {
+      const user = this.data.content;
+      this.userFormGroup.patchValue({
+        id: user.id,
+        login: user.login,
+        employee: user.employee,
+        permission: user.permission,
+        active: user.active
+      });
+      this.passwordForm.clearValidators();
+      this.confirmPasswordForm.clearValidators();
     }
+    this.employees = (await this.employeeService.getAll().toPromise() as Page<Employee>).content;
+    this.permissions = (await this.permissionService.getAll().toPromise() as Page<Permission>).content;
   }
 
-  get nameForm() {
-    return this.userFormGroup.get('name');
-  }
-
-  get passwordForm() {
-    return this.userFormGroup.get('password');
-  }
-
-  get confirmPasswordForm() {
-    return this.userFormGroup.get('confirmPassword');
+  onSave() {
+    if (this.validForm()) {
+      if (this.data.isNew) {
+        this.userService.post(this.userFormGroup.value);
+      } else {
+        this.userService.put(this.userFormGroup.value, parseInt(this.userFormGroup.get('id').value)).toPromise()
+        .then(teste => {
+          console.log(teste)
+        });
+      }
+    }
   }
 
   private validForm() {
@@ -62,10 +89,23 @@ export class UserEditComponent implements OnInit {
     return true;
   }
 
-  onSave() {
-    if (this.validForm()) {
-      alert(this.userModalRef.content.user.login)
-    }
-    console.warn(this.userFormGroup.value);
+  get loginForm() {
+    return this.userFormGroup.get('login');
+  }
+
+  get passwordForm() {
+    return this.userFormGroup.get('password');
+  }
+
+  get confirmPasswordForm() {
+    return this.userFormGroup.get('confirmPassword');
+  }
+
+  get employeeForm() {
+    return this.userFormGroup.get('employee');
+  }
+
+  get permissionForm() {
+    return this.userFormGroup.get('permission');
   }
 }

@@ -1,4 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+
 
 @Component({
   selector: 'app-panel',
@@ -7,7 +8,9 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class PanelComponent implements OnInit {
 
+  @Output() onSearch: EventEmitter<any> = new EventEmitter();
   @Input() panelTitle: string;
+  @Input() showSearchButton: boolean = true;
   isTheFilterPanelExpanded = true;
 
   constructor() { }
@@ -19,4 +22,7 @@ export class PanelComponent implements OnInit {
     this.isTheFilterPanelExpanded = !this.isTheFilterPanelExpanded;
   }
 
+  onClickSearch() {
+    this.onSearch.emit();
+  }
 }

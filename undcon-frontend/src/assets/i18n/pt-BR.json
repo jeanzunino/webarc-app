@@ -44,5 +44,6 @@
         "anterior": "Anterior",
         "proximo": "Próximo"
     },
-    "filtros": "Filtros"
+    "filtros": "Filtros",
+    "total_registros_encontrados": "Total de registros encontrados: {{total}}"
 }

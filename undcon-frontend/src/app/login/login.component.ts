@@ -34,15 +34,6 @@ export class LoginComponent implements OnInit {
       login: ['', Validators.compose([Validators.email, Validators.required])],
       password: ['', Validators.required]
     })
-    
-    let table = new Table();
-    table.set('teste', 'teste').set('teste2', 'teste2');
-    console.log(table.get());
-
-    
-    let table2 = new Table();
-    table2.set('batata', 'batata').set('batata2', 'batata2');
-    console.log(table2.get());
   }
 
   get f() { 

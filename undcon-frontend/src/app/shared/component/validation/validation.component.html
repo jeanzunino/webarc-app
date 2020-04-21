@@ -1,0 +1,6 @@
+<mdb-error *ngIf="form.invalid && (form.dirty || form.touched)">
+  {{ invalidMessage | translate }}
+</mdb-error>
+<mdb-success *ngIf="form.valid && (form.dirty || form.touched)">
+  {{ validMessage | translate }}
+</mdb-success>

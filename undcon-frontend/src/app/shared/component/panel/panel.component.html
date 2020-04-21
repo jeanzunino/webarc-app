@@ -12,6 +12,7 @@
     </div>
     <div class="card-footer secondary-system-color">
       <ul class="nav nav-pills card-header-pills">
+        <button mdbBtn *ngIf="showSearchButton" type="button" color="primary" outline="true" (click)="filters.toggle(); onClickSearch()" mdbWavesEffect>Danger</button>
         <li class="nav-item">
           <ng-content select="[footer]"></ng-content>
         </li>

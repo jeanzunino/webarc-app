@@ -1,40 +1,67 @@
 <app-dialog [modalTitle]="'sfdadas'" [modalRef]="userModalRef">
   <form body id="userEditForm" [formGroup]="userFormGroup">
-    <div class="md-form">
-      <input type="text" id="name" class="form-control text-light" formControlName="name" mdbInput mdbValidate>
-      <label for="name" class="text-light">Usuário</label>
-      <mdb-error *ngIf="nameForm.invalid && (nameForm.dirty || nameForm.touched)">
-        Usuário inválido
-      </mdb-error>
-      <mdb-success *ngIf="nameForm.valid && (nameForm.dirty || nameForm.touched)">
-        Usuário válido
-      </mdb-success>
+    <div class="row">
+      <div class="col-12 col-md-10">
+        <div class="md-form">
+          <input type="text" id="login" class="form-control text-light" formControlName="login" mdbInput mdbValidate>
+          <label for="login" class="text-light">Usuário</label>
+          <app-validation [form]="loginForm" [validMessage]="'Válido'" [invalidMessage]="'Inválido'"></app-validation>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-2">
+        <div class="custom-control custom-checkbox checkbox--align">
+          <input type="checkbox" class="custom-control-input" id="active" tabindex="0" formControlName="active">
+          <label ng-reflect-ng-class="[object Object]" for="active" class="custom-control-label">Ativo</label>
+        </div>
+      </div>
     </div>
-    <div class="md-form">
-      <input type="password" id="password" class="form-control text-light" formControlName="password" mdbInput mdbValidate>
-      <label for="password" class="text-light">Senha</label>
-      <mdb-error *ngIf="passwordForm.invalid && (passwordForm.dirty || passwordForm.touched)">
-        Senha inválida
-      </mdb-error>
-      <mdb-success *ngIf="passwordForm.valid && (passwordForm.dirty || passwordForm.touched)">
-        Senha válida
-      </mdb-success>
+
+    <div class="row">
+      <div class="col-12 col-md-6">
+        <div class="md-form">
+          <select id="employee" class="primary-system-color browser-default custom-select text-light" formControlName="employee" mdbInput mdbValidate>
+            <option selected></option>
+            <option *ngFor="let employee of employees" [value]="employee">{{employee.name}}</option>
+          </select>
+          <label for="employee" class="text-light">Funcionário</label>
+          <app-validation [form]="employeeForm" [validMessage]="'Válido'" [invalidMessage]="'Inválido'"></app-validation>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-6">
+        <div class="md-form">
+          <select id="permission" class="primary-system-color browser-default custom-select text-light" formControlName="permission" mdbInput mdbValidate>
+            <option selected></option>
+            <option *ngFor="let permission of permissions" [value]="permission">{{permission.name}}</option>
+          </select>
+          <label for="permission" class="text-light">Permissão</label>
+          <app-validation [form]="permissionForm" [validMessage]="'Válido'" [invalidMessage]="'Inválido'"></app-validation>
+        </div>
+      </div>
     </div>
-    <div class="md-form">
-      <input type="password" id="confirmPassword" class="form-control text-light" formControlName="confirmPassword" mdbInput mdbValidate>
-      <label for="confirmPassword" class="text-light">Confirmar Senha</label>
-      <mdb-error *ngIf="confirmPasswordForm.invalid && (confirmPasswordForm.dirty || confirmPasswordForm.touched)">
-        Senha inválida
-      </mdb-error>
-      <mdb-success *ngIf="confirmPasswordForm.valid && (confirmPasswordForm.dirty || confirmPasswordForm.touched)">
-        Senha válida
-      </mdb-success>
+
+    <div class="row" *ngIf="data.isNew">
+      <div class="col-12 col-md-6">
+        <div class="md-form">
+          <input type="password" id="password" class="form-control text-light" formControlName="password" mdbInput mdbValidate>
+          <label for="password" class="text-light">Senha</label>
+          <app-validation [form]="passwordForm" [validMessage]="'Válido'" [invalidMessage]="'Inválido'"></app-validation>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-6">
+        <div class="md-form">
+          <input type="password" id="confirmPassword" class="form-control text-light" formControlName="confirmPassword" mdbInput mdbValidate>
+          <label for="confirmPassword" class="text-light">Confirmar Senha</label>
+          <app-validation [form]="confirmPasswordForm" [validMessage]="'Válido'" [invalidMessage]="'Inválido'"></app-validation>
+        </div>
+      </div>
     </div>
   </form>
 
   <div footer>
-    <button mdbBtn type="button" color="secondary" outline="true" aria-label="Close" (click)="userModalRef.hide()" mdbWavesEffect>Close</button>
-    <button mdbBtn type="button" color="danger" outline="true" mdbWavesEffect>Danger</button>
-    <button mdbBtn type="submit" [disabled]="userFormGroup.invalid" form="userEditForm" color="primary" outline="true" (click)="onSave()" mdbWavesEffect>Save!</button>
+    <button mdbBtn type="button" *ngIf="!data.isNew" color="danger" outline="true" mdbWavesEffect>Excluir</button>
+    <button mdbBtn type="submit" [disabled]="userFormGroup.invalid" form="userEditForm" color="primary" outline="true" (click)="onSave()" mdbWavesEffect>Salvar</button>
   </div>
 </app-dialog>

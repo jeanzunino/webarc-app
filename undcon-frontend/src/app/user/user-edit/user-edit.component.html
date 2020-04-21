@@ -1,8 +1,8 @@
 <app-dialog [modalTitle]="'sfdadas'" [modalRef]="userModalRef">
-  <form body [formGroup]="userFormGroup">
+  <form body id="userEditForm" [formGroup]="userFormGroup">
     <div class="md-form">
-      <input type="text" id="name" class="form-control" formControlName="name" mdbInput mdbValidate>
-      <label for="name">Usuário</label>
+      <input type="text" id="name" class="form-control text-light" formControlName="name" mdbInput mdbValidate>
+      <label for="name" class="text-light">Usuário</label>
       <mdb-error *ngIf="nameForm.invalid && (nameForm.dirty || nameForm.touched)">
         Usuário inválido
       </mdb-error>
@@ -11,8 +11,8 @@
       </mdb-success>
     </div>
     <div class="md-form">
-      <input type="password" id="password" class="form-control" formControlName="password" mdbInput mdbValidate>
-      <label for="password">Senha</label>
+      <input type="password" id="password" class="form-control text-light" formControlName="password" mdbInput mdbValidate>
+      <label for="password" class="text-light">Senha</label>
       <mdb-error *ngIf="passwordForm.invalid && (passwordForm.dirty || passwordForm.touched)">
         Senha inválida
       </mdb-error>
@@ -21,8 +21,8 @@
       </mdb-success>
     </div>
     <div class="md-form">
-      <input type="password" id="confirmPassword" class="form-control" formControlName="confirmPassword" mdbInput mdbValidate>
-      <label for="confirmPassword">Confirmar Senha</label>
+      <input type="password" id="confirmPassword" class="form-control text-light" formControlName="confirmPassword" mdbInput mdbValidate>
+      <label for="confirmPassword" class="text-light">Confirmar Senha</label>
       <mdb-error *ngIf="confirmPasswordForm.invalid && (confirmPasswordForm.dirty || confirmPasswordForm.touched)">
         Senha inválida
       </mdb-error>
@@ -35,6 +35,6 @@
   <div footer>
     <button mdbBtn type="button" color="secondary" outline="true" aria-label="Close" (click)="userModalRef.hide()" mdbWavesEffect>Close</button>
     <button mdbBtn type="button" color="danger" outline="true" mdbWavesEffect>Danger</button>
-    <button mdbBtn type="submit" color="primary" outline="true" (click)="onSave()" mdbWavesEffect>Save!</button>
+    <button mdbBtn type="submit" [disabled]="userFormGroup.invalid" form="userEditForm" color="primary" outline="true" (click)="onSave()" mdbWavesEffect>Save!</button>
   </div>
 </app-dialog>

@@ -10,7 +10,7 @@ import com.undcon.app.model.EmployeeEntity;
 
 public interface IEmployeeRepository extends JpaRepository<EmployeeEntity, Long> {
 	
-	public Page<EmployeeEntity> findAllByName(String name, Pageable pageable);
+	public Page<EmployeeEntity> findAllByNameContainingIgnoreCase(String name, Pageable pageable);
 	
 	public List<EmployeeEntity> findByIdNotAndName(Long id, String name);
 }

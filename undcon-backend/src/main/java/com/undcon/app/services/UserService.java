@@ -39,7 +39,7 @@ public class UserService {
 		if (login == null) {
 			return userRepository.findAll(PageUtils.createPageRequest(page, size));
 		}
-		return userRepository.findAllByLogin(login, PageUtils.createPageRequest(page, size));
+		return userRepository.findAllByLoginContainingIgnoreCase(login, PageUtils.createPageRequest(page, size));
 	}
 
 	public UserEntity findById(Long id) {
@@ -64,6 +64,7 @@ public class UserService {
 			throw new UndconException(UndconError.LOGIN_ALREADY_EXISTS_IN_EMPLOYEE);
 		}
 		
+		//TODO Validar se tem @dominio
 		user.setPassword(criptyPassword(user.getPassword()));
 		return userRepository.save(user);
 	}
@@ -85,7 +86,7 @@ public class UserService {
 		find.setResetPassword(user.isResetPassword());
 		find.setLogin(user.getLogin());
 		find.setEmployee(user.getEmployee());
-		if (find.getPassword() == null || find.getPassword().isEmpty()) {
+		if (find.isResetPassword()) {
 			find.setPassword(criptyPassword(user.getPassword()));
 		}
 		

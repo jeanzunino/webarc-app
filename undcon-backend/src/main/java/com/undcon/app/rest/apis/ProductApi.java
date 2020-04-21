@@ -1,5 +1,7 @@
 package com.undcon.app.rest.apis;
 
+import java.util.List;
+
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -63,5 +65,12 @@ public class ProductApi {
 	@Produces(MediaType.APPLICATION_JSON)
 	public void delete(@PathParam("id") long id) throws UndconException {
 		productService.delete(id);
+	}
+	
+	@GET
+	@Path("/stockMin")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<ProductEntity> get() {
+		return productService.getStockMin();
 	}
 }

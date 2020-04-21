@@ -21,7 +21,7 @@ import org.springframework.stereotype.Component;
 import com.undcon.app.enums.ResourceType;
 import com.undcon.app.exceptions.UndconException;
 import com.undcon.app.model.PermissionEntity;
-import com.undcon.app.model.PermissionItenEntity;
+import com.undcon.app.model.PermissionItemEntity;
 import com.undcon.app.repositories.IPermissionItenRepository;
 import com.undcon.app.services.PermissionService;
 
@@ -80,16 +80,16 @@ public class PermissionApi {
 	@POST
 	@Path("/{id}/itens")
 	@Produces(MediaType.APPLICATION_JSON)
-	public PermissionItenEntity postIten(PermissionItenEntity entity) {
+	public PermissionItemEntity postIten(PermissionItemEntity entity) {
 		return repositoryIten.save(entity);
 	}
 
 	@GET
 	@Path("/{id}/itens")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<PermissionItenEntity> getItens(@PathParam("id") long id) {
+	public List<PermissionItemEntity> getItens(@PathParam("id") long id) {
 		PermissionEntity permission = permissionService.findById(id);
-		List<PermissionItenEntity> items = repositoryIten.findByPermission(permission);
+		List<PermissionItemEntity> items = repositoryIten.findByPermission(permission);
 		return items;
 	}
 
@@ -97,7 +97,7 @@ public class PermissionApi {
 	@Path("/{id}/itens/{itemId}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public void postIten(@PathParam("itemId") long itemId) {
-		PermissionItenEntity findItenById = permissionService.findItenById(itemId);
+		PermissionItemEntity findItenById = permissionService.findItenById(itemId);
 		repositoryIten.delete(findItenById);
 	}
 

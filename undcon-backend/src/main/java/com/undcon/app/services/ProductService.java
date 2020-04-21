@@ -12,6 +12,7 @@ import com.undcon.app.enums.UndconError;
 import com.undcon.app.exceptions.UndconException;
 import com.undcon.app.model.ProductEntity;
 import com.undcon.app.repositories.IProductRepository;
+import com.undcon.app.repositories.ProductRepositoryImpl;
 import com.undcon.app.utils.PageUtils;
 
 @Component
@@ -21,13 +22,16 @@ public class ProductService {
 	private IProductRepository productRepository;
 
 	@Autowired
+	private ProductRepositoryImpl productRepositoryImpl;
+	
+	@Autowired
 	private PermissionService permissionService;
 
 	public Page<ProductEntity> getAll(String name, Integer page, Integer size) {
 		if (StringUtils.isEmpty(name)) {
 			return productRepository.findAll(PageUtils.createPageRequest(page, size));
 		}
-		return productRepository.findAllByName(name, PageUtils.createPageRequest(page, size));
+		return productRepository.findAllByNameContainingIgnoreCase(name, PageUtils.createPageRequest(page, size));
 	}
 
 	public ProductEntity findById(Long id) {
@@ -56,6 +60,10 @@ public class ProductService {
 	public void delete(long id) throws UndconException {
 		permissionService.checkPermission(ResourceType.PRODUCT);
 		productRepository.delete(id);
+	}
+
+	public List<ProductEntity> getStockMin() {
+		return productRepositoryImpl.getStockMin();
 	}
 	
 }

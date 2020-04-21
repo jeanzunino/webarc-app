@@ -16,7 +16,7 @@ public interface IUserRepository extends JpaRepository<UserEntity, Long> {
 	
 	List<UserEntity> findByEmployee(EmployeeEntity employee);
 	
-	Page<UserEntity> findAllByLogin(String login, Pageable pageable);
+	Page<UserEntity> findAllByLoginContainingIgnoreCase(String login, Pageable pageable);
 
 	UserEntity findAllByLoginAndPassword(String login, String password);
 }

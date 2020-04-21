@@ -27,7 +27,7 @@ public class CustomerService {
 		if(StringUtils.isEmpty(name)) {
 			return customerRepository.findAll(PageUtils.createPageRequest(page, size));
 		}
-        return customerRepository.findAllByName(name, PageUtils.createPageRequest(page, size));
+        return customerRepository.findAllByNameContainingIgnoreCase(name, PageUtils.createPageRequest(page, size));
     }
 	
 	public CustomerEntity findById(Long id) {

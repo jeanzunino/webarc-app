@@ -27,7 +27,7 @@ public class ProviderService {
 		if (StringUtils.isEmpty(name)) {
 			return providerRepository.findAll(PageUtils.createPageRequest(page, size));
 		}
-		return providerRepository.findAllByName(name, PageUtils.createPageRequest(page, size));
+		return providerRepository.findAllByNameContainingIgnoreCase(name, PageUtils.createPageRequest(page, size));
     }
 	
 	public ProviderEntity findById(Long id) {

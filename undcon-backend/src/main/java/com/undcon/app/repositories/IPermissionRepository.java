@@ -10,7 +10,7 @@ import com.undcon.app.model.PermissionEntity;
 
 public interface IPermissionRepository extends JpaRepository<PermissionEntity, Long> {
 	
-	public Page<PermissionEntity> findAllByName(String name, Pageable pageable);
+	public Page<PermissionEntity> findAllByNameContainingIgnoreCase(String name, Pageable pageable);
 	
 	public List<PermissionEntity> findByIdNotAndName(Long id, String name);
 }

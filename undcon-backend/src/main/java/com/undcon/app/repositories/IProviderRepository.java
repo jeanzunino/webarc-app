@@ -10,7 +10,7 @@ import com.undcon.app.model.ProviderEntity;
 
 public interface IProviderRepository extends JpaRepository<ProviderEntity, Long> {
 	
-	public Page<ProviderEntity> findAllByName(String name, Pageable pageable);
+	public Page<ProviderEntity> findAllByNameContainingIgnoreCase(String name, Pageable pageable);
 	
 	public List<ProviderEntity> findByIdNotAndName(Long id, String name);
 }

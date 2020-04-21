@@ -1,7 +1,13 @@
 <div class="container-fluid screen-top screen-bottom">
-  <app-panel [panelTitle]="'filtros'">
+  <app-panel [panelTitle]="'filtros'" (onSearch)="onSearch()">
+    <div body>
+      <div class="md-form">
+        <input type="text" id="name" class="form-control text-light" [(ngModel)]="name" mdbInput>
+        <label for="name" class="text-light">Usuário</label>
+      </div>
+    </div>
     <div footer>
-      <button mdbBtn type="button" color="danger" outline="true" mdbWavesEffect>Danger</button>
+      <button mdbBtn type="button" color="danger" outline="true" (click)="open()" mdbWavesEffect>Open</button>
     </div>
   </app-panel>
   <div class="card-filter--margin-top">

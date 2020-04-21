@@ -1,9 +1,11 @@
 import { Employee } from '@model/employee';
+import { Permission } from '@model/permission';
 
 export class User {
     id: number;
-    name: string;
     login: string;
     password: string;
-    Employee: Employee
+    employee: Employee;
+    permission: Permission;
+    active: boolean;
 }

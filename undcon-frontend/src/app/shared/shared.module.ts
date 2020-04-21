@@ -1,6 +1,6 @@
 import { NgModule, Injector } from '@angular/core';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { CollapseModule, MDBBootstrapModule } from 'angular-bootstrap-md';
+import { CollapseModule, MDBBootstrapModule, CheckboxModule } from 'angular-bootstrap-md';
 import { CommonModule } from '@angular/common';
 import { NgxSpinnerModule } from "ngx-spinner";
 import { TranslateModule, TranslateService, TranslateLoader } from '@ngx-translate/core';
@@ -9,8 +9,9 @@ import { HttpClient } from '@angular/common/http';
 import { NgxPaginationModule } from 'ngx-pagination';
 
 import { DialogComponent } from '@component/dialog/dialog.component';
-import { TableComponent } from './component/table/table.component';
-import { PanelComponent } from './component/panel/panel.component';
+import { TableComponent } from '@component/table/table.component';
+import { PanelComponent } from '@component/panel/panel.component';
+import { ValidationComponent } from '@component/validation/validation.component';
 
 export let SharedInjector: Injector;
 
@@ -22,7 +23,8 @@ export function HttpLoaderFactory(http: HttpClient) {
   declarations: [
     DialogComponent,
     TableComponent,
-    PanelComponent
+    PanelComponent,
+    ValidationComponent
   ],
   exports: [
     CommonModule,
@@ -34,7 +36,9 @@ export function HttpLoaderFactory(http: HttpClient) {
     TranslateModule,
     NgxPaginationModule,
     TableComponent,
-    PanelComponent
+    PanelComponent,
+    CheckboxModule,
+    ValidationComponent
   ],
   imports: [
     CommonModule,

@@ -34,8 +34,12 @@ export class PermissionComponent extends GridViewComponent<Permission> {
       containerClass: '',
       animated: true,
       data: {
-        permission: item
+        content: item
       }
     });
+  }
+
+  open() {
+    this.onClickItem(null);
   }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, ComponentRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MDBModalRef, ModalOptions } from 'angular-bootstrap-md';
 import { ToastrService } from 'ngx-toastr';
@@ -24,7 +24,7 @@ export class UserEditComponent implements OnInit {
   userFormGroup: FormGroup;
   employees: Employee[];
   permissions: Permission[];
-  data: Modal
+  data: Modal;
 
   constructor(public userModalRef: MDBModalRef,
               public modalOptions: ModalOptions,

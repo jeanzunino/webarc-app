@@ -40,6 +40,6 @@ export class ProviderComponent extends GridViewComponent<Provider> {
   }
 
   open() {
-    this.onClickItem();
+    this.onClickItem(null);
   }
 }

@@ -40,6 +40,6 @@ export class ProductCategoryComponent extends GridViewComponent<ProductCategory>
   }
 
   open() {
-    this.onClickItem();
+    this.onClickItem(null);
   }
 }

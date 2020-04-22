@@ -3,13 +3,8 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MDBModalRef, ModalOptions } from 'angular-bootstrap-md';
 import { ToastrService } from 'ngx-toastr';
 import { TranslateService } from '@ngx-translate/core';
-
-import { Permission } from '@model/permission';
 import { PermissionService } from '@service/permission/permission.service';
-
-export class Teste {
-  permission: Permission
-}
+import { Modal } from '@shared/model/modal';
 
 @Component({
   selector: 'app-permission-edit',
@@ -19,6 +14,7 @@ export class Teste {
 export class PermissionEditComponent implements OnInit {
 
   permissionFormGroup: FormGroup;
+  data: Modal;
 
   constructor(public permissionModalRef: MDBModalRef,
               public modalOptions: ModalOptions,
@@ -29,13 +25,27 @@ export class PermissionEditComponent implements OnInit {
 
   ngOnInit() {
     this.permissionFormGroup = new FormGroup({
+      id: new FormControl(null),
       name: new FormControl('', Validators.required)
     });
-    let dados = this.modalOptions.data as Teste
-    if (dados.permission) {
-      this.nameForm.setValue(dados.permission.name);
-    }
+    this.onLoadValues();
+  }
 
+  async onLoadValues() {
+    this.data = this.modalOptions.data as Modal;
+    if (this.data.content) {
+      const permission = this.data.content;
+      this.permissionFormGroup.patchValue({
+        id: permission.id,
+        name: permission.name
+      });
+    } else{
+      this.permissionFormGroup.patchValue({
+        id: null,
+        name: null
+
+      });
+    }
   }
 
   get nameForm() {
@@ -49,7 +59,17 @@ export class PermissionEditComponent implements OnInit {
 
   onSave() {
     if (this.validForm()) {
-      alert(this.nameForm.value)
+      if (!this.data.content) {
+        this.service.post(this.permissionFormGroup.value).toPromise()
+        .then(teste => {
+          console.log(teste)
+        });
+      } else {
+        this.service.put(this.permissionFormGroup.value, parseInt(this.permissionFormGroup.get('id').value)).toPromise()
+        .then(teste => {
+          console.log(teste)
+        });
+      }
     }
   }
 }

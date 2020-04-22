@@ -125,7 +125,7 @@ public class LoginService {
 	private static String getTenantByLoginAndDomain(String loginAndDomain) throws UndconException {
 		String[] split = loginAndDomain.trim().split("@");
 		if (split.length != 2) {
-			throw new LoginException(UndconError.INVALID_LOGIN_FORMAT);
+			throw new LoginException(UndconError.INVALID_LOGIN_FORMAT_WITH_DOMAIN);
 		}
 		String tenant = split[1];
 		return tenant;
@@ -134,7 +134,7 @@ public class LoginService {
 	private static String getLoginByLoginAndDomain(String loginAndDomain) throws UndconException {
 		String[] split = loginAndDomain.trim().split("@");
 		if (split.length != 2) {
-			throw new UndconException(UndconError.INVALID_LOGIN_FORMAT);
+			throw new UndconException(UndconError.INVALID_LOGIN_FORMAT_WITH_DOMAIN);
 		}
 		return split[0];
 	}

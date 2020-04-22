@@ -3,13 +3,8 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MDBModalRef, ModalOptions } from 'angular-bootstrap-md';
 import { ToastrService } from 'ngx-toastr';
 import { TranslateService } from '@ngx-translate/core';
-
-import { Customer } from '@model/customer';
 import { CustomerService } from '@service/customer/customer.service';
-
-export class Teste {
-  customer: Customer
-}
+import { Modal } from '@shared/model/modal';
 
 @Component({
   selector: 'app-customer-edit',
@@ -19,6 +14,7 @@ export class Teste {
 export class CustomerEditComponent implements OnInit {
 
   customerFormGroup: FormGroup;
+  data: Modal;
 
   constructor(public customerModalRef: MDBModalRef,
               public modalOptions: ModalOptions,
@@ -38,12 +34,12 @@ export class CustomerEditComponent implements OnInit {
 
   async onLoadValues() {
     this.data = this.modalOptions.data as Modal;
-    if (this.data.content != undefined) {
+    if (this.data.content) {
       const customer = this.data.content;
       this.customerFormGroup.patchValue({
         id: customer.id,
         name: customer.name,
-        phone: customer.phone,
+        phone: customer.phone
       });
     }
   }
@@ -63,7 +59,7 @@ export class CustomerEditComponent implements OnInit {
 
   onSave() {
     if (this.validForm()) {
-      if (this.data.isNew) {
+      if (!this.data.content) {
         this.service.post(this.customerFormGroup.value).toPromise()
         .then(teste => {
           console.log(teste)

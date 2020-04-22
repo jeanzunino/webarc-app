@@ -47,7 +47,7 @@ export class ProductCategoryEditComponent implements OnInit {
 
   async onLoadValues() {
     this.data = this.modalOptions.data as Modal;
-    if (this.data.content != undefined) {
+    if (this.data.content) {
       const productCategory = this.data.content;
       this.productCategoryFormGroup.patchValue({
         id: productCategory.id,
@@ -73,7 +73,7 @@ export class ProductCategoryEditComponent implements OnInit {
 
   onSave() {
     if (this.validForm()) {
-      if (this.data.isNew) {
+      if (!this.data.content) {
         this.service.post(this.productCategoryFormGroup.value).toPromise()
         .then(teste => {
           console.log(teste)

@@ -40,6 +40,6 @@ export class CustomerComponent extends GridViewComponent<Customer> {
   }
 
   open() {
-    this.onClickItem();
+    this.onClickItem(null);
   }
 }

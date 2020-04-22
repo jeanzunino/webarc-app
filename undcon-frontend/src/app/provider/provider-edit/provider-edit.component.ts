@@ -3,8 +3,6 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MDBModalRef, ModalOptions } from 'angular-bootstrap-md';
 import { ToastrService } from 'ngx-toastr';
 import { TranslateService } from '@ngx-translate/core';
-
-import { Provider } from '@model/provider';
 import { ProviderService } from '@service/provider/provider.service';
 import { Modal } from '@shared/model/modal';
 
@@ -16,6 +14,7 @@ import { Modal } from '@shared/model/modal';
 export class ProviderEditComponent implements OnInit {
 
   providerFormGroup: FormGroup;
+  data: Modal;
 
   constructor(public providerModalRef: MDBModalRef,
               public modalOptions: ModalOptions,
@@ -36,7 +35,7 @@ export class ProviderEditComponent implements OnInit {
 
   async onLoadValues() {
     this.data = this.modalOptions.data as Modal;
-    if (this.data.content != undefined) {
+    if (this.data.content) {
       const provider = this.data.content;
       this.providerFormGroup.patchValue({
         id: provider.id,
@@ -61,7 +60,7 @@ export class ProviderEditComponent implements OnInit {
 
   onSave() {
     if (this.validForm()) {
-      if (this.data.isNew) {
+      if (this.data.content === undefined) {
         this.service.post(this.providerFormGroup.value).toPromise()
         .then(teste => {
           console.log(teste)

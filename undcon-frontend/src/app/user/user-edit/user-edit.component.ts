@@ -56,8 +56,8 @@ export class UserEditComponent implements OnInit {
       this.userFormGroup.patchValue({
         id: user.id,
         login: user.login,
-        employee: user.employee,
-        permission: user.permission,
+        employee: user.employee.id,
+        permission: user.permission.id,
         active: user.active
       });
       this.passwordForm.clearValidators();
@@ -69,8 +69,13 @@ export class UserEditComponent implements OnInit {
 
   onSave() {
     if (this.validForm()) {
+      this.employeeForm.setValue(this.employees.find(employee => employee.id === parseInt(this.employeeForm.value)));
+      this.permissionForm.setValue(this.permissions.find(permission => permission.id === parseInt(this.permissionForm.value)));
       if (this.data.isNew) {
-        this.userService.post(this.userFormGroup.value);
+        this.userService.post(this.userFormGroup.value).toPromise()
+        .then(teste => {
+          console.log(teste)
+        });
       } else {
         this.userService.put(this.userFormGroup.value, parseInt(this.userFormGroup.get('id').value)).toPromise()
         .then(teste => {

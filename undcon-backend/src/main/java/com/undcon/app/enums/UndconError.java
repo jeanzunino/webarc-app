@@ -16,7 +16,9 @@ public enum UndconError {
 	
 	INVALID_TOKEN_UPDATE_PASSWORD("Token foi gerado para alterar a senha. Altere a senha e tente logar novamente."),
 	
-	INVALID_LOGIN_FORMAT("Usuário inválido: o usuário deve estar no formato 'usuario@cliente'"),
+	INVALID_LOGIN_FORMAT_WITH_DOMAIN("Usuário inválido: o usuário deve estar no formato 'usuario@cliente'"),
+	
+	INVALID_LOGIN_FORMAT("Usuário inválido: o login do usuário deve ter 3 ou mais caracteres e não pode ter @"),
 	
 	NAME_ALREADY_EXISTS("O nome informado já existe"),
 	

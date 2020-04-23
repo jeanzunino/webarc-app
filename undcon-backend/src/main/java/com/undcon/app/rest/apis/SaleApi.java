@@ -1,5 +1,7 @@
 package com.undcon.app.rest.apis;
 
+import java.util.List;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -14,8 +16,11 @@ import javax.ws.rs.core.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 
 import com.undcon.app.dtos.ProductItemRequestDto;
+import com.undcon.app.dtos.ProductSaledInfoDto;
+import com.undcon.app.dtos.SaleInfoDto;
 import com.undcon.app.dtos.SaleRequestDto;
 import com.undcon.app.exceptions.UndconException;
 import com.undcon.app.model.SaleEntity;
@@ -43,10 +48,26 @@ public class SaleApi {
 		return Provider;
 	}
 
+	@GET
+	@Path("/total")
+	@Produces(MediaType.APPLICATION_JSON)
+	public SaleInfoDto getTotal() {
+		return service.getTotalSale();
+	}
+
+	@GET
+	@Path("/topProductSaled")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<ProductSaledInfoDto> getTopProductSaled() {
+		return service.getTopProductSaled(true);
+	}
+
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public SaleEntity post(SaleRequestDto sale) throws UndconException {
+		Assert.notNull(sale.getCustomerId(), "customerId is required");
+		Assert.notNull(sale.getSalesmanId(), "salesmanId is required");
 		return service.persist(sale);
 	}
 
@@ -68,6 +89,9 @@ public class SaleApi {
 	@Path("/{id}/itensProducts")
 	@Produces(MediaType.APPLICATION_JSON)
 	public SaleItemEntity postItem(@PathParam("id") long id, ProductItemRequestDto item) throws UndconException {
+		Assert.notNull(item.getEmployeeId(), "employeeId is required");
+		Assert.notNull(item.getProductId(), "productId is required");
+		Assert.notNull(item.getQuantity(), "quantity is required");
 		return service.addItem(id, item);
 	}
 

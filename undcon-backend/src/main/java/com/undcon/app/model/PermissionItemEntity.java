@@ -13,7 +13,7 @@ import com.undcon.app.enums.ResourceType;
 
 @Entity
 @Table(name = "permissao_item")
-public class PermissionItenEntity {
+public class PermissionItemEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,10 +27,10 @@ public class PermissionItenEntity {
 	@Column(name = "tipo", nullable = false)
 	private ResourceType resourceType;
 	
-	public PermissionItenEntity() {
+	public PermissionItemEntity() {
 	}
 
-	public PermissionItenEntity(Long id, PermissionEntity permission, ResourceType resourceType) {
+	public PermissionItemEntity(Long id, PermissionEntity permission, ResourceType resourceType) {
 		super();
 		this.id = id;
 		this.permission = permission;

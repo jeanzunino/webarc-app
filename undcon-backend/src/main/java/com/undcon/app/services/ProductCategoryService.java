@@ -27,7 +27,7 @@ public class ProductCategoryService {
 		if(StringUtils.isEmpty(name)) {
 			return productCategoryRepository.findAll(PageUtils.createPageRequest(page, size));
 		}
-        return productCategoryRepository.findAllByName(name, PageUtils.createPageRequest(page, size));
+        return productCategoryRepository.findAllByNameContainingIgnoreCase(name, PageUtils.createPageRequest(page, size));
     }
 	
 	public ProductCategoryEntity findById(Long id) {

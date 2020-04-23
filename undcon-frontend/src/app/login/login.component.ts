@@ -7,7 +7,6 @@ import { ToastrService } from 'ngx-toastr';
 import { TranslateService } from '@ngx-translate/core';
 
 import { AuthService } from '@service/auth/auth.service';
-import { Table } from '@app/shared/model/table';
 
 @Component({
   selector: 'app-login',

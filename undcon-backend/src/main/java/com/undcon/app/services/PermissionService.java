@@ -16,7 +16,7 @@ import com.undcon.app.enums.ResourceType;
 import com.undcon.app.enums.UndconError;
 import com.undcon.app.exceptions.UndconException;
 import com.undcon.app.model.PermissionEntity;
-import com.undcon.app.model.PermissionItenEntity;
+import com.undcon.app.model.PermissionItemEntity;
 import com.undcon.app.model.UserEntity;
 import com.undcon.app.repositories.IPermissionItenRepository;
 import com.undcon.app.repositories.IPermissionRepository;
@@ -39,14 +39,14 @@ public class PermissionService {
 		if (StringUtils.isEmpty(name)) {
 			return permissionRepository.findAll(PageUtils.createPageRequest(page, size));
 		}
-		return permissionRepository.findAllByName(name, PageUtils.createPageRequest(page, size));
+		return permissionRepository.findAllByNameContainingIgnoreCase(name, PageUtils.createPageRequest(page, size));
 	}
 
 	public PermissionEntity findById(Long id) {
 		return permissionRepository.findOne(id);
 	}
 	
-	public PermissionItenEntity findItenById(Long id) {
+	public PermissionItemEntity findItenById(Long id) {
 		return permissionItenRepository.findOne(id);
 	}
 	
@@ -95,7 +95,7 @@ public class PermissionService {
 
 	public List<ResourceType> getResourcesOfUser(UserEntity user) {
 		List<ResourceType> resources = new ArrayList<ResourceType>();
-		List<PermissionItenEntity> itens = permissionItenRepository.findByPermission(user.getPermission());
+		List<PermissionItemEntity> itens = permissionItenRepository.findByPermission(user.getPermission());
 		itens.stream().forEach(resource -> resources.add(resource.getResourceType()));
 		return resources;
 	}

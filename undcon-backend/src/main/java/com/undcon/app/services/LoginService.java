@@ -20,6 +20,7 @@ import com.undcon.app.dtos.LoginResponseDto;
 import com.undcon.app.dtos.UserDto;
 import com.undcon.app.enums.ResourceType;
 import com.undcon.app.enums.UndconError;
+import com.undcon.app.exceptions.LoginException;
 import com.undcon.app.exceptions.UndconException;
 import com.undcon.app.mappers.UserMapper;
 import com.undcon.app.model.UserEntity;
@@ -52,22 +53,22 @@ public class LoginService {
 	public LoginResponseDto login(LoginRequestDto dto)
 			throws NoSuchAlgorithmException, UnsupportedEncodingException, UndconException {
 
-		String tenantByLogin = getTenantByLogin(dto.getLogin());
-
+		String tenantByLogin = getTenantByLoginAndDomain(dto.getLogin());
+		String login = getLoginByLoginAndDomain(dto.getLogin());
 		if (!dataSourceProperties.getDatasources().containsKey(tenantByLogin)) {
-			throw new UndconException(UndconError.INVALID_USER_OR_PASSWORD);
+			throw new LoginException(UndconError.INVALID_USER_OR_PASSWORD);
 		}
 		ThreadLocalStorage.setTenantName(tenantByLogin);
 
 		String pass = userService.criptyPassword(dto.getPassword());
-		UserEntity user = userRepository.findAllByLoginAndPassword(dto.getLogin(), pass);
+		UserEntity user = userRepository.findAllByLoginAndPassword(login, pass);
 		boolean resetPassword = false;
 		if (user == null) {
-			throw new UndconException(UndconError.INVALID_USER_OR_PASSWORD);
+			throw new LoginException(UndconError.INVALID_USER_OR_PASSWORD);
 		}
 
 		if (!user.isActive()) {
-			throw new UndconException(UndconError.USER_BLOCKED);
+			throw new LoginException(UndconError.USER_BLOCKED);
 		}
 
 		if (user.isResetPassword()) {
@@ -76,7 +77,7 @@ public class LoginService {
 		// Create payload
 		JSONObject jsonObject = new JSONObject();
 		jsonObject.put("userId", user.getId());
-		jsonObject.put("login", user.getLogin());
+		jsonObject.put("login", login);
 		jsonObject.put("name", user.getEmployee().getName());
 		jsonObject.put("resetPassword", resetPassword);
 		jsonObject.put("tenant", tenantByLogin);
@@ -121,13 +122,21 @@ public class LoginService {
 		return response;
 	}
 
-	private static String getTenantByLogin(String login) throws UndconException {
-		String[] split = login.trim().split("@");
+	private static String getTenantByLoginAndDomain(String loginAndDomain) throws UndconException {
+		String[] split = loginAndDomain.trim().split("@");
 		if (split.length != 2) {
-			throw new UndconException(UndconError.INVALID_LOGIN_FORMAT);
+			throw new LoginException(UndconError.INVALID_LOGIN_FORMAT_WITH_DOMAIN);
 		}
 		String tenant = split[1];
 		return tenant;
+	}
+	
+	private static String getLoginByLoginAndDomain(String loginAndDomain) throws UndconException {
+		String[] split = loginAndDomain.trim().split("@");
+		if (split.length != 2) {
+			throw new UndconException(UndconError.INVALID_LOGIN_FORMAT_WITH_DOMAIN);
+		}
+		return split[0];
 	}
 
 }

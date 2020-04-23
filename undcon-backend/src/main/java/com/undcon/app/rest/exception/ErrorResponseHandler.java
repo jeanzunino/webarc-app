@@ -7,6 +7,7 @@ import javax.ws.rs.ext.Provider;
 import org.springframework.http.HttpStatus;
 
 import com.undcon.app.enums.UndconError;
+import com.undcon.app.exceptions.LoginException;
 import com.undcon.app.exceptions.UndconException;
 import com.undcon.app.rest.models.ErrorMessageModel;
 
@@ -19,6 +20,9 @@ public class ErrorResponseHandler implements ExceptionMapper<Throwable> {
 			ErrorMessageModel bodyOfResponse = new ErrorMessageModel(UndconError.API_ERROR_INVALID_PARAMETERS,
 					error.getMessage());
 			return error(error, HttpStatus.BAD_REQUEST, bodyOfResponse);
+		} else if (error instanceof LoginException) {
+			ErrorMessageModel bodyOfResponse = new ErrorMessageModel(((UndconException) error).getError());
+			return error(error, HttpStatus.UNAUTHORIZED, bodyOfResponse);
 		} else if (error instanceof UndconException) {
 			ErrorMessageModel bodyOfResponse = new ErrorMessageModel(((UndconException) error).getError());
 			return error(error, HttpStatus.BAD_REQUEST, bodyOfResponse);

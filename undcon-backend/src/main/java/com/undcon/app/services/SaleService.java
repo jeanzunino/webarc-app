@@ -1,6 +1,7 @@
 package com.undcon.app.services;
 
 import java.sql.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -8,6 +9,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.undcon.app.dtos.ProductItemRequestDto;
+import com.undcon.app.dtos.ProductSaledInfoDto;
+import com.undcon.app.dtos.SaleInfoDto;
 import com.undcon.app.dtos.SaleRequestDto;
 import com.undcon.app.enums.ResourceType;
 import com.undcon.app.enums.SaleStatus;
@@ -22,6 +25,7 @@ import com.undcon.app.model.SaleItemProductEntity;
 import com.undcon.app.model.UserEntity;
 import com.undcon.app.repositories.ISaleItemRepository;
 import com.undcon.app.repositories.ISaleRepository;
+import com.undcon.app.repositories.SaleRepositoryImpl;
 import com.undcon.app.utils.LongUtils;
 import com.undcon.app.utils.PageUtils;
 
@@ -30,6 +34,9 @@ public class SaleService {
 
 	@Autowired
 	private ISaleRepository saleRepository;
+	
+	@Autowired
+	private SaleRepositoryImpl saleRepositoryImpl;
 
 	@Autowired
 	private ISaleItemRepository saleItemRepository;
@@ -60,6 +67,10 @@ public class SaleService {
 		return saleRepository.findOne(id);
 	}
 
+	public SaleInfoDto getTotalSale() {
+		return new SaleInfoDto(saleRepositoryImpl.getTotalSale(true), saleRepositoryImpl.getTotalSale(false));
+	}
+	
 	public SaleEntity persist(SaleRequestDto saleDto) throws UndconException {
 		permissionService.checkPermission(ResourceType.SALE);
 
@@ -172,5 +183,9 @@ public class SaleService {
 			throw new UndconException(UndconError.SALE_ITEM_NOT_FOUND_IN_THE_SALE);
 		}
 		saleItemRepository.delete(item);
+	}
+
+	public List<ProductSaledInfoDto> getTopProductSaled(boolean billed) {
+		return saleRepositoryImpl.getTopProductSaled(billed);
 	}
 }

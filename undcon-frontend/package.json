@@ -24,6 +24,8 @@
     "@ngx-translate/http-loader": "^4.0.0",
     "angular-bootstrap-md": "^9.0.0",
     "bootstrap": "^4.4.1",
+    "chart.js": "^2.7.3",
+    "chartjs": "^0.3.24",
     "jquery": "^3.4.1",
     "ngx-pagination": "^5.0.0",
     "ngx-spinner": "^9.0.2",

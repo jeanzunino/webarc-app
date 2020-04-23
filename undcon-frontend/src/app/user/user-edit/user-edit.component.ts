@@ -1,4 +1,4 @@
-import { Component, OnInit, ComponentRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MDBModalRef, ModalOptions } from 'angular-bootstrap-md';
 import { ToastrService } from 'ngx-toastr';
@@ -24,7 +24,7 @@ export class UserEditComponent implements OnInit {
   userFormGroup: FormGroup;
   employees: Employee[];
   permissions: Permission[];
-  data: Modal
+  data: Modal;
 
   constructor(public userModalRef: MDBModalRef,
               public modalOptions: ModalOptions,
@@ -94,23 +94,23 @@ export class UserEditComponent implements OnInit {
     return true;
   }
 
-  get loginForm() { 
-    return this.userFormGroup.get('login'); 
+  get loginForm() {
+    return this.userFormGroup.get('login');
   }
 
   get passwordForm() {
-    return this.userFormGroup.get('password'); 
+    return this.userFormGroup.get('password');
   }
 
   get confirmPasswordForm() {
-    return this.userFormGroup.get('confirmPassword'); 
+    return this.userFormGroup.get('confirmPassword');
   }
 
   get employeeForm() {
-    return this.userFormGroup.get('employee'); 
+    return this.userFormGroup.get('employee');
   }
 
   get permissionForm() {
-    return this.userFormGroup.get('permission'); 
+    return this.userFormGroup.get('permission');
   }
 }

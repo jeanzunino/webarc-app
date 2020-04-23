@@ -39,7 +39,7 @@ public class UserService {
 		if (login == null) {
 			return userRepository.findAll(PageUtils.createPageRequest(page, size));
 		}
-		return userRepository.findAllByLogin(login, PageUtils.createPageRequest(page, size));
+		return userRepository.findAllByLoginContainingIgnoreCase(login, PageUtils.createPageRequest(page, size));
 	}
 
 	public UserEntity findById(Long id) {
@@ -52,6 +52,7 @@ public class UserService {
 		if (LongUtils.longIsPositiveValue(user.getId())) {
 			throw new IllegalArgumentException("O novo registro a ser salvo não pode ter o id preenchido.");
 		}
+		validateLoginFormat(user.getLogin());
 		if(hasUserByLogin(user.getLogin())) {
 			throw new UndconException(UndconError.LOGIN_ALREADY_EXISTS);
 		}
@@ -64,12 +65,19 @@ public class UserService {
 			throw new UndconException(UndconError.LOGIN_ALREADY_EXISTS_IN_EMPLOYEE);
 		}
 		
+		//TODO Validar se tem @dominio
 		user.setPassword(criptyPassword(user.getPassword()));
 		return userRepository.save(user);
 	}
 
 	public boolean hasUserByLogin(String login) {
 		return userRepository.findByLogin(login).size() > 0;
+	}
+	
+	public void validateLoginFormat(String login) throws UndconException {
+		if(login.length() < 3 || login.contains("@")){
+			throw new UndconException(UndconError.INVALID_LOGIN_FORMAT);
+		}
 	}
 	
 	public boolean hasUserByEmployee(EmployeeEntity employee) {
@@ -79,13 +87,14 @@ public class UserService {
 	public UserEntity update(UserEntity user)
 			throws NoSuchAlgorithmException, UnsupportedEncodingException, UndconException {
 		permissionService.checkPermission(ResourceType.USER);
+		validateLoginFormat(user.getLogin());
 		UserEntity find = findById(user.getId());
 		
 		//Validar se usuário tem permissão para alterar ResetPassword
 		find.setResetPassword(user.isResetPassword());
 		find.setLogin(user.getLogin());
 		find.setEmployee(user.getEmployee());
-		if (find.getPassword() == null || find.getPassword().isEmpty()) {
+		if (find.isResetPassword()) {
 			find.setPassword(criptyPassword(user.getPassword()));
 		}
 		

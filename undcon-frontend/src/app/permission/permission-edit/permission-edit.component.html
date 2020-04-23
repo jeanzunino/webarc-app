@@ -1,0 +1,15 @@
+<app-dialog modalTitle="Teste3" [modalRef]="permissionModalRef">
+  <form body [formGroup]="permissionFormGroup">
+    <div class="md-form">
+      <input type="text" id="name" class="form-control" formControlName="name" mdbInput mdbValidate />
+      <label for="name">Nome</label>
+    </div>
+
+  </form>
+
+  <div footer>
+    <button mdbBtn type="button" color="secondary" outline="true" aria-label="Close" (click)="permissionModalRef.hide()" mdbWavesEffect>Close</button>
+    <button mdbBtn type="button" color="danger" outline="true" mdbWavesEffect>Danger</button>
+    <button mdbBtn type="submit" color="primary" outline="true" (click)="onSave()" mdbWavesEffect>Save!</button>
+  </div>
+</app-dialog>

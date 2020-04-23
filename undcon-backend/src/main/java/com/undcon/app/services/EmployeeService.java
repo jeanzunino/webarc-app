@@ -27,7 +27,7 @@ public class EmployeeService {
 		if(StringUtils.isEmpty(name)) {
 			return repository.findAll(PageUtils.createPageRequest(page, size));
 		}
-        return repository.findAllByName(name, PageUtils.createPageRequest(page, size));
+        return repository.findAllByNameContainingIgnoreCase(name, PageUtils.createPageRequest(page, size));
     }
 	
 	public EmployeeEntity findById(Long id) {

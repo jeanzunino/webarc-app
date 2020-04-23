@@ -10,7 +10,7 @@ import com.undcon.app.model.CustomerEntity;
 
 public interface ICustomerRepository extends JpaRepository<CustomerEntity, Long> {
 	
-	public Page<CustomerEntity> findAllByName(String name, Pageable pageable);
+	public Page<CustomerEntity> findAllByNameContainingIgnoreCase(String name, Pageable pageable);
 	
 	public List<CustomerEntity> findByIdNotAndName(Long id, String name);
 }

@@ -1,14 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { OnInit } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 import { MDBModalRef, ModalOptions } from 'angular-bootstrap-md';
 import { ToastrService } from 'ngx-toastr';
 import { TranslateService } from '@ngx-translate/core';
 
 import { EntityService } from '@service/entity/entity.service';
-import { Page } from '@model/page';
-import { SharedInjector } from '@shared/shared.module';
 import { Modal } from '@shared/model/modal';
 
 export abstract class DefaultEditViewComponent<T> implements OnInit {

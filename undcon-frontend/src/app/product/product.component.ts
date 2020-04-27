@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { MDBModalService, MDBModalRef } from 'angular-bootstrap-md';
+import { MDBModalService } from 'angular-bootstrap-md';
 
 import { Product } from '@model/product';
 import { ProductService } from '@service/product/product.service';

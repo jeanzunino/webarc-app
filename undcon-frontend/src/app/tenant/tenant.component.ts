@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { MDBModalService, MDBModalRef } from 'angular-bootstrap-md';
+import { MDBModalService } from 'angular-bootstrap-md';
 
 import { TenantService } from '@service/tenant/tenant.service';
 import { GridViewComponent } from '@component/grid-view/grid-view.component';

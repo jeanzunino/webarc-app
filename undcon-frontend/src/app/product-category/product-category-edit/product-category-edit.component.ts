@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MDBModalRef, ModalOptions } from 'angular-bootstrap-md';
 import { ToastrService } from 'ngx-toastr';
@@ -9,7 +9,6 @@ import { ProductCategory } from '@model/product-category';
 import { Page } from '@model/page';
 import { ProductCategoryService } from '@service/product-category/product-category.service';
 import { DefaultEditViewComponent } from '@component/default-edit-view/default-edit-view.component';
-import { Modal } from '@shared/model/modal';
 
 @Component({
   selector: 'app-product-category-edit',

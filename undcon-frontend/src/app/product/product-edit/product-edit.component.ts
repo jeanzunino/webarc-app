@@ -1,13 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MDBModalRef, ModalOptions } from 'angular-bootstrap-md';
 import { ToastrService } from 'ngx-toastr';
 import { TranslateService } from '@ngx-translate/core';
 
 import { Product } from '@model/product';
-import { PermissionService } from '@service/Product/permission.service';
 import { DefaultEditViewComponent } from '@component/default-edit-view/default-edit-view.component';
-import { Modal } from '@shared/model/modal';
 
 @Component({
   selector: 'app-permission-edit',

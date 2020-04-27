@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MDBModalRef, ModalOptions } from 'angular-bootstrap-md';
 import { ToastrService } from 'ngx-toastr';
@@ -14,7 +14,6 @@ import { EmployeeService } from '@service/employee/employee.service';
 import { UserService } from '@service/user/user.service';
 import { PermissionService } from '@service/permission/permission.service';
 import { DefaultEditViewComponent } from '@component/default-edit-view/default-edit-view.component';
-import { Modal } from '@shared/model/modal';
 
 @Component({
   selector: 'app-user-edit',

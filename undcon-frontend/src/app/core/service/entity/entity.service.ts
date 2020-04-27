@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 
+import { Entity } from '@model/entity';
 import { environment } from '@environment/environment';
 import { StorageService } from '@service/storage/storage.service';
 
@@ -24,11 +25,11 @@ export class EntityService<T> {
     return this.http.post<T>(`${this.baseUrl}/${this.entityUrl}`, entity);
   }
 
-  public put(entity: T, id: number) {
-    return this.http.put<T>(`${this.baseUrl}/${this.entityUrl}/${id}`, entity);
+  public put(entity: Entity) {
+    return this.http.put<T>(`${this.baseUrl}/${this.entityUrl}/${entity.id}`, entity);
   }
 
-  public delete(entity: T) {
-    return this.http.delete<T>(`${this.baseUrl}/${this.entityUrl}/entity.id`);
+  public delete(entity: Entity) {
+    return this.http.delete<T>(`${this.baseUrl}/${this.entityUrl}/${entity.id}`);
   }
 }

@@ -8,82 +8,53 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { ProductCategory } from '@model/product-category';
 import { Page } from '@model/page';
 import { ProductCategoryService } from '@service/product-category/product-category.service';
+import { DefaultEditViewComponent } from '@component/default-edit-view/default-edit-view.component';
 import { Modal } from '@shared/model/modal';
-
-export class Teste {
-  productCategory: ProductCategory
-}
 
 @Component({
   selector: 'app-product-category-edit',
   templateUrl: './product-category-edit.component.html',
   styleUrls: ['./product-category-edit.component.scss']
 })
-export class ProductCategoryEditComponent implements OnInit {
-
-  productCategoryFormGroup: FormGroup;
+export class ProductCategoryEditComponent extends DefaultEditViewComponent<ProductCategory> {
 
   categories: ProductCategory[];
 
-  data: Modal
-
   constructor(public productCategoryModalRef: MDBModalRef,
-              public modalOptions: ModalOptions,
-              private toastr: ToastrService,
-              private translate: TranslateService,
-              private service: ProductCategoryService,
-              private spinner: NgxSpinnerService) {
+              modalOptions: ModalOptions,
+              toastr: ToastrService,
+              translate: TranslateService,
+              service: ProductCategoryService,
+              spinner: NgxSpinnerService) {
+                super(productCategoryModalRef, modalOptions, toastr, translate, service);
   }
 
-  ngOnInit() {
-    this.productCategoryFormGroup = new FormGroup({
+  createFormGroup(){
+    return new FormGroup({
       id: new FormControl(null),
       name: new FormControl('', Validators.required),
       parent: new FormControl(null)
     });
-    this.onLoadValues();
-    this.spinner.hide();
   }
 
-  async onLoadValues() {
-    this.data = this.modalOptions.data as Modal;
-    if (this.data.content) {
-      const productCategory = this.data.content;
-      this.productCategoryFormGroup.patchValue({
+  async onLoadValuesEdit(productCategory: ProductCategory){
+      this.getFormGroup().patchValue({
         id: productCategory.id,
         name: productCategory.name,
         parent: productCategory.parent
-      });
-    }
+    });
+  }
+
+  async onLoadData() {
     this.categories = (await this.service.getAll().toPromise() as Page<ProductCategory>).content;
   }
 
   get nameForm() {
-    return this.productCategoryFormGroup.get('name');
+    return this.getFormGroup().get('name');
   }
 
   get parentForm() {
-    return this.productCategoryFormGroup.get('parent');
+    return this.getFormGroup().get('parent');
   }
 
-  private validForm() {
-    return true;
-  }
-
-
-  onSave() {
-    if (this.validForm()) {
-      if (!this.data.content) {
-        this.service.post(this.productCategoryFormGroup.value).toPromise()
-        .then(teste => {
-          console.log(teste)
-        });
-      } else {
-        this.service.put(this.productCategoryFormGroup.value, parseInt(this.productCategoryFormGroup.get('id').value)).toPromise()
-        .then(teste => {
-          console.log(teste)
-        });
-      }
-    }
-  }
 }

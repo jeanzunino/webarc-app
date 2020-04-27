@@ -19,7 +19,7 @@ export class HomeComponent implements OnInit {
   ];
 
   public chartDatasetsProdSales: Array<any> = [
-    { data: [200, 100, 100, 200, 560, 505], label: 'Produtos Vsendidos' }
+    { data: [200, 100, 100, 200, 560, 505], label: 'Produtos Vendidos' }
   ];
 
   public chartDatasetsCustomers: Array<any> = [

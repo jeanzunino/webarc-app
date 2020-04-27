@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { MDBModalService, MDBModalRef } from 'angular-bootstrap-md';
 
 import { Product } from '@model/product';
 import { ProductService } from '@service/product/product.service';
@@ -12,20 +13,22 @@ import { Table } from '@shared/model/table';
 })
 export class ProductComponent extends GridViewComponent<Product> {
 
-  tableValues = new Table().set('id', 'product.id').set('name', 'product.name').set('unit', 'product.unit')
+  tableValues = new Table().set('name', 'product.name').set('unit', 'product.unit')
                            .set('purchasePrice', 'product.purchasePrice').set('salePrice', 'product.salePrice')
                            .set('stock', 'product.stock').set('stockMin', 'product.stockMin').get();
 
   constructor(service: ProductService,
-              activatedRoute: ActivatedRoute) {
-    super(service, activatedRoute);
+              activatedRoute: ActivatedRoute,
+              modalService: MDBModalService) {
+    super(service, activatedRoute, modalService);
   }
 
   onClickItem(item) {
-    this.showDialog(item);
+    //this.openDialog(item, ServiceTypeEditComponent);
   }
 
-  private showDialog(item = null) {
-    alert(item);
+  open() {
+    this.onClickItem(null);
   }
+
 }

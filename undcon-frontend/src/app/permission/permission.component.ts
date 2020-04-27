@@ -14,29 +14,16 @@ import { Table } from '@shared/model/table';
 })
 export class PermissionComponent extends GridViewComponent<Permission> {
 
-  tableValues = new Table().set('id', 'permission.id').set('name', 'permission.name').get();
-  modalRef: MDBModalRef;
+  tableValues = new Table().set('name', 'permission.name').get();
 
   constructor(service: PermissionService,
     activatedRoute: ActivatedRoute,
-    private modalService: MDBModalService) {
-      super(service, activatedRoute);
+    modalService: MDBModalService) {
+      super(service, activatedRoute, modalService);
   }
 
   onClickItem(item) {
-    this.modalRef = this.modalService.show(PermissionEditComponent, {
-      backdrop: true,
-      keyboard: true,
-      focus: true,
-      show: false,
-      ignoreBackdropClick: false,
-      class: 'modal-dialog-centered',
-      containerClass: '',
-      animated: true,
-      data: {
-        content: item
-      }
-    });
+    this.openDialog(item, PermissionEditComponent);
   }
 
   open() {

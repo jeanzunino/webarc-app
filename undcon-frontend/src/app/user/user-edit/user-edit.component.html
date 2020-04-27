@@ -1,5 +1,5 @@
 <app-dialog [modalTitle]="'sfdadas'" [modalRef]="userModalRef">
-  <form body id="userEditForm" [formGroup]="userFormGroup">
+  <form body id="editForm" [formGroup]="formGroup">
     <div class="row">
       <div class="col-12 col-md-10">
         <div class="md-form">
@@ -22,7 +22,7 @@
         <div class="md-form">
           <select id="employee" class="primary-system-color browser-default custom-select text-light" formControlName="employee" mdbInput mdbValidate>
             <option selected></option>
-            <option *ngFor="let employee of employees" [value]="employee">{{employee.name}}</option>
+            <option *ngFor="let employee of employees" [value]="employee.id">{{employee.name}}</option>
           </select>
           <label for="employee" class="text-light">Funcionário</label>
           <app-validation [form]="employeeForm" [validMessage]="'Válido'" [invalidMessage]="'Inválido'"></app-validation>
@@ -33,7 +33,7 @@
         <div class="md-form">
           <select id="permission" class="primary-system-color browser-default custom-select text-light" formControlName="permission" mdbInput mdbValidate>
             <option selected></option>
-            <option *ngFor="let permission of permissions" [value]="permission">{{permission.name}}</option>
+            <option *ngFor="let permission of permissions" [value]="permission.id">{{permission.name}}</option>
           </select>
           <label for="permission" class="text-light">Permissão</label>
           <app-validation [form]="permissionForm" [validMessage]="'Válido'" [invalidMessage]="'Inválido'"></app-validation>
@@ -41,7 +41,7 @@
       </div>
     </div>
 
-    <div class="row" *ngIf="data.isNew">
+    <div class="row" *ngIf="!data.content">
       <div class="col-12 col-md-6">
         <div class="md-form">
           <input type="password" id="password" class="form-control text-light" formControlName="password" mdbInput mdbValidate>
@@ -61,7 +61,7 @@
   </form>
 
   <div footer>
-    <button mdbBtn type="button" *ngIf="!data.isNew" color="danger" outline="true" mdbWavesEffect>Excluir</button>
-    <button mdbBtn type="submit" [disabled]="userFormGroup.invalid" form="userEditForm" color="primary" outline="true" (click)="onSave()" mdbWavesEffect>Salvar</button>
+    <button mdbBtn type="button" *ngIf="data.content" color="danger" outline="true" (click)="onDelete()" mdbWavesEffect>Excluir</button>
+    <button mdbBtn type="submit" [disabled]="formGroup.invalid" form="editForm" color="primary" outline="true" (click)="onSave()" mdbWavesEffect>Salvar</button>
   </div>
 </app-dialog>

@@ -15,50 +15,23 @@ import { Page } from '@app/core/model/page';
 })
 export class UserComponent extends GridViewComponent<User> {
 
-  tableValues = new Table().set('id', 'user.id').set('login', 'user.login').set('permission.name', 'user.permission').get();
+  tableValues = new Table().set('login', 'user.login').set('permission.name', 'user.permission').get();
   modalRef: MDBModalRef;
 
   name: ''
 
   constructor(public userService: UserService,
               activatedRoute: ActivatedRoute,
-              private modalService: MDBModalService) {
-    super(userService, activatedRoute);
+              modalService: MDBModalService) {
+    super(userService, activatedRoute, modalService);
   }
 
   onClickItem(item) {
-    this.spinner.show()
-    this.modalRef = this.modalService.show(UserEditComponent, {
-      backdrop: true,
-      keyboard: true,
-      focus: true,
-      show: false,
-      ignoreBackdropClick: false,
-      class: 'modal-dialog-centered modal-lg',
-      containerClass: '',
-      animated: true,
-      data: {
-        content: item,
-        isNew: false
-      }
-    });
+    this.openDialog(item, UserEditComponent);
   }
 
   open() {
-    this.spinner.show()
-    this.modalRef = this.modalService.show(UserEditComponent, {
-      backdrop: true,
-      keyboard: true,
-      focus: true,
-      show: false,
-      ignoreBackdropClick: false,
-      class: 'modal-dialog-centered modal-lg',
-      containerClass: '',
-      animated: true,
-      data: {
-        isNew: true
-      }
-    });
+    this.onClickItem(null);
   }
 
   async onSearch() {

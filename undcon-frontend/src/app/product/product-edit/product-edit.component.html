@@ -4,7 +4,13 @@
       <input type="text" id="name" class="form-control" formControlName="name" mdbInput mdbValidate />
       <label for="name">Nome</label>
     </div>
-
+    <div class="md-form">
+      <select id="productCategory" class="primary-system-color browser-default custom-select text-light" formControlName="productCategory" mdbInput mdbValidate>
+        <option selected></option>
+        <option *ngFor="let productCategory of categories" [value]="parent">{{productCategory.name}}</option>
+      </select>
+      <label for="productCategory" class="text-light">Categoria de Produto</label>
+    </div>
   </form>
 
   <div footer>

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { MDBModalService, MDBModalRef } from 'angular-bootstrap-md';
+import { MDBModalService } from 'angular-bootstrap-md';
 
 import { Customer } from '@model/customer';
 import { CustomerService } from '@service/customer/customer.service';
@@ -14,29 +14,16 @@ import { Table } from '@shared/model/table';
 })
 export class CustomerComponent extends GridViewComponent<Customer> {
 
-  tableValues = new Table().set('id', 'customer.id').set('name', 'customer.name').set('phone', 'customer.phone').get();
-  modalRef: MDBModalRef;
+  tableValues = new Table().set('name', 'customer.name').set('phone', 'customer.phone').get();
 
   constructor(service: CustomerService,
     activatedRoute: ActivatedRoute,
-    private modalService: MDBModalService) {
-    super(service, activatedRoute);
+    modalService: MDBModalService) {
+    super(service, activatedRoute, modalService);
   }
 
   onClickItem(item) {
-    this.modalRef = this.modalService.show(CustomerEditComponent, {
-      backdrop: true,
-      keyboard: true,
-      focus: true,
-      show: false,
-      ignoreBackdropClick: false,
-      class: 'modal-dialog-centered',
-      containerClass: '',
-      animated: true,
-      data: {
-        content: item
-      }
-    });
+    this.openDialog(item, CustomerEditComponent);
   }
 
   open() {

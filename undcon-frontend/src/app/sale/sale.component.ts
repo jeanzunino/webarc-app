@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { MDBModalService } from 'angular-bootstrap-md';
 
 import { Sale } from '@model/sale';
 import { SaleService } from '@service/sale/sale.service';
@@ -15,15 +16,16 @@ export class SaleComponent extends GridViewComponent<Sale> {
   tableValues = new Table().set('id', 'sale.id').set('customer.name', 'sale.customer-name').set('saleDate', 'sale.saleDate').get();
 
   constructor(service: SaleService,
-              activatedRoute: ActivatedRoute) {
-    super(service, activatedRoute);
+              activatedRoute: ActivatedRoute,
+              modalService: MDBModalService) {
+    super(service, activatedRoute, modalService);
   }
 
   onClickItem(item) {
-    this.showDialog(item);
+    //this.openDialog(item, SaleEditComponent);
   }
 
-  private showDialog(item = null) {
-    alert(item);
+  open() {
+    this.onClickItem(null);
   }
 }

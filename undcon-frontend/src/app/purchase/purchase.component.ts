@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { MDBModalService } from 'angular-bootstrap-md';
 
 import { Purchase } from '@model/purchase';
 import { PurchaseService } from '@service/purchase/purchase.service';
@@ -12,15 +13,20 @@ import { Table } from '@shared/model/table';
 })
 export class PurchaseComponent extends GridViewComponent<Purchase> {
 
-  tableValues = new Table().set('id', 'purchase.id').set('provider.name', 'purchase.name').set('purchaseDate', 'purchase.purchaseDate').get();
+  tableValues = new Table().set('provider.name', 'purchase.name').set('purchaseDate', 'purchase.purchaseDate').get();
 
   constructor(service: PurchaseService,
-              activatedRoute: ActivatedRoute) {
-    super(service, activatedRoute);
+              activatedRoute: ActivatedRoute,
+              modalService: MDBModalService) {
+                super(service, activatedRoute, modalService);
   }
 
   onClickItem(item) {
-    alert(item);
+    //this.openDialog(item, ProductCategoryEditComponent);
+  }
+
+  open() {
+    this.onClickItem(null);
   }
 
 }

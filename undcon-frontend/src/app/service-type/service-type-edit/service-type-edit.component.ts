@@ -4,23 +4,23 @@ import { MDBModalRef, ModalOptions } from 'angular-bootstrap-md';
 import { ToastrService } from 'ngx-toastr';
 import { TranslateService } from '@ngx-translate/core';
 
-import { Permission } from '@model/permission';
-import { PermissionService } from '@service/permission/permission.service';
+import { ServiceType } from '@model/service-type';
+import { ServiceTypeService } from '@service/service-type/service-type.service';
 import { DefaultEditViewComponent } from '@component/default-edit-view/default-edit-view.component';
 
 @Component({
-  selector: 'app-permission-edit',
-  templateUrl: './permission-edit.component.html',
-  styleUrls: ['./permission-edit.component.scss']
+  selector: 'app-service-type-edit',
+  templateUrl: './service-type-edit.component.html',
+  styleUrls: ['./service-type-edit.component.scss']
 })
-export class PermissionEditComponent extends DefaultEditViewComponent<Permission> {
+export class ServiceTypeEditComponent extends DefaultEditViewComponent<ServiceType> {
 
-  constructor(public permissionModalRef: MDBModalRef,
+  constructor(public serviceTypeModalRef: MDBModalRef,
               modalOptions: ModalOptions,
               toastr: ToastrService,
               translate: TranslateService,
-              service: PermissionService) {
-                super(permissionModalRef, modalOptions, toastr, translate, service);
+              service: ServiceTypeService) {
+      super(serviceTypeModalRef, modalOptions, toastr, translate, service);
   }
 
   createFormGroup(){
@@ -30,10 +30,10 @@ export class PermissionEditComponent extends DefaultEditViewComponent<Permission
     });
   }
 
-  onLoadValuesEdit(item: Permission){
+  onLoadValuesEdit(serviceType: ServiceType){
       this.getFormGroup().patchValue({
-        id: item.id,
-        name: item.name
+        id: serviceType.id,
+        name: serviceType.name
     });
   }
 

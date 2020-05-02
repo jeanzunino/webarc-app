@@ -4,8 +4,7 @@ import { MDBModalRef, ModalOptions } from 'angular-bootstrap-md';
 import { ToastrService } from 'ngx-toastr';
 import { TranslateService } from '@ngx-translate/core';
 
-import { Permission } from '@model/permission';
-import { PermissionService } from '@service/permission/permission.service';
+import { Product } from '@model/product';
 import { DefaultEditViewComponent } from '@component/default-edit-view/default-edit-view.component';
 
 @Component({
@@ -13,32 +12,45 @@ import { DefaultEditViewComponent } from '@component/default-edit-view/default-e
   templateUrl: './permission-edit.component.html',
   styleUrls: ['./permission-edit.component.scss']
 })
-export class PermissionEditComponent extends DefaultEditViewComponent<Permission> {
+export class ProductEditComponent extends DefaultEditViewComponent<Product> {
+
+  categories: ProductCategory[];
 
   constructor(public permissionModalRef: MDBModalRef,
-              modalOptions: ModalOptions,
-              toastr: ToastrService,
-              translate: TranslateService,
-              service: PermissionService) {
+              public modalOptions: ModalOptions,
+              private toastr: ToastrService,
+              private translate: TranslateService,
+              private service: ProductService,
+              categoryService: ProductCategoryService,) {
                 super(permissionModalRef, modalOptions, toastr, translate, service);
   }
 
   createFormGroup(){
     return new FormGroup({
       id: new FormControl(null),
-      name: new FormControl('', Validators.required)
+      name: new FormControl('', Validators.required),
+      productCategory: new FormControl('', Validators.required)
     });
   }
 
-  onLoadValuesEdit(item: Permission){
+  onLoadValuesEdit(item: Product){
       this.getFormGroup().patchValue({
         id: item.id,
-        name: item.name
+        name: item.name,
+        productCategory: item.productCategory
     });
+  }
+
+  async onLoadData() {
+    this.categories = (await this.categoryService.getAll().toPromise() as Page<ProductCategory>).content;
   }
 
   get nameForm() {
     return this.getFormGroup().get('name');
+  }
+
+  get productCategoryForm() {
+    return this.getFormGroup().get('productCategory');
   }
 
 }

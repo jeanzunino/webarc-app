@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { MDBModalService, MDBModalRef } from 'angular-bootstrap-md';
+import { MDBModalService } from 'angular-bootstrap-md';
 
 import { ProductCategory } from '@model/product-category';
 import { ProductCategoryService } from '@service/product-category/product-category.service';
@@ -14,29 +14,16 @@ import { Table } from '@shared/model/table';
 })
 export class ProductCategoryComponent extends GridViewComponent<ProductCategory> {
 
-  tableValues = new Table().set('id', 'product-category.id').set('name', 'product-category.name').set('parent.name', 'product-category.name').get();
-  modalRef: MDBModalRef;
+  tableValues = new Table().set('name', 'product-category.name').set('parent.name', 'product-category.name').get();
 
   constructor(service: ProductCategoryService,
               activatedRoute: ActivatedRoute,
-              private modalService: MDBModalService) {
-    super(service, activatedRoute);
+              modalService: MDBModalService) {
+    super(service, activatedRoute, modalService);
   }
 
   onClickItem(item) {
-    this.modalRef = this.modalService.show(ProductCategoryEditComponent, {
-      backdrop: true,
-      keyboard: true,
-      focus: true,
-      show: false,
-      ignoreBackdropClick: false,
-      class: 'modal-dialog-centered',
-      containerClass: '',
-      animated: true,
-      data: {
-        content: item
-      }
-    });
+    this.openDialog(item, ProductCategoryEditComponent);
   }
 
   open() {

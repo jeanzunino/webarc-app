@@ -1,75 +1,50 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MDBModalRef, ModalOptions } from 'angular-bootstrap-md';
 import { ToastrService } from 'ngx-toastr';
 import { TranslateService } from '@ngx-translate/core';
+
+import { Customer } from '@model/customer';
 import { CustomerService } from '@service/customer/customer.service';
-import { Modal } from '@shared/model/modal';
+import { DefaultEditViewComponent } from '@component/default-edit-view/default-edit-view.component';
 
 @Component({
   selector: 'app-customer-edit',
   templateUrl: './customer-edit.component.html',
   styleUrls: ['./customer-edit.component.scss']
 })
-export class CustomerEditComponent implements OnInit {
+export class CustomerEditComponent extends DefaultEditViewComponent<Customer> {
 
-  customerFormGroup: FormGroup;
-  data: Modal;
-
-  constructor(public customerModalRef: MDBModalRef,
-              public modalOptions: ModalOptions,
-              private toastr: ToastrService,
-              private translate: TranslateService,
-              private service: CustomerService) {
+  constructor( public customerModalRef: MDBModalRef,
+               modalOptions: ModalOptions,
+               toastr: ToastrService,
+               translate: TranslateService,
+               service: CustomerService) {
+                super(customerModalRef, modalOptions, toastr, translate, service);
   }
 
-  ngOnInit() {
-    this.customerFormGroup = new FormGroup({
+  createFormGroup(){
+    return new FormGroup({
       id: new FormControl(null),
       name: new FormControl('', Validators.required),
       phone: new FormControl('')
     });
-    this.onLoadValues();
   }
 
-  async onLoadValues() {
-    this.data = this.modalOptions.data as Modal;
-    if (this.data.content) {
-      const customer = this.data.content;
-      this.customerFormGroup.patchValue({
+  onLoadValuesEdit(customer: Customer){
+      this.getFormGroup().patchValue({
         id: customer.id,
         name: customer.name,
         phone: customer.phone
-      });
-    }
+    });
   }
 
   get nameForm() {
-    return this.customerFormGroup.get('name');
+    return this.getFormGroup().get('name');
   }
 
   get phoneForm() {
-    return this.customerFormGroup.get('phone');
+    return this.getFormGroup().get('phone');
   }
 
-  private validForm() {
-    return true;
-  }
-
-
-  onSave() {
-    if (this.validForm()) {
-      if (!this.data.content) {
-        this.service.post(this.customerFormGroup.value).toPromise()
-        .then(teste => {
-          console.log(teste)
-        });
-      } else {
-        this.service.put(this.customerFormGroup.value, parseInt(this.customerFormGroup.get('id').value)).toPromise()
-        .then(teste => {
-          console.log(teste)
-        });
-      }
-    }
-  }
 }

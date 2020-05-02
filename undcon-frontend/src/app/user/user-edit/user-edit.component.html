@@ -1,5 +1,5 @@
 <app-dialog [modalTitle]="'sfdadas'" [modalRef]="userModalRef">
-  <form body id="userEditForm" [formGroup]="userFormGroup">
+  <form body id="editForm" [formGroup]="formGroup">
     <div class="row">
       <div class="col-8 col-md-8">
         <div class="md-form">
@@ -67,7 +67,7 @@
   </form>
 
   <div footer>
-    <button mdbBtn type="button" *ngIf="data.content" color="danger" outline="true" mdbWavesEffect>Excluir</button>
-    <button mdbBtn type="submit" [disabled]="userFormGroup.invalid" form="userEditForm" color="primary" outline="true" (click)="onSave()" mdbWavesEffect>Salvar</button>
+    <button mdbBtn type="button" *ngIf="data.content" color="danger" outline="true" (click)="onDelete()" mdbWavesEffect>Excluir</button>
+    <button mdbBtn type="submit" [disabled]="formGroup.invalid" form="editForm" color="primary" outline="true" (click)="onSave()" mdbWavesEffect>Salvar</button>
   </div>
 </app-dialog>

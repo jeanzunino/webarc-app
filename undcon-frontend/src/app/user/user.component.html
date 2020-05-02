@@ -7,12 +7,12 @@
       </div>
     </div>
 
-  </app-panel>
-
-  <div class="card-filter--margin-top">
     <div footer>
       <button mdbBtn type="button" color="danger" outline="true" (click)="open()" mdbWavesEffect>Adicionar</button>
     </div>
+  </app-panel>
+
+  <div class="card-filter--margin-top">
     <app-table [pageValues]="items" [tableValues]="tableValues" (reloadItems)="reloadItems($event)" (onClickItem)="onClickItem($event)"></app-table>
   </div>
 </div>

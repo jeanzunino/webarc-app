@@ -24,6 +24,13 @@ export class UserComponent extends GridViewComponent<User> {
               activatedRoute: ActivatedRoute,
               private modalService: MDBModalService) {
     super(userService, activatedRoute);
+    this.modalService.closed.subscribe(async () => {
+      this.spinner.show()
+      this.items = await this.userService.getAll({
+        page: 0
+      }).toPromise() as Page<any>;
+      this.spinner.hide()
+    })
   }
 
   onClickItem(item) {
@@ -38,27 +45,14 @@ export class UserComponent extends GridViewComponent<User> {
       containerClass: '',
       animated: true,
       data: {
-        content: item,
-        isNew: false
+        content: item
       }
     });
   }
 
   open() {
     this.spinner.show()
-    this.modalRef = this.modalService.show(UserEditComponent, {
-      backdrop: true,
-      keyboard: true,
-      focus: true,
-      show: false,
-      ignoreBackdropClick: false,
-      class: 'modal-dialog-centered modal-lg',
-      containerClass: '',
-      animated: true,
-      data: {
-        isNew: true
-      }
-    });
+    this.onClickItem(null);
   }
 
   async onSearch() {

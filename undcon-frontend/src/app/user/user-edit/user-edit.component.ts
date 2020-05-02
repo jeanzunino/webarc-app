@@ -13,6 +13,7 @@ import { Employee } from '@model/employee';
 import { PermissionService } from '@service/permission/permission.service';
 import { Permission } from '@model/permission';
 import { Modal } from '@shared/model/modal';
+import { StorageService } from '@service/storage/storage.service';
 
 @Component({
   selector: 'app-user-edit',
@@ -25,6 +26,7 @@ export class UserEditComponent implements OnInit {
   employees: Employee[];
   permissions: Permission[];
   data: Modal;
+  tenant;
 
   constructor(public userModalRef: MDBModalRef,
               public modalOptions: ModalOptions,
@@ -33,7 +35,8 @@ export class UserEditComponent implements OnInit {
               private userService: UserService,
               private employeeService: EmployeeService,
               private permissionService: PermissionService,
-              private spinner: NgxSpinnerService) { }
+              private spinner: NgxSpinnerService,
+              private storageService: StorageService) { }
 
   ngOnInit() {
     this.userFormGroup = new FormGroup({
@@ -51,7 +54,7 @@ export class UserEditComponent implements OnInit {
 
   async onLoadValues() {
     this.data = this.modalOptions.data as Modal;
-    if (!this.data.isNew) {
+    if (this.data.content) {
       const user = this.data.content;
       this.userFormGroup.patchValue({
         id: user.id,
@@ -65,19 +68,21 @@ export class UserEditComponent implements OnInit {
     }
     this.employees = (await this.employeeService.getAll().toPromise() as Page<Employee>).content;
     this.permissions = (await this.permissionService.getAll().toPromise() as Page<Permission>).content;
+    this.tenant = this.storageService.getUser().tenant;
   }
 
   onSave() {
     if (this.validForm()) {
       this.employeeForm.setValue(this.employees.find(employee => employee.id === parseInt(this.employeeForm.value)));
       this.permissionForm.setValue(this.permissions.find(permission => permission.id === parseInt(this.permissionForm.value)));
-      if (this.data.isNew) {
-        this.userService.post(this.userFormGroup.value).toPromise()
+      if (this.data.content) {
+        this.userService.put(this.userFormGroup.value, parseInt(this.userFormGroup.get('id').value)).toPromise()
         .then(teste => {
           console.log(teste)
+          this.userModalRef.hide()
         });
       } else {
-        this.userService.put(this.userFormGroup.value, parseInt(this.userFormGroup.get('id').value)).toPromise()
+        this.userService.post(this.userFormGroup.value).toPromise()
         .then(teste => {
           console.log(teste)
         });

@@ -3,9 +3,12 @@ import { ActivatedRoute } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MDBModalService, MDBModalRef } from 'angular-bootstrap-md';
 
-import { EntityService } from '@service/entity/entity.service';
 import { Page } from '@model/page';
+import { Entity } from '@model/entity';
+import { EntityService } from '@service/entity/entity.service';
 import { SharedInjector } from '@shared/shared.module';
+import { openDialog } from '@shared/utils/utils';
+
 
 export abstract class GridViewComponent<T> implements OnInit {
 
@@ -30,20 +33,8 @@ export abstract class GridViewComponent<T> implements OnInit {
     this.spinner.hide()
   }
 
-  openDialog(item: T, obj: Object) {
-    this.modalRef = this.modalService.show(obj, {
-      backdrop: true,
-      keyboard: true,
-      focus: true,
-      show: false,
-      ignoreBackdropClick: false,
-      class: 'modal-dialog-centered',
-      containerClass: '',
-      animated: true,
-      data: {
-        content: item
-      }
-    });
+  openDialog(item: Entity, obj: Object) {
+     this.modalRef = openDialog(item, obj);
   }
 
 }

@@ -8,7 +8,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { User } from '@model/user';
 import { Employee } from '@model/employee';
 import { Page } from '@model/page';
-import { getTranslate } from '@shared/utils/utils'
+import { getTranslate } from '@shared/utils/utils';
 import { EmployeeService } from '@service/employee/employee.service';
 import { UserService } from '@service/user/user.service';
 import { PermissionService } from '@service/permission/permission.service';

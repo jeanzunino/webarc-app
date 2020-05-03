@@ -11,6 +11,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.undcon.app.enums.PaymentType;
+
 @Entity
 @Table(name = "receita")
 public class IncomeEntity {
@@ -40,14 +42,13 @@ public class IncomeEntity {
 	private CustomerEntity customer;
 
 	@Column(name = "forma_pgto")
-	private String paymentType;
+	private PaymentType paymentType;
 
 	public IncomeEntity() {
-		// TODO Auto-generated constructor stub
 	}
 
 	public IncomeEntity(Long id, String description, Date duaDate, Date paymentDate, String value, int settled,
-			CustomerEntity customer, String paymentType) {
+			CustomerEntity customer, PaymentType paymentType) {
 		super();
 		this.id = id;
 		this.description = description;
@@ -87,7 +88,7 @@ public class IncomeEntity {
 		return customer;
 	}
 
-	public String getPaymentType() {
+	public PaymentType getPaymentType() {
 		return paymentType;
 	}
 

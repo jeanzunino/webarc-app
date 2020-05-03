@@ -47,7 +47,7 @@ public class ProviderService {
 	}
 
 	private void validateName(Long id, String name) throws UndconException {
-		List<ProviderEntity> findByIdNotAndName = providerRepository.findByIdNotAndName(id, name);
+		List<ProviderEntity> findByIdNotAndName = providerRepository.findByIdNotAndNameIgnoreCase(id, name);
 		if(!findByIdNotAndName.isEmpty()) {
 			throw new UndconException(UndconError.NAME_ALREADY_EXISTS);
 		}

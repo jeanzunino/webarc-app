@@ -47,7 +47,7 @@ public class CustomerService {
 	}
 
 	private void validateName(Long id, String name) throws UndconException {
-		List<CustomerEntity> findByIdNotAndName = customerRepository.findByIdNotAndName(id, name);
+		List<CustomerEntity> findByIdNotAndName = customerRepository.findByIdNotAndNameIgnoreCase(id, name);
 		if(!findByIdNotAndName.isEmpty()) {
 			throw new UndconException(UndconError.NAME_ALREADY_EXISTS);
 		}

@@ -10,6 +10,7 @@ const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full', canActivate: [AuthGuard] },
   { path: PageEnum.LOGIN, component: LoginComponent },
   { path: PageEnum.HOME, loadChildren: () => import('@app/home/home.module').then(m => m.HomeModule )},
+  { path: PageEnum.PDV, loadChildren: () => import('@app/pdv/pdv.module').then(m => m.PdvModule )},
   { path: PageEnum.USER, loadChildren: () => import('@app/user/user.module').then(m => m.UserModule)},
   { path: PageEnum.EMPLOYEE, loadChildren: () => import('@app/employee/employee.module').then(m => m.EmployeeModule)},
   { path: PageEnum.CUSTOMER, loadChildren: () => import('@app/customer/customer.module').then(m => m.CustomerModule)},

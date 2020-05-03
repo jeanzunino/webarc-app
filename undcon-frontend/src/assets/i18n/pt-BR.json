@@ -15,6 +15,7 @@
     },
     "menu": {
         "home": "Home",
+        "pdv": "PDV",
         "compra": {
             "title": "Compras",
             "fornecedores": "Fornecedores",

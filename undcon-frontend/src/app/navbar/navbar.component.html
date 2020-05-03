@@ -11,8 +11,12 @@
   <links>
 
     <ul class="navbar-nav mr-auto">
-      <li class="nav-item active">
+      <li class="nav-item">
         <a class="nav-link waves-light" routerLink="/home" (click)="loadingPage()" mdbWavesEffect>{{ 'menu.home' | translate }}</a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link waves-light" routerLink="/pdv" (click)="loadingPage()" mdbWavesEffect>{{ 'menu.pdv' | translate }}</a>
       </li>
 
       <li class="nav-item dropdown" dropdown>

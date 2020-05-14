@@ -1,28 +1,29 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-
+import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
 
 @Component({
-  selector: 'app-panel',
-  templateUrl: './panel.component.html',
-  styleUrls: ['./panel.component.scss']
+  selector: "app-panel",
+  templateUrl: "./panel.component.html"
 })
 export class PanelComponent implements OnInit {
-
-  @Output() onSearch: EventEmitter<any> = new EventEmitter();
+  @Output() search: EventEmitter<any> = new EventEmitter();
+  @Output() clear: EventEmitter<any> = new EventEmitter();
   @Input() panelTitle: string;
-  @Input() showSearchButton: boolean = true;
+  @Input() showDefaultSearchButtons = true;
   isTheFilterPanelExpanded = true;
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   updateExpandedFlagPanel() {
     this.isTheFilterPanelExpanded = !this.isTheFilterPanelExpanded;
   }
 
-  onClickSearch() {
-    this.onSearch.emit();
+  onSearch() {
+    this.search.emit();
+  }
+
+  onClear() {
+    this.clear.emit();
   }
 }

@@ -1,24 +1,28 @@
-import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { MDBModalService } from 'angular-bootstrap-md';
+import { Component } from "@angular/core";
+import { ActivatedRoute } from "@angular/router";
+import { MDBModalService } from "angular-bootstrap-md";
 
-import { Employee } from '@app/core/model/employee';
-import { EmployeeService } from '@service/employee/employee.service';
-import { GridViewComponent } from '@component/grid-view/grid-view.component';
-import { EmployeeEditComponent } from '@app/employee/employee-edit/employee-edit.component';
-import { Table } from '@shared/model/table';
+import { Employee } from "@app/core/model/employee";
+import { EmployeeService } from "@service/employee/employee.service";
+import { GridViewComponent } from "@component/grid-view/grid-view.component";
+import { EmployeeEditComponent } from "@app/employee/employee-edit/employee-edit.component";
+import { Table } from "@shared/model/table";
 
 @Component({
-  selector: 'app-employee',
-  templateUrl: 'employee.component.html'
+  selector: "app-employee",
+  templateUrl: "employee.component.html",
 })
 export class EmployeeComponent extends GridViewComponent<Employee> {
+  tableValues = new Table()
+    .set("name", "employee.name")
+    .set("phone", "employee.phone")
+    .get();
 
-  tableValues = new Table().set('name', 'employee.name').set('phone', 'employee.phone').get();
-
-  constructor(service: EmployeeService,
+  constructor(
+    service: EmployeeService,
     activatedRoute: ActivatedRoute,
-    modalService: MDBModalService) {
+    modalService: MDBModalService
+  ) {
     super(service, activatedRoute, modalService);
   }
 

@@ -1,17 +1,15 @@
-import { TestBed, async } from '@angular/core/testing';
+import { TestBed, async } from "@angular/core/testing";
 
-import { AppComponent } from '@app/app.component';
+import { AppComponent } from "@app/app.component";
 
-describe('AppComponent', () => {
+describe("AppComponent", () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        AppComponent
-      ],
+      declarations: [AppComponent],
     }).compileComponents();
   }));
 
-  it('should create the app', () => {
+  it("should create the app", () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.debugElement.componentInstance;
     expect(app).toBeTruthy();
@@ -20,13 +18,15 @@ describe('AppComponent', () => {
   it(`should have as title 'webarc-frontend'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.debugElement.componentInstance;
-    expect(app.title).toEqual('webarc-frontend');
+    expect(app.title).toEqual("webarc-frontend");
   });
 
-  it('should render title', () => {
+  it("should render title", () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('.content span').textContent).toContain('webarc-frontend app is running!');
+    expect(compiled.querySelector(".content span").textContent).toContain(
+      "webarc-frontend app is running!"
+    );
   });
 });

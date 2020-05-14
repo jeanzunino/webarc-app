@@ -1,7 +1,7 @@
-import { Entity } from '@model/entity';
+import { Entity } from "@model/entity";
 
 export class Employee extends Entity {
-    id: number;
-    name: string;
-    phone: string;
+  id: number;
+  name: string;
+  phone: string;
 }

@@ -1,20 +1,20 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient } from "@angular/common/http";
 
-import { Entity } from '@model/entity';
-import { environment } from '@environment/environment';
-import { StorageService } from '@service/storage/storage.service';
+import { Entity } from "@model/entity";
+import { environment } from "@environment/environment";
+import { StorageService } from "@service/storage/storage.service";
 
 export class EntityService<T> {
-
   public baseUrl = environment.url;
 
-  constructor(protected http: HttpClient,
+  constructor(
+    protected http: HttpClient,
     protected storageService: StorageService,
-    protected entityUrl: string) {
-  }
+    protected entityUrl: string
+  ) {}
 
   public getAll(params?: {}) {
-    return this.http.get(`${this.baseUrl}/${this.entityUrl}`, {params});
+    return this.http.get(`${this.baseUrl}/${this.entityUrl}`, { params });
   }
 
   public get() {
@@ -26,10 +26,15 @@ export class EntityService<T> {
   }
 
   public put(entity: Entity) {
-    return this.http.put<T>(`${this.baseUrl}/${this.entityUrl}/${entity.id}`, entity);
+    return this.http.put<T>(
+      `${this.baseUrl}/${this.entityUrl}/${entity.id}`,
+      entity
+    );
   }
 
   public delete(entity: Entity) {
-    return this.http.delete<T>(`${this.baseUrl}/${this.entityUrl}/${entity.id}`);
+    return this.http.delete<T>(
+      `${this.baseUrl}/${this.entityUrl}/${entity.id}`
+    );
   }
 }

@@ -1,44 +1,45 @@
-import { Component } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { MDBModalRef, ModalOptions } from 'angular-bootstrap-md';
-import { ToastrService } from 'ngx-toastr';
-import { TranslateService } from '@ngx-translate/core';
+import { Component } from "@angular/core";
+import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { MDBModalRef, ModalOptions } from "angular-bootstrap-md";
+import { ToastrService } from "ngx-toastr";
+import { TranslateService } from "@ngx-translate/core";
 
-import { ServiceType } from '@model/service-type';
-import { ServiceTypeService } from '@service/service-type/service-type.service';
-import { DefaultEditViewComponent } from '@component/default-edit-view/default-edit-view.component';
+import { ServiceType } from "@model/service-type";
+import { ServiceTypeService } from "@service/service-type/service-type.service";
+import { DefaultEditViewComponent } from "@component/default-edit-view/default-edit-view.component";
 
 @Component({
-  selector: 'app-service-type-edit',
-  templateUrl: './service-type-edit.component.html',
-  styleUrls: ['./service-type-edit.component.scss']
+  selector: "app-service-type-edit",
+  templateUrl: "./service-type-edit.component.html"
 })
-export class ServiceTypeEditComponent extends DefaultEditViewComponent<ServiceType> {
-
-  constructor(public serviceTypeModalRef: MDBModalRef,
-              modalOptions: ModalOptions,
-              toastr: ToastrService,
-              translate: TranslateService,
-              service: ServiceTypeService) {
-      super(serviceTypeModalRef, modalOptions, toastr, translate, service);
+export class ServiceTypeEditComponent extends DefaultEditViewComponent<
+  ServiceType
+> {
+  constructor(
+    public serviceTypeModalRef: MDBModalRef,
+    modalOptions: ModalOptions,
+    toastr: ToastrService,
+    translate: TranslateService,
+    service: ServiceTypeService
+  ) {
+    super(serviceTypeModalRef, modalOptions, toastr, translate, service);
   }
 
-  createFormGroup(){
+  createFormGroup() {
     return new FormGroup({
       id: new FormControl(null),
-      name: new FormControl('', Validators.required)
+      name: new FormControl("", Validators.required),
     });
   }
 
-  onLoadValuesEdit(serviceType: ServiceType){
-      this.getFormGroup().patchValue({
-        id: serviceType.id,
-        name: serviceType.name
+  onLoadValuesEdit(serviceType: ServiceType) {
+    this.getFormGroup().patchValue({
+      id: serviceType.id,
+      name: serviceType.name,
     });
   }
 
   get nameForm() {
-    return this.getFormGroup().get('name');
+    return this.getFormGroup().get("name");
   }
-
 }

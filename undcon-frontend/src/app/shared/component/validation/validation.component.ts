@@ -1,19 +1,15 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input } from "@angular/core";
 
 @Component({
-  selector: 'app-validation',
-  templateUrl: './validation.component.html',
-  styleUrls: ['./validation.component.scss']
+  selector: "app-validation",
+  templateUrl: "./validation.component.html"
 })
 export class ValidationComponent implements OnInit {
-
   @Input() form;
-  @Input() validMessage: string = '';
-  @Input() invalidMessage: string = '';
+  @Input() validMessage: string = "";
+  @Input() invalidMessage: string = "";
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit(): void {
-  }
-
+  ngOnInit(): void {}
 }

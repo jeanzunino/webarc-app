@@ -12,5 +12,5 @@ public interface IProviderRepository extends JpaRepository<ProviderEntity, Long>
 	
 	public Page<ProviderEntity> findAllByNameContainingIgnoreCase(String name, Pageable pageable);
 	
-	public List<ProviderEntity> findByIdNotAndName(Long id, String name);
+	public List<ProviderEntity> findByIdNotAndNameIgnoreCase(Long id, String name);
 }

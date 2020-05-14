@@ -47,7 +47,7 @@ public class EmployeeService {
 	}
 
 	private void validateName(Long id, String name) throws UndconException {
-		List<EmployeeEntity> findByIdNotAndName = repository.findByIdNotAndName(id, name);
+		List<EmployeeEntity> findByIdNotAndName = repository.findByIdNotAndNameIgnoreCase(id, name);
 		if(!findByIdNotAndName.isEmpty()) {
 			throw new UndconException(UndconError.NAME_ALREADY_EXISTS);
 		}

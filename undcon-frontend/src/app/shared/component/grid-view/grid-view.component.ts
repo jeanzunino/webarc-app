@@ -1,14 +1,18 @@
-import { OnInit, OnDestroy } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
-import { NgxSpinnerService } from "ngx-spinner";
-import { MDBModalService, MDBModalRef } from "angular-bootstrap-md";
-import { takeUntil } from "rxjs/operators";
-import { Subject } from "rxjs";
+import { OnInit, OnDestroy } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { MDBModalService, MDBModalRef } from 'angular-bootstrap-md';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
-import { EntityService } from "@service/entity/entity.service";
-import { Page } from "@model/page";
-import { SharedInjector } from "@shared/shared.module";
-import { CloseDialogValues } from "@shared/model/close-dialog-values";
+
+import { Page } from '@model/page';
+import { Entity } from '@model/entity';
+import { EntityService } from '@service/entity/entity.service';
+import { SharedInjector } from '@shared/shared.module';
+import { openDialog } from '@shared/utils/utils';
+
+import { CloseDialogValues } from '@shared/model/close-dialog-values';
 
 export abstract class GridViewComponent<T> implements OnInit, OnDestroy {
   spinner = SharedInjector.get(NgxSpinnerService);
@@ -47,22 +51,10 @@ export abstract class GridViewComponent<T> implements OnInit, OnDestroy {
     this.spinner.hide();
   }
 
-  openDialog(item: T, obj: Object) {
-    this.modalRef = this.modalService.show(obj, {
-      backdrop: true,
-      keyboard: true,
-      focus: true,
-      show: false,
-      ignoreBackdropClick: false,
-      class: "modal-dialog-centered",
-      containerClass: "",
-      animated: true,
-      data: {
-        content: item,
-      },
-    });
+  openDialog(item: Entity, obj: Object) {
+     this.modalRef = openDialog(item, obj);
 
-    this.modalRef.content.onClose
+     this.modalRef.content.onClose
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((values: CloseDialogValues) => {
         if (values.hasChange) {

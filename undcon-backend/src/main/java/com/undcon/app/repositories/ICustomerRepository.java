@@ -12,5 +12,5 @@ public interface ICustomerRepository extends JpaRepository<CustomerEntity, Long>
 	
 	public Page<CustomerEntity> findAllByNameContainingIgnoreCase(String name, Pageable pageable);
 	
-	public List<CustomerEntity> findByIdNotAndName(Long id, String name);
+	public List<CustomerEntity> findByIdNotAndNameIgnoreCase(Long id, String name);
 }

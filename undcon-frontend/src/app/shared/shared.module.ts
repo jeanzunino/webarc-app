@@ -1,25 +1,26 @@
-import { NgModule, Injector } from "@angular/core";
-import { ReactiveFormsModule, FormsModule } from "@angular/forms";
+import { NgModule, Injector } from '@angular/core';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import {
   CollapseModule,
   MDBBootstrapModule,
   CheckboxModule,
-} from "angular-bootstrap-md";
-import { CommonModule } from "@angular/common";
-import { NgxSpinnerModule } from "ngx-spinner";
+} from 'angular-bootstrap-md';
+import { CommonModule } from '@angular/common';
+import { NgxSpinnerModule } from 'ngx-spinner';
 import {
   TranslateModule,
   TranslateService,
   TranslateLoader,
-} from "@ngx-translate/core";
-import { TranslateHttpLoader } from "@ngx-translate/http-loader";
-import { HttpClient } from "@angular/common/http";
-import { NgxPaginationModule } from "ngx-pagination";
+} from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { HttpClient } from '@angular/common/http';
+import { NgxPaginationModule } from 'ngx-pagination';
+import { NgxMaskModule } from 'ngx-mask';
 
-import { DialogComponent } from "@component/dialog/dialog.component";
-import { TableComponent } from "@component/table/table.component";
-import { PanelComponent } from "@component/panel/panel.component";
-import { ValidationComponent } from "@component/validation/validation.component";
+import { DialogComponent } from '@component/dialog/dialog.component';
+import { TableComponent } from '@component/table/table.component';
+import { PanelComponent } from '@component/panel/panel.component';
+import { ValidationComponent } from '@component/validation/validation.component';
 
 export let SharedInjector: Injector;
 
@@ -46,7 +47,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     TableComponent,
     PanelComponent,
     CheckboxModule,
-    ValidationComponent,
+    ValidationComponent
   ],
   imports: [
     CommonModule,
@@ -60,11 +61,12 @@ export function HttpLoaderFactory(http: HttpClient) {
       },
     }),
     NgxPaginationModule,
+    NgxMaskModule.forRoot()
   ],
 })
 export class SharedModule {
   constructor(private translate: TranslateService, private injector: Injector) {
-    this.translate.setDefaultLang("pt-BR");
+    this.translate.setDefaultLang('pt-BR');
     SharedInjector = this.injector;
   }
 }

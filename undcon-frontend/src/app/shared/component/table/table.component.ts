@@ -1,12 +1,12 @@
-import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
-import { TableValues } from "@shared/model/table";
-import { Page } from "@model/page";
+import { TableValues } from '@shared/model/table';
+import { Page } from '@model/page';
 
 @Component({
-  selector: "app-table",
-  templateUrl: "./table.component.html",
-  styleUrls: ["./table.component.scss"],
+  selector: 'app-table',
+  templateUrl: './table.component.html',
+  styleUrls: ['./table.component.scss'],
 })
 export class TableComponent implements OnInit {
   currentPage = 0;
@@ -33,13 +33,13 @@ export class TableComponent implements OnInit {
   }
 
   getFieldsOfTable(item, tableValue: TableValues) {
-    const split = tableValue.field.split(".");
+    const split = tableValue.field.split('.');
     if (split.length > 1) {
       const value = item[split[0]];
       if (value) {
         return value[split[1]];
       }
-      return "";
+      return '';
     }
     return item[tableValue.field];
   }

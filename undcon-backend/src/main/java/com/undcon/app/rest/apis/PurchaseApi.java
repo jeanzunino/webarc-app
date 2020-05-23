@@ -29,14 +29,15 @@ public class PurchaseApi {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Page<PurchaseEntity> getAll(@QueryParam("page") Integer page, @QueryParam("size") Integer size) {
-		return service.getAll(page, size);
+	public Page<PurchaseEntity> getAll(@QueryParam("filter") String filter, @QueryParam("page") Integer page,
+			@QueryParam("size") Integer size) {
+		return service.getAll(filter, page, size);
 	}
 
 	@GET
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public PurchaseEntity get(@PathParam("id") long id) {
+	public PurchaseEntity get(@PathParam("id") long id) throws UndconException {
 		PurchaseEntity Provider = service.findById(id);
 		return Provider;
 	}

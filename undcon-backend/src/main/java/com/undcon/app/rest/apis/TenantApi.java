@@ -27,9 +27,9 @@ public class TenantApi {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Page<TenantEntity> getAll(@QueryParam("page") Integer page, @QueryParam("size") Integer size)
-			throws UndconException {
-		return service.getAll(page, size);
+	public Page<TenantEntity> getAll(@QueryParam("filter") String filter, @QueryParam("page") Integer page,
+			@QueryParam("size") Integer size) throws UndconException {
+		return service.getAll(filter, page, size);
 	}
 
 	@GET

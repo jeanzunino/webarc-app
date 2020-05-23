@@ -27,15 +27,15 @@ public class ProductCategoryApi {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Page<ProductCategoryEntity> getAll(@QueryParam("name") String name, @QueryParam("page") Integer page,
+	public Page<ProductCategoryEntity> getAll(@QueryParam("filter") String filter, @QueryParam("page") Integer page,
 			@QueryParam("size") Integer size) {
-		return service.getAll(name, page, size);
+		return service.getAll(filter, page, size);
 	}
 
 	@GET
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ProductCategoryEntity get(@PathParam("id") long id) {
+	public ProductCategoryEntity get(@PathParam("id") long id) throws UndconException {
 		ProductCategoryEntity entity = service.findById(id);
 		return entity;
 	}

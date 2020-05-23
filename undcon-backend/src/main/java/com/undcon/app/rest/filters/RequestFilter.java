@@ -18,6 +18,7 @@ import com.nimbusds.jose.JWSVerifier;
 import com.nimbusds.jose.Payload;
 import com.nimbusds.jose.crypto.MACVerifier;
 import com.undcon.app.enums.UndconError;
+import com.undcon.app.exceptions.UndconException;
 import com.undcon.app.model.UserEntity;
 import com.undcon.app.multitenancy.ThreadLocalStorage;
 import com.undcon.app.rest.models.ErrorMessageModel;
@@ -63,7 +64,14 @@ public class RequestFilter implements ContainerRequestFilter {
         ThreadLocalStorage.setTenantName((String) payloadAsJsonObject.get("tenant"));
         Long userId = (Long) payloadAsJsonObject.get("userId");
         
-        UserEntity user = userService.findById(userId);
+        UserEntity user;
+		try {
+			user = userService.findById(userId);
+		} catch (UndconException e) {
+			throw new WebApplicationException(Response
+				     .status(Response.Status.UNAUTHORIZED)
+				     .entity(new ErrorMessageModel(UndconError.INVALID_USER_LOGGED)).build());
+		}
         if(user == null || !user.isActive() || user.isResetPassword()) {
         	throw new WebApplicationException(Response
 				     .status(Response.Status.UNAUTHORIZED)

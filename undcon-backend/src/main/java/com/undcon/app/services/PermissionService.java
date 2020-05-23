@@ -3,14 +3,13 @@ package com.undcon.app.services;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
 import com.undcon.app.enums.ResourceType;
 import com.undcon.app.enums.UndconError;
@@ -21,10 +20,9 @@ import com.undcon.app.model.UserEntity;
 import com.undcon.app.repositories.IPermissionItenRepository;
 import com.undcon.app.repositories.IPermissionRepository;
 import com.undcon.app.rest.models.ErrorPermissionModel;
-import com.undcon.app.utils.PageUtils;
 
 @Component
-public class PermissionService {
+public class PermissionService extends AbstractService<PermissionEntity>{
 
 	@Autowired
 	private IPermissionRepository permissionRepository;
@@ -35,15 +33,25 @@ public class PermissionService {
 	@Autowired
 	private IPermissionItenRepository permissionItenRepository;
 
-	public Page<PermissionEntity> getAll(String name, Integer page, Integer size) {
-		if (StringUtils.isEmpty(name)) {
-			return permissionRepository.findAll(PageUtils.createPageRequest(page, size));
-		}
-		return permissionRepository.findAllByNameContainingIgnoreCase(name, PageUtils.createPageRequest(page, size));
+	public Page<PermissionEntity> getAll(String filter, Integer page, Integer size) {
+		return super.getAll(PermissionEntity.class, filter, page, size);
 	}
 
-	public PermissionEntity findById(Long id) {
-		return permissionRepository.findOne(id);
+	@Override
+	protected void validateBeforePost(PermissionEntity entity) throws UndconException {
+		super.validateBeforePost(entity);
+		validateName(0L, entity.getName());
+	}
+
+	@Override
+	protected void validateBeforeUpdate(PermissionEntity entity) throws UndconException {
+		super.validateBeforeUpdate(entity);
+		validateName(entity.getId(), entity.getName());
+	}
+
+	@Override
+	protected void validateBeforeDelete(PermissionEntity entity) throws UndconException {
+		super.validateBeforeDelete(entity);
 	}
 	
 	public PermissionItemEntity findItenById(Long id) {
@@ -57,24 +65,7 @@ public class PermissionService {
 		}
 		return permission;
 	}
-
-	public PermissionEntity persist(PermissionEntity entity) throws UndconException {
-		checkPermission(ResourceType.Permission);
-		validateName(0L, entity.getName());
-		return permissionRepository.save(entity);
-	}
-
-	public PermissionEntity update(PermissionEntity entity) throws UndconException {
-		checkPermission(ResourceType.Permission);
-		validateName(entity.getId(), entity.getName());
-		return permissionRepository.save(entity);
-	}
-
-	public void delete(long id) throws ForbiddenException, UndconException {
-		checkPermission(ResourceType.Permission);
-		permissionRepository.delete(id);
-	}
-
+	
 	private void validateName(Long id, String name) throws UndconException {
 		List<PermissionEntity> findByIdNotAndName = permissionRepository.findByIdNotAndName(id, name);
 		if (!findByIdNotAndName.isEmpty()) {
@@ -98,5 +89,15 @@ public class PermissionService {
 		List<PermissionItemEntity> itens = permissionItenRepository.findByPermission(user.getPermission());
 		itens.stream().forEach(resource -> resources.add(resource.getResourceType()));
 		return resources;
+	}
+
+	@Override
+	protected JpaRepository<PermissionEntity, Long> getRepository() {
+		return permissionRepository;
+	}
+
+	@Override
+	protected ResourceType getResourceType() {
+		return ResourceType.Permission;
 	}
 }

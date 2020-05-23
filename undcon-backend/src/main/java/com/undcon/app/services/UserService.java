@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,11 +18,10 @@ import com.undcon.app.model.EmployeeEntity;
 import com.undcon.app.model.UserEntity;
 import com.undcon.app.multitenancy.ThreadLocalStorage;
 import com.undcon.app.repositories.IUserRepository;
-import com.undcon.app.utils.LongUtils;
-import com.undcon.app.utils.PageUtils;
+import com.undcon.app.utils.NumberUtils;
 
 @Component
-public class UserService {
+public class UserService extends AbstractService<UserEntity>{
 
 	public static String SHARED_KEY = "a0a2abd8-6162-41c3-83d6-1cf559b46afc";
 
@@ -33,23 +33,16 @@ public class UserService {
 	
 	@Autowired
 	private EmployeeService employeeService;
-
-	public Page<UserEntity> getAll(Integer page, Integer size, String login) throws UndconException {
-		permissionService.checkPermission(ResourceType.USER);
-		if (login == null) {
-			return userRepository.findAll(PageUtils.createPageRequest(page, size));
-		}
-		return userRepository.findAllByLoginContainingIgnoreCase(login, PageUtils.createPageRequest(page, size));
+	
+	public Page<UserEntity> getAll(String filter, Integer page, Integer size) throws UndconException {
+		permissionService.checkPermission(getResourceType());
+		return super.getAll(UserEntity.class, filter, page, size);
 	}
 
-	public UserEntity findById(Long id) {
-		return userRepository.findOne(id);
-	}
-
-	public UserEntity persist(UserEntity user)
-			throws NoSuchAlgorithmException, UnsupportedEncodingException, UndconException {
-		permissionService.checkPermission(ResourceType.USER);
-		if (LongUtils.longIsPositiveValue(user.getId())) {
+	@Override
+	protected void validateBeforePost(UserEntity user) throws UndconException {
+		super.validateBeforePost(user);
+		if (NumberUtils.longIsPositiveValue(user.getId())) {
 			throw new IllegalArgumentException("O novo registro a ser salvo não pode ter o id preenchido.");
 		}
 		validateLoginFormat(user.getLogin());
@@ -65,9 +58,31 @@ public class UserService {
 			throw new UndconException(UndconError.LOGIN_ALREADY_EXISTS_IN_EMPLOYEE);
 		}
 		
-		//TODO Validar se tem @dominio
-		user.setPassword(criptyPassword(user.getPassword()));
-		return userRepository.save(user);
+		try {
+			user.setPassword(criptyPassword(user.getPassword()));
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	protected void validateBeforeUpdate(UserEntity user) throws UndconException {
+		super.validateBeforeUpdate(user);
+		validateLoginFormat(user.getLogin());
+		UserEntity find = findById(user.getId());
+		
+		//Validar se usuário tem permissão para alterar ResetPassword
+		if (find.isResetPassword()) {
+			try {
+				user.setPassword(criptyPassword(user.getPassword()));
+			} catch (NoSuchAlgorithmException e) {
+				e.printStackTrace();
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	public boolean hasUserByLogin(String login) {
@@ -84,23 +99,6 @@ public class UserService {
 		return userRepository.findByEmployee(employee).size() > 0;
 	}
 
-	public UserEntity update(UserEntity user)
-			throws NoSuchAlgorithmException, UnsupportedEncodingException, UndconException {
-		permissionService.checkPermission(ResourceType.USER);
-		validateLoginFormat(user.getLogin());
-		UserEntity find = findById(user.getId());
-		
-		//Validar se usuário tem permissão para alterar ResetPassword
-		find.setResetPassword(user.isResetPassword());
-		find.setLogin(user.getLogin());
-		find.setEmployee(user.getEmployee());
-		if (find.isResetPassword()) {
-			find.setPassword(criptyPassword(user.getPassword()));
-		}
-		
-		return userRepository.save(find);
-	}
-
 	public String criptyPassword(String password) throws NoSuchAlgorithmException, UnsupportedEncodingException {
 		if (password == null) {
 			return null;
@@ -112,11 +110,6 @@ public class UserService {
 			hexString.append(String.format("%02X", 0xFF & b));
 		}
 		return hexString.toString();
-	}
-
-	public void delete(long id) throws UndconException {
-		permissionService.checkPermission(ResourceType.USER);
-		userRepository.delete(id);
 	}
 
 	@Transactional
@@ -133,6 +126,16 @@ public class UserService {
 
 	public List<ResourceType> getPermissionOfLoggeduser() {
 		return permissionService.getResourcesOfUser(getCurrentUser());
+	}
+
+	@Override
+	protected JpaRepository<UserEntity, Long> getRepository() {
+		return userRepository;
+	}
+
+	@Override
+	protected ResourceType getResourceType() {
+		return ResourceType.USER;
 	}
 
 }

@@ -2,43 +2,46 @@ package com.undcon.app.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Component;
 
 import com.undcon.app.enums.ResourceType;
 import com.undcon.app.exceptions.UndconException;
 import com.undcon.app.model.ExpenseEntity;
 import com.undcon.app.repositories.IExpenseRepository;
-import com.undcon.app.utils.PageUtils;
 
 @Component
-public class ExpenseService {
+public class ExpenseService extends AbstractService<ExpenseEntity>{
 
 	@Autowired
 	private IExpenseRepository expenseRepository;
 	
-	@Autowired
-	private PermissionService permissionService;
-
-	public Page<ExpenseEntity> getAll(Integer page, Integer size) {
-        return expenseRepository.findAll(PageUtils.createPageRequest(page, size));
-    }
-	
-	public ExpenseEntity findById(Long id) {
-        return expenseRepository.findOne(id);
-    }
-	
-	public ExpenseEntity persist(ExpenseEntity entity) throws UndconException {
-		permissionService.checkPermission(ResourceType.EXPENSE);
-		return expenseRepository.save(entity);
+	public Page<ExpenseEntity> getAll(String filter, Integer page, Integer size) {
+		return super.getAll(ExpenseEntity.class, filter, page, size);
 	}
 
-	public ExpenseEntity update(ExpenseEntity entity) throws UndconException {
-		permissionService.checkPermission(ResourceType.EXPENSE);
-		return expenseRepository.save(entity);
+	@Override
+	protected void validateBeforePost(ExpenseEntity entity) throws UndconException {
+		super.validateBeforePost(entity);
 	}
 
-	public void delete(long id) throws UndconException {
-		permissionService.checkPermission(ResourceType.EXPENSE);
-		expenseRepository.delete(id);
+	@Override
+	protected void validateBeforeUpdate(ExpenseEntity entity) throws UndconException {
+		super.validateBeforeUpdate(entity);
+	}
+
+	@Override
+	protected void validateBeforeDelete(ExpenseEntity entity) throws UndconException {
+		super.validateBeforeDelete(entity);
+	}
+
+	@Override
+	protected JpaRepository<ExpenseEntity, Long> getRepository() {
+		return expenseRepository;
+	}
+
+	@Override
+	protected ResourceType getResourceType() {
+		return ResourceType.EXPENSE;
 	}
 }

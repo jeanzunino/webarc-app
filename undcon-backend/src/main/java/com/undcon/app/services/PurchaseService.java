@@ -4,6 +4,7 @@ import java.sql.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,11 +21,10 @@ import com.undcon.app.model.PurchaseItemProductEntity;
 import com.undcon.app.model.UserEntity;
 import com.undcon.app.repositories.IPurchaseItemRepository;
 import com.undcon.app.repositories.IPurchaseRepository;
-import com.undcon.app.utils.LongUtils;
-import com.undcon.app.utils.PageUtils;
+import com.undcon.app.utils.NumberUtils;
 
 @Component
-public class PurchaseService {
+public class PurchaseService extends AbstractService<PurchaseEntity>{
 
 	@Autowired
 	private IPurchaseRepository purchaseRepository;
@@ -47,44 +47,37 @@ public class PurchaseService {
 	@Autowired
 	private UserService userService;
 
-	public Page<PurchaseEntity> getAll(Integer page, Integer size) {
-        return purchaseRepository.findAll(PageUtils.createPageRequest(page, size));
-    }
-	
-	public PurchaseEntity findById(Long id) {
-        return purchaseRepository.findOne(id);
-    }
-	
-	public PurchaseEntity persist(PurchaseEntity entity) throws UndconException {
-		permissionService.checkPermission(ResourceType.PURCHASE);
+	public Page<PurchaseEntity> getAll(String filter, Integer page, Integer size) {
+		return super.getAll(PurchaseEntity.class, filter, page, size);
+	}
+
+	@Override
+	protected void validateBeforePost(PurchaseEntity entity) throws UndconException {
+		super.validateBeforePost(entity);
 		entity.setStatus(SaleStatus.CREATED);
 		entity.setPurchaseDate(new Date(System.currentTimeMillis()));
 		entity.setBilled(false);
 		entity.setUser(userService.getCurrentUser());
 		validateProvider(entity);
-		
-		return purchaseRepository.save(entity);
 	}
 
+	@Override
+	protected void validateBeforeUpdate(PurchaseEntity entity) throws UndconException {
+		super.validateBeforeUpdate(entity);
+		validateProvider(entity);
+	}
+
+	@Override
+	protected void validateBeforeDelete(PurchaseEntity entity) throws UndconException {
+		super.validateBeforeDelete(entity);
+		entity.setStatus(SaleStatus.CANCELED);
+		purchaseRepository.save(entity);
+	}
+	
 	private void validateProvider(PurchaseEntity entity) throws UndconException {
 		if(entity.getProvider() == null) {
 			throw new UndconException(UndconError.PURCHASE_ENTITY_INVALID_PROVIDER);
 		}
-	}
-	
-	public PurchaseEntity update(PurchaseEntity entity) throws UndconException {
-		permissionService.checkPermission(ResourceType.PURCHASE);
-		
-		validateProvider(entity);
-		
-		return purchaseRepository.save(entity);
-	}
-
-	public void delete(long id) throws UndconException {
-		permissionService.checkPermission(ResourceType.PURCHASE);
-		PurchaseEntity sale = findById(id);
-		sale.setStatus(SaleStatus.CANCELED);
-		purchaseRepository.save(sale);
 	}
 	
 	@Transactional
@@ -104,7 +97,7 @@ public class PurchaseService {
 		EmployeeEntity employee = user.getEmployee();
 
 		// Se o Front não enviar o funciona´rio
-		if (LongUtils.longIsPositiveValue(itemDto.getEmployeeId())) {
+		if (NumberUtils.longIsPositiveValue(itemDto.getEmployeeId())) {
 			employee = employeeService.findById(itemDto.getEmployeeId());
 		}
 
@@ -155,5 +148,15 @@ public class PurchaseService {
 			throw new UndconException(UndconError.SALE_ITEM_NOT_FOUND_IN_THE_SALE);
 		}
 		purchaseItemRepository.delete(item);
+	}
+
+	@Override
+	protected JpaRepository<PurchaseEntity, Long> getRepository() {
+		return purchaseRepository;
+	}
+
+	@Override
+	protected ResourceType getResourceType() {
+		return ResourceType.PURCHASE;
 	}
 }

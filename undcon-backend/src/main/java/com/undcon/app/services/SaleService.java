@@ -26,7 +26,7 @@ import com.undcon.app.model.UserEntity;
 import com.undcon.app.repositories.ISaleItemRepository;
 import com.undcon.app.repositories.ISaleRepository;
 import com.undcon.app.repositories.SaleRepositoryImpl;
-import com.undcon.app.utils.LongUtils;
+import com.undcon.app.utils.NumberUtils;
 import com.undcon.app.utils.PageUtils;
 
 @Component
@@ -84,7 +84,7 @@ public class SaleService {
 		
 		EmployeeEntity salesman = user.getEmployee();
 		// Se o Front não enviar o funcionário
-		if (LongUtils.longIsPositiveValue(saleDto.getSalesmanId())) {
+		if (NumberUtils.longIsPositiveValue(saleDto.getSalesmanId())) {
 			salesman = employeeService.findById(saleDto.getSalesmanId());
 		}
 		SaleEntity sale = new SaleEntity(null, customer, saleDate, billed, status, user, salesman);
@@ -130,7 +130,7 @@ public class SaleService {
 		EmployeeEntity employee = user.getEmployee();
 
 		// Se o Front não enviar o funciona´rio
-		if (LongUtils.longIsPositiveValue(itemDto.getEmployeeId())) {
+		if (NumberUtils.longIsPositiveValue(itemDto.getEmployeeId())) {
 			employee = employeeService.findById(itemDto.getEmployeeId());
 		}
 

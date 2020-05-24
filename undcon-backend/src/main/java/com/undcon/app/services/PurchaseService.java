@@ -20,7 +20,7 @@ import com.undcon.app.model.PurchaseItemProductEntity;
 import com.undcon.app.model.UserEntity;
 import com.undcon.app.repositories.IPurchaseItemRepository;
 import com.undcon.app.repositories.IPurchaseRepository;
-import com.undcon.app.utils.LongUtils;
+import com.undcon.app.utils.NumberUtils;
 import com.undcon.app.utils.PageUtils;
 
 @Component
@@ -104,7 +104,7 @@ public class PurchaseService {
 		EmployeeEntity employee = user.getEmployee();
 
 		// Se o Front não enviar o funciona´rio
-		if (LongUtils.longIsPositiveValue(itemDto.getEmployeeId())) {
+		if (NumberUtils.longIsPositiveValue(itemDto.getEmployeeId())) {
 			employee = employeeService.findById(itemDto.getEmployeeId());
 		}
 

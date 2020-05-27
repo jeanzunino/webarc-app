@@ -9,7 +9,7 @@ import com.undcon.app.enums.UndconError;
 import com.undcon.app.exceptions.UndconException;
 import com.undcon.app.model.TenantEntity;
 import com.undcon.app.repositories.ITenantRepository;
-import com.undcon.app.utils.LongUtils;
+import com.undcon.app.utils.NumberUtils;
 import com.undcon.app.utils.PageUtils;
 
 @Component
@@ -33,7 +33,7 @@ public class TenantService {
 
 	public TenantEntity persist(TenantEntity tenant) throws UndconException {
 		permissionService.checkPermission(ResourceType.TENANT);
-		if (LongUtils.longIsPositiveValue(tenant.getId())) {
+		if (NumberUtils.longIsPositiveValue(tenant.getId())) {
 			throw new UndconException(UndconError.NEW_REGISTER_INVALID_ID);
 		}
 

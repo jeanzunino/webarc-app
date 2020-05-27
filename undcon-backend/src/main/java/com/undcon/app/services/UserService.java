@@ -17,7 +17,7 @@ import com.undcon.app.model.EmployeeEntity;
 import com.undcon.app.model.UserEntity;
 import com.undcon.app.multitenancy.ThreadLocalStorage;
 import com.undcon.app.repositories.IUserRepository;
-import com.undcon.app.utils.LongUtils;
+import com.undcon.app.utils.NumberUtils;
 import com.undcon.app.utils.PageUtils;
 
 @Component
@@ -49,7 +49,7 @@ public class UserService {
 	public UserEntity persist(UserEntity user)
 			throws NoSuchAlgorithmException, UnsupportedEncodingException, UndconException {
 		permissionService.checkPermission(ResourceType.USER);
-		if (LongUtils.longIsPositiveValue(user.getId())) {
+		if (NumberUtils.longIsPositiveValue(user.getId())) {
 			throw new IllegalArgumentException("O novo registro a ser salvo não pode ter o id preenchido.");
 		}
 		validateLoginFormat(user.getLogin());

@@ -1,16 +1,16 @@
-import { Component } from "@angular/core";
-import { FormGroup, FormControl, Validators } from "@angular/forms";
-import { MDBModalRef, ModalOptions } from "angular-bootstrap-md";
-import { ToastrService } from "ngx-toastr";
-import { TranslateService } from "@ngx-translate/core";
+import { Component } from '@angular/core';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { MDBModalRef, ModalOptions } from 'angular-bootstrap-md';
+import { ToastrService } from 'ngx-toastr';
+import { TranslateService } from '@ngx-translate/core';
 
-import { ServiceType } from "@model/service-type";
-import { ServiceTypeService } from "@service/service-type/service-type.service";
-import { DefaultEditViewComponent } from "@component/default-edit-view/default-edit-view.component";
+import { ServiceType } from '@model/service-type';
+import { ServiceTypeService } from '@service/service-type/service-type.service';
+import { DefaultEditViewComponent } from '@component/default-edit-view/default-edit-view.component';
 
 @Component({
-  selector: "app-service-type-edit",
-  templateUrl: "./service-type-edit.component.html"
+  selector: 'app-service-type-edit',
+  templateUrl: './service-type-edit.component.html'
 })
 export class ServiceTypeEditComponent extends DefaultEditViewComponent<
   ServiceType
@@ -28,7 +28,9 @@ export class ServiceTypeEditComponent extends DefaultEditViewComponent<
   createFormGroup() {
     return new FormGroup({
       id: new FormControl(null),
-      name: new FormControl("", Validators.required),
+      name: new FormControl('', Validators.required),
+      description: new FormControl(''),
+      price: new FormControl('')
     });
   }
 
@@ -36,10 +38,20 @@ export class ServiceTypeEditComponent extends DefaultEditViewComponent<
     this.getFormGroup().patchValue({
       id: serviceType.id,
       name: serviceType.name,
+      description: serviceType.description,
+      price: serviceType.price
     });
   }
 
   get nameForm() {
-    return this.getFormGroup().get("name");
+    return this.getFormGroup().get('name');
+  }
+
+  get descriptionForm() {
+    return this.getFormGroup().get('description');
+  }
+
+  get priceForm() {
+    return this.getFormGroup().get('price');
   }
 }

@@ -35,7 +35,7 @@ export class ProviderEditComponent extends DefaultEditViewComponent<Provider> {
     this.getFormGroup().patchValue({
       id: provider.id,
       name: provider.name,
-      phone: provider.phone,
+      phone: provider.phone
     });
   }
 

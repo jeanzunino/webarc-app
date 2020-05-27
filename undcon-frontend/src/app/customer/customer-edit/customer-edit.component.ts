@@ -1,16 +1,16 @@
-import { Component } from "@angular/core";
-import { FormGroup, FormControl, Validators } from "@angular/forms";
-import { MDBModalRef, ModalOptions } from "angular-bootstrap-md";
-import { ToastrService } from "ngx-toastr";
-import { TranslateService } from "@ngx-translate/core";
+import { Component } from '@angular/core';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { MDBModalRef, ModalOptions } from 'angular-bootstrap-md';
+import { ToastrService } from 'ngx-toastr';
+import { TranslateService } from '@ngx-translate/core';
 
-import { Customer } from "@model/customer";
-import { CustomerService } from "@service/customer/customer.service";
-import { DefaultEditViewComponent } from "@component/default-edit-view/default-edit-view.component";
+import { Customer } from '@model/customer';
+import { CustomerService } from '@service/customer/customer.service';
+import { DefaultEditViewComponent } from '@component/default-edit-view/default-edit-view.component';
 
 @Component({
-  selector: "app-customer-edit",
-  templateUrl: "./customer-edit.component.html"
+  selector: 'app-customer-edit',
+  templateUrl: './customer-edit.component.html'
 })
 export class CustomerEditComponent extends DefaultEditViewComponent<Customer> {
   constructor(
@@ -26,8 +26,8 @@ export class CustomerEditComponent extends DefaultEditViewComponent<Customer> {
   createFormGroup() {
     return new FormGroup({
       id: new FormControl(null),
-      name: new FormControl("", Validators.required),
-      phone: new FormControl(""),
+      name: new FormControl('', Validators.required),
+      phone: new FormControl(''),
     });
   }
 
@@ -40,10 +40,10 @@ export class CustomerEditComponent extends DefaultEditViewComponent<Customer> {
   }
 
   get nameForm() {
-    return this.getFormGroup().get("name");
+    return this.getFormGroup().get('name');
   }
 
   get phoneForm() {
-    return this.getFormGroup().get("phone");
+    return this.getFormGroup().get('phone');
   }
 }

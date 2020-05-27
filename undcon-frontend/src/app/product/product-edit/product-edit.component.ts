@@ -1,15 +1,15 @@
-import { Component } from "@angular/core";
-import { FormGroup, FormControl, Validators } from "@angular/forms";
-import { MDBModalRef, ModalOptions } from "angular-bootstrap-md";
-import { ToastrService } from "ngx-toastr";
-import { TranslateService } from "@ngx-translate/core";
+import { Component } from '@angular/core';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { MDBModalRef, ModalOptions } from 'angular-bootstrap-md';
+import { ToastrService } from 'ngx-toastr';
+import { TranslateService } from '@ngx-translate/core';
 
-import { Product } from "@model/product";
-import { DefaultEditViewComponent } from "@component/default-edit-view/default-edit-view.component";
+import { Product } from '@model/product';
+import { DefaultEditViewComponent } from '@component/default-edit-view/default-edit-view.component';
 
 @Component({
-  selector: "app-permission-edit",
-  templateUrl: "./permission-edit.component.html"
+  selector: 'app-permission-edit',
+  templateUrl: './permission-edit.component.html'
 })
 export class ProductEditComponent extends DefaultEditViewComponent<Product> {
   categories: ProductCategory[];
@@ -28,8 +28,8 @@ export class ProductEditComponent extends DefaultEditViewComponent<Product> {
   createFormGroup() {
     return new FormGroup({
       id: new FormControl(null),
-      name: new FormControl("", Validators.required),
-      productCategory: new FormControl("", Validators.required),
+      name: new FormControl('', Validators.required),
+      productCategory: new FormControl('', Validators.required),
     });
   }
 
@@ -48,10 +48,10 @@ export class ProductEditComponent extends DefaultEditViewComponent<Product> {
   }
 
   get nameForm() {
-    return this.getFormGroup().get("name");
+    return this.getFormGroup().get('name');
   }
 
   get productCategoryForm() {
-    return this.getFormGroup().get("productCategory");
+    return this.getFormGroup().get('productCategory');
   }
 }

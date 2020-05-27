@@ -3,7 +3,6 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MDBModalRef, ModalOptions } from 'angular-bootstrap-md';
 import { ToastrService } from 'ngx-toastr';
 import { TranslateService } from '@ngx-translate/core';
-import { NgxSpinnerService } from 'ngx-spinner';
 
 import { User } from '@model/user';
 import { Employee } from '@model/employee';
@@ -92,7 +91,7 @@ export class UserEditComponent extends DefaultEditViewComponent<User> {
     );
     this.permissionForm.setValue(
       this.permissions.find(
-        (permission) => permission.id == this.permissionForm.value
+        (permission) => permission.id === this.permissionForm.value
       )
     );
   }

@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 import { TableValues } from '@shared/model/table';
 import { Page } from '@model/page';
+import { MaskPipe } from 'ngx-mask';
 
 @Component({
   selector: 'app-table',
@@ -26,6 +27,8 @@ export class TableComponent implements OnInit {
     this.currentPage = page;
   }
 
+  constructor(private maskPipe: MaskPipe) { }
+
   ngOnInit(): void {}
 
   getHeaders(tableValue: TableValues) {
@@ -33,15 +36,22 @@ export class TableComponent implements OnInit {
   }
 
   getFieldsOfTable(item, tableValue: TableValues) {
+    let finalValue = '';
     const split = tableValue.field.split('.');
     if (split.length > 1) {
       const value = item[split[0]];
       if (value) {
-        return value[split[1]];
+        finalValue = value[split[1]];
       }
-      return '';
+    } else {
+      finalValue = item[tableValue.field];
     }
-    return item[tableValue.field];
+
+    if (tableValue.mask) {
+      return this.maskPipe.transform(finalValue, tableValue.mask);
+    }
+
+    return finalValue;
   }
 
   updateItems(page) {

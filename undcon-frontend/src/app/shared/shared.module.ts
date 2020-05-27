@@ -15,7 +15,7 @@ import {
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HttpClient } from '@angular/common/http';
 import { NgxPaginationModule } from 'ngx-pagination';
-import { NgxMaskModule } from 'ngx-mask';
+import { NgxMaskModule, MaskPipe } from 'ngx-mask';
 
 import { DialogComponent } from '@component/dialog/dialog.component';
 import { TableComponent } from '@component/table/table.component';
@@ -33,7 +33,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     DialogComponent,
     TableComponent,
     PanelComponent,
-    ValidationComponent,
+    ValidationComponent
   ],
   exports: [
     CommonModule,
@@ -63,6 +63,9 @@ export function HttpLoaderFactory(http: HttpClient) {
     NgxPaginationModule,
     NgxMaskModule.forRoot()
   ],
+  providers: [
+    MaskPipe
+  ]
 })
 export class SharedModule {
   constructor(private translate: TranslateService, private injector: Injector) {

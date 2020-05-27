@@ -75,9 +75,7 @@ export abstract class GridViewComponent<T> implements OnInit, OnDestroy {
   async onClearParams() {
     this.spinner.show();
     this.filterParams = null;
-    this.items = (await this.service.getAll({ page: 0 }).toPromise()) as Page<
-      T
-    >;
+    this.items = (await this.service.getAll({ page: 0 }).toPromise()) as Page<T>;
     this.currentPage = 1;
     this.spinner.hide();
   }

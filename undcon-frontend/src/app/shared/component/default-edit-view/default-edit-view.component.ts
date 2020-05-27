@@ -1,13 +1,13 @@
-import { OnInit, OnDestroy } from "@angular/core";
-import { FormGroup } from "@angular/forms";
-import { MDBModalRef, ModalOptions } from "angular-bootstrap-md";
-import { ToastrService } from "ngx-toastr";
-import { TranslateService } from "@ngx-translate/core";
-import { Subject } from "rxjs";
+import { OnInit, OnDestroy } from '@angular/core';
+import { FormGroup } from '@angular/forms';
+import { MDBModalRef, ModalOptions } from 'angular-bootstrap-md';
+import { ToastrService } from 'ngx-toastr';
+import { TranslateService } from '@ngx-translate/core';
+import { Subject } from 'rxjs';
 
-import { EntityService } from "@service/entity/entity.service";
-import { Modal } from "@shared/model/modal";
-import { CloseDialogValues } from "@shared/model/close-dialog-values";
+import { EntityService } from '@service/entity/entity.service';
+import { Modal } from '@shared/model/modal';
+import { CloseDialogValues } from '@shared/model/close-dialog-values';
 
 export abstract class DefaultEditViewComponent<T> implements OnInit, OnDestroy {
   private closeDialogValues = new CloseDialogValues();

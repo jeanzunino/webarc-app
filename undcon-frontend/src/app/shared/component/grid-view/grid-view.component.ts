@@ -20,7 +20,7 @@ export abstract class GridViewComponent<T> implements OnInit, OnDestroy {
   modalRef: MDBModalRef;
   currentPage = 0;
   private ngUnsubscribe = new Subject();
-  private filterParams = null;
+  private filterParams = new Map<string, string>();
 
   constructor(
     private service: EntityService<T>,
@@ -42,12 +42,7 @@ export abstract class GridViewComponent<T> implements OnInit, OnDestroy {
     this.spinner.show();
     this.currentPage = page + 1;
 
-    let params = { page };
-    if (this.filterParams) {
-      this.filterParams.page = page;
-      params = this.filterParams;
-    }
-    this.items = (await this.service.getAll(params).toPromise()) as Page<T>;
+    this.items = (await this.service.getAll(this.filterParams, page).toPromise()) as Page<T>;
     this.spinner.hide();
   }
 
@@ -64,18 +59,18 @@ export abstract class GridViewComponent<T> implements OnInit, OnDestroy {
       });
   }
 
-  async onSearchParams(params: {}) {
+  async onSearchParams(filters: Map<string, string>) {
     this.spinner.show();
-    this.filterParams = params;
-    this.items = (await this.service.getAll(params).toPromise()) as Page<T>;
+    this.filterParams = filters;
+    this.items = (await this.service.getAll(this.filterParams).toPromise()) as Page<T>;
     this.currentPage = 1;
     this.spinner.hide();
   }
 
   async onClearParams() {
     this.spinner.show();
-    this.filterParams = null;
-    this.items = (await this.service.getAll({ page: 0 }).toPromise()) as Page<
+    this.filterParams = new Map<string, string>();
+    this.items = (await this.service.getAll(this.filterParams).toPromise()) as Page<
       T
     >;
     this.currentPage = 1;

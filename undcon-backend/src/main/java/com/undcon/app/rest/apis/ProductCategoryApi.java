@@ -47,6 +47,7 @@ public class ProductCategoryApi {
 	}
 
 	@PUT
+	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public ProductCategoryEntity put(ProductCategoryEntity entity) throws UndconException {
 		return service.update(entity);

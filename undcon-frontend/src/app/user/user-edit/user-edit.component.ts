@@ -87,12 +87,10 @@ export class UserEditComponent extends DefaultEditViewComponent<User> {
 
   afterValidateFormSave() {
     this.employeeForm.setValue(
-      this.employees.find((employee) => employee.id === this.employeeForm.value)
+      this.employees.find(employee => employee.id === +this.employeeForm.value)
     );
     this.permissionForm.setValue(
-      this.permissions.find(
-        (permission) => permission.id === this.permissionForm.value
-      )
+      this.permissions.find(permission => permission.id === +this.permissionForm.value)
     );
   }
 

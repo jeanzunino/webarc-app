@@ -1,6 +1,6 @@
-import { Resolve } from "@angular/router";
+import { Resolve } from '@angular/router';
 
-import { EntityService } from "@service/entity/entity.service";
+import { EntityService } from '@service/entity/entity.service';
 
 export class GetAllResolver<T> implements Resolve<any> {
   constructor(private entityService: EntityService<T>) {}

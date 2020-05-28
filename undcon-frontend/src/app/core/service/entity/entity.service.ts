@@ -13,7 +13,15 @@ export class EntityService<T> {
     protected entityUrl: string
   ) {}
 
-  public getAll(params?: {}) {
+  public getAll(filters?: Map<string, string>, pageNumber: number = 0, sizeNumber: number = 10) {
+    let filterAsString: string = "";
+    if(filters){
+      filters.forEach((value: string, key: string) => {
+        filterAsString = "&"+key + value;
+      });
+    }
+    let params : {};
+    params = {filter: filterAsString, page: pageNumber, size: sizeNumber };
     return this.http.get(`${this.baseUrl}/${this.entityUrl}`, { params });
   }
 

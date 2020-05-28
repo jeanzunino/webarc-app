@@ -27,6 +27,7 @@ public class ErrorResponseHandler implements ExceptionMapper<Throwable> {
 			ErrorMessageModel bodyOfResponse = new ErrorMessageModel(((UndconException) error).getError());
 			return error(error, HttpStatus.BAD_REQUEST, bodyOfResponse);
 		}
+		error.printStackTrace();
 		ErrorMessageModel bodyOfResponse = new ErrorMessageModel(UndconError.GENERIC_ERROR,
 				error.getMessage());
 		return error(error, HttpStatus.INTERNAL_SERVER_ERROR, bodyOfResponse);

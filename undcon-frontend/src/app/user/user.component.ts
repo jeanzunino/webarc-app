@@ -37,7 +37,9 @@ export class UserComponent extends GridViewComponent<User> {
   }
 
   onSearch() {
-    this.onSearchParams({ page: 0, login: this.name });
+    let params = new Map<string, string>();
+    params.set("login:", this.name);
+    this.onSearchParams(params);
   }
 
   onClear() {

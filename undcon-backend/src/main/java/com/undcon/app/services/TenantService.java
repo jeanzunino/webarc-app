@@ -2,6 +2,7 @@ package com.undcon.app.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Component;
 
 import com.undcon.app.enums.ResourceType;
@@ -10,10 +11,9 @@ import com.undcon.app.exceptions.UndconException;
 import com.undcon.app.model.TenantEntity;
 import com.undcon.app.repositories.ITenantRepository;
 import com.undcon.app.utils.NumberUtils;
-import com.undcon.app.utils.PageUtils;
 
 @Component
-public class TenantService {
+public class TenantService extends AbstractService<TenantEntity> {
 
 	@Autowired
 	private ITenantRepository tenantRepository;
@@ -21,9 +21,9 @@ public class TenantService {
 	@Autowired
 	private PermissionService permissionService;
 
-	public Page<TenantEntity> getAll(Integer page, Integer size) throws UndconException {
-		permissionService.checkPermission(ResourceType.TENANT);
-		return tenantRepository.findAll(PageUtils.createPageRequest(page, size));
+	public Page<TenantEntity> getAll(String filter, Integer page, Integer size) throws UndconException {
+		permissionService.checkPermission(getResourceType());
+		return super.getAll(TenantEntity.class, filter, page, size);
 	}
 
 	public TenantEntity findById(Long id) throws UndconException {
@@ -31,23 +31,22 @@ public class TenantService {
 		return tenantRepository.findOne(id);
 	}
 
-	public TenantEntity persist(TenantEntity tenant) throws UndconException {
-		permissionService.checkPermission(ResourceType.TENANT);
-		if (NumberUtils.longIsPositiveValue(tenant.getId())) {
+	@Override
+	protected void validateBeforePost(TenantEntity entity) throws UndconException {
+		super.validateBeforePost(entity);
+		if (NumberUtils.longIsPositiveValue(entity.getId())) {
 			throw new UndconException(UndconError.NEW_REGISTER_INVALID_ID);
 		}
-
-		return tenantRepository.save(tenant);
 	}
 
-	public TenantEntity update(TenantEntity tenant) throws UndconException {
-		permissionService.checkPermission(ResourceType.TENANT);
-		return tenantRepository.save(tenant);
+	@Override
+	protected JpaRepository<TenantEntity, Long> getRepository() {
+		return tenantRepository;
 	}
 
-	public void delete(long id) throws UndconException {
-		permissionService.checkPermission(ResourceType.TENANT);
-		tenantRepository.delete(id);
+	@Override
+	protected ResourceType getResourceType() {
+		return ResourceType.TENANT;
 	}
 
 }

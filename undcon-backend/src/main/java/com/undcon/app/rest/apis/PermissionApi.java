@@ -37,15 +37,15 @@ public class PermissionApi {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Page<PermissionEntity> getAll(@QueryParam("name") String name, @QueryParam("page") Integer page,
+	public Page<PermissionEntity> getAll(@QueryParam("filter") String filter, @QueryParam("page") Integer page,
 			@QueryParam("size") Integer size) {
-		return permissionService.getAll(name, page, size);
+		return permissionService.getAll(filter, page, size);
 	}
 
 	@GET
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public PermissionEntity get(@PathParam("id") long id) {
+	public PermissionEntity get(@PathParam("id") long id) throws UndconException {
 		PermissionEntity entity = permissionService.findById(id);
 		return entity;
 	}
@@ -87,7 +87,7 @@ public class PermissionApi {
 	@GET
 	@Path("/{id}/itens")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<PermissionItemEntity> getItens(@PathParam("id") long id) {
+	public List<PermissionItemEntity> getItens(@PathParam("id") long id) throws UndconException {
 		PermissionEntity permission = permissionService.findById(id);
 		List<PermissionItemEntity> items = repositoryIten.findByPermission(permission);
 		return items;

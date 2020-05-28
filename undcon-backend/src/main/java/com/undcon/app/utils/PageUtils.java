@@ -12,8 +12,9 @@ public class PageUtils {
 	}
 
 	public static PageRequest createPageRequest(Integer page, Integer size) {
-		page = page == null ? PAGE_NUMBER_DEFAULT : page;
-		size = size == null ? PAGE_SIZE_DEFAULT : size;
+		page = NumberUtils.isNullOrZero(page) ? PAGE_NUMBER_DEFAULT : page;
+		size = NumberUtils.isNullOrZero(size) ? PAGE_SIZE_DEFAULT : size;
 		return new PageRequest(page, size);
 	}
+	
 }

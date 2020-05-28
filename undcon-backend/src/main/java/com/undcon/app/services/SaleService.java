@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,10 +28,9 @@ import com.undcon.app.repositories.ISaleItemRepository;
 import com.undcon.app.repositories.ISaleRepository;
 import com.undcon.app.repositories.SaleRepositoryImpl;
 import com.undcon.app.utils.NumberUtils;
-import com.undcon.app.utils.PageUtils;
 
 @Component
-public class SaleService {
+public class SaleService extends AbstractService<SaleEntity>{
 
 	@Autowired
 	private ISaleRepository saleRepository;
@@ -59,14 +59,10 @@ public class SaleService {
 	@Autowired
 	private EmployeeService employeeService;
 
-	public Page<SaleEntity> getAll(Integer page, Integer size) {
-		return saleRepository.findAll(PageUtils.createPageRequest(page, size));
+	public Page<SaleEntity> getAll(String filter, Integer page, Integer size) {
+		return super.getAll(SaleEntity.class, filter, page, size);
 	}
-
-	public SaleEntity findById(Long id) {
-		return saleRepository.findOne(id);
-	}
-
+	
 	public SaleInfoDto getTotalSale() {
 		return new SaleInfoDto(saleRepositoryImpl.getTotalSale(true), saleRepositoryImpl.getTotalSale(false));
 	}
@@ -187,5 +183,15 @@ public class SaleService {
 
 	public List<ProductSaledInfoDto> getTopProductSaled(boolean billed) {
 		return saleRepositoryImpl.getTopProductSaled(billed);
+	}
+
+	@Override
+	protected JpaRepository<SaleEntity, Long> getRepository() {
+		return saleRepository;
+	}
+
+	@Override
+	protected ResourceType getResourceType() {
+		return ResourceType.SALE;
 	}
 }

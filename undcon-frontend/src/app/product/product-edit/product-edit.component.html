@@ -1,21 +1,75 @@
 <app-dialog modalTitle="Produto" [modalRef]="permissionModalRef">
-  <form body [formGroup]="formGroup">
-    <div class="md-form">
-      <input type="text" id="name" class="form-control" formControlName="name" mdbInput mdbValidate />
-      <label for="name">Nome</label>
+  <form body id="editForm" [formGroup]="formGroup">
+    <div class="row">
+      <div class="col-12 col-md-6">
+        <div class="md-form">
+          <input type="text" id="name" class="form-control text-light" formControlName="name" mdbInput mdbValidate />
+          <label for="name" class="text-light">Nome</label>
+          <app-validation [form]="nameForm" [validMessage]="'Válido'" [invalidMessage]="'Inválido'"></app-validation>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-6">
+        <div class="md-form">
+          <input type="text" id="unit" class="form-control text-light" formControlName="unit" mdbInput mdbValidate />
+          <label for="unit" class="text-light">Unidade</label>
+          <app-validation [form]="unitForm" [validMessage]="'Válido'" [invalidMessage]="'Inválido'"></app-validation>
+        </div>
+      </div>
     </div>
-    <div class="md-form">
-      <select id="productCategory" class="primary-system-color browser-default custom-select text-light" formControlName="productCategory" mdbInput mdbValidate>
-        <option selected></option>
-        <option *ngFor="let productCategory of categories" [value]="parent">{{productCategory.name}}</option>
-      </select>
-      <label for="productCategory" class="text-light">Categoria de Produto</label>
+
+    <div class="row">
+      <div class="col-12 col-md-6">
+        <div class="md-form">
+          <input type="number" id="purchasePrice" class="form-control text-light" formControlName="purchasePrice" mdbInput mdbValidate />
+          <label for="purchasePrice" class="text-light">Preço para compra</label>
+          <app-validation [form]="purchasePriceForm" [validMessage]="'Válido'" [invalidMessage]="'Inválido'"></app-validation>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-6">
+        <div class="md-form">
+          <input type="number" id="salePrice" class="form-control text-light" formControlName="salePrice" mdbInput mdbValidate />
+          <label for="salePrice" class="text-light">Preço da venda</label>
+          <app-validation [form]="salePriceForm" [validMessage]="'Válido'" [invalidMessage]="'Inválido'"></app-validation>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-12 col-md-6">
+        <div class="md-form">
+          <input type="number" id="stock" class="form-control text-light" formControlName="stock" mdbInput mdbValidate />
+          <label for="stock" class="text-light">Estoque</label>
+          <app-validation [form]="stockForm" [validMessage]="'Válido'" [invalidMessage]="'Inválido'"></app-validation>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-6">
+        <div class="md-form">
+          <input type="number" id="stockMin" class="form-control text-light" formControlName="stockMin" mdbInput mdbValidate />
+          <label for="stockMin" class="text-light">Estoque mínimo</label>
+          <app-validation [form]="stockMinForm" [validMessage]="'Válido'" [invalidMessage]="'Inválido'"></app-validation>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-12 col-md-6">
+        <div class="md-form">
+          <select id="productCategory" class="primary-system-color browser-default custom-select text-light" formControlName="productCategory" mdbInput mdbValidate>
+            <option selected></option>
+            <option *ngFor="let productCategory of productCategories" [value]="productCategory.id">{{productCategory.name}}</option>
+          </select>
+          <label for="productCategory" class="text-light">Categoria do Produto</label>
+          <app-validation [form]="productCategoryForm" [validMessage]="'Válido'" [invalidMessage]="'Inválido'"></app-validation>
+        </div>
+      </div>
     </div>
   </form>
 
   <div footer>
-    <button mdbBtn type="button" color="secondary" outline="true" aria-label="Close" (click)="permissionModalRef.hide()" mdbWavesEffect>Close</button>
-    <button mdbBtn type="button" color="danger" outline="true" mdbWavesEffect>Danger</button>
-    <button mdbBtn type="submit" color="primary" outline="true" (click)="onSave()" mdbWavesEffect>Save!</button>
+    <button mdbBtn type="button" *ngIf="data.content" color="danger" outline="true" (click)="onDelete()" mdbWavesEffect>Excluir</button>
+    <button mdbBtn type="submit" [disabled]="formGroup.invalid" form="editForm" color="primary" outline="true" (click)="onSave()" mdbWavesEffect>Salvar</button>
   </div>
 </app-dialog>

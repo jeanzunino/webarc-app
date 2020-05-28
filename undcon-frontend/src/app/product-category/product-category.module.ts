@@ -12,6 +12,6 @@ import { SharedModule } from '@shared/shared.module';
     SharedModule,
     MDBBootstrapModule.forRoot(),
     ProductCategoryRoutingModule
-  ],
+  ]
 })
 export class ProductCategoryModule {}

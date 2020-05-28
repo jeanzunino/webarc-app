@@ -30,7 +30,7 @@ export class ServiceTypeEditComponent extends DefaultEditViewComponent<
       id: new FormControl(null),
       name: new FormControl('', Validators.required),
       description: new FormControl(''),
-      price: new FormControl('')
+      price: new FormControl('', Validators.required)
     });
   }
 

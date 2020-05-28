@@ -1,0 +1,46 @@
+<app-dialog modalTitle="Cliente" [modalRef]="tenantModalRef">
+  <form body id="editForm" [formGroup]="formGroup">
+    <div class="row">
+      <div class="col-12">
+        <div class="md-form">
+          <input type="text" id="name" class="form-control text-light" formControlName="name" mdbInput mdbValidate />
+          <label for="name" class="text-light">Nome</label>
+          <app-validation [form]="nameForm" [validMessage]="'Válido'" [invalidMessage]="'Inválido'"></app-validation>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-12">
+        <div class="md-form">
+          <input type="email" id="email" class="form-control text-light" formControlName="email" mdbInput mdbValidate />
+          <label for="email" class="text-light">E-mail</label>
+          <app-validation [form]="emailForm" [validMessage]="'Válido'" [invalidMessage]="'Inválido'"></app-validation>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-12 col-md-6">
+        <div class="md-form">
+          <input type="text" id="schemaName" class="form-control text-light" formControlName="schemaName" mdbInput mdbValidate />
+          <label for="schemaName" class="text-light">Esquema</label>
+          <app-validation [form]="schemaNameForm" [validMessage]="'Válido'" [invalidMessage]="'Inválido'"></app-validation>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-6">
+        <div class="md-form">
+          <input type="text" id="phone" class="form-control text-light" formControlName="phone" mask="(00) 00000-0000"  mdbInput mdbValidate />
+          <label for="phone" class="text-light">Telefone</label>
+          <app-validation [form]="phoneForm" [validMessage]="'Válido'" [invalidMessage]="'Inválido'"></app-validation>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <div footer>
+    <button mdbBtn type="button" *ngIf="data.content" color="danger" outline="true" (click)="onDelete()" mdbWavesEffect>Excluir</button>
+    <button mdbBtn type="submit" [disabled]="formGroup.invalid" form="editForm" color="primary" outline="true" (click)="onSave()" mdbWavesEffect>Salvar</button>
+  </div>
+</app-dialog>

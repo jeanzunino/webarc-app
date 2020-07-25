@@ -7,6 +7,8 @@ import { UserService } from '@service/user/user.service';
 import { UserEditComponent } from '@app/user/user-edit/user-edit.component';
 import { GridViewComponent } from '@component/grid-view/grid-view.component';
 import { Table } from '@shared/model/table';
+import { QueryFilterEnum } from '@core/enum/query-filter';
+import { getQueryFilter } from '@shared/utils/utils';
 
 @Component({
   selector: 'app-user',
@@ -37,8 +39,8 @@ export class UserComponent extends GridViewComponent<User> {
   }
 
   onSearch() {
-    let params = new Map<string, string>();
-    params.set("login:", this.name);
+    const params = new Map<string, string>();
+    params.set(getQueryFilter('name', QueryFilterEnum.CONTAINS_IC), this.name);
     this.onSearchParams(params);
   }
 

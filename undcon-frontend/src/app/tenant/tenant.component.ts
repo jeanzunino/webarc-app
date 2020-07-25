@@ -7,12 +7,20 @@ import { GridViewComponent } from '@component/grid-view/grid-view.component';
 import { Table } from '@shared/model/table';
 import { Tenant } from '@model/tenant';
 import { TenantEditComponent } from '@app/tenant/tenant-edit/tenant-edit.component';
+import { QueryFilterEnum } from '@core/enum/query-filter';
+import { getQueryFilter } from '@shared/utils/utils';
 
 @Component({
   selector: 'app-tenant',
   templateUrl: './tenant.component.html',
 })
 export class TenantComponent extends GridViewComponent<Tenant> {
+
+  name = null;
+  email = null;
+  schemaName = null;
+  phone = null;
+
   tableValues = new Table()
     .set('name', 'tenant.name')
     .set('email', 'tenant.email')
@@ -34,5 +42,22 @@ export class TenantComponent extends GridViewComponent<Tenant> {
 
   open() {
     this.onClickItem(null);
+  }
+
+  onSearch() {
+    const params = new Map<string, string>();
+    params.set(getQueryFilter('name', QueryFilterEnum.CONTAINS_IC), this.name);
+    params.set(getQueryFilter('email', QueryFilterEnum.CONTAINS_IC), this.email);
+    params.set(getQueryFilter('schemaName', QueryFilterEnum.CONTAINS_IC), this.schemaName);
+    params.set(getQueryFilter('phone', QueryFilterEnum.CONTAINS_IC), this.phone);
+    this.onSearchParams(params);
+  }
+
+  onClear() {
+    this.name = null;
+    this.email = null;
+    this.schemaName = null;
+    this.phone = null;
+    this.onClearParams();
   }
 }

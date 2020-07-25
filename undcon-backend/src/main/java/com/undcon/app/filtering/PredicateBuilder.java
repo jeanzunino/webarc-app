@@ -74,10 +74,12 @@ public class PredicateBuilder<T> {
 		switch (type.getName()) {
 		case "long":
 			return Long.valueOf(value);
-		case "String":
+		case "java.lang.String":
 			return value;
 		case "Integer":
 			return Integer.parseInt(value);
+		case "double":
+			return Double.parseDouble(value);
 			
 		//TODO Falta converter outros tipos	
 		default:

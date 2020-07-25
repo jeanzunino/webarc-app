@@ -7,6 +7,8 @@ import { CustomerService } from '@service/customer/customer.service';
 import { GridViewComponent } from '@shared/component/grid-view/grid-view.component';
 import { CustomerEditComponent } from '@app/customer/customer-edit/customer-edit.component';
 import { Table } from '@shared/model/table';
+import { QueryFilterEnum } from '@core/enum/query-filter';
+import { getQueryFilter } from '@shared/utils/utils';
 
 @Component({
   selector: 'app-customer',
@@ -17,6 +19,8 @@ export class CustomerComponent extends GridViewComponent<Customer> {
     .set('name', 'customer.name')
     .set('phone', 'customer.phone', '(00) 00000-0000')
     .get();
+  name = null;
+  phone = null;
 
   constructor(
     service: CustomerService,
@@ -32,5 +36,18 @@ export class CustomerComponent extends GridViewComponent<Customer> {
 
   open() {
     this.onClickItem(null);
+  }
+
+  onSearch() {
+    const params = new Map<string, string>();
+    params.set(getQueryFilter('name', QueryFilterEnum.CONTAINS_IC), this.name);
+    params.set(getQueryFilter('phone', QueryFilterEnum.CONTAINS_IC), this.phone);
+    this.onSearchParams(params);
+  }
+
+  onClear() {
+    this.name = null;
+    this.phone = null;
+    this.onClearParams();
   }
 }

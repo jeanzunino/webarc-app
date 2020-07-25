@@ -1,5 +1,21 @@
 <div class="container-fluid screen-top screen-bottom">
-  <app-panel [panelTitle]="'filtros'">
+  <app-panel panelTitle="filtros" (search)="onSearch()" (clear)="onClear()">
+    <div body>
+      <div class="row">
+        <div class="col-6">
+          <div class="md-form">
+            <input type="text" id="name" class="form-control text-light" [(ngModel)]="name" mdbInput />
+            <label for="name" class="text-light">Nome</label>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="md-form">
+            <input type="text" id="phone" class="form-control text-light" [(ngModel)]="phone" mdbInput />
+            <label for="phone" class="text-light">Telefone</label>
+          </div>
+        </div>
+      </div>
+    </div>
   </app-panel>
   <div class="card-filter--margin-top">
     <app-table [pageValues]="items" [tableValues]="tableValues" [updateCurrentPage]="currentPage"

@@ -7,6 +7,8 @@ import { EmployeeService } from '@service/employee/employee.service';
 import { GridViewComponent } from '@component/grid-view/grid-view.component';
 import { EmployeeEditComponent } from '@app/employee/employee-edit/employee-edit.component';
 import { Table } from '@shared/model/table';
+import { QueryFilterEnum } from '@core/enum/query-filter';
+import { getQueryFilter } from '@shared/utils/utils';
 
 @Component({
   selector: 'app-employee',
@@ -17,6 +19,8 @@ export class EmployeeComponent extends GridViewComponent<Employee> {
     .set('name', 'employee.name')
     .set('phone', 'employee.phone', '(00) 00000-0000')
     .get();
+  name = null;
+  phone = null;
 
   constructor(
     service: EmployeeService,
@@ -32,5 +36,18 @@ export class EmployeeComponent extends GridViewComponent<Employee> {
 
   open() {
     this.onClickItem(null);
+  }
+
+  onSearch() {
+    const params = new Map<string, string>();
+    params.set(getQueryFilter('name', QueryFilterEnum.CONTAINS_IC), this.name);
+    params.set(getQueryFilter('phone', QueryFilterEnum.CONTAINS_IC), this.phone);
+    this.onSearchParams(params);
+  }
+
+  onClear() {
+    this.name = null;
+    this.phone = null;
+    this.onClearParams();
   }
 }

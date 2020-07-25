@@ -1,8 +1,8 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient } from '@angular/common/http';
 
-import { Entity } from "@model/entity";
-import { environment } from "@environment/environment";
-import { StorageService } from "@service/storage/storage.service";
+import { Entity } from '@model/entity';
+import { environment } from '@environment/environment';
+import { StorageService } from '@service/storage/storage.service';
 
 export class EntityService<T> {
   public baseUrl = environment.url;
@@ -14,10 +14,12 @@ export class EntityService<T> {
   ) {}
 
   public getAll(filters?: Map<string, string>, pageNumber: number = 0, sizeNumber: number = 10) {
-    let filterAsString: string = "";
+    let filterAsString: string = '';
     if(filters){
       filters.forEach((value: string, key: string) => {
-        filterAsString = "&"+key + value;
+        if (value) {
+          filterAsString += '&' + key + value;
+        }
       });
     }
     let params : {};

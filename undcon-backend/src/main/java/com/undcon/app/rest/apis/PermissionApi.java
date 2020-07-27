@@ -25,6 +25,9 @@ import com.undcon.app.model.PermissionItemEntity;
 import com.undcon.app.repositories.IPermissionItenRepository;
 import com.undcon.app.services.PermissionService;
 
+/**
+ * Api de Permissões
+ */
 @Component
 @Path("/permissions")
 public class PermissionApi {

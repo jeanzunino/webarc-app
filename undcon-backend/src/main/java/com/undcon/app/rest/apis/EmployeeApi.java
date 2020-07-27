@@ -18,6 +18,9 @@ import com.undcon.app.exceptions.UndconException;
 import com.undcon.app.model.EmployeeEntity;
 import com.undcon.app.services.EmployeeService;
 
+/**
+ * Api de Empregados/Funcionários
+ */
 @Component
 @Path("/employees")
 public class EmployeeApi {

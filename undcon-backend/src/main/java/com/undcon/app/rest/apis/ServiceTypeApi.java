@@ -18,6 +18,9 @@ import com.undcon.app.exceptions.UndconException;
 import com.undcon.app.model.ServiceTypeEntity;
 import com.undcon.app.services.ServiceTypeService;
 
+/**
+ * Api de Tipos de Serviços
+ */
 @Component
 @Path("/serviceTypes")
 public class ServiceTypeApi {

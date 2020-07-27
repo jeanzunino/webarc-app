@@ -27,6 +27,9 @@ import com.undcon.app.model.SaleEntity;
 import com.undcon.app.model.SaleItemEntity;
 import com.undcon.app.services.SaleService;
 
+/**
+ * Api de Vendas
+ */
 @Component
 @Path("/sales")
 public class SaleApi {

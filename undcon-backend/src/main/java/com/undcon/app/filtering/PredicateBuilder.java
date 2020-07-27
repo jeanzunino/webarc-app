@@ -6,6 +6,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.EnumPath;
+import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.core.types.dsl.StringPath;
 
@@ -32,39 +34,148 @@ public class PredicateBuilder<T> {
 		BooleanExpression expression = null;
 		for (SearchCriteria filter : filters) {
 			Class type = pathBuilder.getType().getDeclaredField(filter.getKey()).getType();
-
-			//filter=name:João
+			// filter=name:João
 			switch (filter.getOperation()) {
 			case "=":
-				PathBuilder<Object> propertyEq = pathBuilder.get(filter.getKey());
-				expression = expressionAnd(expression, propertyEq.eq(convertToValue(type, filter.getValue())));
+				if (type.isEnum()) {
+					EnumPath<?> propertyEnum = pathBuilder.getEnum(filter.getKey(), type);
+					expression = expressionAnd(expression, propertyEnum.stringValue().eq(filter.getValue().toUpperCase()));
+				} else {
+					PathBuilder<Object> propertyEq = pathBuilder.get(filter.getKey());
+					expression = expressionAnd(expression, propertyEq.eq(convertToValue(type, filter.getValue())));
+				}
+				break;
+			case "!=":
+				if (type.isEnum()) {
+					EnumPath<?> propertyEnum = pathBuilder.getEnum(filter.getKey(), type);
+					expression = expressionAnd(expression, propertyEnum.stringValue().ne(filter.getValue().toUpperCase()));
+				} else {
+					PathBuilder<Object> propertyEq = pathBuilder.get(filter.getKey());
+					expression = expressionAnd(expression, propertyEq.ne(convertToValue(type, filter.getValue())));
+				}
 				break;
 			case ":":
 				StringPath path = pathBuilder.getString(filter.getKey());
 				expression = expressionAnd(expression, path.containsIgnoreCase(filter.getValue().toString()));
 				break;
-			case "!=":
-				PathBuilder<Object> propertyNe = pathBuilder.get(filter.getKey());
-				expression = expressionAnd(expression, propertyNe.ne(filter.getValue()));
-				break;
 			case ">":
-				StringPath propertyGt = pathBuilder.getString(filter.getKey());
-				expression = expressionAnd(expression, propertyGt.gt(filter.getValue()));
+				switch (type.getName()) {
+				case "long":
+				case "java.lang.Long":
+					NumberPath<Long> propertyGtLong = pathBuilder.getNumber(filter.getKey(), Long.class);
+					expression = expressionAnd(expression, propertyGtLong.gt(Long.valueOf(filter.getValue())));
+					break;
+				case "int":
+				case "java.lang.Integer":
+					NumberPath<Integer> propertyGtInteger = pathBuilder.getNumber(filter.getKey(), Integer.class);
+					expression = expressionAnd(expression, propertyGtInteger.gt(Integer.valueOf(filter.getValue())));
+					break;
+				case "double":
+				case "java.lang.Double":
+					NumberPath<Double> propertyGtDouble = pathBuilder.getNumber(filter.getKey(), Double.class);
+					expression = expressionAnd(expression, propertyGtDouble.gt(Double.valueOf(filter.getValue())));
+					break;
+//				case "java.sql.Date":
+//					DatePath propertyGtDate = pathBuilder.getDate(filter.getKey(), Date.class);
+//					expression = expressionAnd(expression,
+//							propertyGtDate.gt(Date.from(Instant.parse(filter.getValue()))));
+//					break;
+				default:
+					throw new IllegalArgumentException(
+							"Invalid operation filter " + filter.getOperation() + " for type " + type.getName());
+				}
+
 				break;
 			case "<":
-				StringPath propertyLt = pathBuilder.getString(filter.getKey());
-				expression = expressionAnd(expression, propertyLt.lt(filter.getValue()));
+				switch (type.getName()) {
+				case "long":
+				case "java.lang.Long":
+					NumberPath<Long> propertyGtLong = pathBuilder.getNumber(filter.getKey(), Long.class);
+					expression = expressionAnd(expression, propertyGtLong.lt(Long.valueOf(filter.getValue())));
+					break;
+				case "int":
+				case "java.lang.Integer":
+					NumberPath<Integer> propertyGtInteger = pathBuilder.getNumber(filter.getKey(), Integer.class);
+					expression = expressionAnd(expression, propertyGtInteger.lt(Integer.valueOf(filter.getValue())));
+					break;
+				case "double":
+				case "java.lang.Double":
+					NumberPath<Double> propertyGtDouble = pathBuilder.getNumber(filter.getKey(), Double.class);
+					expression = expressionAnd(expression, propertyGtDouble.lt(Double.valueOf(filter.getValue())));
+					break;
+//				case "java.sql.Date":
+//					DatePath propertyGtDate = pathBuilder.getDate(filter.getKey(), Date.class);
+//					expression = expressionAnd(expression,
+//							propertyGtDate.lt(Date.from(Instant.parse(filter.getValue()))));
+//					break;
+				default:
+					throw new IllegalArgumentException(
+							"Invalid operation filter " + filter.getOperation() + " for type " + type.getName());
+				}
 				break;
 			case ">=":
-				StringPath propertyGoe = pathBuilder.getString(filter.getKey());
-				expression = expressionAnd(expression, (propertyGoe.goe(filter.getValue())));
+				switch (type.getName()) {
+				case "long":
+				case "java.lang.Long":
+					NumberPath<Long> propertyGtLong = pathBuilder.getNumber(filter.getKey(), Long.class);
+					expression = expressionAnd(expression, propertyGtLong.gt(Long.valueOf(filter.getValue()))
+							.or(propertyGtLong.eq(Long.valueOf(filter.getValue()))));
+					break;
+				case "int":
+				case "java.lang.Integer":
+					NumberPath<Integer> propertyGtInteger = pathBuilder.getNumber(filter.getKey(), Integer.class);
+					expression = expressionAnd(expression, propertyGtInteger.gt(Integer.valueOf(filter.getValue()))
+							.or(propertyGtInteger.eq(Integer.valueOf(filter.getValue()))));
+					break;
+				case "double":
+				case "java.lang.Double":
+					NumberPath<Double> propertyGtDouble = pathBuilder.getNumber(filter.getKey(), Double.class);
+					expression = expressionAnd(expression, propertyGtDouble.gt(Double.valueOf(filter.getValue()))
+							.or(propertyGtDouble.eq(Double.valueOf(filter.getValue()))));
+					break;
+//				case "java.sql.Date":
+//					DatePath propertyGtDate = pathBuilder.getDate(filter.getKey(), Date.class);
+//					expression = expressionAnd(expression,
+//							propertyGtDate.gt(Date.from(Instant.parse(filter.getValue()))));
+//					break;
+				default:
+					throw new IllegalArgumentException(
+							"Invalid operation filter " + filter.getOperation() + " for type " + type.getName());
+				}
 				break;
 			case "<=":
-				StringPath propertyLoe = pathBuilder.getString(filter.getKey());
-				expression = expressionAnd(expression, propertyLoe.loe(filter.getValue()));
+				switch (type.getName()) {
+				case "long":
+				case "java.lang.Long":
+					NumberPath<Long> propertyGtLong = pathBuilder.getNumber(filter.getKey(), Long.class);
+					expression = expressionAnd(expression, propertyGtLong.lt(Long.valueOf(filter.getValue()))
+							.or(propertyGtLong.eq(Long.valueOf(filter.getValue()))));
+					break;
+				case "int":
+				case "java.lang.Integer":
+					NumberPath<Integer> propertyGtInteger = pathBuilder.getNumber(filter.getKey(), Integer.class);
+					expression = expressionAnd(expression, propertyGtInteger.lt(Integer.valueOf(filter.getValue()))
+							.or(propertyGtInteger.eq(Integer.valueOf(filter.getValue()))));
+					break;
+				case "double":
+				case "java.lang.Double":
+					NumberPath<Double> propertyGtDouble = pathBuilder.getNumber(filter.getKey(), Double.class);
+					expression = expressionAnd(expression, propertyGtDouble.lt(Double.valueOf(filter.getValue()))
+							.or(propertyGtDouble.eq(Double.valueOf(filter.getValue()))));
+					break;
+//				case "java.sql.Date":
+//					DatePath propertyGtDate = pathBuilder.getDate(filter.getKey(), Date.class);
+//					expression = expressionAnd(expression,
+//							propertyGtDate.gt(Date.from(Instant.parse(filter.getValue()))));
+//					break;
+				default:
+					throw new IllegalArgumentException(
+							"Invalid operation filter " + filter.getOperation() + " for type " + type.getName());
+				}
 				break;
 			default:
-				break;
+				throw new IllegalArgumentException(
+						"Invalid operation filter " + filter.getOperation() + " for type " + type.getName());
 			}
 		}
 		return expression;
@@ -73,15 +184,18 @@ public class PredicateBuilder<T> {
 	private Object convertToValue(Class type, String value) {
 		switch (type.getName()) {
 		case "long":
+		case "java.lang.Long":
 			return Long.valueOf(value);
 		case "java.lang.String":
 			return value;
-		case "Integer":
+		case "int":
+		case "java.lang.Integer":
 			return Integer.parseInt(value);
 		case "double":
+		case "java.lang.Double":
 			return Double.parseDouble(value);
-			
-		//TODO Falta converter outros tipos	
+
+		// TODO Falta converter outros tipos
 		default:
 			break;
 		}
@@ -97,11 +211,16 @@ public class PredicateBuilder<T> {
 
 	public static List<SearchCriteria> getCriterias(String search) {
 		search = search == null ? "" : search.trim();
-		Pattern pattern = Pattern.compile("(\\w+?)(:|<|>|>=|<=|contains|=)((\\w|\\s)+?),");
+		// https://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html
+		Pattern pattern = Pattern.compile("(\\w+?)(:|<|>|>=|<=|contains|=|!=)((\\w|\\s)+?),");
 		Matcher matcher = pattern.matcher(search + ",");
 		List<SearchCriteria> criterias = new ArrayList<SearchCriteria>();
 		while (matcher.find()) {
 			criterias.add(new SearchCriteria(matcher.group(1), matcher.group(2), matcher.group(3)));
+		}
+
+		if (search != null && search.length() > 0 && criterias.isEmpty()) {
+			throw new IllegalArgumentException("Invalid Filter");
 		}
 		return criterias;
 	}

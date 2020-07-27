@@ -18,6 +18,9 @@ import com.undcon.app.exceptions.UndconException;
 import com.undcon.app.model.IncomeEntity;
 import com.undcon.app.services.IncomeService;
 
+/**
+ * Api de Receitas
+ */
 @Component
 @Path("/incomes")
 public class IncomeApi {

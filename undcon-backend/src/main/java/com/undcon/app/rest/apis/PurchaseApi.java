@@ -20,6 +20,9 @@ import com.undcon.app.model.PurchaseEntity;
 import com.undcon.app.model.PurchaseItemEntity;
 import com.undcon.app.services.PurchaseService;
 
+/**
+ * Api de Compras
+ */
 @Component
 @Path("/purchases")
 public class PurchaseApi {

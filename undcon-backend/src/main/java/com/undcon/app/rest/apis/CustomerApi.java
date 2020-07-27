@@ -18,6 +18,9 @@ import com.undcon.app.exceptions.UndconException;
 import com.undcon.app.model.CustomerEntity;
 import com.undcon.app.services.CustomerService;
 
+/**
+ * Api de Clientes
+ */
 @Component
 @Path("/customers")
 public class CustomerApi {

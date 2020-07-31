@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { CustomerService } from '@app/core/service/customer/customer.service';
+import { Customer } from '@app/core/model/customer';
+import { Page } from '@app/core/model/page';
+import { Employee } from '@app/core/model/employee';
 
 @Component({
   selector: 'app-sale-detail',
@@ -8,63 +12,18 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class SaleDetailComponent implements OnInit {
 
-  constructor(private router: Router, private rt: ActivatedRoute) { }
+  constructor(private router: Router, private rt: ActivatedRoute, private cs: CustomerService) { }
 
-  ngOnInit(): void {
+  data: Customer[];
+
+  async ngOnInit() {
+    this.data = ((await this.cs.getAll().toPromise()) as Page<
+      Customer
+    >).content
   }
 
   goBack() {
     const previousRoute = "../";
     this.router.navigate([previousRoute], { relativeTo: this.rt.parent });
-}
-
-searchText = "";
-usersArray = [
-  {
-    id: 1,
-    name: "Leanne Graham",
-    username: "Bret",
-    email: "Sincere@april.biz",
-    address: {
-      street: "Kulas Light",
-      suite: "Apt. 556",
-      city: "Gwenborough",
-      zipcode: "92998-3874",
-      geo: {
-        lat: "-37.3159",
-        lng: "81.1496"
-      }
-    },
-    phone: "1-770-736-8031 x56442",
-    website: "hildegard.org",
-    company: {
-      name: "Romaguera-Crona",
-      catchPhrase: "Multi-layered client-server neural-net",
-      bs: "harness real-time e-markets"
-    }
-  },
-  {
-    id: 2,
-    name: "Ervin Howell",
-    username: "Antonette",
-    email: "Shanna@melissa.tv",
-    address: {
-      street: "Victor Plains",
-      suite: "Suite 879",
-      city: "Wisokyburgh",
-      zipcode: "90566-7771",
-      geo: {
-        lat: "-43.9509",
-        lng: "-34.4618"
-      }
-    },
-    phone: "010-692-6593 x09125",
-    website: "anastasia.net",
-    company: {
-      name: "Deckow-Crist",
-      catchPhrase: "Proactive didactic contingency",
-      bs: "synergize scalable supply-chains"
-    }
   }
-];
 }

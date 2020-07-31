@@ -69,3 +69,7 @@ input::-webkit-inner-spin-button {
 .pad-0 {
   padding: 0px;
 }
+
+.pad-t-0 {
+  padding-top: 0px
+}

@@ -1,45 +1,24 @@
-<div *ngIf="!showSimplePanel">
-  <div class="card primary-system-color">
-    <div class="card-header text-light secondary-system-color cursor-pointer" (click)="filters.toggle()">
-      <div class="close pull-right">
-        <i *ngIf="isTheFilterPanelExpanded" class="fas fa-angle-up text-light"></i>
-        <i *ngIf="!isTheFilterPanelExpanded" class="fas fa-angle-down text-light"></i>
-      </div>
-      {{ panelTitle | translate }}
-    </div>
-    <div mdbCollapse [isCollapsed]="true" (expanded)="updateExpandedFlagPanel()" (collapsed)="updateExpandedFlagPanel()" #filters="bs-collapse">
-      <div class="card-body">
-        <ng-content select="[body]"></ng-content>
-      </div>
-      <div class="card-footer secondary-system-color">
-        <ul class="nav nav-pills card-header-pills">
-          <button mdbBtn *ngIf="showDefaultSearchButtons" type="button" color="primary" outline="true" (click)="filters.toggle(); onSearch()" mdbWavesEffect>Buscar</button>
-          <button mdbBtn *ngIf="showDefaultSearchButtons" type="button" color="mdb-color" outline="true" (click)="filters.toggle(); onClear()" mdbWavesEffect>Limpar</button>
-          <li class="nav-item">
-            <ng-content select="[footer]"></ng-content>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</div>
 
-<div *ngIf="showSimplePanel">
-  <div class="card primary-system-color">
-    <div *ngIf="showHeader" class="card-header text-light secondary-system-color cursor-pointer">
-      {{ panelTitle | translate }}
+<div class="card primary-system-color">
+  <div class="card-header text-light secondary-system-color cursor-pointer" (click)="filters.toggle()">
+    <div class="close pull-right">
+      <i *ngIf="isTheFilterPanelExpanded" class="fas fa-angle-up text-light" aria-hidden="true"></i>
+      <i *ngIf="!isTheFilterPanelExpanded" class="fas fa-angle-down text-light" aria-hidden="true"></i>
     </div>
-    <div>
-      <div class="card-body">
-        <ng-content select="[body]"></ng-content>
-      </div>
-      <div *ngIf="showFooter" class="card-footer secondary-system-color">
-        <ul class="nav nav-pills card-header-pills">
-          <li class="nav-item">
-            <ng-content select="[footer]"></ng-content>
-          </li>
-        </ul>
-      </div>
+    {{ panelTitle | translate }}
+  </div>
+  <div mdbCollapse [isCollapsed]="true" (expanded)="updateExpandedFlagPanel()" (collapsed)="updateExpandedFlagPanel()" #filters="bs-collapse">
+    <div class="card-body pad-t-0">
+      <ng-content select="[body]"></ng-content>
+    </div>
+    <div class="card-footer secondary-system-color">
+      <ul class="nav nav-pills card-header-pills">
+        <button mdbBtn *ngIf="showDefaultSearchButtons" type="button" color="primary" outline="true" (click)="filters.toggle(); onSearch()" mdbWavesEffect>Buscar</button>
+        <button mdbBtn *ngIf="showDefaultSearchButtons" type="button" color="mdb-color" outline="true" (click)="filters.toggle(); onClear()" mdbWavesEffect>Limpar</button>
+        <li class="nav-item">
+          <ng-content select="[footer]"></ng-content>
+        </li>
+      </ul>
     </div>
   </div>
 </div>

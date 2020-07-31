@@ -21,6 +21,7 @@ import { RouterModule } from '@angular/router';
 import { DialogComponent } from '@component/dialog/dialog.component';
 import { TableComponent } from '@component/table/table.component';
 import { PanelComponent } from '@component/panel/panel.component';
+import { SimplePanelComponent } from '@component/simple-panel/simple-panel.component';
 import { ValidationComponent } from '@component/validation/validation.component';
 import { EmptyComponent } from '@component/empty/empty.component';
 import { EmptyChildrenComponent } from '@component/empty-children/empty-children.component';
@@ -30,12 +31,13 @@ export let SharedInjector: Injector;
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
 }
-
+import {AutocompleteLibModule} from 'angular-ng-autocomplete';
 @NgModule({
   declarations: [
     DialogComponent,
     TableComponent,
     PanelComponent,
+    SimplePanelComponent,
     ValidationComponent,
     EmptyComponent,
     EmptyChildrenComponent
@@ -51,6 +53,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     NgxPaginationModule,
     TableComponent,
     PanelComponent,
+    SimplePanelComponent,
     CheckboxModule,
     ValidationComponent,
     EmptyComponent,

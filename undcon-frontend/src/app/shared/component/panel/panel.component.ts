@@ -9,9 +9,6 @@ export class PanelComponent implements OnInit {
   @Output() clear: EventEmitter<any> = new EventEmitter();
   @Input() panelTitle: string;
   @Input() showDefaultSearchButtons = true;
-  @Input() showSimplePanel = false;
-  @Input() showHeader = true;
-  @Input() showFooter = true;
   isTheFilterPanelExpanded = true;
 
   constructor() {}

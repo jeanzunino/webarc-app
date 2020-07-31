@@ -1,11 +1,11 @@
-import { Component } from "@angular/core";
-import { TranslateService } from "@ngx-translate/core";
+import { Component } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 
-import { AuthService } from "@service/auth/auth.service";
+import { AuthService } from '@service/auth/auth.service';
 
 @Component({
-  selector: "app-root",
-  templateUrl: "./app.component.html",
+  selector: 'app-root',
+  templateUrl: './app.component.html',
 })
 export class AppComponent {
   displayMenu: boolean = false;

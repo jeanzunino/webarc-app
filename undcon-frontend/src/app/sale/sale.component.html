@@ -1,8 +1,16 @@
-<div class="container-fluid screen-top screen-bottom">
-  <app-panel [panelTitle]="'filtros'">
-  </app-panel>
-  <div class="card-filter--margin-top">
-    <app-table [pageValues]="items" [tableValues]="tableValues" [updateCurrentPage]="currentPage"
-      (reloadItems)="reloadItems($event)" (clickItem)="onClickItem($event)"></app-table>
+<app-panel panelTitle="filtros" (search)="onSearch()" (clear)="onClear()">
+  <div body>
+    <div class="row">
+      <div class="col-6">
+        <div class="md-form">
+          <input type="text" id="name" class="form-control text-light" [(ngModel)]="name" mdbInput />
+          <label for="name" class="text-light">Nome</label>
+        </div>
+      </div>
+    </div>
   </div>
+</app-panel>
+<div class="card-filter--margin-top">
+  <app-table [pageValues]="items" [tableValues]="tableValues" [updateCurrentPage]="currentPage"
+    (reloadItems)="reloadItems($event)" (clickItem)="onClickItem($event)"></app-table>
 </div>

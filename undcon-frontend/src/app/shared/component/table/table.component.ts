@@ -36,6 +36,7 @@ export class TableComponent implements OnInit {
   }
 
   getFieldsOfTable(item, tableValue: TableValues) {
+    debugger;
     let finalValue = '';
     const split = tableValue.field.split('.');
     if (split.length > 1) {

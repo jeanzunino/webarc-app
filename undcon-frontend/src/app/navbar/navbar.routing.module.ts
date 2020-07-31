@@ -1,80 +1,80 @@
-import { NgModule } from "@angular/core";
-import { RouterModule, Routes } from "@angular/router";
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
 
-import { PageNotFoundComponent } from "@app/page-not-found/page-not-found.component";
-import { LoginComponent } from "@app/login/login.component";
-import { AuthGuard } from "@guard/auth/auth.guard";
-import { PageEnum } from "@enum/page-enum";
+import { PageNotFoundComponent } from '@app/page-not-found/page-not-found.component';
+import { LoginComponent } from '@app/login/login.component';
+import { AuthGuard } from '@guard/auth/auth.guard';
+import { PageEnum } from '@enum/page-enum';
 
 const routes: Routes = [
   {
-    path: "",
-    redirectTo: "/home",
-    pathMatch: "full",
+    path: '',
+    redirectTo: '/home',
+    pathMatch: 'full',
     canActivate: [AuthGuard],
   },
   { path: PageEnum.LOGIN, component: LoginComponent },
   {
     path: PageEnum.HOME,
     loadChildren: () =>
-      import("@app/home/home.module").then((m) => m.HomeModule),
+      import('@app/home/home.module').then((m) => m.HomeModule),
   },
   {
     path: PageEnum.USER,
     loadChildren: () =>
-      import("@app/user/user.module").then((m) => m.UserModule),
+      import('@app/user/user.module').then((m) => m.UserModule),
   },
   {
     path: PageEnum.EMPLOYEE,
     loadChildren: () =>
-      import("@app/employee/employee.module").then((m) => m.EmployeeModule),
+      import('@app/employee/employee.module').then((m) => m.EmployeeModule),
   },
   {
     path: PageEnum.CUSTOMER,
     loadChildren: () =>
-      import("@app/customer/customer.module").then((m) => m.CustomerModule),
+      import('@app/customer/customer.module').then((m) => m.CustomerModule),
   },
   {
     path: PageEnum.PROVIDER,
     loadChildren: () =>
-      import("@app/provider/provider.module").then((m) => m.ProviderModule),
+      import('@app/provider/provider.module').then((m) => m.ProviderModule),
   },
   {
     path: PageEnum.PRODUCT,
     loadChildren: () =>
-      import("@app/product/product.module").then((m) => m.ProductModule),
+      import('@app/product/product.module').then((m) => m.ProductModule),
   },
   {
     path: PageEnum.PRODUCT_CATEGORY,
     loadChildren: () =>
-      import("@app/product-category/product-category.module").then(
+      import('@app/product-category/product-category.module').then(
         (m) => m.ProductCategoryModule
       ),
   },
   {
     path: PageEnum.PERMISSION,
     loadChildren: () =>
-      import("@app/permission/permission.module").then(
+      import('@app/permission/permission.module').then(
         (m) => m.PermissionModule
       ),
   },
   {
     path: PageEnum.SERVICE_TYPE,
     loadChildren: () =>
-      import("@app/service-type/service-type.module").then(
+      import('@app/service-type/service-type.module').then(
         (m) => m.ServiceTypeModule
       ),
   },
   //{ path: PageEnum.FINANCIAL, loadChildren: '@app/financial/financial.module#FinancialModule'},
   {
-    path: PageEnum.SALE,
+    path: '',
     loadChildren: () =>
-      import("@app/sale/sale.module").then((m) => m.SaleModule),
+      import('@app/sale/sale.module').then((m) => m.SaleModule),
   },
   {
     path: PageEnum.PURCHASE,
     loadChildren: () =>
-      import("@app/purchase/purchase.module").then((m) => m.PurchaseModule),
+      import('@app/purchase/purchase.module').then((m) => m.PurchaseModule),
   },
 
   //{ path: PageEnum.MENU_TEMPLATE, loadChildren: '@app/menuTemplate/menuTemplate.module#ManuTemplateModule'},
@@ -82,10 +82,10 @@ const routes: Routes = [
   {
     path: PageEnum.TENANT,
     loadChildren: () =>
-      import("@app/tenant/tenant.module").then((m) => m.TenantModule),
-  },
+      import('@app/tenant/tenant.module').then((m) => m.TenantModule),
+  }
 
-  { path: "**", component: PageNotFoundComponent, canActivate: [AuthGuard] },
+  // { path: '**', component: PageNotFoundComponent, canActivate: [AuthGuard] },
 ];
 
 @NgModule({

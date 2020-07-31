@@ -16,11 +16,14 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HttpClient } from '@angular/common/http';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { NgxMaskModule, MaskPipe } from 'ngx-mask';
+import { RouterModule } from '@angular/router';
 
 import { DialogComponent } from '@component/dialog/dialog.component';
 import { TableComponent } from '@component/table/table.component';
 import { PanelComponent } from '@component/panel/panel.component';
 import { ValidationComponent } from '@component/validation/validation.component';
+import { EmptyComponent } from '@component/empty/empty.component';
+import { EmptyChildrenComponent } from '@component/empty-children/empty-children.component';
 
 export let SharedInjector: Injector;
 
@@ -33,7 +36,9 @@ export function HttpLoaderFactory(http: HttpClient) {
     DialogComponent,
     TableComponent,
     PanelComponent,
-    ValidationComponent
+    ValidationComponent,
+    EmptyComponent,
+    EmptyChildrenComponent
   ],
   exports: [
     CommonModule,
@@ -47,7 +52,9 @@ export function HttpLoaderFactory(http: HttpClient) {
     TableComponent,
     PanelComponent,
     CheckboxModule,
-    ValidationComponent
+    ValidationComponent,
+    EmptyComponent,
+    EmptyChildrenComponent
   ],
   imports: [
     CommonModule,
@@ -61,7 +68,8 @@ export function HttpLoaderFactory(http: HttpClient) {
       },
     }),
     NgxPaginationModule,
-    NgxMaskModule.forRoot()
+    NgxMaskModule.forRoot(),
+    RouterModule
   ],
   providers: [
     MaskPipe

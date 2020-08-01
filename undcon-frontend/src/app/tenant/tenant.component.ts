@@ -9,6 +9,7 @@ import { Tenant } from '@model/tenant';
 import { TenantEditComponent } from '@app/tenant/tenant-edit/tenant-edit.component';
 import { QueryFilterEnum } from '@core/enum/query-filter';
 import { getQueryFilter } from '@shared/utils/utils';
+import { FormatEnum } from '@core/enum/format-enum';
 
 @Component({
   selector: 'app-tenant',
@@ -25,7 +26,7 @@ export class TenantComponent extends GridViewComponent<Tenant> {
     .set('name', 'tenant.name')
     .set('email', 'tenant.email')
     .set('schemaName', 'tenant.schemaName')
-    .set('phone', 'tenant.phone', '(00) 00000-0000')
+    .set('phone', 'tenant.phone', FormatEnum.PHONE_MASK)
     .get();
 
   constructor(

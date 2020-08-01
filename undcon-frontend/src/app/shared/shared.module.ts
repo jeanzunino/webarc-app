@@ -17,6 +17,7 @@ import { HttpClient } from '@angular/common/http';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { NgxMaskModule, MaskPipe } from 'ngx-mask';
 import { RouterModule } from '@angular/router';
+import { AutocompleteLibModule } from 'angular-ng-autocomplete';
 
 import { DialogComponent } from '@component/dialog/dialog.component';
 import { TableComponent } from '@component/table/table.component';
@@ -25,13 +26,14 @@ import { SimplePanelComponent } from '@component/simple-panel/simple-panel.compo
 import { ValidationComponent } from '@component/validation/validation.component';
 import { EmptyComponent } from '@component/empty/empty.component';
 import { EmptyChildrenComponent } from '@component/empty-children/empty-children.component';
+import { AutocompleteComponent } from './component/autocomplete/autocomplete.component';
 
 export let SharedInjector: Injector;
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
 }
-import {AutocompleteLibModule} from 'angular-ng-autocomplete';
+
 @NgModule({
   declarations: [
     DialogComponent,
@@ -40,7 +42,9 @@ import {AutocompleteLibModule} from 'angular-ng-autocomplete';
     SimplePanelComponent,
     ValidationComponent,
     EmptyComponent,
-    EmptyChildrenComponent
+    EmptyChildrenComponent,
+    //TODO rever
+    AutocompleteComponent
   ],
   exports: [
     CommonModule,
@@ -57,7 +61,9 @@ import {AutocompleteLibModule} from 'angular-ng-autocomplete';
     CheckboxModule,
     ValidationComponent,
     EmptyComponent,
-    EmptyChildrenComponent
+    EmptyChildrenComponent,
+    // AutocompleteComponent,
+    AutocompleteLibModule
   ],
   imports: [
     CommonModule,
@@ -72,7 +78,8 @@ import {AutocompleteLibModule} from 'angular-ng-autocomplete';
     }),
     NgxPaginationModule,
     NgxMaskModule.forRoot(),
-    RouterModule
+    RouterModule,
+    AutocompleteLibModule
   ],
   providers: [
     MaskPipe

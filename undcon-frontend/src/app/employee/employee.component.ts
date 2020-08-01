@@ -9,6 +9,7 @@ import { EmployeeEditComponent } from '@app/employee/employee-edit/employee-edit
 import { Table } from '@shared/model/table';
 import { QueryFilterEnum } from '@core/enum/query-filter';
 import { getQueryFilter } from '@shared/utils/utils';
+import { FormatEnum } from '@core/enum/format-enum';
 
 @Component({
   selector: 'app-employee',
@@ -17,7 +18,7 @@ import { getQueryFilter } from '@shared/utils/utils';
 export class EmployeeComponent extends GridViewComponent<Employee> {
   tableValues = new Table()
     .set('name', 'employee.name')
-    .set('phone', 'employee.phone', '(00) 00000-0000')
+    .set('phone', 'employee.phone', FormatEnum.PHONE_MASK)
     .get();
   name = null;
   phone = null;

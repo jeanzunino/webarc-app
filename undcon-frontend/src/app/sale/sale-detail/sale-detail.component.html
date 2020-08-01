@@ -1,10 +1,52 @@
-<app-simple-panel panelTitle="filtros">
+<app-simple-panel [panelTitle]="entity.status.toUpperCase()" [panelTitleColor]="'color-black'" [showHeader]="true"
+                  [icon]="iconPanelHeader" [headerColor]="colorPanelHeader">
   <div body>
-    <button mdbBtn type="button" color="primary" outline="true" (click)="goBack();" mdbWavesEffect>Voltar</button>
+
+    <div class="row">
+      <div class="col-12">
+        <div class="md-form">
+          <input type="text" id="name" class="form-control text-light" mdbInput />
+          <label for="name" class="text-light">Nome</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-6 ng-autocomplete">
+        <label for="asd" class="text-light active">Cliente</label>
+        <ng-autocomplete id="asd"[data]="customers" [searchKeyword]="customerKeyword" [initialValue]="customerInitialValue" [itemTemplate]="itemTemplate"
+                         [notFoundTemplate]="notFoundTemplate" (selected)='customerSelectEvent($event)' (inputChanged)='teste($event)' minQueryLength="3">
+        </ng-autocomplete>
+
+        <ng-template #itemTemplate let-item>
+          <a [innerHTML]="item.name"></a>
+        </ng-template>
+
+        <ng-template #notFoundTemplate let-notFound>
+          <div [innerHTML]="notFound"></div>
+        </ng-template>
+      </div>
+
+      <div class="col-6 ng-autocomplete">
+        <label for="ewq" class="text-light active">Venda</label>
+        <ng-autocomplete id="ewq" [data]="employees" [searchKeyword]="employeeKeyword" [initialValue]="employeeInitialValue" [itemTemplate]="itemTemplate"
+                         [notFoundTemplate]="notFoundTemplate" (selected)='employeeSelectEvent($event)'>
+        </ng-autocomplete>
+
+        <ng-template #itemTemplate let-item>
+          <a [innerHTML]="item.name"></a>
+        </ng-template>
+
+        <ng-template #notFoundTemplate let-notFound>
+          <div [innerHTML]="notFound"></div>
+        </ng-template>
+      </div>
+    </div>
+
+    <div class="row">
+      <button mdbBtn type="button" color="primary" outline="true" (click)="goBack();" mdbWavesEffect>Voltar</button>
+    </div>
+
+
   </div>
 </app-simple-panel>
-<div class="card-filter--margin-top">
-
-
-
-

@@ -1,17 +1,22 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MDBModalService } from 'angular-bootstrap-md';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 import { Sale } from '@model/sale';
 import { SaleService } from '@service/sale/sale.service';
 import { GridViewComponent } from '@component/grid-view/grid-view.component';
 import { Table } from '@shared/model/table';
+import { SharedInjector } from '@shared/shared.module';
+import { FormatEnum } from '@app/core/enum/format-enum';
 
 @Component({
   selector: 'app-sale',
   templateUrl: './sale.component.html',
 })
 export class SaleComponent extends GridViewComponent<Sale> {
+
+  spinner = SharedInjector.get(NgxSpinnerService);
   tableValues = new Table()
     .set('id', 'sale.id')
     .set('customer.name', 'sale.customer-name')
@@ -19,7 +24,7 @@ export class SaleComponent extends GridViewComponent<Sale> {
     .set('salesman.name', 'sale.salesman-name')
     .set('status', 'sale.status')
     .set('user.login', 'sale.user-login')
-    .set('billed', 'sale.billed')
+    .set('billed', 'sale.billed', FormatEnum.YES_NO)
     .get();
   name = null;
 
@@ -34,7 +39,8 @@ export class SaleComponent extends GridViewComponent<Sale> {
   }
 
   onClickItem(sale: Sale) {
-    this.router.navigate((sale === null ? [0] : [sale.id]), { relativeTo: this.rt });
+    this.spinner.show();
+    this.router.navigate((sale === null ? ['new'] : [sale.id]), { relativeTo: this.rt });
   }
 
   open() {

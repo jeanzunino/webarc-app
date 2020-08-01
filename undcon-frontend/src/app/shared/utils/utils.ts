@@ -4,6 +4,7 @@ import { MDBModalService } from 'angular-bootstrap-md';
 import { SharedInjector } from '@shared/shared.module';
 import { Entity } from '@model/entity';
 import { QueryFilterEnum } from '@app/core/enum/query-filter';
+import { FormatEnum } from '@app/core/enum/format-enum';
 
 const translate = SharedInjector.get(TranslateService);
 
@@ -35,4 +36,8 @@ export const openDialog = (item: Entity, obj: Object) => {
 
 export const getQueryFilter = (field, operation: QueryFilterEnum) => {
   return `${field}${operation}`;
-}
+};
+
+export const getPhoneMask = (formatEnum: FormatEnum) => {
+  return getTranslate(formatEnum);
+};

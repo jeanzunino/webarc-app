@@ -14,21 +14,21 @@ export class EntityService<T> {
   ) {}
 
   public getAll(filters?: Map<string, string>, pageNumber: number = 0, sizeNumber: number = 10) {
-    let filterAsString: string = '';
-    if(filters){
+    let filterAsString = '';
+    if (filters) {
       filters.forEach((value: string, key: string) => {
         if (value) {
           filterAsString += '&' + key + value;
         }
       });
     }
-    let params : {};
+    let params: {};
     params = {filter: filterAsString, page: pageNumber, size: sizeNumber };
     return this.http.get(`${this.baseUrl}/${this.entityUrl}`, { params });
   }
 
-  public get() {
-    return this.http.get<T>(`${this.baseUrl}/${this.entityUrl}`);
+  public get(id: number) {
+    return this.http.get<T>(`${this.baseUrl}/${this.entityUrl}/${id}`);
   }
 
   public post(entity: T) {

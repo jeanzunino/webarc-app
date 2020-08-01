@@ -9,6 +9,23 @@ export class SimplePanelComponent implements OnInit {
   @Input() showHeader = false;
   @Input() showFooter = false;
 
+  iconFinal = '';
+  @Input() set icon(icon: string) {
+    this.iconFinal = icon;
+  }
+
+  iconColorFinal = '';
+  @Input() set iconColor(iconColor: string) {
+    this.iconColorFinal = iconColor;
+  }
+
+  headerColorFinal = 'secondary-system-color';
+  @Input() set headerColor(color: string) {
+    this.headerColorFinal = color;
+  }
+
+  @Input() panelTitleColor = 'text-light';
+
   constructor() {}
 
   ngOnInit(): void { }

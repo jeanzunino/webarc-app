@@ -9,6 +9,7 @@ import { GridViewComponent } from '@component/grid-view/grid-view.component';
 import { Table } from '@shared/model/table';
 import { QueryFilterEnum } from '@core/enum/query-filter';
 import { getQueryFilter } from '@shared/utils/utils';
+import { FormatEnum } from '@app/core/enum/format-enum';
 
 @Component({
   selector: 'app-user',
@@ -17,8 +18,11 @@ import { getQueryFilter } from '@shared/utils/utils';
 export class UserComponent extends GridViewComponent<User> {
   tableValues = new Table()
     .set('login', 'user.login')
+    .set('employee.name', 'user.employee-name')
     .set('permission.name', 'user.permission')
+    .set('active', 'user.active', FormatEnum.YES_NO)
     .get();
+
   modalRef: MDBModalRef;
   name = null;
 
@@ -31,6 +35,7 @@ export class UserComponent extends GridViewComponent<User> {
   }
 
   onClickItem(item) {
+    debugger
     this.openDialog(item, UserEditComponent);
   }
 

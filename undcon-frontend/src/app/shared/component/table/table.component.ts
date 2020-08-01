@@ -1,8 +1,10 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { MaskPipe } from 'ngx-mask';
+import { TranslateService } from '@ngx-translate/core';
 
 import { TableValues } from '@shared/model/table';
 import { Page } from '@model/page';
-import { MaskPipe } from 'ngx-mask';
+import { FormatEnum } from '@app/core/enum/format-enum';
 
 @Component({
   selector: 'app-table',
@@ -27,7 +29,8 @@ export class TableComponent implements OnInit {
     this.currentPage = page;
   }
 
-  constructor(private maskPipe: MaskPipe) { }
+  constructor(private maskPipe: MaskPipe,
+              private translate: TranslateService) { }
 
   ngOnInit(): void {}
 
@@ -36,7 +39,6 @@ export class TableComponent implements OnInit {
   }
 
   getFieldsOfTable(item, tableValue: TableValues) {
-    debugger;
     let finalValue = '';
     const split = tableValue.field.split('.');
     if (split.length > 1) {
@@ -48,8 +50,12 @@ export class TableComponent implements OnInit {
       finalValue = item[tableValue.field];
     }
 
-    if (tableValue.mask) {
-      return this.maskPipe.transform(finalValue, tableValue.mask);
+    if (tableValue.formatEnum) {
+      if (tableValue.formatEnum === FormatEnum.PHONE_MASK) {
+        return this.maskPipe.transform(finalValue, this.translate.instant(tableValue.formatEnum));
+      } else if (tableValue.formatEnum === FormatEnum.YES_NO) {
+        return finalValue ? this.translate.instant('yes') : this.translate.instant('no');
+      }
     }
 
     return finalValue;

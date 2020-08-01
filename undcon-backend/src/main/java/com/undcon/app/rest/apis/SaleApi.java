@@ -21,10 +21,12 @@ import org.springframework.util.Assert;
 import com.undcon.app.dtos.ProductItemRequestDto;
 import com.undcon.app.dtos.ProductSaledInfoDto;
 import com.undcon.app.dtos.SaleInfoDto;
+import com.undcon.app.dtos.SaleItemDto;
 import com.undcon.app.dtos.SaleRequestDto;
 import com.undcon.app.exceptions.UndconException;
 import com.undcon.app.model.SaleEntity;
 import com.undcon.app.model.SaleItemEntity;
+import com.undcon.app.model.SaleItemServiceEntity;
 import com.undcon.app.services.SaleService;
 
 /**
@@ -50,6 +52,15 @@ public class SaleApi {
 	public SaleEntity get(@PathParam("id") long id) throws UndconException {
 		SaleEntity Provider = service.findById(id);
 		return Provider;
+	}
+
+	@GET
+	@Path("/{id}/itens")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Page<SaleItemDto> getitens(@PathParam("id") long id, @QueryParam("page") Integer page, @QueryParam("size") Integer size)
+			throws UndconException {
+		Page<SaleItemDto> itens = service.getItens(id, page, size);
+		return itens;
 	}
 
 	@GET

@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.undcon.app.dtos.ProductItemRequestDto;
 import com.undcon.app.dtos.ProductSaledInfoDto;
 import com.undcon.app.dtos.SaleInfoDto;
+import com.undcon.app.dtos.SaleItemDto;
 import com.undcon.app.dtos.SaleRequestDto;
 import com.undcon.app.enums.ResourceType;
 import com.undcon.app.enums.SaleStatus;
@@ -23,11 +24,13 @@ import com.undcon.app.model.ProductEntity;
 import com.undcon.app.model.SaleEntity;
 import com.undcon.app.model.SaleItemEntity;
 import com.undcon.app.model.SaleItemProductEntity;
+import com.undcon.app.model.SaleItemServiceEntity;
 import com.undcon.app.model.UserEntity;
 import com.undcon.app.repositories.ISaleItemRepository;
 import com.undcon.app.repositories.ISaleRepository;
 import com.undcon.app.repositories.SaleRepositoryImpl;
 import com.undcon.app.utils.NumberUtils;
+import com.undcon.app.utils.PageUtils;
 
 @Component
 public class SaleService extends AbstractService<SaleEntity>{
@@ -183,6 +186,10 @@ public class SaleService extends AbstractService<SaleEntity>{
 
 	public List<ProductSaledInfoDto> getTopProductSaled(boolean billed) {
 		return saleRepositoryImpl.getTopProductSaled(billed);
+	}
+	
+	public Page<SaleItemDto> getItens(Long id, Integer page, Integer size) {
+		return saleRepositoryImpl.findAllById(id, PageUtils.createPageRequest(page, size));
 	}
 
 	@Override

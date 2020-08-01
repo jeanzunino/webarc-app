@@ -14,7 +14,6 @@ public class SaleItemProductEntity extends SaleItemEntity {
 	private ProductEntity product;
 
 	public SaleItemProductEntity() {
-		// TODO Auto-generated constructor stub
 	}
 
 	public SaleItemProductEntity(Long id, ProductEntity product, SaleEntity sale, UserEntity user,

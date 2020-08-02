@@ -2,6 +2,7 @@ package com.undcon.app.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -28,7 +29,7 @@ public abstract class SaleItemEntity {
 	private UserEntity user;
 
 	@ManyToOne
-	@JoinColumn(name = "vendedor_id", nullable = false)
+	@JoinColumn(name = "empregado_id", nullable = false)
 	private EmployeeEntity salesman;
 
 	@Column(name = "valor_unitario")

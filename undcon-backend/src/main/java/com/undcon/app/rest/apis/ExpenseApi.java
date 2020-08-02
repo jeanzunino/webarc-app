@@ -18,6 +18,9 @@ import com.undcon.app.exceptions.UndconException;
 import com.undcon.app.model.ExpenseEntity;
 import com.undcon.app.services.ExpenseService;
 
+/**
+ * Api de Despesas
+ */
 @Component
 @Path("/expenses")
 public class ExpenseApi {

@@ -18,6 +18,9 @@ import com.undcon.app.exceptions.UndconException;
 import com.undcon.app.model.ProductCategoryEntity;
 import com.undcon.app.services.ProductCategoryService;
 
+/**
+ * Api de Categoria de Produtos
+ */
 @Component
 @Path("/productCategories")
 public class ProductCategoryApi {

@@ -18,6 +18,9 @@ import com.undcon.app.exceptions.UndconException;
 import com.undcon.app.model.TenantEntity;
 import com.undcon.app.services.TenantService;
 
+/**
+ * Api de Tenants
+ */
 @Component
 @Path("/tenants")
 public class TenantApi {

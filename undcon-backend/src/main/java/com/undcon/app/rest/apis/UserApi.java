@@ -28,6 +28,9 @@ import com.undcon.app.model.UserEntity;
 import com.undcon.app.services.UserService;
 import com.undcon.app.utils.PageUtils;
 
+/**
+ * Api de Usuários
+ */
 @Component
 @Path("/users")
 public class UserApi {

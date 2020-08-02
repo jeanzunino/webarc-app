@@ -1,5 +1,6 @@
 package com.undcon.app.repositories;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -7,27 +8,113 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
+import com.querydsl.core.types.Order;
+import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.Path;
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.jpa.impl.JPAQuery;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.undcon.app.dtos.ProductSaledInfoDto;
+import com.undcon.app.dtos.SaleItemDto;
+import com.undcon.app.model.QSaleItemProductEntity;
+import com.undcon.app.model.QSaleItemServiceEntity;
+import com.undcon.app.model.SaleItemProductEntity;
+import com.undcon.app.model.SaleItemServiceEntity;
+import com.undcon.app.utils.PageUtils;
 
 @Repository
 public class SaleRepositoryImpl {
 
 	@Autowired
 	private EntityManager em;
-	
-	public Double getTotalSale(boolean billed){
-		Query query = em.createQuery("SELECT SUM((s.quantity * s.price)) AS total from SaleItemProductEntity s where s.sale.billed = :billed ", Double.class);
+
+	@Autowired
+	private ISaleItemProductRepository saleItemProductRepository;
+
+	@Autowired
+	private ISaleItemServiceRepository saleItemServiceRepository;
+
+	public Double getTotalSale(boolean billed) {
+		Query query = em.createQuery(
+				"SELECT SUM((s.quantity * s.price)) AS total from SaleItemProductEntity s where s.sale.billed = :billed ",
+				Double.class);
 		query.setParameter("billed", billed);
 		Double b = (Double) query.getSingleResult();
 		return b;
 	}
-	
-	public List<ProductSaledInfoDto> getTopProductSaled(boolean billed){
-		TypedQuery<ProductSaledInfoDto>  query = em.createQuery("SELECT new com.undcon.app.dtos.ProductSaledInfoDto(s.product.id as productId, s.product.name as productName, SUM((s.quantity )) AS quantity, SUM((s.quantity * s.price)) AS totalSaled ) from SaleItemProductEntity s where s.sale.billed = :billed GROUP BY s.product.id, s.product.name", ProductSaledInfoDto.class);
+
+	public List<ProductSaledInfoDto> getTopProductSaled(boolean billed) {
+		TypedQuery<ProductSaledInfoDto> query = em.createQuery(
+				"SELECT new com.undcon.app.dtos.ProductSaledInfoDto(s.product.id as productId, s.product.name as productName, SUM((s.quantity )) AS quantity, SUM((s.quantity * s.price)) AS totalSaled ) from SaleItemProductEntity s where s.sale.billed = :billed GROUP BY s.product.id, s.product.name",
+				ProductSaledInfoDto.class);
 		query.setParameter("billed", billed);
 		List<ProductSaledInfoDto> b = query.getResultList();
 		return b;
+	}
+
+	public Page<SaleItemDto> findAllById(Long id, Pageable pageable) {
+		JPAQueryFactory jpaQueryFactory = new JPAQueryFactory(em);
+		JPAQuery<SaleItemProductEntity> query = jpaQueryFactory.selectFrom(QSaleItemProductEntity.saleItemProductEntity)
+				.where(QSaleItemProductEntity.saleItemProductEntity.sale.id.eq(id));
+		query.limit(pageable.getPageSize());
+		query.offset(pageable.getPageNumber() * pageable.getPageSize());
+		Path<Object> fieldPath = Expressions.path(Object.class, QSaleItemProductEntity.saleItemProductEntity, "id");
+
+		query.orderBy(new OrderSpecifier(Order.ASC, fieldPath));
+		List<SaleItemProductEntity> itensProduct = query.fetch();
+		List<SaleItemDto> result = new ArrayList<SaleItemDto>();
+		for (SaleItemProductEntity saleItemProductEntity : itensProduct) {
+			result.add(new SaleItemDto(saleItemProductEntity.getId(), saleItemProductEntity.getProduct().getName(),
+					saleItemProductEntity.getSale().getId(), true, saleItemProductEntity.getUser().getLogin(),
+					saleItemProductEntity.getSalesman().getName(), saleItemProductEntity.getPrice(),
+					saleItemProductEntity.getQuantity()));
+		}
+		long countItensProductTotal = saleItemProductRepository
+				.count(QSaleItemProductEntity.saleItemProductEntity.sale.id.eq(id));
+
+		if (result.size() < pageable.getPageSize()) {
+			jpaQueryFactory = new JPAQueryFactory(em);
+			JPAQuery<SaleItemServiceEntity> queryService = jpaQueryFactory
+					.select(QSaleItemServiceEntity.saleItemServiceEntity)
+					.from(QSaleItemServiceEntity.saleItemServiceEntity)
+					.where(QSaleItemServiceEntity.saleItemServiceEntity.sale.id.eq(id));
+			if (!result.isEmpty()) {
+				queryService.offset(0);
+				queryService.limit(pageable.getPageSize() - result.size());
+			} else {
+				queryService.offset(calcOffSetService(pageable, countItensProductTotal));
+				queryService.limit(pageable.getPageSize());
+			}
+			fieldPath = Expressions.path(Object.class, QSaleItemServiceEntity.saleItemServiceEntity, "id");
+			queryService.orderBy(new OrderSpecifier(Order.ASC, fieldPath));
+			List<SaleItemServiceEntity> itensService = queryService.fetch();
+			for (SaleItemServiceEntity saleItemServiceEntity : itensService) {
+				result.add(new SaleItemDto(saleItemServiceEntity.getId(), saleItemServiceEntity.getService().getName(),
+						saleItemServiceEntity.getSale().getId(), false, saleItemServiceEntity.getUser().getLogin(),
+						saleItemServiceEntity.getSalesman().getName(), saleItemServiceEntity.getPrice(),
+						saleItemServiceEntity.getQuantity()));
+			}
+		}
+
+		long countItensServiceTotal = saleItemServiceRepository
+				.count(QSaleItemServiceEntity.saleItemServiceEntity.sale.id.eq(id));
+		long total = countItensProductTotal + countItensServiceTotal;
+		return new PageImpl<SaleItemDto>(result, pageable, total);
+	}
+
+	private static long calcOffSetService(Pageable pageable, long countItensProductTotal) {
+		if(pageable.getPageNumber() == 0 ) {
+			return 0;
+		}
+		return (pageable.getPageNumber() * pageable.getPageSize()) - (countItensProductTotal % pageable.getPageSize()) - pageable.getPageSize();
+	}
+	
+	public static void main(String[] args) {
+		System.out.println(calcOffSetService(PageUtils.createPageRequest(2, 10), 13));
 	}
 }

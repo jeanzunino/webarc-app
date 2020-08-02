@@ -18,6 +18,9 @@ import com.undcon.app.exceptions.UndconException;
 import com.undcon.app.model.ProviderEntity;
 import com.undcon.app.services.ProviderService;
 
+/**
+ * Api de Forncedores
+ */
 @Component
 @Path("/providers")
 public class ProviderApi {

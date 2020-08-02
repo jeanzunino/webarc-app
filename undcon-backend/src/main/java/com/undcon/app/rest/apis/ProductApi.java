@@ -22,6 +22,9 @@ import com.undcon.app.mappers.ProductMapper;
 import com.undcon.app.model.ProductEntity;
 import com.undcon.app.services.ProductService;
 
+/**
+ * Api de Produtos
+ */
 @Component
 @Path("/products")
 public class ProductApi {

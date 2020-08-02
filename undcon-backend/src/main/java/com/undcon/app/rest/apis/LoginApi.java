@@ -16,6 +16,9 @@ import com.undcon.app.dtos.LoginResponseDto;
 import com.undcon.app.exceptions.UndconException;
 import com.undcon.app.services.LoginService;
 
+/**
+ * Api de Login
+ */
 @Component
 @Path("/login")
 public class LoginApi {

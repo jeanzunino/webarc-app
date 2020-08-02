@@ -49,7 +49,7 @@ public class ProductService extends AbstractService<ProductEntity> {
 	public List<ProductEntity> getStockMin() {
 		return productRepositoryImpl.getStockMin();
 	}
-
+	
 	@Override
 	protected JpaRepository<ProductEntity, Long> getRepository() {
 		return productRepository;

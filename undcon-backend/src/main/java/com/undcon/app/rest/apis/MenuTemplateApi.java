@@ -22,6 +22,9 @@ import com.undcon.app.repositories.IMenuTemplateItemRepository;
 import com.undcon.app.repositories.IMenuTemplateRepository;
 import com.undcon.app.services.MenuTemplateService;
 
+/**
+ * Api de Configuração do Menu
+ */
 @Component
 @Path("/menus")
 public class MenuTemplateApi {

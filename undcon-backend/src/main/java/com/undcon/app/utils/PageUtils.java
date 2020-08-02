@@ -8,7 +8,6 @@ public class PageUtils {
 	private static final int PAGE_SIZE_DEFAULT = 10;
 
 	private PageUtils() {
-		// TODO Auto-generated constructor stub
 	}
 
 	public static PageRequest createPageRequest(Integer page, Integer size) {

@@ -1,52 +1,149 @@
-<app-simple-panel [panelTitle]="entity.status.toUpperCase()" [panelTitleColor]="'color-black'" [showHeader]="true"
+<app-simple-panel [panelTitle]="getTitle()" [panelTitleColor]="'color-black'" [showHeader]="showPanelHeader"
                   [icon]="iconPanelHeader" [headerColor]="colorPanelHeader">
   <div body>
+    <form [formGroup]="formGroup">
+      <div class="row">
+        <div class="col-4">
+          <div class="md-form">
+            <input type="text" id="data" class="form-control text-light" formControlName="saleDate" mask="00/00/0000 00:00" mdbInput mdbValidate />
+            <label for="data" class="text-light">Data</label>
+            <app-validation [form]="saleDateForm" [validMessage]="'Válido'" [invalidMessage]="'Inválido'"></app-validation>
+          </div>
+        </div>
 
-    <div class="row">
-      <div class="col-12">
-        <div class="md-form">
-          <input type="text" id="name" class="form-control text-light" mdbInput />
-          <label for="name" class="text-light">Nome</label>
+        <div class="col-4 ng-autocomplete">
+          <label for="customers" class="text-light">Cliente</label>
+          <ng-autocomplete id="customers" [data]="customers" [searchKeyword]="customerKeyword" [initialValue]="customerInitialValue" [itemTemplate]="customerTemplate"
+                          [notFoundTemplate]="customerNotFoundTemplate" (selected)='customerSelectEvent($event)'
+                          (inputChanged)="customerChangeEvent($event)" minQueryLength="3" notFoundText="Nenhum cliente encontrado"
+                          (inputCleared)="customerInputCleared()" #ngAutoCompleteCustomer>
+          </ng-autocomplete>
+        </div>
+
+        <div class="col-4 ng-autocomplete">
+          <label for="employees" class="text-light">Venda</label>
+          <ng-autocomplete id="employees" [data]="employees" [searchKeyword]="employeeKeyword" [initialValue]="employeeInitialValue" [itemTemplate]="employeeTemplate"
+                          [notFoundTemplate]="employeeNotFoundTemplate" (selected)='employeeSelectEvent($event)'
+                          (inputChanged)="employeeChangeEvent($event)" minQueryLength="3" notFoundText="Nenhum funcionário encontrado"
+                          (inputCleared)="employeeInputCleared()" #ngAutoCompleteEmployee>
+          </ng-autocomplete>
         </div>
       </div>
-    </div>
+    </form>
 
     <div class="row">
-      <div class="col-6 ng-autocomplete">
-        <label for="asd" class="text-light active">Cliente</label>
-        <ng-autocomplete id="asd"[data]="customers" [searchKeyword]="customerKeyword" [initialValue]="customerInitialValue" [itemTemplate]="itemTemplate"
-                         [notFoundTemplate]="notFoundTemplate" (selected)='customerSelectEvent($event)' (inputChanged)='teste($event)' minQueryLength="3">
-        </ng-autocomplete>
+      <div class="col-6">
+        <app-simple-panel panelColor="secondary-system-color">
+          <div body>
+            <div class="row">
+              <div class="col-8">
+                <label for="product" class="text-light">Produto</label>
+                <ng-autocomplete id="product" [data]="products" [searchKeyword]="productKeyword" [itemTemplate]="productTemplate"
+                                [notFoundTemplate]="productNotFoundTemplate" (selected)='productSelectEvent($event)'
+                                (inputChanged)="productChangeEvent($event)" minQueryLength="3" notFoundText="Nenhum produto encontrado"
+                                (inputCleared)="productInputCleared()" #ngAutoCompleteProduct>
+                </ng-autocomplete>
+              </div>
+              <div class="col-4">
+                <p class="text-light">Valor unitário</p>
+                <p class="text-light font-weight-bold">R$ {{productPrice}}</p>
+              </div>
+            </div>
 
-        <ng-template #itemTemplate let-item>
-          <a [innerHTML]="item.name"></a>
-        </ng-template>
+            <div class="row">
+              <div class="col-8">
+                <div class="md-form">
+                  <input type="text" id="qts" class="form-control text-light" [(ngModel)]="productQtd" mask="0000" (keyup)="updateProductTotal()" mdbInput />
+                  <label for="qts" class="text-light">Quantidade</label>
+                </div>
+              </div>
+              <div class="col-4">
+                <p class="text-light">Valor total</p>
+                <p class="text-light font-weight-bold font-size-25">R$ {{productPriceTotal}}</p>
+              </div>
+            </div>
 
-        <ng-template #notFoundTemplate let-notFound>
-          <div [innerHTML]="notFound"></div>
-        </ng-template>
+            <div class="row">
+              <div class="col-12">
+                <button mdbBtn type="button" color="primary" outline="true" (click)="goBack();" mdbWavesEffect>Adicionar</button>
+              </div>
+            </div>
+          </div>
+        </app-simple-panel>
       </div>
+      <div class="col-6">
+        <app-simple-panel panelColor="secondary-system-color">
+          <div body>
+            <div class="row">
+              <div class="col-8">
+                <label for="product" class="text-light">Serviço</label>
+                <ng-autocomplete id="product" [data]="services" [searchKeyword]="serviceKeyword" [itemTemplate]="serviceTemplate"
+                                [notFoundTemplate]="serviceNotFoundTemplate" (selected)='serviceSelectEvent($event)'
+                                (inputChanged)="serviceChangeEvent($event)" minQueryLength="3" notFoundText="Nenhum serviço encontrado"
+                                (inputCleared)="serviceInputCleared()" #ngAutoCompleteService>
+                </ng-autocomplete>
+              </div>
+              <div class="col-4">
+                <p class="text-light">Valor unitário</p>
+                <p class="text-light font-weight-bold">R$ {{servicePrice}}</p>
+              </div>
+            </div>
 
-      <div class="col-6 ng-autocomplete">
-        <label for="ewq" class="text-light active">Venda</label>
-        <ng-autocomplete id="ewq" [data]="employees" [searchKeyword]="employeeKeyword" [initialValue]="employeeInitialValue" [itemTemplate]="itemTemplate"
-                         [notFoundTemplate]="notFoundTemplate" (selected)='employeeSelectEvent($event)'>
-        </ng-autocomplete>
+            <div class="row">
+              <div class="col-8">
+                <div class="md-form">
+                  <input type="text" id="qts" class="form-control text-light" [(ngModel)]="serviceQtd" mask="0000" (keyup)="updateServiceTotal()" mdbInput />
+                  <label for="qts" class="text-light">Quantidade</label>
+                </div>
+              </div>
+              <div class="col-4">
+                <p class="text-light">Valor total</p>
+                <p class="text-light font-weight-bold font-size-25">R$ {{servicePriceTotal}}</p>
+              </div>
+            </div>
 
-        <ng-template #itemTemplate let-item>
-          <a [innerHTML]="item.name"></a>
-        </ng-template>
-
-        <ng-template #notFoundTemplate let-notFound>
-          <div [innerHTML]="notFound"></div>
-        </ng-template>
+            <div class="row">
+              <div class="col-12">
+                <button mdbBtn type="button" color="primary" outline="true" (click)="goBack();" mdbWavesEffect>Adicionar</button>
+              </div>
+            </div>
+          </div>
+        </app-simple-panel>
       </div>
     </div>
-
     <div class="row">
-      <button mdbBtn type="button" color="primary" outline="true" (click)="goBack();" mdbWavesEffect>Voltar</button>
+      <div class="col-12">
+        <!-- <app-table [pageValues]="items" [tableValues]="tableValues" [updateCurrentPage]="currentPage"
+      (reloadItems)="reloadItems($event)" (clickItem)="onClickItem($event)"></app-table> -->
+      </div>
     </div>
-
-
   </div>
 </app-simple-panel>
+
+<ng-template #customerTemplate let-item>
+  <a [innerHTML]="item.name"></a>
+</ng-template>
+<ng-template #customerNotFoundTemplate let-notFound>
+  <div [innerHTML]="notFound"></div>
+</ng-template>
+
+<ng-template #employeeTemplate let-item>
+  <a [innerHTML]="item.name"></a>
+</ng-template>
+<ng-template #employeeNotFoundTemplate let-notFound>
+  <div [innerHTML]="notFound"></div>
+</ng-template>
+
+<ng-template #productTemplate let-item>
+  <a [innerHTML]="item.name"></a>
+</ng-template>
+<ng-template #productNotFoundTemplate let-notFound>
+  <div [innerHTML]="notFound"></div>
+</ng-template>
+
+<ng-template #serviceTemplate let-item>
+  <a [innerHTML]="item.name"></a>
+</ng-template>
+<ng-template #serviceNotFoundTemplate let-notFound>
+  <div [innerHTML]="notFound"></div>
+</ng-template>

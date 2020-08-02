@@ -28,9 +28,7 @@ const routes: Routes = [
         path: ':id',
         component: EmptyChildrenComponent,
         resolve: {
-          entity: SaleDetailResolver,
-          customers: CustomerResolver,
-          employees: EmployeeResolver
+          entity: SaleDetailResolver
         },
         children: [
           {
@@ -48,9 +46,7 @@ const routes: Routes = [
   exports: [RouterModule],
   providers: [
     SaleResolver,
-    SaleDetailResolver,
-    CustomerResolver,
-    EmployeeResolver
+    SaleDetailResolver
   ]
 })
 export class SaleRoutingModule {}

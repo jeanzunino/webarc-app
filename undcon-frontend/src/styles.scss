@@ -1,0 +1,25 @@
+.ng-autocomplete {
+  .autocomplete-container {
+    .input-container {
+      input {
+        background-color: transparent;
+        color: #FFFFFF;
+      }
+      .ng-star-inserted {
+        i {
+          color: #FFFFFF;
+        }
+      }
+    }
+    .suggestions-container {
+      background-color: #282a36;
+      ul li a {
+        color: #FFFFFF;
+      }
+    }
+    .not-found {
+      background-color: #282a36;
+      color: #FFFFFF;
+    }
+  }
+}

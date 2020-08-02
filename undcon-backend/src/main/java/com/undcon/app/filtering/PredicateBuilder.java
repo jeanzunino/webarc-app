@@ -7,6 +7,7 @@ import java.util.regex.Pattern;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.EnumPath;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.core.types.dsl.StringPath;
@@ -23,23 +24,35 @@ public class PredicateBuilder<T> {
 		List<SearchCriteria> filters = getCriterias(filter);
 		try {
 			return buildFilteredResult(filters);
-		} catch (NoSuchFieldException | SecurityException e) {
+		} catch (SecurityException e) {
 			throw new RuntimeException(e);
 		}
 
 	}
 
-	public BooleanExpression buildFilteredResult(List<SearchCriteria> filters)
-			throws NoSuchFieldException, SecurityException {
+	public BooleanExpression buildFilteredResult(List<SearchCriteria> filters) throws SecurityException {
 		BooleanExpression expression = null;
 		for (SearchCriteria filter : filters) {
-			Class type = pathBuilder.getType().getDeclaredField(filter.getKey()).getType();
-			// filter=name:João
+			Class type;
+			try {
+				type = pathBuilder.getType().getDeclaredField(filter.getKey()).getType();
+			} catch (NoSuchFieldException e) {
+				e.printStackTrace();
+				throw new IllegalArgumentException(
+						"Invalid field filter '" + filter.getKey() + "' for type " + pathBuilder.getType());
+			}
 			switch (filter.getOperation()) {
 			case "=":
 				if (type.isEnum()) {
-					EnumPath<?> propertyEnum = pathBuilder.getEnum(filter.getKey(), type);
-					expression = expressionAnd(expression, propertyEnum.stringValue().eq(filter.getValue().toUpperCase()));
+					Class<Enum> e = type;
+					Enum[] enumConstants = e.getEnumConstants();
+					for (Enum enumConstant : enumConstants) {
+						if (enumConstant.name().equals(filter.getValue().toUpperCase())) {
+							EnumPath propertyEnum = pathBuilder.getEnum(filter.getKey(), e);
+							expression = expressionAnd(expression, propertyEnum.eq(enumConstant));
+						}
+					}
+
 				} else {
 					PathBuilder<Object> propertyEq = pathBuilder.get(filter.getKey());
 					expression = expressionAnd(expression, propertyEq.eq(convertToValue(type, filter.getValue())));
@@ -47,8 +60,14 @@ public class PredicateBuilder<T> {
 				break;
 			case "!=":
 				if (type.isEnum()) {
-					EnumPath<?> propertyEnum = pathBuilder.getEnum(filter.getKey(), type);
-					expression = expressionAnd(expression, propertyEnum.stringValue().ne(filter.getValue().toUpperCase()));
+					Class<Enum> e = type;
+					Enum[] enumConstants = e.getEnumConstants();
+					for (Enum enumConstant : enumConstants) {
+						if (enumConstant.name().equals(filter.getValue().toUpperCase())) {
+							EnumPath propertyEnum = pathBuilder.getEnum(filter.getKey(), e);
+							expression = expressionAnd(expression, propertyEnum.ne(enumConstant));
+						}
+					}
 				} else {
 					PathBuilder<Object> propertyEq = pathBuilder.get(filter.getKey());
 					expression = expressionAnd(expression, propertyEq.ne(convertToValue(type, filter.getValue())));
@@ -177,6 +196,7 @@ public class PredicateBuilder<T> {
 				throw new IllegalArgumentException(
 						"Invalid operation filter " + filter.getOperation() + " for type " + type.getName());
 			}
+
 		}
 		return expression;
 	}
@@ -195,7 +215,9 @@ public class PredicateBuilder<T> {
 		case "java.lang.Double":
 			return Double.parseDouble(value);
 
-		// TODO Falta converter outros tipos
+		case "java.lang.Boolean":
+		case "boolean":
+			return Boolean.parseBoolean(value);
 		default:
 			break;
 		}

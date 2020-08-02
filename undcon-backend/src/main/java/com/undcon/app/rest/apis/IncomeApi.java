@@ -18,6 +18,9 @@ import com.undcon.app.exceptions.UndconException;
 import com.undcon.app.model.IncomeEntity;
 import com.undcon.app.services.IncomeService;
 
+/**
+ * Api de Receitas
+ */
 @Component
 @Path("/incomes")
 public class IncomeApi {
@@ -27,14 +30,15 @@ public class IncomeApi {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Page<IncomeEntity> getAll(@QueryParam("page") Integer page, @QueryParam("size") Integer size) {
-		return service.getAll(page, size);
+	public Page<IncomeEntity> getAll(@QueryParam("filter") String filter, @QueryParam("page") Integer page,
+			@QueryParam("size") Integer size) {
+		return service.getAll(filter, page, size);
 	}
 
 	@GET
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public IncomeEntity get(@PathParam("id") long id) {
+	public IncomeEntity get(@PathParam("id") long id) throws UndconException {
 		IncomeEntity customer = service.findById(id);
 		return customer;
 	}

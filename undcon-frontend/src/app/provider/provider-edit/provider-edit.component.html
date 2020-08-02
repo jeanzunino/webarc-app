@@ -1,13 +1,23 @@
-<app-dialog modalTitle="Teste3" [modalRef]="providerModalRef">
-  <form body [formGroup]="formGroup">
-    <div class="md-form">
-      <input type="text" id="name" class="form-control" formControlName="name" mdbInput mdbValidate />
-      <label for="name">Nome</label>
+<app-dialog modalTitle="Fornecedor" [modalRef]="providerModalRef">
+  <form body id="editForm" [formGroup]="formGroup">
+    <div class="row">
+      <div class="col-12">
+        <div class="md-form">
+          <input type="text" id="name" class="form-control text-light" formControlName="name" mdbInput mdbValidate />
+          <label for="name" class="text-light">Nome</label>
+          <app-validation [form]="nameForm" [validMessage]="'Válido'" [invalidMessage]="'Inválido'"></app-validation>
+        </div>
+      </div>
     </div>
 
-    <div class="md-form">
-      <input type="text" id="phone" class="form-control" formControlName="phone" mdbInput mdbValidate />
-      <label for="name">Telefone</label>
+    <div class="row">
+      <div class="col-12">
+        <div class="md-form">
+          <input type="text" id="phone" class="form-control text-light" formControlName="phone" mask="(00) 00000-0000"  mdbInput mdbValidate />
+          <label for="phone" class="text-light">Telefone</label>
+          <app-validation [form]="phoneForm" [validMessage]="'Válido'" [invalidMessage]="'Inválido'"></app-validation>
+        </div>
+      </div>
     </div>
   </form>
 

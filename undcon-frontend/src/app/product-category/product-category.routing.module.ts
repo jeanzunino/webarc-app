@@ -7,17 +7,18 @@ import { ProductCategoryResolver } from '@app/product-category/product-category.
 
 const routes: Routes = [
   {
-    path: '', component: ProductCategoryComponent,
+    path: '',
+    component: ProductCategoryComponent,
     canActivate: [AuthGuard],
     resolve: {
-      items: ProductCategoryResolver
-    }
-  }
+      items: ProductCategoryResolver,
+    },
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
-  providers: [ProductCategoryResolver]
+  providers: [ProductCategoryResolver],
 })
 export class ProductCategoryRoutingModule {}

@@ -22,6 +22,9 @@ import com.undcon.app.mappers.ProductMapper;
 import com.undcon.app.model.ProductEntity;
 import com.undcon.app.services.ProductService;
 
+/**
+ * Api de Produtos
+ */
 @Component
 @Path("/products")
 public class ProductApi {
@@ -34,15 +37,15 @@ public class ProductApi {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Page<ProductEntity> getAll(@QueryParam("name") String name, @QueryParam("page") Integer page,
+	public Page<ProductEntity> getAll(@QueryParam("filter") String filter, @QueryParam("page") Integer page,
 			@QueryParam("size") Integer size) {
-		return productService.getAll(name, page, size);
+		return productService.getAll(filter, page, size);
 	}
 
 	@GET
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ProductEntity get(@PathParam("id") long id) {
+	public ProductEntity get(@PathParam("id") long id) throws UndconException {
 		ProductEntity entity = productService.findById(id);
 		return entity;
 	}

@@ -7,17 +7,18 @@ import { ProductResolver } from '@app/product/product.resolver';
 
 const routes: Routes = [
   {
-    path: '', component: ProductComponent,
+    path: '',
+    component: ProductComponent,
     canActivate: [AuthGuard],
     resolve: {
-      items: ProductResolver
-    }
-  }
+      items: ProductResolver,
+    },
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
-  providers: [ProductResolver]
+  providers: [ProductResolver],
 })
 export class ProductRoutingModule {}

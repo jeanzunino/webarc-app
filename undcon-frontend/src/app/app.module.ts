@@ -1,4 +1,3 @@
-
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { ToastrModule } from 'ngx-toastr';
@@ -16,9 +15,7 @@ import { LoginModule } from '@app/login/login.module';
 import { InterceptorModule } from '@interceptor/interceptor.module';
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
+  declarations: [AppComponent],
   imports: [
     SharedModule,
     HttpClientModule,
@@ -30,13 +27,7 @@ import { InterceptorModule } from '@interceptor/interceptor.module';
     RouterModule,
     BrowserAnimationsModule
   ],
-  providers: [
-    StorageService,
-    AuthService,
-    AuthGuard
-  ],
-  bootstrap: [
-    AppComponent
-  ]
+  providers: [StorageService, AuthService, AuthGuard],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

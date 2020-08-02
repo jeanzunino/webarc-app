@@ -7,30 +7,27 @@ import { UserService } from '@service/user/user.service';
 import { UserEditComponent } from '@app/user/user-edit/user-edit.component';
 import { GridViewComponent } from '@component/grid-view/grid-view.component';
 import { Table } from '@shared/model/table';
-import { Page } from '@app/core/model/page';
+import { QueryFilterEnum } from '@core/enum/query-filter';
+import { getQueryFilter } from '@shared/utils/utils';
 
 @Component({
   selector: 'app-user',
-  templateUrl: './user.component.html'
+  templateUrl: './user.component.html',
 })
 export class UserComponent extends GridViewComponent<User> {
-
-  tableValues = new Table().set('login', 'user.login').set('permission.name', 'user.permission').get();
+  tableValues = new Table()
+    .set('login', 'user.login')
+    .set('permission.name', 'user.permission')
+    .get();
   modalRef: MDBModalRef;
+  name = null;
 
-  name: ''
-
-  constructor(public userService: UserService,
-              activatedRoute: ActivatedRoute,
-              modalService: MDBModalService) {
+  constructor(
+    public userService: UserService,
+    activatedRoute: ActivatedRoute,
+    modalService: MDBModalService
+  ) {
     super(userService, activatedRoute, modalService);
-    this.modalService.closed.subscribe(async () => {
-      this.spinner.show()
-      this.items = await this.userService.getAll({
-        page: 0
-      }).toPromise() as Page<any>;
-      this.spinner.hide();
-    })
   }
 
   onClickItem(item) {
@@ -41,11 +38,14 @@ export class UserComponent extends GridViewComponent<User> {
     this.onClickItem(null);
   }
 
-  async onSearch() {
-    this.spinner.show();
-    this.items = await this.userService.getAll({
-      login: this.name
-    }).toPromise() as Page<User>;
-    this.spinner.hide();
+  onSearch() {
+    const params = new Map<string, string>();
+    params.set(getQueryFilter('name', QueryFilterEnum.CONTAINS_IC), this.name);
+    this.onSearchParams(params);
+  }
+
+  onClear() {
+    this.name = null;
+    this.onClearParams();
   }
 }

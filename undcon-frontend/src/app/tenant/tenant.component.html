@@ -1,10 +1,38 @@
 <div class="container-fluid screen-top screen-bottom">
-  <app-panel [panelTitle]="'filtros'">
-    <div footer>
-      <button mdbBtn type="button" color="danger" outline="true" mdbWavesEffect>Danger</button>
+  <app-panel panelTitle="filtros" (search)="onSearch()" (clear)="onClear()">
+    <div body>
+      <div class="row">
+        <div class="col-6">
+          <div class="md-form">
+            <input type="text" id="name" class="form-control text-light" [(ngModel)]="name" mdbInput />
+            <label for="name" class="text-light">Tenant</label>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="md-form">
+            <input type="text" id="email" class="form-control text-light" [(ngModel)]="email" mdbInput />
+            <label for="email" class="text-light">Email</label>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-6">
+          <div class="md-form">
+            <input type="text" id="esquema" class="form-control text-light" [(ngModel)]="schemaName" mdbInput />
+            <label for="esquema" class="text-light">Esquema</label>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="md-form">
+            <input type="text" id="phone" class="form-control text-light" [(ngModel)]="phone" mdbInput />
+            <label for="phone" class="text-light">Telefone</label>
+          </div>
+        </div>
+      </div>
     </div>
   </app-panel>
   <div class="card-filter--margin-top">
-    <app-table [pageValues]="items" [tableValues]="tableValues" (reloadItems)="reloadItems($event)" (onClickItem)="onClickItem($event)"></app-table>
+    <app-table [pageValues]="items" [tableValues]="tableValues" [updateCurrentPage]="currentPage"
+      (reloadItems)="reloadItems($event)" (clickItem)="onClickItem($event)"></app-table>
   </div>
 </div>

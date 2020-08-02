@@ -5,16 +5,26 @@ import { environment } from '@environment/environment';
 import { StorageService } from '@service/storage/storage.service';
 
 export class EntityService<T> {
-
   public baseUrl = environment.url;
 
-  constructor(protected http: HttpClient,
+  constructor(
+    protected http: HttpClient,
     protected storageService: StorageService,
-    protected entityUrl: string) {
-  }
+    protected entityUrl: string
+  ) {}
 
-  public getAll(params?: {}) {
-    return this.http.get(`${this.baseUrl}/${this.entityUrl}`, {params});
+  public getAll(filters?: Map<string, string>, pageNumber: number = 0, sizeNumber: number = 10) {
+    let filterAsString: string = '';
+    if(filters){
+      filters.forEach((value: string, key: string) => {
+        if (value) {
+          filterAsString += '&' + key + value;
+        }
+      });
+    }
+    let params : {};
+    params = {filter: filterAsString, page: pageNumber, size: sizeNumber };
+    return this.http.get(`${this.baseUrl}/${this.entityUrl}`, { params });
   }
 
   public get() {
@@ -26,10 +36,15 @@ export class EntityService<T> {
   }
 
   public put(entity: Entity) {
-    return this.http.put<T>(`${this.baseUrl}/${this.entityUrl}/${entity.id}`, entity);
+    return this.http.put<T>(
+      `${this.baseUrl}/${this.entityUrl}/${entity.id}`,
+      entity
+    );
   }
 
   public delete(entity: Entity) {
-    return this.http.delete<T>(`${this.baseUrl}/${this.entityUrl}/${entity.id}`);
+    return this.http.delete<T>(
+      `${this.baseUrl}/${this.entityUrl}/${entity.id}`
+    );
   }
 }

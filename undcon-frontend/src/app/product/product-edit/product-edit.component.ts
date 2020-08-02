@@ -6,51 +6,92 @@ import { TranslateService } from '@ngx-translate/core';
 
 import { Product } from '@model/product';
 import { DefaultEditViewComponent } from '@component/default-edit-view/default-edit-view.component';
+import { ProductCategoryService } from '@service/product-category/product-category.service';
+import { ProductService } from '@service/product/product.service';
+import { ProductCategory } from '@app/core/model/product-category';
+import { Page } from '@app/core/model/page';
 
 @Component({
-  selector: 'app-permission-edit',
-  templateUrl: './permission-edit.component.html',
-  styleUrls: ['./permission-edit.component.scss']
+  selector: 'app-product-edit',
+  templateUrl: './product-edit.component.html'
 })
 export class ProductEditComponent extends DefaultEditViewComponent<Product> {
+  productCategories: ProductCategory[];
 
-  categories: ProductCategory[];
-
-  constructor(public permissionModalRef: MDBModalRef,
-              public modalOptions: ModalOptions,
-              private toastr: ToastrService,
-              private translate: TranslateService,
-              private service: ProductService,
-              categoryService: ProductCategoryService,) {
-                super(permissionModalRef, modalOptions, toastr, translate, service);
+  constructor(
+    public permissionModalRef: MDBModalRef,
+    public modalOptions: ModalOptions,
+    toastr: ToastrService,
+    translate: TranslateService,
+    service: ProductService,
+    public productCategoryService: ProductCategoryService
+  ) {
+    super(permissionModalRef, modalOptions, toastr, translate, service);
   }
 
-  createFormGroup(){
+  createFormGroup() {
     return new FormGroup({
       id: new FormControl(null),
       name: new FormControl('', Validators.required),
-      productCategory: new FormControl('', Validators.required)
+      unit: new FormControl('', Validators.required),
+      purchasePrice: new FormControl('', Validators.required),
+      salePrice: new FormControl('', Validators.required),
+      stock: new FormControl('', Validators.required),
+      stockMin: new FormControl('', Validators.required),
+      productCategory: new FormControl(null, Validators.required)
     });
   }
 
-  onLoadValuesEdit(item: Product){
-      this.getFormGroup().patchValue({
-        id: item.id,
-        name: item.name,
-        productCategory: item.productCategory
+  onLoadValuesEdit(item: Product) {
+    this.getFormGroup().patchValue({
+      id: item.id,
+      name: item.name,
+      unit: item.unit,
+      purchasePrice: item.purchasePrice,
+      salePrice: item.salePrice,
+      stock: item.stock,
+      stockMin: item.stock,
+      productCategory: item.productCategory.id
     });
   }
 
   async onLoadData() {
-    this.categories = (await this.categoryService.getAll().toPromise() as Page<ProductCategory>).content;
+    this.productCategories = ((await this.productCategoryService.getAll().toPromise()) as Page<
+      ProductCategory
+    >).content;
+  }
+
+  afterValidateFormSave() {
+    this.productCategoryForm.setValue(
+      this.productCategories.find(productCategory => productCategory.id === +this.productCategoryForm.value)
+    );
   }
 
   get nameForm() {
     return this.getFormGroup().get('name');
   }
 
+  get unitForm() {
+    return this.getFormGroup().get('unit');
+  }
+
+  get purchasePriceForm() {
+    return this.getFormGroup().get('purchasePrice');
+  }
+
+  get salePriceForm() {
+    return this.getFormGroup().get('salePrice');
+  }
+
+  get stockForm() {
+    return this.getFormGroup().get('stock');
+  }
+
+  get stockMinForm() {
+    return this.getFormGroup().get('stockMin');
+  }
+
   get productCategoryForm() {
     return this.getFormGroup().get('productCategory');
   }
-
 }

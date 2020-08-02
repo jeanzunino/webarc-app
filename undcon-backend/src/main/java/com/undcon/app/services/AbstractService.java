@@ -1,40 +1,68 @@
 package com.undcon.app.services;
 
-import java.util.List;
-
-import org.springframework.data.domain.PageRequest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.util.StringUtils;
+import org.springframework.data.querydsl.QueryDslPredicateExecutor;
+import org.springframework.stereotype.Component;
 
-import com.undcon.app.enums.UndconError;
+import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.dsl.PathBuilder;
+import com.undcon.app.enums.ResourceType;
 import com.undcon.app.exceptions.UndconException;
+import com.undcon.app.filtering.PredicateBuilder;
 import com.undcon.app.utils.PageUtils;
 
+@Component
 public abstract class AbstractService<T> {
+
+	@Autowired
+	protected PermissionService permissionService;
 
 	protected abstract JpaRepository<T, Long> getRepository();
 
-	public List<T> getAll(String name, Integer page, Integer size) {
-		if (StringUtils.isEmpty(name)) {
-			return getRepository().findAll(PageUtils.createPageRequest(page, size)).getContent();
-		}
-		return findAllByName(name, PageUtils.createPageRequest(page, size));
+	protected abstract ResourceType getResourceType();
+
+	protected void validateBeforePost(T entity) throws UndconException {
 	}
 
-	public T findById(Long id) {
+	protected void validateBeforeUpdate(T entity) throws UndconException {
+
+	}
+
+	protected void validateBeforeDelete(T entity) throws UndconException {
+
+	}
+
+	protected Page<T> getAll(Class<? extends T> clazz, String filter, Integer page, Integer size) {
+		String clazzName = clazz.getSimpleName();
+		clazzName = clazzName.substring(0, 1).toLowerCase().concat(clazzName.substring(1));
+		PathBuilder<T> pathBuilder = new PathBuilder<T>(clazz, clazzName);
+		Predicate predicate = new PredicateBuilder<T>(pathBuilder).buildFilteredResult(filter);
+		QueryDslPredicateExecutor<T> repo = (QueryDslPredicateExecutor<T>) getRepository();
+		return repo.findAll(predicate, PageUtils.createPageRequest(page, size));
+	}
+
+	public T findById(Long id) throws UndconException {
 		return getRepository().findOne(id);
 	}
 
-	public T validateAndGet(Long id) throws UndconException {
-		T entity = findById(id);
-		if (entity == null) {
-			throw new UndconException(getNotFoundError());
-		}
-		return entity;
+	public T persist(T entity) throws UndconException {
+		permissionService.checkPermission(getResourceType());
+		validateBeforePost(entity);
+		return getRepository().save(entity);
 	}
 
-	protected abstract UndconError getNotFoundError();
+	public T update(T entity) throws UndconException {
+		permissionService.checkPermission(getResourceType());
+		validateBeforeUpdate(entity);
+		return getRepository().save(entity);
+	}
 
-	protected abstract List<T> findAllByName(String name, PageRequest createPageRequest);
-
+	public void delete(long id) throws UndconException {
+		permissionService.checkPermission(getResourceType());
+		T entity = findById(id);
+		validateBeforeDelete(entity);
+		getRepository().delete(id);
+	}
 }

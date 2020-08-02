@@ -28,6 +28,9 @@ import com.undcon.app.model.UserEntity;
 import com.undcon.app.services.UserService;
 import com.undcon.app.utils.PageUtils;
 
+/**
+ * Api de Usuários
+ */
 @Component
 @Path("/users")
 public class UserApi {
@@ -40,9 +43,9 @@ public class UserApi {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Page<UserDto> getAll(@QueryParam("login") String login, @QueryParam("page") Integer page,
+	public Page<UserDto> getAll(@QueryParam("filter") String filter, @QueryParam("page") Integer page,
 			@QueryParam("size") Integer size) throws UndconException {
-		Page<UserEntity> findAll = service.getAll(page, size, login);
+		Page<UserEntity> findAll = service.getAll(filter, page, size);
 		List<UserDto> content = mapper.toDto(findAll.getContent());
 		Page<UserDto> pageDto = new PageImpl<UserDto>(content, PageUtils.createPageRequest(page, size), findAll.getTotalElements());
 		return pageDto;
@@ -51,7 +54,7 @@ public class UserApi {
 	@GET
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public UserDto get(@PathParam("id") long id) {
+	public UserDto get(@PathParam("id") long id) throws UndconException {
 		UserEntity customer = service.findById(id);
 		return mapper.toDto(customer);
 	}

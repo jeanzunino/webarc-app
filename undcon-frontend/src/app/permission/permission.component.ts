@@ -7,19 +7,23 @@ import { PermissionService } from '@service/permission/permission.service';
 import { GridViewComponent } from '@component/grid-view/grid-view.component';
 import { PermissionEditComponent } from '@app/permission/permission-edit/permission-edit.component';
 import { Table } from '@shared/model/table';
+import { QueryFilterEnum } from '@core/enum/query-filter';
+import { getQueryFilter } from '@shared/utils/utils';
 
 @Component({
   selector: 'app-permission',
-  templateUrl: './permission.component.html'
+  templateUrl: './permission.component.html',
 })
 export class PermissionComponent extends GridViewComponent<Permission> {
-
   tableValues = new Table().set('name', 'permission.name').get();
+  name = null;
 
-  constructor(service: PermissionService,
+  constructor(
+    service: PermissionService,
     activatedRoute: ActivatedRoute,
-    modalService: MDBModalService) {
-      super(service, activatedRoute, modalService);
+    modalService: MDBModalService
+  ) {
+    super(service, activatedRoute, modalService);
   }
 
   onClickItem(item) {
@@ -28,5 +32,16 @@ export class PermissionComponent extends GridViewComponent<Permission> {
 
   open() {
     this.onClickItem(null);
+  }
+
+  onSearch() {
+    const params = new Map<string, string>();
+    params.set(getQueryFilter('name', QueryFilterEnum.CONTAINS_IC), this.name);
+    this.onSearchParams(params);
+  }
+
+  onClear() {
+    this.name = null;
+    this.onClearParams();
   }
 }

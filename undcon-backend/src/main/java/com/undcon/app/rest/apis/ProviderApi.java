@@ -18,6 +18,9 @@ import com.undcon.app.exceptions.UndconException;
 import com.undcon.app.model.ProviderEntity;
 import com.undcon.app.services.ProviderService;
 
+/**
+ * Api de Forncedores
+ */
 @Component
 @Path("/providers")
 public class ProviderApi {
@@ -27,15 +30,15 @@ public class ProviderApi {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Page<ProviderEntity> getAll(@QueryParam("name") String name, @QueryParam("page") Integer page,
+	public Page<ProviderEntity> getAll(@QueryParam("filter") String filter, @QueryParam("page") Integer page,
 			@QueryParam("size") Integer size) {
-		return service.getAll(name, page, size);
+		return service.getAll(filter, page, size);
 	}
 
 	@GET
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ProviderEntity get(@PathParam("id") long id) {
+	public ProviderEntity get(@PathParam("id") long id) throws UndconException {
 		ProviderEntity Provider = service.findById(id);
 		return Provider;
 	}

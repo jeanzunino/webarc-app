@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
+import { NgxMaskModule } from 'ngx-mask';
 
 import { CustomerRoutingModule } from '@app/customer/customer.routing.module';
 import { CustomerComponent } from '@app/customer/customer.component';
@@ -7,14 +8,12 @@ import { CustomerEditComponent } from '@app/customer/customer-edit/customer-edit
 import { SharedModule } from '@shared/shared.module';
 
 @NgModule({
-  declarations: [
-    CustomerComponent,
-    CustomerEditComponent
-  ],
+  declarations: [CustomerComponent, CustomerEditComponent],
   imports: [
     SharedModule,
     MDBBootstrapModule.forRoot(),
-    CustomerRoutingModule
-  ]
+    CustomerRoutingModule,
+    NgxMaskModule.forRoot()
+  ],
 })
-export class CustomerModule { }
+export class CustomerModule {}

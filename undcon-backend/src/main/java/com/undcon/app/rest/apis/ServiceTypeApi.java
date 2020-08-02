@@ -18,6 +18,9 @@ import com.undcon.app.exceptions.UndconException;
 import com.undcon.app.model.ServiceTypeEntity;
 import com.undcon.app.services.ServiceTypeService;
 
+/**
+ * Api de Tipos de Serviços
+ */
 @Component
 @Path("/serviceTypes")
 public class ServiceTypeApi {
@@ -27,14 +30,15 @@ public class ServiceTypeApi {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Page<ServiceTypeEntity> getAll(@QueryParam("page") Integer page, @QueryParam("size") Integer size) {
-		return serviceTypeService.getAll(page, size);
+	public Page<ServiceTypeEntity> getAll(@QueryParam("filter") String filter, @QueryParam("page") Integer page,
+			@QueryParam("size") Integer size) {
+		return serviceTypeService.getAll(filter, page, size);
 	}
 
 	@GET
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ServiceTypeEntity get(@PathParam("id") long id) {
+	public ServiceTypeEntity get(@PathParam("id") long id) throws UndconException {
 		ServiceTypeEntity entity = serviceTypeService.findById(id);
 		return entity;
 	}

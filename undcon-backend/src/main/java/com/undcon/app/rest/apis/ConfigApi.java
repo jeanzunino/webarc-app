@@ -17,6 +17,9 @@ import org.springframework.stereotype.Component;
 import com.undcon.app.model.ConfigurationEntity;
 import com.undcon.app.repositories.IConfigurationRepository;
 
+/**
+ * Api de Configurações
+ */
 @Component
 @Path("/configuration")
 public class ConfigApi {

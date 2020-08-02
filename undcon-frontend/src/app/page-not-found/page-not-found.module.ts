@@ -1,13 +1,9 @@
-import { NgModule } from '@angular/core';
+import { NgModule } from "@angular/core";
 
-import { PageNotFoundComponent } from '@app/page-not-found/page-not-found.component';
+import { PageNotFoundComponent } from "@app/page-not-found/page-not-found.component";
 
 @NgModule({
-  declarations: [
-    PageNotFoundComponent
-  ],
-  exports: [
-    PageNotFoundComponent
-  ]
+  declarations: [PageNotFoundComponent],
+  exports: [PageNotFoundComponent],
 })
-export class PageNotFoundModule { }
+export class PageNotFoundModule {}

@@ -18,6 +18,9 @@ import com.undcon.app.exceptions.UndconException;
 import com.undcon.app.model.TenantEntity;
 import com.undcon.app.services.TenantService;
 
+/**
+ * Api de Tenants
+ */
 @Component
 @Path("/tenants")
 public class TenantApi {
@@ -27,9 +30,9 @@ public class TenantApi {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Page<TenantEntity> getAll(@QueryParam("page") Integer page, @QueryParam("size") Integer size)
-			throws UndconException {
-		return service.getAll(page, size);
+	public Page<TenantEntity> getAll(@QueryParam("filter") String filter, @QueryParam("page") Integer page,
+			@QueryParam("size") Integer size) throws UndconException {
+		return service.getAll(filter, page, size);
 	}
 
 	@GET

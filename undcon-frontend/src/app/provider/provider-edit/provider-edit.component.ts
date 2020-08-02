@@ -10,16 +10,16 @@ import { DefaultEditViewComponent } from '@component/default-edit-view/default-e
 
 @Component({
   selector: 'app-provider-edit',
-  templateUrl: './provider-edit.component.html',
-  styleUrls: ['./provider-edit.component.scss']
+  templateUrl: './provider-edit.component.html'
 })
 export class ProviderEditComponent extends DefaultEditViewComponent<Provider> {
-
-  constructor(public providerModalRef: MDBModalRef,
-              modalOptions: ModalOptions,
-              toastr: ToastrService,
-              translate: TranslateService,
-              service: ProviderService) {
+  constructor(
+    public providerModalRef: MDBModalRef,
+    modalOptions: ModalOptions,
+    toastr: ToastrService,
+    translate: TranslateService,
+    service: ProviderService
+  ) {
     super(providerModalRef, modalOptions, toastr, translate, service);
   }
 
@@ -27,7 +27,7 @@ export class ProviderEditComponent extends DefaultEditViewComponent<Provider> {
     return new FormGroup({
       id: new FormControl(null),
       name: new FormControl('', Validators.required),
-      phone: new FormControl('')
+      phone: new FormControl(''),
     });
   }
 
@@ -46,5 +46,4 @@ export class ProviderEditComponent extends DefaultEditViewComponent<Provider> {
   get phoneForm() {
     return this.getFormGroup().get('phone');
   }
-
 }

@@ -10,32 +10,32 @@ import { DefaultEditViewComponent } from '@component/default-edit-view/default-e
 
 @Component({
   selector: 'app-customer-edit',
-  templateUrl: './customer-edit.component.html',
-  styleUrls: ['./customer-edit.component.scss']
+  templateUrl: './customer-edit.component.html'
 })
 export class CustomerEditComponent extends DefaultEditViewComponent<Customer> {
-
-  constructor( public customerModalRef: MDBModalRef,
-               modalOptions: ModalOptions,
-               toastr: ToastrService,
-               translate: TranslateService,
-               service: CustomerService) {
-                super(customerModalRef, modalOptions, toastr, translate, service);
+  constructor(
+    public customerModalRef: MDBModalRef,
+    modalOptions: ModalOptions,
+    toastr: ToastrService,
+    translate: TranslateService,
+    service: CustomerService
+  ) {
+    super(customerModalRef, modalOptions, toastr, translate, service);
   }
 
-  createFormGroup(){
+  createFormGroup() {
     return new FormGroup({
       id: new FormControl(null),
       name: new FormControl('', Validators.required),
-      phone: new FormControl('')
+      phone: new FormControl(''),
     });
   }
 
-  onLoadValuesEdit(customer: Customer){
-      this.getFormGroup().patchValue({
-        id: customer.id,
-        name: customer.name,
-        phone: customer.phone
+  onLoadValuesEdit(customer: Customer) {
+    this.getFormGroup().patchValue({
+      id: customer.id,
+      name: customer.name,
+      phone: customer.phone
     });
   }
 
@@ -46,5 +46,4 @@ export class CustomerEditComponent extends DefaultEditViewComponent<Customer> {
   get phoneForm() {
     return this.getFormGroup().get('phone');
   }
-
 }

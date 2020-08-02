@@ -1,15 +1,18 @@
-<app-dialog modalTitle="Teste3" [modalRef]="permissionModalRef">
-  <form body [formGroup]="formGroup">
-    <div class="md-form">
-      <input type="text" id="name" class="form-control" formControlName="name" mdbInput mdbValidate />
-      <label for="name">Nome</label>
+<app-dialog modalTitle="Cliente" [modalRef]="permissionModalRef">
+  <form body id="editForm" [formGroup]="formGroup">
+    <div class="row">
+      <div class="col-12">
+        <div class="md-form">
+          <input type="text" id="name" class="form-control text-light" formControlName="name" mdbInput mdbValidate />
+          <label for="name" class="text-light">Nome</label>
+          <app-validation [form]="nameForm" [validMessage]="'Válido'" [invalidMessage]="'Inválido'"></app-validation>
+        </div>
+      </div>
     </div>
-
   </form>
 
   <div footer>
-    <button mdbBtn type="button" color="secondary" outline="true" aria-label="Close" (click)="permissionModalRef.hide()" mdbWavesEffect>Close</button>
-    <button mdbBtn type="button" color="danger" outline="true" mdbWavesEffect>Danger</button>
-    <button mdbBtn type="submit" color="primary" outline="true" (click)="onSave()" mdbWavesEffect>Save!</button>
+    <button mdbBtn type="button" *ngIf="data.content" color="danger" outline="true" (click)="onDelete()" mdbWavesEffect>Excluir</button>
+    <button mdbBtn type="submit" [disabled]="formGroup.invalid" form="editForm" color="primary" outline="true" (click)="onSave()" mdbWavesEffect>Salvar</button>
   </div>
 </app-dialog>

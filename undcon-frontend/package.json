@@ -7,7 +7,11 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "format-ts": "prettier --write \"**/*.ts\"",
+    "format-json": "prettier --write \"**/*.json\"",
+    "format-style": "prettier-stylelint --write",
+    "format-all": "npm run format-ts && npm run format-json"
   },
   "private": true,
   "dependencies": {
@@ -27,12 +31,19 @@
     "chart.js": "^2.7.3",
     "chartjs": "^0.3.24",
     "jquery": "^3.4.1",
+    "ngx-mask": "^9.0.2",
     "ngx-pagination": "^5.0.0",
     "ngx-spinner": "^9.0.2",
     "ngx-toastr": "^12.0.0",
     "popper.js": "^1.16.0",
+    "prettier": "^2.0.5",
+    "prettier-stylelint": "^0.4.2",
     "rxjs": "^6.5.4",
+    "stylelint": "^13.3.3",
+    "stylelint-config-recommended-scss": "^4.2.0",
+    "stylelint-scss": "^3.17.2",
     "tslib": "^1.10.0",
+    "tslint-config-prettier": "^1.18.0",
     "zone.js": "~0.10.2"
   },
   "devDependencies": {

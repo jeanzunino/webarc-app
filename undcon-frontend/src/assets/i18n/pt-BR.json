@@ -1,50 +1,50 @@
 {
-    "error": {
-        "authentication" : {
-            "title": "Erro de autenticação",
-            "message": "Usuário ou senha inválido."
-        },
-        "save.title": "Não foi possível salvar o(a) {{entity}}"
+  "error": {
+    "authentication": {
+      "title": "Erro de autenticação",
+      "message": "Usuário ou senha inválido."
     },
-    "user": {
-        "entity": "Usuário",
-        "id": "Id",
-        "login": "Login",
-        "active": "Ativo",
-        "permission": "Permissões"
+    "save.title": "Não foi possível salvar o(a) {{entity}}"
+  },
+  "user": {
+    "entity": "Usuário",
+    "id": "Id",
+    "login": "Login",
+    "active": "Ativo",
+    "permission": "Permissões"
+  },
+  "menu": {
+    "home": "Home",
+	"pdv": "PDV",
+    "compra": {
+      "title": "Compras",
+      "fornecedores": "Fornecedores",
+      "compras": "Compras"
     },
-    "menu": {
-        "home": "Home",
-        "pdv": "PDV",
-        "compra": {
-            "title": "Compras",
-            "fornecedores": "Fornecedores",
-            "compras": "Compras"
-        },
-        "venda": {
-            "title": "Vendas",
-            "clientes": "Clientes",
-            "vendas": "Vendas"
-        },
-        "geral": {
-            "title": "Gerais",
-            "tipos-servicos": "Tipos de Serviços",
-            "categorias-produtos": "Categorias de Produtos",
-            "produtos": "Produtos"
-        },
-        "configuracao": {
-            "title": "Configurações",
-            "tenants": "Tenants",
-            "permissoes": "Permissões",
-            "funcionarios": "Funcionários",
-            "usuarios": "Usuários"
-        },
-        "sair": "Sair"
+    "venda": {
+      "title": "Vendas",
+      "clientes": "Clientes",
+      "vendas": "Vendas"
     },
-    "table": {
-        "anterior": "Anterior",
-        "proximo": "Próximo"
+    "geral": {
+      "title": "Gerais",
+      "tipos-servicos": "Tipos de Serviços",
+      "categorias-produtos": "Categorias de Produtos",
+      "produtos": "Produtos"
     },
-    "filtros": "Filtros",
-    "total_registros_encontrados": "Total de registros encontrados: {{total}}"
+    "configuracao": {
+      "title": "Configurações",
+      "tenants": "Tenants",
+      "permissoes": "Permissões",
+      "funcionarios": "Funcionários",
+      "usuarios": "Usuários"
+    },
+    "sair": "Sair"
+  },
+  "table": {
+    "anterior": "Anterior",
+    "proximo": "Próximo"
+  },
+  "filtros": "Filtros",
+  "total_registros_encontrados": "Total de registros encontrados: {{total}}"
 }

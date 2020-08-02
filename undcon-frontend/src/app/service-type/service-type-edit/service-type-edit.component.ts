@@ -10,30 +10,36 @@ import { DefaultEditViewComponent } from '@component/default-edit-view/default-e
 
 @Component({
   selector: 'app-service-type-edit',
-  templateUrl: './service-type-edit.component.html',
-  styleUrls: ['./service-type-edit.component.scss']
+  templateUrl: './service-type-edit.component.html'
 })
-export class ServiceTypeEditComponent extends DefaultEditViewComponent<ServiceType> {
-
-  constructor(public serviceTypeModalRef: MDBModalRef,
-              modalOptions: ModalOptions,
-              toastr: ToastrService,
-              translate: TranslateService,
-              service: ServiceTypeService) {
-      super(serviceTypeModalRef, modalOptions, toastr, translate, service);
+export class ServiceTypeEditComponent extends DefaultEditViewComponent<
+  ServiceType
+> {
+  constructor(
+    public serviceTypeModalRef: MDBModalRef,
+    modalOptions: ModalOptions,
+    toastr: ToastrService,
+    translate: TranslateService,
+    service: ServiceTypeService
+  ) {
+    super(serviceTypeModalRef, modalOptions, toastr, translate, service);
   }
 
-  createFormGroup(){
+  createFormGroup() {
     return new FormGroup({
       id: new FormControl(null),
-      name: new FormControl('', Validators.required)
+      name: new FormControl('', Validators.required),
+      description: new FormControl(''),
+      price: new FormControl('', Validators.required)
     });
   }
 
-  onLoadValuesEdit(serviceType: ServiceType){
-      this.getFormGroup().patchValue({
-        id: serviceType.id,
-        name: serviceType.name
+  onLoadValuesEdit(serviceType: ServiceType) {
+    this.getFormGroup().patchValue({
+      id: serviceType.id,
+      name: serviceType.name,
+      description: serviceType.description,
+      price: serviceType.price
     });
   }
 
@@ -41,4 +47,11 @@ export class ServiceTypeEditComponent extends DefaultEditViewComponent<ServiceTy
     return this.getFormGroup().get('name');
   }
 
+  get descriptionForm() {
+    return this.getFormGroup().get('description');
+  }
+
+  get priceForm() {
+    return this.getFormGroup().get('price');
+  }
 }

@@ -5,12 +5,14 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.undcon.app.dtos.ProductItemRequestDto;
 import com.undcon.app.dtos.ProductSaledInfoDto;
 import com.undcon.app.dtos.SaleInfoDto;
+import com.undcon.app.dtos.SaleItemDto;
 import com.undcon.app.dtos.SaleRequestDto;
 import com.undcon.app.enums.ResourceType;
 import com.undcon.app.enums.SaleStatus;
@@ -22,15 +24,16 @@ import com.undcon.app.model.ProductEntity;
 import com.undcon.app.model.SaleEntity;
 import com.undcon.app.model.SaleItemEntity;
 import com.undcon.app.model.SaleItemProductEntity;
+import com.undcon.app.model.SaleItemServiceEntity;
 import com.undcon.app.model.UserEntity;
 import com.undcon.app.repositories.ISaleItemRepository;
 import com.undcon.app.repositories.ISaleRepository;
 import com.undcon.app.repositories.SaleRepositoryImpl;
-import com.undcon.app.utils.LongUtils;
+import com.undcon.app.utils.NumberUtils;
 import com.undcon.app.utils.PageUtils;
 
 @Component
-public class SaleService {
+public class SaleService extends AbstractService<SaleEntity>{
 
 	@Autowired
 	private ISaleRepository saleRepository;
@@ -59,14 +62,10 @@ public class SaleService {
 	@Autowired
 	private EmployeeService employeeService;
 
-	public Page<SaleEntity> getAll(Integer page, Integer size) {
-		return saleRepository.findAll(PageUtils.createPageRequest(page, size));
+	public Page<SaleEntity> getAll(String filter, Integer page, Integer size) {
+		return super.getAll(SaleEntity.class, filter, page, size);
 	}
-
-	public SaleEntity findById(Long id) {
-		return saleRepository.findOne(id);
-	}
-
+	
 	public SaleInfoDto getTotalSale() {
 		return new SaleInfoDto(saleRepositoryImpl.getTotalSale(true), saleRepositoryImpl.getTotalSale(false));
 	}
@@ -84,7 +83,7 @@ public class SaleService {
 		
 		EmployeeEntity salesman = user.getEmployee();
 		// Se o Front não enviar o funcionário
-		if (LongUtils.longIsPositiveValue(saleDto.getSalesmanId())) {
+		if (NumberUtils.longIsPositiveValue(saleDto.getSalesmanId())) {
 			salesman = employeeService.findById(saleDto.getSalesmanId());
 		}
 		SaleEntity sale = new SaleEntity(null, customer, saleDate, billed, status, user, salesman);
@@ -130,7 +129,7 @@ public class SaleService {
 		EmployeeEntity employee = user.getEmployee();
 
 		// Se o Front não enviar o funciona´rio
-		if (LongUtils.longIsPositiveValue(itemDto.getEmployeeId())) {
+		if (NumberUtils.longIsPositiveValue(itemDto.getEmployeeId())) {
 			employee = employeeService.findById(itemDto.getEmployeeId());
 		}
 
@@ -187,5 +186,19 @@ public class SaleService {
 
 	public List<ProductSaledInfoDto> getTopProductSaled(boolean billed) {
 		return saleRepositoryImpl.getTopProductSaled(billed);
+	}
+	
+	public Page<SaleItemDto> getItens(Long id, Integer page, Integer size) {
+		return saleRepositoryImpl.findAllById(id, PageUtils.createPageRequest(page, size));
+	}
+
+	@Override
+	protected JpaRepository<SaleEntity, Long> getRepository() {
+		return saleRepository;
+	}
+
+	@Override
+	protected ResourceType getResourceType() {
+		return ResourceType.SALE;
 	}
 }

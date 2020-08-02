@@ -18,6 +18,9 @@ import com.undcon.app.exceptions.UndconException;
 import com.undcon.app.model.ProductCategoryEntity;
 import com.undcon.app.services.ProductCategoryService;
 
+/**
+ * Api de Categoria de Produtos
+ */
 @Component
 @Path("/productCategories")
 public class ProductCategoryApi {
@@ -27,15 +30,15 @@ public class ProductCategoryApi {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Page<ProductCategoryEntity> getAll(@QueryParam("name") String name, @QueryParam("page") Integer page,
+	public Page<ProductCategoryEntity> getAll(@QueryParam("filter") String filter, @QueryParam("page") Integer page,
 			@QueryParam("size") Integer size) {
-		return service.getAll(name, page, size);
+		return service.getAll(filter, page, size);
 	}
 
 	@GET
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ProductCategoryEntity get(@PathParam("id") long id) {
+	public ProductCategoryEntity get(@PathParam("id") long id) throws UndconException {
 		ProductCategoryEntity entity = service.findById(id);
 		return entity;
 	}
@@ -47,6 +50,7 @@ public class ProductCategoryApi {
 	}
 
 	@PUT
+	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public ProductCategoryEntity put(ProductCategoryEntity entity) throws UndconException {
 		return service.update(entity);

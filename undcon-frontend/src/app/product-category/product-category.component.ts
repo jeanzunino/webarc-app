@@ -7,18 +7,27 @@ import { ProductCategoryService } from '@service/product-category/product-catego
 import { GridViewComponent } from '@component/grid-view/grid-view.component';
 import { ProductCategoryEditComponent } from '@app/product-category/product-category-edit/product-category-edit.component';
 import { Table } from '@shared/model/table';
+import { QueryFilterEnum } from '@core/enum/query-filter';
+import { getQueryFilter } from '@shared/utils/utils';
 
 @Component({
   selector: 'app-product-category',
-  templateUrl: './product-category.component.html'
+  templateUrl: './product-category.component.html',
 })
-export class ProductCategoryComponent extends GridViewComponent<ProductCategory> {
+export class ProductCategoryComponent extends GridViewComponent<
+  ProductCategory
+> {
+  tableValues = new Table()
+    .set('name', 'product-category.name')
+    .set('parent.name', 'product-category.name')
+    .get();
+  name = null;
 
-  tableValues = new Table().set('name', 'product-category.name').set('parent.name', 'product-category.name').get();
-
-  constructor(service: ProductCategoryService,
-              activatedRoute: ActivatedRoute,
-              modalService: MDBModalService) {
+  constructor(
+    service: ProductCategoryService,
+    activatedRoute: ActivatedRoute,
+    modalService: MDBModalService
+  ) {
     super(service, activatedRoute, modalService);
   }
 
@@ -28,5 +37,16 @@ export class ProductCategoryComponent extends GridViewComponent<ProductCategory>
 
   open() {
     this.onClickItem(null);
+  }
+
+  onSearch() {
+    const params = new Map<string, string>();
+    params.set(getQueryFilter('name', QueryFilterEnum.CONTAINS_IC), this.name);
+    this.onSearchParams(params);
+  }
+
+  onClear() {
+    this.name = null;
+    this.onClearParams();
   }
 }

@@ -1,28 +1,38 @@
-import { OnInit } from '@angular/core';
+import { OnInit, OnDestroy } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MDBModalRef, ModalOptions } from 'angular-bootstrap-md';
 import { ToastrService } from 'ngx-toastr';
 import { TranslateService } from '@ngx-translate/core';
+import { Subject } from 'rxjs';
 
 import { EntityService } from '@service/entity/entity.service';
 import { Modal } from '@shared/model/modal';
+import { CloseDialogValues } from '@shared/model/close-dialog-values';
 
-export abstract class DefaultEditViewComponent<T> implements OnInit {
-
+export abstract class DefaultEditViewComponent<T> implements OnInit, OnDestroy {
+  private closeDialogValues = new CloseDialogValues();
   formGroup: FormGroup;
   data: Modal;
+  onClose = new Subject<CloseDialogValues>();
 
-  constructor(public modalRef: MDBModalRef,
+  constructor(
+    public modalRef: MDBModalRef,
     public modalOptions: ModalOptions,
     public toastr: ToastrService,
     translate: TranslateService,
-    protected service: EntityService<T>) {
-  }
+    protected service: EntityService<T>
+  ) {}
 
   ngOnInit() {
     this.formGroup = this.createFormGroup();
     this.onLoadValues();
     this.onLoadData();
+
+    this.closeDialogValues.hasChange = false;
+  }
+
+  ngOnDestroy() {
+    this.onClose.next(this.closeDialogValues);
   }
 
   abstract createFormGroup();
@@ -41,38 +51,43 @@ export abstract class DefaultEditViewComponent<T> implements OnInit {
 
   abstract onLoadValuesEdit(item);
 
-  validForm(){
+  validForm() {
     return true;
   }
 
-  onLoadData() {
-
-  }
+  onLoadData() {}
 
   onDelete() {
-      if (this.data.content) {
-        this.service.delete(this.getFormGroup().value).toPromise()
-          .then(teste => {
-            this.modalRef.hide();
-          });
-      }
+    if (this.data.content) {
+      this.service
+        .delete(this.getFormGroup().value)
+        .toPromise()
+        .then((teste) => {
+          this.closeDialogValues.hasChange = true;
+          this.modalRef.hide();
+        });
+    }
   }
 
-  afterValidateFormSave(){
-
-  }
+  afterValidateFormSave() {}
 
   onSave() {
     if (this.validForm()) {
       this.afterValidateFormSave();
       if (!this.data.content) {
-        this.service.post(this.getFormGroup().value).toPromise()
-          .then(teste => {
+        this.service
+          .post(this.getFormGroup().value)
+          .toPromise()
+          .then((teste) => {
+            this.closeDialogValues.hasChange = true;
             this.modalRef.hide();
           });
       } else {
-        this.service.put(this.getFormGroup().value).toPromise()
-          .then(teste => {
+        this.service
+          .put(this.getFormGroup().value)
+          .toPromise()
+          .then((teste) => {
+            this.closeDialogValues.hasChange = true;
             this.modalRef.hide();
           });
       }

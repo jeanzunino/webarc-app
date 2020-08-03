@@ -27,27 +27,28 @@ public class PdvEntity {
 	@ManyToOne
 	@JoinColumn(name = "usuario_responsavel_abertura_id", nullable = false)
 	private UserEntity responsibleUserInOpening;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "usuario_responsavel_fechamento_id", nullable = true)
 	private UserEntity responsibleUserInClosing;
-	
+
 	@Column(name = "data_abertura", nullable = false)
 	private Date openingDate;
-	
+
 	@Column(name = "data_fechamento", nullable = true)
 	private Date closingDate;
-	
+
 	@Column(name = "valor_abertura")
 	private double openingValue;
-	
+
 	@Column(name = "valor_fechamento")
-	private double closingValue;
+	private Double closingValue;
+
 	protected PdvEntity() {
 	}
 
 	public PdvEntity(Long id, UserEntity user, UserEntity responsibleUserInOpening, UserEntity responsibleUserInClosing,
-			Date openingDate, Date closingDate) {
+			Date openingDate, Date closingDate, double openingValue, Double closingValue) {
 		super();
 		this.id = id;
 		this.user = user;
@@ -55,6 +56,8 @@ public class PdvEntity {
 		this.responsibleUserInClosing = responsibleUserInClosing;
 		this.openingDate = openingDate;
 		this.closingDate = closingDate;
+		this.openingValue = openingValue;
+		this.closingValue = closingValue;
 	}
 
 	public Long getId() {
@@ -105,5 +108,20 @@ public class PdvEntity {
 		this.closingDate = closingDate;
 	}
 
-	
+	public double getOpeningValue() {
+		return openingValue;
+	}
+
+	public void setOpeningValue(double openingValue) {
+		this.openingValue = openingValue;
+	}
+
+	public Double getClosingValue() {
+		return closingValue;
+	}
+
+	public void setClosingValue(Double closingValue) {
+		this.closingValue = closingValue;
+	}
+
 }

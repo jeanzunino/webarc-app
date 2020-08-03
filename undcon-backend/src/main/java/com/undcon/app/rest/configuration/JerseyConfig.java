@@ -10,6 +10,7 @@ import com.undcon.app.rest.apis.ExpenseApi;
 import com.undcon.app.rest.apis.IncomeApi;
 import com.undcon.app.rest.apis.LoginApi;
 import com.undcon.app.rest.apis.MenuTemplateApi;
+import com.undcon.app.rest.apis.PdvApi;
 import com.undcon.app.rest.apis.PermissionApi;
 import com.undcon.app.rest.apis.ProductApi;
 import com.undcon.app.rest.apis.ProductCategoryApi;
@@ -58,7 +59,7 @@ public class JerseyConfig extends ResourceConfig {
 
 		register(PurchaseApi.class);
 		register(SaleApi.class);
-		
+		register(PdvApi.class);
 		
 		register(ErrorResponseHandler.class);
 		// Uncomment to disable WADL Generation:

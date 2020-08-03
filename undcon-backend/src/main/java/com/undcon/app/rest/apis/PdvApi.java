@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
+import com.undcon.app.dtos.OpenPdvDto;
 import com.undcon.app.exceptions.UndconException;
 import com.undcon.app.mappers.ProductMapper;
 import com.undcon.app.model.PdvEntity;
@@ -43,14 +44,14 @@ public class PdvApi {
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	public PdvEntity post(PdvEntity pdv) throws UndconException {
+	public PdvEntity post(OpenPdvDto pdv) throws UndconException {
 		return pdvService.persist(pdv);
 	}
 
 	@PUT
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public PdvEntity put(PdvEntity pdv) throws UndconException {
+	public PdvEntity put(OpenPdvDto pdv) throws UndconException {
 		return pdvService.update(pdv);
 	}
 

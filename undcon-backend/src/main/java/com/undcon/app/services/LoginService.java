@@ -131,7 +131,7 @@ public class LoginService {
 		return tenant;
 	}
 	
-	private static String getLoginByLoginAndDomain(String loginAndDomain) throws UndconException {
+	public static String getLoginByLoginAndDomain(String loginAndDomain) throws UndconException {
 		String[] split = loginAndDomain.trim().split("@");
 		if (split.length != 2) {
 			throw new UndconException(UndconError.INVALID_LOGIN_FORMAT_WITH_DOMAIN);

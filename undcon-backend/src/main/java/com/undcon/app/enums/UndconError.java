@@ -44,7 +44,9 @@ public enum UndconError {
 	
 	SALE_ITEM_STOCK_NOT_AVAIABLE("Saldo não disponível"),
 	
-	PURCHASE_ENTITY_INVALID_PROVIDER("Fornecedor inválido para a compra");
+	PURCHASE_ENTITY_INVALID_PROVIDER("Fornecedor inválido para a compra"),
+	
+	PDV_ALREADY_OPEN_TO_THE_LOGGED_USER("O PDV já está aberto para o usuário logado");
 	
 	private String message;
 

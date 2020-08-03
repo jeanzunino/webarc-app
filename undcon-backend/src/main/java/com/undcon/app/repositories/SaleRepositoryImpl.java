@@ -111,10 +111,11 @@ public class SaleRepositoryImpl {
 		if(pageable.getPageNumber() == 0 ) {
 			return 0;
 		}
-		return (pageable.getPageNumber() * pageable.getPageSize()) - (countItensProductTotal % pageable.getPageSize()) - pageable.getPageSize();
+		long count = (pageable.getPageNumber() * pageable.getPageSize()) - (countItensProductTotal % pageable.getPageSize()) - pageable.getPageSize();
+		if(count < 0) {
+			return 0;
+		}
+		return count;
 	}
 	
-	public static void main(String[] args) {
-		System.out.println(calcOffSetService(PageUtils.createPageRequest(2, 10), 13));
-	}
 }

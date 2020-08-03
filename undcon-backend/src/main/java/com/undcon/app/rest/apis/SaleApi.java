@@ -81,8 +81,11 @@ public class SaleApi {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public SaleEntity post(SaleRequestDto sale) throws UndconException {
-		Assert.notNull(sale.getCustomerId(), "customerId is required");
-		Assert.notNull(sale.getSalesmanId(), "salesmanId is required");
+		Assert.notNull(sale.getCustomer(), "customer is required");
+		Assert.notNull(sale.getSalesman(), "salesman is required");
+		
+		Assert.notNull(sale.getCustomer().getId(), "customer.id is required");
+		Assert.notNull(sale.getSalesman().getId(), "salesman.id is required");
 		return service.persist(sale);
 	}
 

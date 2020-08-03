@@ -24,7 +24,6 @@ import com.undcon.app.model.ProductEntity;
 import com.undcon.app.model.SaleEntity;
 import com.undcon.app.model.SaleItemEntity;
 import com.undcon.app.model.SaleItemProductEntity;
-import com.undcon.app.model.SaleItemServiceEntity;
 import com.undcon.app.model.UserEntity;
 import com.undcon.app.repositories.ISaleItemRepository;
 import com.undcon.app.repositories.ISaleRepository;
@@ -33,11 +32,11 @@ import com.undcon.app.utils.NumberUtils;
 import com.undcon.app.utils.PageUtils;
 
 @Component
-public class SaleService extends AbstractService<SaleEntity>{
+public class SaleService extends AbstractService<SaleEntity> {
 
 	@Autowired
 	private ISaleRepository saleRepository;
-	
+
 	@Autowired
 	private SaleRepositoryImpl saleRepositoryImpl;
 
@@ -55,7 +54,7 @@ public class SaleService extends AbstractService<SaleEntity>{
 
 	@Autowired
 	private CustomerService customerService;
-	
+
 	@Autowired
 	private StockService stockService;
 
@@ -65,26 +64,26 @@ public class SaleService extends AbstractService<SaleEntity>{
 	public Page<SaleEntity> getAll(String filter, Integer page, Integer size) {
 		return super.getAll(SaleEntity.class, filter, page, size);
 	}
-	
+
 	public SaleInfoDto getTotalSale() {
 		return new SaleInfoDto(saleRepositoryImpl.getTotalSale(true), saleRepositoryImpl.getTotalSale(false));
 	}
-	
+
 	public SaleEntity persist(SaleRequestDto saleDto) throws UndconException {
 		permissionService.checkPermission(ResourceType.SALE);
 
 		UserEntity user = userService.getCurrentUser();
 
-		CustomerEntity customer = customerService.findById(saleDto.getCustomerId());
+		CustomerEntity customer = customerService.findById(saleDto.getCustomer().getId());
 		validateClient(customer);
 		boolean billed = false;
 		Date saleDate = new Date(System.currentTimeMillis());
 		SaleStatus status = SaleStatus.CREATED;
-		
+
 		EmployeeEntity salesman = user.getEmployee();
 		// Se o Front não enviar o funcionário
-		if (NumberUtils.longIsPositiveValue(saleDto.getSalesmanId())) {
-			salesman = employeeService.findById(saleDto.getSalesmanId());
+		if (saleDto.getSalesman() != null && NumberUtils.longIsPositiveValue(saleDto.getSalesman().getId())) {
+			salesman = employeeService.findById(saleDto.getSalesman().getId());
 		}
 		SaleEntity sale = new SaleEntity(null, customer, saleDate, billed, status, user, salesman);
 		return saleRepository.save(sale);
@@ -100,7 +99,7 @@ public class SaleService extends AbstractService<SaleEntity>{
 		permissionService.checkPermission(ResourceType.SALE);
 		SaleEntity sale = findById(saleDto.getId());
 
-		CustomerEntity customer = customerService.findById(saleDto.getCustomerId());
+		CustomerEntity customer = customerService.findById(saleDto.getCustomer().getId());
 		validateClient(customer);
 		return saleRepository.save(sale);
 	}
@@ -187,7 +186,7 @@ public class SaleService extends AbstractService<SaleEntity>{
 	public List<ProductSaledInfoDto> getTopProductSaled(boolean billed) {
 		return saleRepositoryImpl.getTopProductSaled(billed);
 	}
-	
+
 	public Page<SaleItemDto> getItens(Long id, Integer page, Integer size) {
 		return saleRepositoryImpl.findAllById(id, PageUtils.createPageRequest(page, size));
 	}

@@ -11,7 +11,6 @@ import { DatePipe } from '@angular/common';
 @NgModule({
   declarations: [SaleComponent, SaleDetailComponent],
   imports: [SharedModule, MDBBootstrapModule.forRoot(), SaleRoutingModule,
-    NgxMaskModule.forRoot()],
-  providers: [DatePipe]
+    NgxMaskModule.forRoot()]
 })
 export class SaleModule {}

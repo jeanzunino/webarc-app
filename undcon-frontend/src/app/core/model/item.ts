@@ -1,7 +1,7 @@
 import { Entity } from '@model/entity';
 
-export class ProductItem extends Entity {
-  productId: number;
+export class Item extends Entity {
+  itemId: number;
   quantity: number;
   employeeId: number;
 }

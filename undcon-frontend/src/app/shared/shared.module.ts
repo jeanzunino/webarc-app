@@ -5,7 +5,7 @@ import {
   MDBBootstrapModule,
   CheckboxModule,
 } from 'angular-bootstrap-md';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import {
   TranslateModule,
@@ -26,6 +26,7 @@ import { SimplePanelComponent } from '@component/simple-panel/simple-panel.compo
 import { ValidationComponent } from '@component/validation/validation.component';
 import { EmptyComponent } from '@component/empty/empty.component';
 import { EmptyChildrenComponent } from '@component/empty-children/empty-children.component';
+import { ConfirmDialogComponent } from '@component/confirm-dialog/confirm-dialog.component';
 
 export let SharedInjector: Injector;
 
@@ -41,7 +42,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     SimplePanelComponent,
     ValidationComponent,
     EmptyComponent,
-    EmptyChildrenComponent
+    EmptyChildrenComponent,
+    ConfirmDialogComponent
   ],
   exports: [
     CommonModule,
@@ -77,7 +79,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     RouterModule
   ],
   providers: [
-    MaskPipe
+    MaskPipe,
+    DatePipe
   ]
 })
 export class SharedModule {

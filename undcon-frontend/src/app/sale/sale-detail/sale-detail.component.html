@@ -101,7 +101,7 @@
                 <p class="text-light font-weight-bold font-size-25">R$ {{servicePriceTotal}}</p>
               </div>
             </div>
-            <button mdbBtn type="button" color="primary" outline="true" (click)="goBack();" *ngIf="!isBilled() && !isCanceled()" mdbWavesEffect>Adicionar</button>
+            <button mdbBtn type="button" color="primary" outline="true" (click)="addService();" *ngIf="!isBilled() && !isCanceled()" mdbWavesEffect>Adicionar</button>
           </div>
         </app-simple-panel>
       </div>
@@ -113,7 +113,7 @@
           <div body>
             <app-table [pageValues]="saleItems" [tableValues]="tableValues" [updateCurrentPage]="currentPage"
                       (reloadItems)="reloadItems($event)" [showBtnAdd]="false" [selectableLine]="false"
-                      [showDelete]="!isBilled()" (deleteItem)="deleteSaleItem($event)"></app-table>
+                      [showDelete]="!isBilled()" (deleteItem)="confirmDeleteSaleItem($event)"></app-table>
           <!-- (clickItem)="onClickItem($event)" -->
           </div>
         </app-simple-panel>

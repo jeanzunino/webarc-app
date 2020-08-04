@@ -1,9 +1,11 @@
 import { NgxSpinnerService } from 'ngx-spinner';
-import { Component, ViewEncapsulation, ViewChild } from '@angular/core';
+import { Component, ViewEncapsulation, ViewChild, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import { TranslateService } from '@ngx-translate/core';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
 import { Customer } from '@model/customer';
 import { Sale } from '@model/sale';
@@ -21,9 +23,13 @@ import { ServiceType } from '@model/service-type';
 import { ServiceTypeService } from '@service/service-type/service-type.service';
 import { SaleItem } from '@model/sale-item';
 import { Table } from '@shared/model/table';
-import { SaleService } from '@app/core/service/sale/sale.service';
-import { FormatEnum } from '@app/core/enum/format-enum';
-import { ProductItem } from '@app/core/model/product-item';
+import { SaleService } from '@service/sale/sale.service';
+import { FormatEnum } from '@enum/format-enum';
+import { Item } from '@core/model/item';
+import { openConfimDialog } from '@shared/utils/utils';
+import { ConfirmDialogModel } from '@app/shared/model/confirm-dialog-model';
+import { CloseDialogValues } from '@app/shared/model/close-dialog-values';
+import { ActionReturnDialog } from '@enum/action-return-dialog';
 
 @Component({
   selector: 'app-sale-detail',
@@ -31,8 +37,9 @@ import { ProductItem } from '@app/core/model/product-item';
   styleUrls: ['./sale-detail.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class SaleDetailComponent {
+export class SaleDetailComponent implements OnDestroy {
 
+  private ngUnsubscribe = new Subject();
   spinner = SharedInjector.get(NgxSpinnerService);
   showPanelHeader = false;
 
@@ -43,6 +50,7 @@ export class SaleDetailComponent {
     .set('price', 'sale-item.price')
     .set('quantity', 'sale-item.quantity')
     .set('isProduct', 'sale-item.type', FormatEnum.IS_PRODUCT)
+    .set('subTotalItem', 'sale-item.subTotalItem')
     .get();
 
   entity: Sale;
@@ -86,6 +94,11 @@ export class SaleDetailComponent {
               private toastr: ToastrService,
               private translate: TranslateService) {
     this.loadPage();
+  }
+
+  ngOnDestroy() {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 
   private loadPage() {
@@ -150,6 +163,7 @@ export class SaleDetailComponent {
   }
 
   serviceSelectEvent(serviceType: ServiceType) {
+    this.serviceSelect = serviceType;
     this.servicePrice = serviceType.price;
     this.servicePriceTotal = this.servicePrice * this.serviceQtd;
   }
@@ -206,11 +220,17 @@ export class SaleDetailComponent {
 
   productInputCleared() {
     this.products = [];
+    this.productSelect = null;
+    this.productQtd = 0;
+    this.productPriceTotal = 0;
     this.ngAutoCompleteProduct.close();
   }
 
   serviceInputCleared() {
     this.services = [];
+    this.serviceSelect = null;
+    this.serviceQtd = 0;
+    this.servicePriceTotal = 0;
     this.ngAutoCompleteService.close();
   }
 
@@ -287,15 +307,14 @@ export class SaleDetailComponent {
 
   async addProduct() {
     if (this.validProduct()) {
-      const productItem = new ProductItem();
-      productItem.productId = this.productSelect.id;
-      productItem.employeeId = this.entity.salesman.id;
-      productItem.quantity = this.productQtd;
-      await this.ss.addProductItem(this.entity.id, productItem).toPromise()
+      const item = new Item();
+      item.itemId = this.productSelect.id;
+      item.employeeId = this.entity.salesman.id;
+      item.quantity = this.productQtd;
+      await this.ss.addProductItem(this.entity.id, item).toPromise()
         .then(() => {
           this.reloadItems(0);
-          this.productSelect = null;
-          this.productQtd = 0;
+          this.productInputCleared();
           this.toastr.success(
             this.translate.instant('Produto adicionado com sucesso'),
             this.translate.instant('Sucesso')
@@ -304,19 +323,59 @@ export class SaleDetailComponent {
     }
   }
 
-  async deleteSaleItem(saleItem: SaleItem) {
-    if (saleItem.isProduct) {
-      await this.ss.deleteProductItem(this.entity.id, saleItem.id).toPromise()
-      .then(() => {
-        this.reloadItems(0);
-        this.toastr.success(
-          this.translate.instant('Produto removido com sucesso'),
-          this.translate.instant('Sucesso')
-        );
-      });
-    } else {
-
+  async addService() {
+    if (this.validService()) {
+      const item = new Item();
+      item.itemId = this.serviceSelect.id;
+      item.employeeId = this.entity.salesman.id;
+      item.quantity = this.serviceQtd;
+      await this.ss.addServiceItem(this.entity.id, item).toPromise()
+        .then(() => {
+          this.reloadItems(0);
+          this.serviceInputCleared();
+          this.toastr.success(
+            this.translate.instant('Serviço adicionado com sucesso'),
+            this.translate.instant('Sucesso')
+          );
+        });
     }
+  }
+
+  confirmDeleteSaleItem(saleItem: SaleItem) {
+    const value = saleItem.isProduct ? 'produto' : 'serviço';
+    openConfimDialog(new ConfirmDialogModel(`Confirma a remoção do ${value} ${saleItem.name}`)).content.onClose
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe((values: CloseDialogValues) => {
+        if (values.action === ActionReturnDialog.CONFIRM) {
+          if (saleItem.isProduct) {
+            this.deleteProductItem(saleItem);
+          } else {
+            this.deleteServiceItem(saleItem);
+          }
+        }
+      });
+  }
+
+  deleteProductItem(saleItem: SaleItem) {
+    this.ss.deleteProductItem(this.entity.id, saleItem.id).toPromise()
+    .then(() => {
+      this.reloadItems(0);
+      this.toastr.success(
+        this.translate.instant('Produto removido com sucesso'),
+        this.translate.instant('Sucesso')
+      );
+    });
+  }
+
+  deleteServiceItem(saleItem: SaleItem) {
+    this.ss.deleteServiceItem(this.entity.id, saleItem.id).toPromise()
+    .then(() => {
+      this.reloadItems(0);
+      this.toastr.success(
+        this.translate.instant('Serviço removido com sucesso'),
+        this.translate.instant('Sucesso')
+      );
+    });
   }
 
   private validProduct() {
@@ -331,6 +390,26 @@ export class SaleDetailComponent {
     if (!this.productQtd) {
       this.toastr.error(
         this.translate.instant('A quantidade do produto deve ser informada'),
+        this.translate.instant('Erro')
+      );
+      return false;
+    }
+
+    return true;
+  }
+
+  private validService() {
+    if (!this.serviceSelect) {
+      this.toastr.error(
+        this.translate.instant('Nenhum serviço selecionado'),
+        this.translate.instant('Erro')
+      );
+      return false;
+    }
+
+    if (!this.serviceQtd) {
+      this.toastr.error(
+        this.translate.instant('A quantidade do serviço deve ser informada'),
         this.translate.instant('Erro')
       );
       return false;

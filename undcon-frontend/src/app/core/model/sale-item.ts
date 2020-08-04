@@ -8,4 +8,5 @@ export class SaleItem extends Entity {
   salesmanName: string;
   price: string;
   quantity: number;
+  subTotalItem: number;
 }

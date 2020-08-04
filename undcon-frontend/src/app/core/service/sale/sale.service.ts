@@ -7,7 +7,7 @@ import { StorageService } from '@service/storage/storage.service';
 import { Observable } from 'rxjs';
 import { Page } from '@model/page';
 import { SaleItem } from '@model/sale-item';
-import { ProductItem } from '@model/product-item';
+import { Item } from '@model/item';
 
 @Injectable({
   providedIn: 'root',
@@ -24,11 +24,19 @@ export class SaleService extends EntityService<Sale> {
     return this.getAllCustomUrl(`${this.baseUrl}/${this.entityUrl}/${saleId}/itens`, null, page) as Observable<Page<SaleItem>>;
   }
 
-  addProductItem(saleId: number, productItem: ProductItem): Observable<any> {
-    return this.postCustomUrl(`${this.baseUrl}/${this.entityUrl}/${saleId}/itensProducts`, productItem);
+  addProductItem(saleId: number, item: Item): Observable<any> {
+    return this.postCustomUrl(`${this.baseUrl}/${this.entityUrl}/${saleId}/itensProducts`, item);
   }
 
   deleteProductItem(saleId: number, productItemId: number): Observable<any> {
     return this.deleteCustomUrl(`${this.baseUrl}/${this.entityUrl}/${saleId}/itensProducts/${productItemId}`);
+  }
+
+  addServiceItem(saleId: number, item: Item): Observable<any> {
+    return this.postCustomUrl(`${this.baseUrl}/${this.entityUrl}/${saleId}/itensServices`, item);
+  }
+
+  deleteServiceItem(saleId: number, servicetItemId: number): Observable<any> {
+    return this.deleteCustomUrl(`${this.baseUrl}/${this.entityUrl}/${saleId}/itensServices/${servicetItemId}`);
   }
 }

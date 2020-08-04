@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
-import com.undcon.app.dtos.ProductItemRequestDto;
+import com.undcon.app.dtos.ItemRequestDto;
 import com.undcon.app.exceptions.UndconException;
 import com.undcon.app.model.PurchaseEntity;
 import com.undcon.app.model.PurchaseItemEntity;
@@ -68,14 +68,14 @@ public class PurchaseApi {
 	@POST
 	@Path("/{id}/itensProducts")
 	@Produces(MediaType.APPLICATION_JSON)
-	public PurchaseItemEntity postItem(@PathParam("id") long id, ProductItemRequestDto item) throws UndconException {
+	public PurchaseItemEntity postItem(@PathParam("id") long id, ItemRequestDto item) throws UndconException {
 		return service.addItem(id, item);
 	}
 
 	@PUT
 	@Path("/{id}/itensProducts")
 	@Produces(MediaType.APPLICATION_JSON)
-	public PurchaseItemEntity putItem(@PathParam("id") long id, ProductItemRequestDto item) throws UndconException {
+	public PurchaseItemEntity putItem(@PathParam("id") long id, ItemRequestDto item) throws UndconException {
 			return service.updateItem(id, item);
 	}
 

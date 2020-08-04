@@ -18,7 +18,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
-import com.undcon.app.dtos.ProductItemRequestDto;
+import com.undcon.app.dtos.ItemRequestDto;
 import com.undcon.app.dtos.ProductSaledInfoDto;
 import com.undcon.app.dtos.SaleInfoDto;
 import com.undcon.app.dtos.SaleItemDto;
@@ -26,7 +26,6 @@ import com.undcon.app.dtos.SaleRequestDto;
 import com.undcon.app.exceptions.UndconException;
 import com.undcon.app.model.SaleEntity;
 import com.undcon.app.model.SaleItemEntity;
-import com.undcon.app.model.SaleItemServiceEntity;
 import com.undcon.app.services.SaleService;
 
 /**
@@ -57,8 +56,8 @@ public class SaleApi {
 	@GET
 	@Path("/{id}/itens")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Page<SaleItemDto> getitens(@PathParam("id") long id, @QueryParam("page") Integer page, @QueryParam("size") Integer size)
-			throws UndconException {
+	public Page<SaleItemDto> getitens(@PathParam("id") long id, @QueryParam("page") Integer page,
+			@QueryParam("size") Integer size) throws UndconException {
 		Page<SaleItemDto> itens = service.getItens(id, page, size);
 		return itens;
 	}
@@ -83,7 +82,7 @@ public class SaleApi {
 	public SaleEntity post(SaleRequestDto sale) throws UndconException {
 		Assert.notNull(sale.getCustomer(), "customer is required");
 		Assert.notNull(sale.getSalesman(), "salesman is required");
-		
+
 		Assert.notNull(sale.getCustomer().getId(), "customer.id is required");
 		Assert.notNull(sale.getSalesman().getId(), "salesman.id is required");
 		return service.persist(sale);
@@ -106,24 +105,50 @@ public class SaleApi {
 	@POST
 	@Path("/{id}/itensProducts")
 	@Produces(MediaType.APPLICATION_JSON)
-	public SaleItemEntity postItem(@PathParam("id") long id, ProductItemRequestDto item) throws UndconException {
+	public SaleItemEntity postItemProduct(@PathParam("id") long id, ItemRequestDto item) throws UndconException {
 		Assert.notNull(item.getEmployeeId(), "employeeId is required");
-		Assert.notNull(item.getProductId(), "productId is required");
+		Assert.notNull(item.getItemId(), "itemId is required");
 		Assert.notNull(item.getQuantity(), "quantity is required");
-		return service.addItem(id, item);
+		return service.addItemProduct(id, item);
+	}
+
+	@POST
+	@Path("/{id}/itensServices")
+	@Produces(MediaType.APPLICATION_JSON)
+	public SaleItemEntity postItemService(@PathParam("id") long id, ItemRequestDto item) throws UndconException {
+		Assert.notNull(item.getEmployeeId(), "employeeId is required");
+		Assert.notNull(item.getItemId(), "itemId is required");
+		Assert.notNull(item.getQuantity(), "quantity is required");
+		return service.addItemService(id, item);
 	}
 
 	@PUT
 	@Path("/{id}/itensProducts")
 	@Produces(MediaType.APPLICATION_JSON)
-	public SaleItemEntity putItem(@PathParam("id") long id, ProductItemRequestDto item) throws UndconException {
-		return service.updateItem(id, item);
+	public SaleItemEntity putProductItem(@PathParam("id") long id, ItemRequestDto item) throws UndconException {
+		return service.updateProductItem(id, item);
+	}
+
+	@PUT
+	@Path("/{id}/itensServices")
+	@Produces(MediaType.APPLICATION_JSON)
+	public SaleItemEntity putServiceItem(@PathParam("id") long id, ItemRequestDto item) throws UndconException {
+		return service.updateServiceItem(id, item);
 	}
 
 	@DELETE
-	@Path("/{id}/itensProducts/{itemId}")
+	@Path("/{saleId}/itensProducts/{itemId}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public void deleteItem(@PathParam("saleId") long saleId, @PathParam("itemId") long itemId) throws UndconException {
-		service.deleteItem(saleId, itemId);
+	public void deleteProductItem(@PathParam("saleId") long saleId, @PathParam("itemId") long itemId)
+			throws UndconException {
+		service.deleteProductItem(saleId, itemId);
+	}
+
+	@DELETE
+	@Path("/{saleId}/itensServices/{itemId}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public void deleteServiceItem(@PathParam("saleId") long saleId, @PathParam("itemId") long itemId)
+			throws UndconException {
+		service.deleteServiceItem(saleId, itemId);
 	}
 }

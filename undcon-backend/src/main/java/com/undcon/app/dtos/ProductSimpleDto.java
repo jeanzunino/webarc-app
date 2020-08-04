@@ -8,10 +8,7 @@ public class ProductSimpleDto {
 	private ProductCategoryDto productCategory;
 
 	public ProductSimpleDto() {
-		// TODO Auto-generated constructor stub
 	}
-
-
 
 	public ProductSimpleDto(Long id, String name, String unit, ProductCategoryDto productCategory) {
 		super();
@@ -20,8 +17,6 @@ public class ProductSimpleDto {
 		this.unit = unit;
 		this.productCategory = productCategory;
 	}
-
-
 
 	public Long getId() {
 		return id;
@@ -47,18 +42,12 @@ public class ProductSimpleDto {
 		this.productCategory = productCategory;
 	}
 
-
-
 	public String getUnit() {
 		return unit;
 	}
 
-
-
 	public void setUnit(String unit) {
 		this.unit = unit;
 	}
-	
-	
 
 }

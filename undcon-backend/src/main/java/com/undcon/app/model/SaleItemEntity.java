@@ -2,7 +2,6 @@ package com.undcon.app.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -10,13 +9,15 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class SaleItemEntity {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "item_id_seq")
+	@SequenceGenerator(name = "item_id_seq", sequenceName = "item_venda_produto_id_seq")
 	@Column(name = "id")
 	private Long id;
 
@@ -42,8 +43,8 @@ public abstract class SaleItemEntity {
 		// TODO Auto-generated constructor stub
 	}
 
-	public SaleItemEntity(Long id, SaleEntity sale, UserEntity user, EmployeeEntity salesman,
-			double price, long quantity) {
+	public SaleItemEntity(Long id, SaleEntity sale, UserEntity user, EmployeeEntity salesman, double price,
+			long quantity) {
 		super();
 		this.id = id;
 		this.sale = sale;

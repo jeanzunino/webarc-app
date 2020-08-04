@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.undcon.app.dtos.ProductItemRequestDto;
+import com.undcon.app.dtos.ItemRequestDto;
 import com.undcon.app.dtos.ProductSaledInfoDto;
 import com.undcon.app.dtos.SaleInfoDto;
 import com.undcon.app.dtos.SaleItemDto;
@@ -24,8 +24,11 @@ import com.undcon.app.model.ProductEntity;
 import com.undcon.app.model.SaleEntity;
 import com.undcon.app.model.SaleItemEntity;
 import com.undcon.app.model.SaleItemProductEntity;
+import com.undcon.app.model.SaleItemServiceEntity;
+import com.undcon.app.model.ServiceTypeEntity;
 import com.undcon.app.model.UserEntity;
-import com.undcon.app.repositories.ISaleItemRepository;
+import com.undcon.app.repositories.ISaleItemProductRepository;
+import com.undcon.app.repositories.ISaleItemServiceRepository;
 import com.undcon.app.repositories.ISaleRepository;
 import com.undcon.app.repositories.SaleRepositoryImpl;
 import com.undcon.app.utils.NumberUtils;
@@ -41,7 +44,10 @@ public class SaleService extends AbstractService<SaleEntity> {
 	private SaleRepositoryImpl saleRepositoryImpl;
 
 	@Autowired
-	private ISaleItemRepository saleItemRepository;
+	private ISaleItemProductRepository saleItemProductRepository;
+	
+	@Autowired
+	private ISaleItemServiceRepository saleItemServiceRepository;
 
 	@Autowired
 	private PermissionService permissionService;
@@ -49,6 +55,9 @@ public class SaleService extends AbstractService<SaleEntity> {
 	@Autowired
 	private ProductService productService;
 
+	@Autowired
+	private ServiceTypeService serviceTypeService;
+	
 	@Autowired
 	private UserService userService;
 
@@ -112,15 +121,18 @@ public class SaleService extends AbstractService<SaleEntity> {
 	}
 
 	@Transactional
-	public SaleItemEntity addItem(long saleId, ProductItemRequestDto itemDto) throws UndconException {
+	public SaleItemEntity addItemProduct(long saleId, ItemRequestDto itemDto) throws UndconException {
 		permissionService.checkPermission(ResourceType.SALE);
 		SaleEntity sale = findById(saleId);
 		if (sale == null) {
 			throw new UndconException(UndconError.SALE_NOT_FOUND);
 		}
 
-		ProductEntity product = productService.findById(itemDto.getProductId());
+		ProductEntity product = productService.findById(itemDto.getItemId());
 
+		if (product == null) {
+			throw new UndconException(UndconError.PRODUCT_NOT_FOUND);
+		}
 		stockService.checkStockAvaiable(product, itemDto.getQuantity());
 
 		UserEntity user = userService.getCurrentUser();
@@ -134,37 +146,84 @@ public class SaleService extends AbstractService<SaleEntity> {
 
 		SaleItemProductEntity item = new SaleItemProductEntity(null, product, sale, user, employee,
 				product.getSalePrice(), itemDto.getQuantity());
-		saleItemRepository.save(item);
+		item = saleItemProductRepository.save(item);
 
 		stockService.discounProductOfStock(product, itemDto.getQuantity());
 
 		return item;
 	}
+	
+	@Transactional
+	public SaleItemEntity addItemService(long saleId, ItemRequestDto itemDto) throws UndconException {
+		permissionService.checkPermission(ResourceType.SALE);
+		SaleEntity sale = findById(saleId);
+		if (sale == null) {
+			throw new UndconException(UndconError.SALE_NOT_FOUND);
+		}
+
+		ServiceTypeEntity service = serviceTypeService.findById(itemDto.getItemId());
+		if (service == null) {
+			throw new UndconException(UndconError.SERVICE_TYPE_NOT_FOUND);
+		}
+		
+		UserEntity user = userService.getCurrentUser();
+
+		EmployeeEntity employee = user.getEmployee();
+
+		// Se o Front não enviar o funciona´rio
+		if (NumberUtils.longIsPositiveValue(itemDto.getEmployeeId())) {
+			employee = employeeService.findById(itemDto.getEmployeeId());
+		}
+
+		SaleItemServiceEntity item = new SaleItemServiceEntity(null, service, sale, user, employee,
+				service.getPrice(), itemDto.getQuantity());
+		
+		return saleItemServiceRepository.save(item);
+	}
 
 	@Transactional
-	public SaleItemEntity updateItem(long saleId, ProductItemRequestDto itemDto) throws UndconException {
+	public SaleItemEntity updateProductItem(long saleId, ItemRequestDto itemDto) throws UndconException {
 		permissionService.checkPermission(ResourceType.SALE);
 
 		SaleEntity sale = findById(saleId);
 		if (sale == null) {
 			throw new UndconException(UndconError.SALE_NOT_FOUND);
 		}
-		ProductEntity product = productService.findById(itemDto.getProductId());
+		ProductEntity product = productService.findById(itemDto.getItemId());
 
-		SaleItemEntity item = saleItemRepository.findOne(itemDto.getId());
+		SaleItemProductEntity item = saleItemProductRepository.findOne(itemDto.getId());
 
 		product.setStock(product.getStock() + item.getQuantity());
 
 		stockService.checkStockAvaiable(product, itemDto.getQuantity());
 
-		saleItemRepository.save(item);
+		saleItemProductRepository.save(item);
 
 		stockService.discounProductOfStock(product, itemDto.getQuantity());
 
 		return item;
 	}
+	
+	@Transactional
+	public SaleItemEntity updateServiceItem(long saleId, ItemRequestDto itemDto) throws UndconException {
+		permissionService.checkPermission(ResourceType.SALE);
 
-	public void deleteItem(Long saleId, long itemId) throws UndconException {
+		SaleEntity sale = findById(saleId);
+		if (sale == null) {
+			throw new UndconException(UndconError.SALE_NOT_FOUND);
+		}
+		UserEntity user = userService.getCurrentUser();
+		ServiceTypeEntity service = serviceTypeService.findById(itemDto.getItemId());
+
+		SaleItemServiceEntity item = saleItemServiceRepository.findOne(itemDto.getId());
+		item.setService(service);
+		item.setPrice(item.getPrice());
+		item.setUser(user);
+		
+		return saleItemServiceRepository.save(item);
+	}
+
+	public void deleteProductItem(Long saleId, long itemId) throws UndconException {
 		permissionService.checkPermission(ResourceType.SALE);
 
 		SaleEntity sale = findById(saleId);
@@ -172,7 +231,7 @@ public class SaleService extends AbstractService<SaleEntity> {
 			throw new UndconException(UndconError.SALE_NOT_FOUND);
 		}
 
-		SaleItemEntity item = saleItemRepository.findOne(itemId);
+		SaleItemProductEntity item = saleItemProductRepository.findOne(itemId);
 		if (item == null) {
 			throw new UndconException(UndconError.SALE_ITEM_NOT_FOUND);
 		}
@@ -180,7 +239,26 @@ public class SaleService extends AbstractService<SaleEntity> {
 		if (!item.getSale().getId().equals(sale.getId())) {
 			throw new UndconException(UndconError.SALE_ITEM_NOT_FOUND_IN_THE_SALE);
 		}
-		saleItemRepository.delete(item);
+		saleItemProductRepository.delete(item);
+	}
+	
+	public void deleteServiceItem(Long saleId, long itemId) throws UndconException {
+		permissionService.checkPermission(ResourceType.SALE);
+
+		SaleEntity sale = findById(saleId);
+		if (sale == null) {
+			throw new UndconException(UndconError.SALE_NOT_FOUND);
+		}
+
+		SaleItemServiceEntity item = saleItemServiceRepository.findOne(itemId);
+		if (item == null) {
+			throw new UndconException(UndconError.SALE_ITEM_NOT_FOUND);
+		}
+
+		if (!item.getSale().getId().equals(sale.getId())) {
+			throw new UndconException(UndconError.SALE_ITEM_NOT_FOUND_IN_THE_SALE);
+		}
+		saleItemServiceRepository.delete(item);
 	}
 
 	public List<ProductSaledInfoDto> getTopProductSaled(boolean billed) {

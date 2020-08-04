@@ -69,10 +69,12 @@ public class SaleRepositoryImpl {
 		List<SaleItemProductEntity> itensProduct = query.fetch();
 		List<SaleItemDto> result = new ArrayList<SaleItemDto>();
 		for (SaleItemProductEntity saleItemProductEntity : itensProduct) {
+			double subTotalItem = saleItemProductEntity.getPrice() * saleItemProductEntity.getQuantity();
 			result.add(new SaleItemDto(saleItemProductEntity.getId(), saleItemProductEntity.getProduct().getName(),
 					saleItemProductEntity.getSale().getId(), true, saleItemProductEntity.getUser().getLogin(),
 					saleItemProductEntity.getSalesman().getName(), saleItemProductEntity.getPrice(),
-					saleItemProductEntity.getQuantity()));
+					saleItemProductEntity.getQuantity(),
+					subTotalItem));
 		}
 		long countItensProductTotal = saleItemProductRepository
 				.count(QSaleItemProductEntity.saleItemProductEntity.sale.id.eq(id));
@@ -94,10 +96,11 @@ public class SaleRepositoryImpl {
 			queryService.orderBy(new OrderSpecifier(Order.ASC, fieldPath));
 			List<SaleItemServiceEntity> itensService = queryService.fetch();
 			for (SaleItemServiceEntity saleItemServiceEntity : itensService) {
+				double subTotalItem = saleItemServiceEntity.getPrice() * saleItemServiceEntity.getQuantity();
 				result.add(new SaleItemDto(saleItemServiceEntity.getId(), saleItemServiceEntity.getService().getName(),
 						saleItemServiceEntity.getSale().getId(), false, saleItemServiceEntity.getUser().getLogin(),
 						saleItemServiceEntity.getSalesman().getName(), saleItemServiceEntity.getPrice(),
-						saleItemServiceEntity.getQuantity()));
+						saleItemServiceEntity.getQuantity(), subTotalItem));
 			}
 		}
 
@@ -108,14 +111,15 @@ public class SaleRepositoryImpl {
 	}
 
 	private static long calcOffSetService(Pageable pageable, long countItensProductTotal) {
-		if(pageable.getPageNumber() == 0 ) {
+		if (pageable.getPageNumber() == 0) {
 			return 0;
 		}
-		long count = (pageable.getPageNumber() * pageable.getPageSize()) - (countItensProductTotal % pageable.getPageSize()) - pageable.getPageSize();
-		if(count < 0) {
+		long count = (pageable.getPageNumber() * pageable.getPageSize())
+				- (countItensProductTotal % pageable.getPageSize()) - pageable.getPageSize();
+		if (count < 0) {
 			return 0;
 		}
 		return count;
 	}
-	
+
 }

@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.undcon.app.dtos.ProductItemRequestDto;
+import com.undcon.app.dtos.ItemRequestDto;
 import com.undcon.app.enums.ResourceType;
 import com.undcon.app.enums.SaleStatus;
 import com.undcon.app.enums.UndconError;
@@ -82,14 +82,14 @@ public class PurchaseService extends AbstractService<PurchaseEntity>{
 	}
 	
 	@Transactional
-	public PurchaseItemEntity addItem(long purchaseId, ProductItemRequestDto itemDto) throws UndconException {
+	public PurchaseItemEntity addItem(long purchaseId, ItemRequestDto itemDto) throws UndconException {
 		permissionService.checkPermission(ResourceType.SALE);
 		PurchaseEntity purchase = findById(purchaseId);
 		if (purchase == null) {
 			throw new UndconException(UndconError.SALE_NOT_FOUND);
 		}
 
-		ProductEntity product = productService.findById(itemDto.getProductId());
+		ProductEntity product = productService.findById(itemDto.getItemId());
 
 		stockService.checkStockAvaiable(product, itemDto.getQuantity());
 
@@ -112,14 +112,14 @@ public class PurchaseService extends AbstractService<PurchaseEntity>{
 	}
 
 	@Transactional
-	public PurchaseItemEntity updateItem(long saleId, ProductItemRequestDto itemDto) throws UndconException {
+	public PurchaseItemEntity updateItem(long saleId, ItemRequestDto itemDto) throws UndconException {
 		permissionService.checkPermission(ResourceType.SALE);
 
 		PurchaseEntity purchase = findById(saleId);
 		if (purchase == null) {
 			throw new UndconException(UndconError.SALE_NOT_FOUND);
 		}
-		ProductEntity product = productService.findById(itemDto.getProductId());
+		ProductEntity product = productService.findById(itemDto.getItemId());
 
 		PurchaseItemEntity item = purchaseItemRepository.findOne(itemDto.getId());
 

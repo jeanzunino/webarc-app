@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
-import com.undcon.app.dtos.ProductSimpleDto;
+import com.undcon.app.dtos.ProductDto;
 import com.undcon.app.exceptions.UndconException;
 import com.undcon.app.mappers.ProductMapper;
 import com.undcon.app.model.ProductEntity;
@@ -52,14 +52,14 @@ public class ProductApi {
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	public ProductEntity post(ProductSimpleDto dto) throws UndconException {
+	public ProductEntity post(ProductDto dto) throws UndconException {
 		return productService.persist(productMapper.toEntity(dto));
 	}
 
 	@PUT
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ProductEntity put(ProductSimpleDto dto) throws UndconException {
+	public ProductEntity put(ProductDto dto) throws UndconException {
 		return productService.update(productMapper.toEntity(dto));
 	}
 

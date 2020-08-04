@@ -23,6 +23,7 @@ import com.undcon.app.dtos.ProductSaledInfoDto;
 import com.undcon.app.dtos.SaleInfoDto;
 import com.undcon.app.dtos.SaleItemDto;
 import com.undcon.app.dtos.SaleRequestDto;
+import com.undcon.app.dtos.SaleTotalDto;
 import com.undcon.app.exceptions.UndconException;
 import com.undcon.app.model.SaleEntity;
 import com.undcon.app.model.SaleItemEntity;
@@ -67,6 +68,13 @@ public class SaleApi {
 	@Produces(MediaType.APPLICATION_JSON)
 	public SaleInfoDto getTotal() {
 		return service.getTotalSale();
+	}
+	
+	@GET
+	@Path("/{id}/total")
+	@Produces(MediaType.APPLICATION_JSON)
+	public SaleTotalDto getSaleTotal(@PathParam("id") long id) {
+		return service.getSaleTotal(id);
 	}
 
 	@GET

@@ -106,6 +106,14 @@ input::-webkit-inner-spin-button {
   background-color:	#FFFF66;
 }
 
+.color-orange {
+  color:	#f09b00;
+}
+
+.background-color-orange {
+  background-color:	#f09b00;
+}
+
 .color-black {
   color: black;
 }
@@ -113,6 +121,23 @@ input::-webkit-inner-spin-button {
 .margin-b-0 {
   margin-bottom: 0px;
 }
+
 .font-size-25 {
   font-size: 25px;
+}
+
+.width-84 {
+  width: 84px;
+}
+
+.text-align-center {
+  text-align: center;
+}
+
+.margin-b-20 {
+  margin-bottom: 20px;
+}
+
+.font-size-38 {
+  font-size: 38px;
 }

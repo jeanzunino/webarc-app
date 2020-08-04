@@ -5,7 +5,7 @@
         <div class="col-6 div--total-items-align">
           {{'total_registros_encontrados' | translate: {total: totalItems} }}
         </div>
-        <div class="col-6 div-button--table-header">
+        <div *ngIf="showBtnAdd" class="col-6 div-button--table-header">
           <button mdbBtn class="button--table-header" type="button" color="primary" outline="true" (click)="onClickItem(null)" mdbWavesEffect>Adicionar</button>
         </div>
       </div>
@@ -21,9 +21,14 @@
           <tbody>
             <tr
               *ngFor="let item of tableItems | paginate: {itemsPerPage: 10, currentPage: currentPage, totalItems: totalItems}"
-              class="cursor-pointer">
+              class="{{selectableLine ? 'cursor-pointer' : ''}}">
               <th *ngFor="let tableValue of tableValues" class="text-light" (click)="onClickItem(item)">
                 {{ getFieldsOfTable(item, tableValue) }}
+              </th>
+              <th class="width-84 text-align-center" *ngIf="showDelete">
+                <a type="button" (click)="deleteItemEvent(item)">
+                  <mdb-icon fas class="color-crimson" icon="fa fa-trash"></mdb-icon>
+                </a>
               </th>
             </tr>
           </tbody>
@@ -48,7 +53,7 @@
       <div>
         <label>Nenhum resultado foi encontrado.</label>
       </div>
-      <button mdbBtn type="button" color="primary" outline="true" (click)="onClickItem(null)" mdbWavesEffect>Adicionar</button>
+      <button *ngIf="showBtnAdd" mdbBtn type="button" color="primary" outline="true" (click)="onClickItem(null)" mdbWavesEffect>Adicionar</button>
     </div>
   </div>
 </div>

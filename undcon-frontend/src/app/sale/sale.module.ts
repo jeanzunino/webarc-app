@@ -6,10 +6,12 @@ import { SaleComponent } from '@app/sale/sale.component';
 import { SharedModule } from '@shared/shared.module';
 import { SaleDetailComponent } from './sale-detail/sale-detail.component';
 import { NgxMaskModule } from 'ngx-mask';
+import { DatePipe } from '@angular/common';
 
 @NgModule({
   declarations: [SaleComponent, SaleDetailComponent],
   imports: [SharedModule, MDBBootstrapModule.forRoot(), SaleRoutingModule,
     NgxMaskModule.forRoot()],
+  providers: [DatePipe]
 })
 export class SaleModule {}

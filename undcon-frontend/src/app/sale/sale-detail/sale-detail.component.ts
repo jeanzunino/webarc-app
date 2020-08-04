@@ -1,22 +1,29 @@
 import { NgxSpinnerService } from 'ngx-spinner';
-import { Component, ViewEncapsulation, OnInit, ViewChild } from '@angular/core';
+import { Component, ViewEncapsulation, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { DatePipe } from '@angular/common';
+import { ToastrService } from 'ngx-toastr';
+import { TranslateService } from '@ngx-translate/core';
 
 import { Customer } from '@model/customer';
 import { Sale } from '@model/sale';
 import { Page } from '@model/page';
 import { SharedInjector } from '@shared/shared.module';
 import { Employee } from '@model/employee';
-import { CustomerService } from '@app/core/service/customer/customer.service';
+import { CustomerService } from '@service/customer/customer.service';
 import { getQueryFilter } from '@shared/utils/utils';
 import { QueryFilterEnum } from '@core/enum/query-filter';
-import { SaleStatus } from '@app/core/enum/sale-status';
-import { FormGroup, FormControl } from '@angular/forms';
-import { EmployeeService } from '@app/core/service/employee/employee.service';
-import { Product } from '@app/core/model/product';
-import { ProductService } from '@app/core/service/product/product.service';
-import { ServiceType } from '@app/core/model/service-type';
-import { ServiceTypeService } from '@app/core/service/service-type/service-type.service';
+import { SaleStatus } from '@enum/sale-status';
+import { EmployeeService } from '@service/employee/employee.service';
+import { Product } from '@model/product';
+import { ProductService } from '@service/product/product.service';
+import { ServiceType } from '@model/service-type';
+import { ServiceTypeService } from '@service/service-type/service-type.service';
+import { SaleItem } from '@model/sale-item';
+import { Table } from '@shared/model/table';
+import { SaleService } from '@app/core/service/sale/sale.service';
+import { FormatEnum } from '@app/core/enum/format-enum';
+import { ProductItem } from '@app/core/model/product-item';
 
 @Component({
   selector: 'app-sale-detail',
@@ -28,7 +35,15 @@ export class SaleDetailComponent {
 
   spinner = SharedInjector.get(NgxSpinnerService);
   showPanelHeader = false;
-  formGroup: FormGroup;
+
+  saleItems: Page<SaleItem>;
+  currentPage = 0;
+  tableValues = new Table()
+    .set('name', 'sale-item.name')
+    .set('price', 'sale-item.price')
+    .set('quantity', 'sale-item.quantity')
+    .set('isProduct', 'sale-item.type', FormatEnum.IS_PRODUCT)
+    .get();
 
   entity: Sale;
   colorPanelHeader = '';
@@ -45,6 +60,7 @@ export class SaleDetailComponent {
   employeeInitialValue;
 
   @ViewChild('ngAutoCompleteProduct') ngAutoCompleteProduct;
+  private productSelect: Product;
   products: Product[];
   productKeyword = 'name';
   productPrice = 0;
@@ -52,6 +68,7 @@ export class SaleDetailComponent {
   productPriceTotal = 0;
 
   @ViewChild('ngAutoCompleteService') ngAutoCompleteService;
+  private serviceSelect: ServiceType;
   services: ServiceType[];
   serviceKeyword = 'name';
   servicePrice = 0;
@@ -63,31 +80,25 @@ export class SaleDetailComponent {
               private cs: CustomerService,
               private es: EmployeeService,
               private ps: ProductService,
-              private sts: ServiceTypeService) {
+              private sts: ServiceTypeService,
+              private ss: SaleService,
+              private datePipe: DatePipe,
+              private toastr: ToastrService,
+              private translate: TranslateService) {
     this.loadPage();
   }
 
   private loadPage() {
-    this.createFormGroup();
-    this.entity = this.rt.snapshot.data.entity as Sale;
+    this.entity = new Sale();
     if (!this.isNew()) {
+      this.entity = this.rt.snapshot.data.entity as Sale;
       this.customerInitialValue = this.entity.customer;
       this.employeeInitialValue = this.entity.salesman;
-      this.formGroup.patchValue({
-        id: this.entity.id,
-        saleDate: this.entity.saleDate
-      });
       this.setPanelHeaderStatus();
       this.showPanelHeader = true;
+      this.saleItems = this.rt.snapshot.data.saleItens;
     }
     this.spinner.hide();
-  }
-
-  createFormGroup() {
-    this.formGroup = new FormGroup({
-      id: new FormControl(null),
-      saleDate: new FormControl('')
-    });
   }
 
   private setPanelHeaderStatus() {
@@ -98,7 +109,7 @@ export class SaleDetailComponent {
         break;
       }
       case SaleStatus.TO_BILL: {
-        this.colorPanelHeader = 'background-color-light-yellow';
+        this.colorPanelHeader = 'background-color-orange';
         this.iconPanelHeader = 'fa fa-exclamation-triangle';
         break;
       }
@@ -129,6 +140,7 @@ export class SaleDetailComponent {
   }
 
   productSelectEvent(product: Product) {
+    this.productSelect = product;
     this.productPrice = product.salePrice;
     this.productPriceTotal = this.productPrice * this.productQtd;
   }
@@ -202,15 +214,128 @@ export class SaleDetailComponent {
     this.ngAutoCompleteService.close();
   }
 
-  get saleDateForm() {
-    return this.formGroup.get('saleDate');
-  }
-
   public isNew() {
     return this.rt.snapshot.params.id === 'new';
   }
 
   public getTitle() {
-    return this.entity ? this.entity.status.toUpperCase() : '';
+    return !this.isNew() ? `${this.entity.status.toUpperCase()} - ${this.datePipe.transform(this.entity.saleDate, 'dd/MM/yyyy hh:mm')}`
+                         : '';
+  }
+
+  async reloadItems(page) {
+    this.spinner.show();
+    this.currentPage = page + 1;
+    this.saleItems = (await this.ss.getSaleItens(this.entity.id, page).toPromise());
+    this.spinner.hide();
+  }
+
+  isToBill() {
+    return this.isNew() ? false : this.entity.status === SaleStatus.TO_BILL;
+  }
+
+  isBilled() {
+    return this.isNew() ? false : this.entity.status === SaleStatus.BILLED;
+  }
+
+  isCanceled() {
+    return this.isNew() ? false : this.entity.status === SaleStatus.CANCELED;
+  }
+
+  isCreated() {
+    return this.isNew() ? false : this.entity.status === SaleStatus.CREATED;
+  }
+
+  async onSave() {
+    if (this.validEntity()) {
+      await this.ss.post(this.entity)
+      .toPromise()
+      .then(sale => {
+        this.entity = sale;
+        this.setPanelHeaderStatus();
+        if (this.isNew()) {
+          this.showPanelHeader = true;
+          this.router.navigate(['../', this.entity.id], { relativeTo: this.rt.parent });
+        }
+        this.toastr.success(
+          this.translate.instant('Venda incluida com sucesso'),
+          this.translate.instant('Sucesso')
+        );
+      });
+    }
+  }
+
+  private validEntity() {
+    if (!this.entity.customer) {
+      this.toastr.error(
+        this.translate.instant('Cliente não informado'),
+        this.translate.instant('Erro')
+      );
+      return false;
+    }
+
+    if (!this.entity.salesman) {
+      this.toastr.error(
+        this.translate.instant('Vendedor não informado'),
+        this.translate.instant('Erro')
+      );
+      return false;
+    }
+
+    return true;
+  }
+
+  async addProduct() {
+    if (this.validProduct()) {
+      const productItem = new ProductItem();
+      productItem.productId = this.productSelect.id;
+      productItem.employeeId = this.entity.salesman.id;
+      productItem.quantity = this.productQtd;
+      await this.ss.addProductItem(this.entity.id, productItem).toPromise()
+        .then(() => {
+          this.reloadItems(0);
+          this.productSelect = null;
+          this.productQtd = 0;
+          this.toastr.success(
+            this.translate.instant('Produto adicionado com sucesso'),
+            this.translate.instant('Sucesso')
+          );
+        });
+    }
+  }
+
+  async deleteSaleItem(saleItem: SaleItem) {
+    if (saleItem.isProduct) {
+      await this.ss.deleteProductItem(this.entity.id, saleItem.id).toPromise()
+      .then(() => {
+        this.reloadItems(0);
+        this.toastr.success(
+          this.translate.instant('Produto removido com sucesso'),
+          this.translate.instant('Sucesso')
+        );
+      });
+    } else {
+
+    }
+  }
+
+  private validProduct() {
+    if (!this.productSelect) {
+      this.toastr.error(
+        this.translate.instant('Nenhum produto selecionado'),
+        this.translate.instant('Erro')
+      );
+      return false;
+    }
+
+    if (!this.productQtd) {
+      this.toastr.error(
+        this.translate.instant('A quantidade do produto deve ser informada'),
+        this.translate.instant('Erro')
+      );
+      return false;
+    }
+
+    return true;
   }
 }

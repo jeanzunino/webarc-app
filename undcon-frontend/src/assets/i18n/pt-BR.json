@@ -50,5 +50,7 @@
   "filtros": "Filtros",
   "total_registros_encontrados": "Total de registros encontrados: {{total}}",
   "yes": "Sim",
-  "no": "Não"
+  "no": "Não",
+  "product": "Produto",
+  "service": "Serviço"
 }

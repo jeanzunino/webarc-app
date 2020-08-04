@@ -20,7 +20,7 @@ export class SaleComponent extends GridViewComponent<Sale> {
   tableValues = new Table()
     .set('id', 'sale.id')
     .set('customer.name', 'sale.customer-name')
-    .set('saleDate', 'sale.saleDate')
+    .set('saleDate', 'sale.saleDate', FormatEnum.DATE_TIME_PIPE)
     .set('salesman.name', 'sale.salesman-name')
     .set('status', 'sale.status')
     .set('user.login', 'sale.user-login')

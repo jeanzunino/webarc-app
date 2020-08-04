@@ -1,37 +1,42 @@
 <app-simple-panel [panelTitle]="getTitle()" [panelTitleColor]="'color-black'" [showHeader]="showPanelHeader"
                   [icon]="iconPanelHeader" [headerColor]="colorPanelHeader">
   <div body>
-    <form [formGroup]="formGroup">
+    <div class="margin-b-20">
       <div class="row">
-        <div class="col-4">
-          <div class="md-form">
-            <input type="text" id="data" class="form-control text-light" formControlName="saleDate" mask="00/00/0000 00:00" mdbInput mdbValidate />
-            <label for="data" class="text-light">Data</label>
-            <app-validation [form]="saleDateForm" [validMessage]="'Válido'" [invalidMessage]="'Inválido'"></app-validation>
-          </div>
-        </div>
-
-        <div class="col-4 ng-autocomplete">
+        <div class="col-6 ng-autocomplete">
           <label for="customers" class="text-light">Cliente</label>
           <ng-autocomplete id="customers" [data]="customers" [searchKeyword]="customerKeyword" [initialValue]="customerInitialValue" [itemTemplate]="customerTemplate"
                           [notFoundTemplate]="customerNotFoundTemplate" (selected)='customerSelectEvent($event)'
                           (inputChanged)="customerChangeEvent($event)" minQueryLength="3" notFoundText="Nenhum cliente encontrado"
-                          (inputCleared)="customerInputCleared()" #ngAutoCompleteCustomer>
+                          (inputCleared)="customerInputCleared()" [disabled]="!isNew()" #ngAutoCompleteCustomer>
           </ng-autocomplete>
         </div>
 
-        <div class="col-4 ng-autocomplete">
-          <label for="employees" class="text-light">Venda</label>
+        <div class="col-6 ng-autocomplete">
+          <label for="employees" class="text-light">Vendedor</label>
           <ng-autocomplete id="employees" [data]="employees" [searchKeyword]="employeeKeyword" [initialValue]="employeeInitialValue" [itemTemplate]="employeeTemplate"
                           [notFoundTemplate]="employeeNotFoundTemplate" (selected)='employeeSelectEvent($event)'
                           (inputChanged)="employeeChangeEvent($event)" minQueryLength="3" notFoundText="Nenhum funcionário encontrado"
-                          (inputCleared)="employeeInputCleared()" #ngAutoCompleteEmployee>
+                          (inputCleared)="employeeInputCleared()" [disabled]="!isNew()" #ngAutoCompleteEmployee>
           </ng-autocomplete>
         </div>
       </div>
-    </form>
+    </div>
 
-    <div class="row">
+    <div class="row margin-b-20">
+      <div class="col-6">
+        <button mdbBtn *ngIf="isNew()" type="button" color="primary" outline="true" (click)="onSave()" mdbWavesEffect>Salvar</button>
+        <button mdbBtn *ngIf="!isNew()" type="button" color="primary" outline="true" (click)="onSave()" mdbWavesEffect>Finalizar</button>
+        <button mdbBtn type="button" color="mdb-color" outline="true" (click)="goBack()" mdbWavesEffect>Voltar</button>
+      </div>
+      <div class="col-6 align-end">
+        <p class="text-light font-weight-bold font-size-38 margin-b-0">R$ {{productPriceTotal}}</p>
+        <button mdbBtn type="button" color="success" outline="true" (click)="goBack()" *ngIf="isToBill()" mdbWavesEffect>Faturar</button>
+        <button mdbBtn type="button" color="danger" outline="true" (click)="goBack()" *ngIf="!isNew() && !isBilled() && !isCanceled()" mdbWavesEffect>Cancelar</button>
+      </div>
+    </div>
+
+    <div class="row margin-b-20" *ngIf="isCreated()">
       <div class="col-6">
         <app-simple-panel panelColor="secondary-system-color">
           <div body>
@@ -62,16 +67,11 @@
                 <p class="text-light font-weight-bold font-size-25">R$ {{productPriceTotal}}</p>
               </div>
             </div>
-
-            <div class="row">
-              <div class="col-12">
-                <button mdbBtn type="button" color="primary" outline="true" (click)="goBack();" mdbWavesEffect>Adicionar</button>
-              </div>
-            </div>
+            <button mdbBtn type="button" color="primary" outline="true" (click)="addProduct();" *ngIf="!isBilled() && !isCanceled()" mdbWavesEffect>Adicionar</button>
           </div>
         </app-simple-panel>
       </div>
-      <div class="col-6">
+      <div class="col-6" *ngIf="isCreated() || isToBill()">
         <app-simple-panel panelColor="secondary-system-color">
           <div body>
             <div class="row">
@@ -101,20 +101,23 @@
                 <p class="text-light font-weight-bold font-size-25">R$ {{servicePriceTotal}}</p>
               </div>
             </div>
-
-            <div class="row">
-              <div class="col-12">
-                <button mdbBtn type="button" color="primary" outline="true" (click)="goBack();" mdbWavesEffect>Adicionar</button>
-              </div>
-            </div>
+            <button mdbBtn type="button" color="primary" outline="true" (click)="goBack();" *ngIf="!isBilled() && !isCanceled()" mdbWavesEffect>Adicionar</button>
           </div>
         </app-simple-panel>
       </div>
     </div>
-    <div class="row">
+
+    <div class="row" *ngIf="!isNew()">
       <div class="col-12">
-        <!-- <app-table [pageValues]="items" [tableValues]="tableValues" [updateCurrentPage]="currentPage"
-      (reloadItems)="reloadItems($event)" (clickItem)="onClickItem($event)"></app-table> -->
+        <app-simple-panel panelColor="secondary-system-color" [showHeader]="true" [panelTitle]="'Itens da venda'.toUpperCase()">
+          <div body>
+            <app-table [pageValues]="saleItems" [tableValues]="tableValues" [updateCurrentPage]="currentPage"
+                      (reloadItems)="reloadItems($event)" [showBtnAdd]="false" [selectableLine]="false"
+                      [showDelete]="!isBilled()" (deleteItem)="deleteSaleItem($event)"></app-table>
+          <!-- (clickItem)="onClickItem($event)" -->
+          </div>
+        </app-simple-panel>
+
       </div>
     </div>
   </div>

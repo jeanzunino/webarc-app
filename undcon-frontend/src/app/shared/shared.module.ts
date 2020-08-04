@@ -26,7 +26,6 @@ import { SimplePanelComponent } from '@component/simple-panel/simple-panel.compo
 import { ValidationComponent } from '@component/validation/validation.component';
 import { EmptyComponent } from '@component/empty/empty.component';
 import { EmptyChildrenComponent } from '@component/empty-children/empty-children.component';
-import { AutocompleteComponent } from './component/autocomplete/autocomplete.component';
 
 export let SharedInjector: Injector;
 
@@ -42,9 +41,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     SimplePanelComponent,
     ValidationComponent,
     EmptyComponent,
-    EmptyChildrenComponent,
-    //TODO rever
-    AutocompleteComponent
+    EmptyChildrenComponent
   ],
   exports: [
     CommonModule,
@@ -62,7 +59,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     ValidationComponent,
     EmptyComponent,
     EmptyChildrenComponent,
-    // AutocompleteComponent,
     AutocompleteLibModule
   ],
   imports: [
@@ -78,8 +74,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     }),
     NgxPaginationModule,
     NgxMaskModule.forRoot(),
-    RouterModule,
-    AutocompleteLibModule
+    RouterModule
   ],
   providers: [
     MaskPipe

@@ -23,3 +23,15 @@ export class SaleDetailResolver {
         return this.saleService.get(route.params.id);
     }
 }
+
+@Injectable()
+export class SaleItensResolver {
+  constructor(private saleService: SaleService) {}
+
+    public resolve(route: ActivatedRouteSnapshot) {
+        if (route.params.id === 'new') {
+          return;
+        }
+        return this.saleService.getSaleItens(route.params.id, 0);
+    }
+}

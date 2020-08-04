@@ -27,12 +27,30 @@ export class EntityService<T> {
     return this.http.get(`${this.baseUrl}/${this.entityUrl}`, { params });
   }
 
+  public getAllCustomUrl(url: string, filters?: Map<string, string>, pageNumber: number = 0, sizeNumber: number = 10) {
+    let filterAsString = '';
+    if (filters) {
+      filters.forEach((value: string, key: string) => {
+        if (value) {
+          filterAsString += '&' + key + value;
+        }
+      });
+    }
+    let params: {};
+    params = {filter: filterAsString, page: pageNumber, size: sizeNumber };
+    return this.http.get(url, { params });
+  }
+
   public get(id: number) {
     return this.http.get<T>(`${this.baseUrl}/${this.entityUrl}/${id}`);
   }
 
   public post(entity: T) {
     return this.http.post<T>(`${this.baseUrl}/${this.entityUrl}`, entity);
+  }
+
+  public postCustomUrl(url: string, entity: any) {
+    return this.http.post<any>(url, entity);
   }
 
   public put(entity: Entity) {
@@ -46,5 +64,9 @@ export class EntityService<T> {
     return this.http.delete<T>(
       `${this.baseUrl}/${this.entityUrl}/${entity.id}`
     );
+  }
+
+  public deleteCustomUrl(url: string) {
+    return this.http.delete<any>(url);
   }
 }

@@ -5,6 +5,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { TableValues } from '@shared/model/table';
 import { Page } from '@model/page';
 import { FormatEnum } from '@app/core/enum/format-enum';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-table',
@@ -19,6 +20,7 @@ export class TableComponent implements OnInit {
 
   @Output() reloadItems: EventEmitter<number> = new EventEmitter();
   @Output() clickItem: EventEmitter<any> = new EventEmitter();
+  @Output() deleteItem: EventEmitter<number> = new EventEmitter();
   @Input() tableValues: TableValues[] = [];
   @Input() set pageValues(value: Page<any>) {
     this.tableItems = value.content;
@@ -28,9 +30,13 @@ export class TableComponent implements OnInit {
     this.controlCurrentPage = true;
     this.currentPage = page;
   }
+  @Input() showBtnAdd = true;
+  @Input() selectableLine = true;
+  @Input() showDelete = false;
 
   constructor(private maskPipe: MaskPipe,
-              private translate: TranslateService) { }
+              private translate: TranslateService,
+              private datePipe: DatePipe) { }
 
   ngOnInit(): void {}
 
@@ -55,6 +61,10 @@ export class TableComponent implements OnInit {
         return this.maskPipe.transform(finalValue, this.translate.instant(tableValue.formatEnum));
       } else if (tableValue.formatEnum === FormatEnum.YES_NO) {
         return finalValue ? this.translate.instant('yes') : this.translate.instant('no');
+      } else if (tableValue.formatEnum === FormatEnum.IS_PRODUCT) {
+        return finalValue ? this.translate.instant('product') : this.translate.instant('service');
+      } else if (tableValue.formatEnum === FormatEnum.DATE_TIME_PIPE) {
+        return this.datePipe.transform(finalValue, 'dd/MM/yyyy hh:mm');
       }
     }
 
@@ -70,5 +80,9 @@ export class TableComponent implements OnInit {
 
   onClickItem(item) {
     this.clickItem.emit(item);
+  }
+
+  deleteItemEvent(item) {
+    this.deleteItem.emit(item);
   }
 }

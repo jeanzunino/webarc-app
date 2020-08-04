@@ -14,6 +14,7 @@ import com.undcon.app.dtos.ProductSaledInfoDto;
 import com.undcon.app.dtos.SaleInfoDto;
 import com.undcon.app.dtos.SaleItemDto;
 import com.undcon.app.dtos.SaleRequestDto;
+import com.undcon.app.dtos.SaleTotalDto;
 import com.undcon.app.enums.ResourceType;
 import com.undcon.app.enums.SaleStatus;
 import com.undcon.app.enums.UndconError;
@@ -269,6 +270,10 @@ public class SaleService extends AbstractService<SaleEntity> {
 		return saleRepositoryImpl.findAllById(id, PageUtils.createPageRequest(page, size));
 	}
 
+	public SaleTotalDto getSaleTotal(Long id){
+		return saleRepositoryImpl.getSaleTotal(id);
+	}
+	
 	@Override
 	protected JpaRepository<SaleEntity, Long> getRepository() {
 		return saleRepository;

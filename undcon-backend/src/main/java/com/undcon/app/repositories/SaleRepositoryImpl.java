@@ -1,5 +1,7 @@
 package com.undcon.app.repositories;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,11 +23,11 @@ import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.undcon.app.dtos.ProductSaledInfoDto;
 import com.undcon.app.dtos.SaleItemDto;
+import com.undcon.app.dtos.SaleTotalDto;
 import com.undcon.app.model.QSaleItemProductEntity;
 import com.undcon.app.model.QSaleItemServiceEntity;
 import com.undcon.app.model.SaleItemProductEntity;
 import com.undcon.app.model.SaleItemServiceEntity;
-import com.undcon.app.utils.PageUtils;
 
 @Repository
 public class SaleRepositoryImpl {
@@ -73,8 +75,7 @@ public class SaleRepositoryImpl {
 			result.add(new SaleItemDto(saleItemProductEntity.getId(), saleItemProductEntity.getProduct().getName(),
 					saleItemProductEntity.getSale().getId(), true, saleItemProductEntity.getUser().getLogin(),
 					saleItemProductEntity.getSalesman().getName(), saleItemProductEntity.getPrice(),
-					saleItemProductEntity.getQuantity(),
-					subTotalItem));
+					saleItemProductEntity.getQuantity(), subTotalItem));
 		}
 		long countItensProductTotal = saleItemProductRepository
 				.count(QSaleItemProductEntity.saleItemProductEntity.sale.id.eq(id));
@@ -108,6 +109,30 @@ public class SaleRepositoryImpl {
 				.count(QSaleItemServiceEntity.saleItemServiceEntity.sale.id.eq(id));
 		long total = countItensProductTotal + countItensServiceTotal;
 		return new PageImpl<SaleItemDto>(result, pageable, total);
+	}
+
+	public SaleTotalDto getSaleTotal(Long id) {
+		JPAQueryFactory jpaQueryFactory = new JPAQueryFactory(em);
+		JPAQuery<SaleItemProductEntity> query = jpaQueryFactory.selectFrom(QSaleItemProductEntity.saleItemProductEntity)
+				.where(QSaleItemProductEntity.saleItemProductEntity.sale.id.eq(id));
+		List<SaleItemProductEntity> itensProduct = query.fetch();
+		List<SaleItemDto> result = new ArrayList<SaleItemDto>();
+		double total = 0;
+		for (SaleItemProductEntity saleItemProductEntity : itensProduct) {
+			double subTotalItem = saleItemProductEntity.getPrice() * saleItemProductEntity.getQuantity();
+			total += subTotalItem;
+		}
+
+		jpaQueryFactory = new JPAQueryFactory(em);
+		JPAQuery<SaleItemServiceEntity> queryService = jpaQueryFactory
+				.select(QSaleItemServiceEntity.saleItemServiceEntity).from(QSaleItemServiceEntity.saleItemServiceEntity)
+				.where(QSaleItemServiceEntity.saleItemServiceEntity.sale.id.eq(id));
+		List<SaleItemServiceEntity> itensService = queryService.fetch();
+		for (SaleItemServiceEntity saleItemServiceEntity : itensService) {
+			double subTotalItem = saleItemServiceEntity.getPrice() * saleItemServiceEntity.getQuantity();
+			total += subTotalItem;
+		}
+		return new SaleTotalDto(new BigDecimal(total).setScale(2, RoundingMode.HALF_EVEN).doubleValue());
 	}
 
 	private static long calcOffSetService(Pageable pageable, long countItensProductTotal) {

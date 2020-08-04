@@ -66,13 +66,6 @@ export abstract class DefaultEditViewComponent<T> implements OnInit, OnDestroy {
         .then((teste) => {
           this.closeDialogValues.hasChange = true;
           this.modalRef.hide();
-        })
-        .catch(e => {
-          if (e.status === 400)
-            this.toastr.error(
-              this.translate.instant("translationKey"),
-              this.translate.instant("Erro")
-            );
         });
     }
   }
@@ -89,12 +82,6 @@ export abstract class DefaultEditViewComponent<T> implements OnInit, OnDestroy {
           .then((teste) => {
             this.closeDialogValues.hasChange = true;
             this.modalRef.hide();
-          }).catch(e => {
-            if (e.status === 400)
-              this.toastr.error(
-                e.error.message,
-                "Erro"
-              );
           });
       } else {
         this.service
@@ -103,12 +90,6 @@ export abstract class DefaultEditViewComponent<T> implements OnInit, OnDestroy {
           .then((teste) => {
             this.closeDialogValues.hasChange = true;
             this.modalRef.hide();
-          }).catch(e => {
-            if (e.status === 400)
-              this.toastr.error(
-                e.error.message,
-                "Erro"
-              );
           });
       }
     }

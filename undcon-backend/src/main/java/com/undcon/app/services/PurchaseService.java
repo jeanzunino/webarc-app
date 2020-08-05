@@ -18,6 +18,8 @@ import com.undcon.app.model.ProductEntity;
 import com.undcon.app.model.PurchaseEntity;
 import com.undcon.app.model.PurchaseItemEntity;
 import com.undcon.app.model.PurchaseItemProductEntity;
+import com.undcon.app.model.PurchaseItemServiceEntity;
+import com.undcon.app.model.ServiceTypeEntity;
 import com.undcon.app.model.UserEntity;
 import com.undcon.app.repositories.IPurchaseItemRepository;
 import com.undcon.app.repositories.IPurchaseRepository;
@@ -35,6 +37,9 @@ public class PurchaseService extends AbstractService<PurchaseEntity>{
 	
 	@Autowired
 	private ProductService productService;
+	
+	@Autowired
+	private ServiceTypeService serviceTypeService;
 	
 	@Autowired
 	private StockService stockService;
@@ -82,7 +87,7 @@ public class PurchaseService extends AbstractService<PurchaseEntity>{
 	}
 	
 	@Transactional
-	public PurchaseItemEntity addItem(long purchaseId, ItemRequestDto itemDto) throws UndconException {
+	public PurchaseItemEntity addProductItem(long purchaseId, ItemRequestDto itemDto) throws UndconException {
 		permissionService.checkPermission(ResourceType.SALE);
 		PurchaseEntity purchase = findById(purchaseId);
 		if (purchase == null) {
@@ -109,6 +114,31 @@ public class PurchaseService extends AbstractService<PurchaseEntity>{
 		stockService.discounProductOfStock(product, itemDto.getQuantity());
 
 		return item;
+	}
+	
+	@Transactional
+	public PurchaseItemEntity addServiceItem(long purchaseId, ItemRequestDto itemDto) throws UndconException {
+		permissionService.checkPermission(ResourceType.SALE);
+		PurchaseEntity purchase = findById(purchaseId);
+		if (purchase == null) {
+			throw new UndconException(UndconError.SALE_NOT_FOUND);
+		}
+
+		ServiceTypeEntity service = serviceTypeService.findById(itemDto.getItemId());
+
+		UserEntity user = userService.getCurrentUser();
+
+		EmployeeEntity employee = user.getEmployee();
+
+		// Se o Front não enviar o funciona´rio
+		if (NumberUtils.longIsPositiveValue(itemDto.getEmployeeId())) {
+			employee = employeeService.findById(itemDto.getEmployeeId());
+		}
+
+		PurchaseItemServiceEntity item = new PurchaseItemServiceEntity(null, service, purchase, user, employee,
+				service.getPrice(), itemDto.getQuantity());
+		
+		return purchaseItemRepository.save(item);
 	}
 
 	@Transactional

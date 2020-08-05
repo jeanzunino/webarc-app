@@ -20,6 +20,8 @@ import org.springframework.util.Assert;
 
 import com.undcon.app.dtos.ItemRequestDto;
 import com.undcon.app.dtos.ProductSaledInfoDto;
+import com.undcon.app.dtos.SaleIncomeRequestDto;
+import com.undcon.app.dtos.SaleIncomeResponseDto;
 import com.undcon.app.dtos.SaleInfoDto;
 import com.undcon.app.dtos.SaleItemDto;
 import com.undcon.app.dtos.SaleRequestDto;
@@ -69,7 +71,7 @@ public class SaleApi {
 	public SaleInfoDto getTotal() {
 		return service.getTotalSale();
 	}
-	
+
 	@GET
 	@Path("/{id}/total")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -118,6 +120,15 @@ public class SaleApi {
 		Assert.notNull(item.getItemId(), "itemId is required");
 		Assert.notNull(item.getQuantity(), "quantity is required");
 		return service.addItemProduct(id, item);
+	}
+
+	@POST
+	@Path("/{id}/toBill")
+	@Produces(MediaType.APPLICATION_JSON)
+	public SaleIncomeResponseDto toBillSale(@PathParam("id") long id, SaleIncomeRequestDto saleIncomeDto) throws UndconException {
+		Assert.notNull(saleIncomeDto.getPaymentType(), "paymentType is required");
+		Assert.notNull(saleIncomeDto.getValue(), "value is required");
+		return service.toBill(id, saleIncomeDto);
 	}
 
 	@POST

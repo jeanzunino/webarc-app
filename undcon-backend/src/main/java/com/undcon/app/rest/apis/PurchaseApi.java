@@ -68,10 +68,17 @@ public class PurchaseApi {
 	@POST
 	@Path("/{id}/itensProducts")
 	@Produces(MediaType.APPLICATION_JSON)
-	public PurchaseItemEntity postItem(@PathParam("id") long id, ItemRequestDto item) throws UndconException {
-		return service.addItem(id, item);
+	public PurchaseItemEntity postProductItem(@PathParam("id") long id, ItemRequestDto item) throws UndconException {
+		return service.addProductItem(id, item);
 	}
 
+	@POST
+	@Path("/{id}/itensServices")
+	@Produces(MediaType.APPLICATION_JSON)
+	public PurchaseItemEntity postServiceItem(@PathParam("id") long id, ItemRequestDto item) throws UndconException {
+		return service.addServiceItem(id, item);
+	}
+	
 	@PUT
 	@Path("/{id}/itensProducts")
 	@Produces(MediaType.APPLICATION_JSON)

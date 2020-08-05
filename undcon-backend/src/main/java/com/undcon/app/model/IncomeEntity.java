@@ -32,10 +32,14 @@ public class IncomeEntity {
 	private Date paymentDate;
 
 	@Column(name = "valor")
-	private String value;
+	private double value;
 
 	@Column(name = "baixado")
-	private int settled;
+	private boolean settled;
+
+	@ManyToOne
+	@JoinColumn(name = "venda_id", nullable = true)
+	private SaleEntity sale;
 
 	@ManyToOne
 	@JoinColumn(name = "cliente_id", nullable = false)
@@ -47,8 +51,8 @@ public class IncomeEntity {
 	public IncomeEntity() {
 	}
 
-	public IncomeEntity(Long id, String description, Date duaDate, Date paymentDate, String value, int settled,
-			CustomerEntity customer, PaymentType paymentType) {
+	public IncomeEntity(Long id, String description, Date duaDate, Date paymentDate, double value, boolean settled,
+			SaleEntity sale, CustomerEntity customer, PaymentType paymentType) {
 		super();
 		this.id = id;
 		this.description = description;
@@ -56,6 +60,7 @@ public class IncomeEntity {
 		this.paymentDate = paymentDate;
 		this.value = value;
 		this.settled = settled;
+		this.sale = sale;
 		this.customer = customer;
 		this.paymentType = paymentType;
 	}
@@ -64,32 +69,72 @@ public class IncomeEntity {
 		return id;
 	}
 
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 	public String getDescription() {
 		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public Date getDuaDate() {
 		return duaDate;
 	}
 
+	public void setDuaDate(Date duaDate) {
+		this.duaDate = duaDate;
+	}
+
 	public Date getPaymentDate() {
 		return paymentDate;
 	}
 
-	public String getValue() {
+	public void setPaymentDate(Date paymentDate) {
+		this.paymentDate = paymentDate;
+	}
+
+	public double getValue() {
 		return value;
 	}
 
-	public int getSettled() {
+	public void setValue(double value) {
+		this.value = value;
+	}
+
+	public boolean isSettled() {
 		return settled;
 	}
 
-	public CustomerEntity getProvider() {
+	public void setSettled(boolean settled) {
+		this.settled = settled;
+	}
+
+	public SaleEntity getSale() {
+		return sale;
+	}
+
+	public void setSale(SaleEntity sale) {
+		this.sale = sale;
+	}
+
+	public CustomerEntity getCustomer() {
 		return customer;
+	}
+
+	public void setCustomer(CustomerEntity customer) {
+		this.customer = customer;
 	}
 
 	public PaymentType getPaymentType() {
 		return paymentType;
+	}
+
+	public void setPaymentType(PaymentType paymentType) {
+		this.paymentType = paymentType;
 	}
 
 }

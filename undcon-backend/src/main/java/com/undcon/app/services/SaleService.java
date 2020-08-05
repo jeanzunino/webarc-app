@@ -1,5 +1,7 @@
 package com.undcon.app.services;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Date;
 import java.util.List;
 
@@ -11,6 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.undcon.app.dtos.ItemRequestDto;
 import com.undcon.app.dtos.ProductSaledInfoDto;
+import com.undcon.app.dtos.SaleIncomeRequestDto;
+import com.undcon.app.dtos.SaleIncomeResponseDto;
 import com.undcon.app.dtos.SaleInfoDto;
 import com.undcon.app.dtos.SaleItemDto;
 import com.undcon.app.dtos.SaleRequestDto;
@@ -21,6 +25,7 @@ import com.undcon.app.enums.UndconError;
 import com.undcon.app.exceptions.UndconException;
 import com.undcon.app.model.CustomerEntity;
 import com.undcon.app.model.EmployeeEntity;
+import com.undcon.app.model.IncomeEntity;
 import com.undcon.app.model.ProductEntity;
 import com.undcon.app.model.SaleEntity;
 import com.undcon.app.model.SaleItemEntity;
@@ -46,7 +51,7 @@ public class SaleService extends AbstractService<SaleEntity> {
 
 	@Autowired
 	private ISaleItemProductRepository saleItemProductRepository;
-	
+
 	@Autowired
 	private ISaleItemServiceRepository saleItemServiceRepository;
 
@@ -58,7 +63,7 @@ public class SaleService extends AbstractService<SaleEntity> {
 
 	@Autowired
 	private ServiceTypeService serviceTypeService;
-	
+
 	@Autowired
 	private UserService userService;
 
@@ -71,6 +76,9 @@ public class SaleService extends AbstractService<SaleEntity> {
 	@Autowired
 	private EmployeeService employeeService;
 
+	@Autowired
+	private IncomeService incomeService;
+
 	public Page<SaleEntity> getAll(String filter, Integer page, Integer size) {
 		return super.getAll(SaleEntity.class, filter, page, size);
 	}
@@ -79,6 +87,7 @@ public class SaleService extends AbstractService<SaleEntity> {
 		return new SaleInfoDto(saleRepositoryImpl.getTotalSale(true), saleRepositoryImpl.getTotalSale(false));
 	}
 
+	@Transactional
 	public SaleEntity persist(SaleRequestDto saleDto) throws UndconException {
 		permissionService.checkPermission(ResourceType.SALE);
 
@@ -105,6 +114,7 @@ public class SaleService extends AbstractService<SaleEntity> {
 		}
 	}
 
+	@Transactional
 	public SaleEntity update(SaleRequestDto saleDto) throws UndconException {
 		permissionService.checkPermission(ResourceType.SALE);
 		SaleEntity sale = findById(saleDto.getId());
@@ -114,6 +124,7 @@ public class SaleService extends AbstractService<SaleEntity> {
 		return saleRepository.save(sale);
 	}
 
+	@Transactional
 	public void delete(long id) throws UndconException {
 		permissionService.checkPermission(ResourceType.SALE);
 		SaleEntity sale = findById(id);
@@ -153,7 +164,7 @@ public class SaleService extends AbstractService<SaleEntity> {
 
 		return item;
 	}
-	
+
 	@Transactional
 	public SaleItemEntity addItemService(long saleId, ItemRequestDto itemDto) throws UndconException {
 		permissionService.checkPermission(ResourceType.SALE);
@@ -166,7 +177,7 @@ public class SaleService extends AbstractService<SaleEntity> {
 		if (service == null) {
 			throw new UndconException(UndconError.SERVICE_TYPE_NOT_FOUND);
 		}
-		
+
 		UserEntity user = userService.getCurrentUser();
 
 		EmployeeEntity employee = user.getEmployee();
@@ -176,9 +187,9 @@ public class SaleService extends AbstractService<SaleEntity> {
 			employee = employeeService.findById(itemDto.getEmployeeId());
 		}
 
-		SaleItemServiceEntity item = new SaleItemServiceEntity(null, service, sale, user, employee,
-				service.getPrice(), itemDto.getQuantity());
-		
+		SaleItemServiceEntity item = new SaleItemServiceEntity(null, service, sale, user, employee, service.getPrice(),
+				itemDto.getQuantity());
+
 		return saleItemServiceRepository.save(item);
 	}
 
@@ -204,7 +215,7 @@ public class SaleService extends AbstractService<SaleEntity> {
 
 		return item;
 	}
-	
+
 	@Transactional
 	public SaleItemEntity updateServiceItem(long saleId, ItemRequestDto itemDto) throws UndconException {
 		permissionService.checkPermission(ResourceType.SALE);
@@ -220,10 +231,11 @@ public class SaleService extends AbstractService<SaleEntity> {
 		item.setService(service);
 		item.setPrice(item.getPrice());
 		item.setUser(user);
-		
+
 		return saleItemServiceRepository.save(item);
 	}
 
+	@Transactional
 	public void deleteProductItem(Long saleId, long itemId) throws UndconException {
 		permissionService.checkPermission(ResourceType.SALE);
 
@@ -242,7 +254,7 @@ public class SaleService extends AbstractService<SaleEntity> {
 		}
 		saleItemProductRepository.delete(item);
 	}
-	
+
 	public void deleteServiceItem(Long saleId, long itemId) throws UndconException {
 		permissionService.checkPermission(ResourceType.SALE);
 
@@ -270,17 +282,49 @@ public class SaleService extends AbstractService<SaleEntity> {
 		return saleRepositoryImpl.findAllById(id, PageUtils.createPageRequest(page, size));
 	}
 
-	public SaleTotalDto getSaleTotal(Long id){
+	public SaleTotalDto getSaleTotal(Long id) {
 		return saleRepositoryImpl.getSaleTotal(id);
 	}
-	
+
 	@Override
 	protected JpaRepository<SaleEntity, Long> getRepository() {
 		return saleRepository;
+	}
+
+	@Transactional
+	public SaleIncomeResponseDto toBill(long id, SaleIncomeRequestDto saleIncomeDto) throws UndconException {
+		permissionService.checkPermission(ResourceType.SALE);
+
+		SaleEntity sale = findById(id);
+		if (sale == null) {
+			throw new UndconException(UndconError.SALE_NOT_FOUND);
+		}
+
+		Date paymentDate = saleIncomeDto.getPaymentDate();
+		if(saleIncomeDto.isSettled() && paymentDate == null) {
+			paymentDate = new Date(System.currentTimeMillis());
+		}
+		
+		IncomeEntity income = new IncomeEntity(null, "Pagamento de Venda - " + sale.getSaleDate() + " #" + sale.getId(),
+				saleIncomeDto.getDuaDate(), paymentDate, saleIncomeDto.getValue(),
+				saleIncomeDto.isSettled(), sale, sale.getCustomer(), saleIncomeDto.getPaymentType());
+		incomeService.persist(income);
+
+		sale.setStatus(SaleStatus.BILLED);
+
+		sale = saleRepository.save(sale);
+
+		double amountPayable = 0;
+		double amountPaid = 0;
+
+		amountPayable = new BigDecimal(amountPayable).setScale(2, RoundingMode.HALF_EVEN).doubleValue();
+		amountPaid = new BigDecimal(amountPaid).setScale(2, RoundingMode.HALF_EVEN).doubleValue();
+		return new SaleIncomeResponseDto(income, sale, amountPayable, amountPaid);
 	}
 
 	@Override
 	protected ResourceType getResourceType() {
 		return ResourceType.SALE;
 	}
+
 }

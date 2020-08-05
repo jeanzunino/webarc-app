@@ -4,6 +4,8 @@ import {
   CollapseModule,
   MDBBootstrapModule,
   CheckboxModule,
+  ButtonsModule,
+  WavesModule
 } from 'angular-bootstrap-md';
 import { CommonModule, DatePipe } from '@angular/common';
 import { NgxSpinnerModule } from 'ngx-spinner';
@@ -58,6 +60,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     PanelComponent,
     SimplePanelComponent,
     CheckboxModule,
+    ButtonsModule,
+    WavesModule,
     ValidationComponent,
     EmptyComponent,
     EmptyChildrenComponent,

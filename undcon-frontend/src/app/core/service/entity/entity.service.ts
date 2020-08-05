@@ -45,6 +45,10 @@ export class EntityService<T> {
     return this.http.get<T>(`${this.baseUrl}/${this.entityUrl}/${id}`);
   }
 
+  public getCustomUrl(url: string) {
+    return this.http.get<any>(url);
+  }
+
   public post(entity: T) {
     return this.http.post<T>(`${this.baseUrl}/${this.entityUrl}`, entity);
   }

@@ -44,6 +44,7 @@ export class SaleDetailComponent implements OnDestroy {
   showPanelHeader = false;
 
   saleItems: Page<SaleItem>;
+  saleTotalValue = 0;
   currentPage = 0;
   tableValues = new Table()
     .set('name', 'sale-item.name')
@@ -101,7 +102,7 @@ export class SaleDetailComponent implements OnDestroy {
     this.ngUnsubscribe.complete();
   }
 
-  private loadPage() {
+  private async loadPage() {
     this.entity = new Sale();
     if (!this.isNew()) {
       this.entity = this.rt.snapshot.data.entity as Sale;
@@ -110,8 +111,12 @@ export class SaleDetailComponent implements OnDestroy {
       this.setPanelHeaderStatus();
       this.showPanelHeader = true;
       this.saleItems = this.rt.snapshot.data.saleItens;
+      this.setSaleTotalValue();
     }
-    this.spinner.hide();
+  }
+
+  private async setSaleTotalValue() {
+    this.saleTotalValue = (await this.ss.getSaleTotal(this.entity.id).toPromise()).totalValue;
   }
 
   private setPanelHeaderStatus() {
@@ -221,16 +226,20 @@ export class SaleDetailComponent implements OnDestroy {
   productInputCleared() {
     this.products = [];
     this.productSelect = null;
+    this.productPrice = 0;
     this.productQtd = 0;
     this.productPriceTotal = 0;
+    this.ngAutoCompleteProduct.clear();
     this.ngAutoCompleteProduct.close();
   }
 
   serviceInputCleared() {
     this.services = [];
     this.serviceSelect = null;
+    this.servicePrice = 0;
     this.serviceQtd = 0;
     this.servicePriceTotal = 0;
+    this.ngAutoCompleteService.clear();
     this.ngAutoCompleteService.close();
   }
 
@@ -266,9 +275,27 @@ export class SaleDetailComponent implements OnDestroy {
     return this.isNew() ? false : this.entity.status === SaleStatus.CREATED;
   }
 
-  async onSave() {
+  onConfirmSave() {
     if (this.validEntity()) {
-      await this.ss.post(this.entity)
+      const msg = `
+        Confirma a inclusão da nova venda com os seguinte dados?<br>
+        Cliente: ${this.entity.customer.name}<br>
+        Vendedor: ${this.entity.salesman.name}<br><br>
+        Após a inclusão os dados não poderão ser alterados!
+      `;
+      openConfimDialog(new ConfirmDialogModel(msg)).content.onClose
+        .pipe(takeUntil(this.ngUnsubscribe))
+        .subscribe((values: CloseDialogValues) => {
+          if (values.action === ActionReturnDialog.CONFIRM) {
+            this.onSave();
+          }
+        });
+    }
+  }
+
+  private async onSave() {
+    this.spinner.show();
+    await this.ss.post(this.entity)
       .toPromise()
       .then(sale => {
         this.entity = sale;
@@ -282,7 +309,36 @@ export class SaleDetailComponent implements OnDestroy {
           this.translate.instant('Sucesso')
         );
       });
+    this.spinner.hide();
+  }
+
+  onConfirmFinalize() {
+    if (this.validFinalize()) {
+      const msg = `
+        Confirma a finalização da venda?<br><br>
+        Após a finalização só poderá Faturar ou Finalizar!
+      `;
+      openConfimDialog(new ConfirmDialogModel(msg)).content.onClose
+        .pipe(takeUntil(this.ngUnsubscribe))
+        .subscribe((values: CloseDialogValues) => {
+          if (values.action === ActionReturnDialog.CONFIRM) {
+            this.entity.status = SaleStatus.TO_BILL;
+            this.onUpdateSale('Venda finalizada com sucesso');
+          }
+        });
     }
+  }
+
+  private validFinalize() {
+    if (!this.saleItems || (this.saleItems && this.saleItems.content.length === 0)) {
+      this.toastr.error(
+        this.translate.instant('Não possuí itens para finalizar.'),
+        this.translate.instant('Erro')
+      );
+      return false;
+    }
+
+    return true;
   }
 
   private validEntity() {
@@ -306,6 +362,7 @@ export class SaleDetailComponent implements OnDestroy {
   }
 
   async addProduct() {
+    this.spinner.show();
     if (this.validProduct()) {
       const item = new Item();
       item.itemId = this.productSelect.id;
@@ -315,15 +372,18 @@ export class SaleDetailComponent implements OnDestroy {
         .then(() => {
           this.reloadItems(0);
           this.productInputCleared();
+          this.setSaleTotalValue();
           this.toastr.success(
             this.translate.instant('Produto adicionado com sucesso'),
             this.translate.instant('Sucesso')
           );
         });
     }
+    this.spinner.hide();
   }
 
   async addService() {
+    this.spinner.show();
     if (this.validService()) {
       const item = new Item();
       item.itemId = this.serviceSelect.id;
@@ -333,17 +393,19 @@ export class SaleDetailComponent implements OnDestroy {
         .then(() => {
           this.reloadItems(0);
           this.serviceInputCleared();
+          this.setSaleTotalValue();
           this.toastr.success(
             this.translate.instant('Serviço adicionado com sucesso'),
             this.translate.instant('Sucesso')
           );
         });
     }
+    this.spinner.hide();
   }
 
   confirmDeleteSaleItem(saleItem: SaleItem) {
-    const value = saleItem.isProduct ? 'produto' : 'serviço';
-    openConfimDialog(new ConfirmDialogModel(`Confirma a remoção do ${value} ${saleItem.name}`)).content.onClose
+    openConfimDialog(new ConfirmDialogModel(`Confirma a remoção do ${saleItem.isProduct ? 'produto' : 'serviço'} ${saleItem.name}`))
+      .content.onClose
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((values: CloseDialogValues) => {
         if (values.action === ActionReturnDialog.CONFIRM) {
@@ -356,26 +418,32 @@ export class SaleDetailComponent implements OnDestroy {
       });
   }
 
-  deleteProductItem(saleItem: SaleItem) {
+  private deleteProductItem(saleItem: SaleItem) {
+    this.spinner.show();
     this.ss.deleteProductItem(this.entity.id, saleItem.id).toPromise()
     .then(() => {
       this.reloadItems(0);
+      this.setSaleTotalValue();
       this.toastr.success(
         this.translate.instant('Produto removido com sucesso'),
         this.translate.instant('Sucesso')
       );
     });
+    this.spinner.hide();
   }
 
-  deleteServiceItem(saleItem: SaleItem) {
+  private deleteServiceItem(saleItem: SaleItem) {
+    this.spinner.show();
     this.ss.deleteServiceItem(this.entity.id, saleItem.id).toPromise()
     .then(() => {
       this.reloadItems(0);
+      this.setSaleTotalValue();
       this.toastr.success(
         this.translate.instant('Serviço removido com sucesso'),
         this.translate.instant('Sucesso')
       );
     });
+    this.spinner.hide();
   }
 
   private validProduct() {
@@ -416,5 +484,44 @@ export class SaleDetailComponent implements OnDestroy {
     }
 
     return true;
+  }
+
+  onConfirmCancel() {
+    const msg = `Confirma o cancelamento da venda?`;
+    openConfimDialog(new ConfirmDialogModel(msg)).content.onClose
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe((values: CloseDialogValues) => {
+        if (values.action === ActionReturnDialog.CONFIRM) {
+          this.entity.status = SaleStatus.CANCELED;
+          this.onUpdateSale('Venda cancelada com sucesso');
+        }
+      });
+  }
+
+  onConfirmBill() {
+    const msg = `Confirma o faturamento da venda?`;
+    openConfimDialog(new ConfirmDialogModel(msg)).content.onClose
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe((values: CloseDialogValues) => {
+        if (values.action === ActionReturnDialog.CONFIRM) {
+          this.entity.status = SaleStatus.BILLED;
+          this.onUpdateSale('Venda faturada com sucesso');
+        }
+      });
+  }
+
+  private async onUpdateSale(msgSucess: string) {
+    this.spinner.show();
+    await this.ss.put(this.entity)
+      .toPromise()
+      .then(sale => {
+        this.entity = sale;
+        this.setPanelHeaderStatus();
+        this.toastr.success(
+          this.translate.instant(msgSucess),
+          this.translate.instant('Sucesso')
+        );
+      });
+    this.spinner.hide();
   }
 }

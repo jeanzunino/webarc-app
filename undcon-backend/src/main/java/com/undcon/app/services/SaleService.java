@@ -111,6 +111,19 @@ public class SaleService extends AbstractService<SaleEntity> {
 
 		CustomerEntity customer = customerService.findById(saleDto.getCustomer().getId());
 		validateClient(customer);
+		
+		EmployeeEntity salesman;
+		if (saleDto.getSalesman() != null && NumberUtils.longIsPositiveValue(saleDto.getSalesman().getId())) {
+			salesman = employeeService.findById(saleDto.getSalesman().getId());
+		} else {
+			UserEntity user = userService.getCurrentUser();
+			salesman = user.getEmployee();
+		}
+		
+		sale.setCustomer(customer);
+		sale.setSalesman(salesman);
+		sale.setStatus(saleDto.getStatus());
+		
 		return saleRepository.save(sale);
 	}
 

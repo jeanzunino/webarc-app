@@ -21,12 +21,13 @@ export const getTranslate = (key, params = null) => {
 };
 
 export const openDialog = (item: Entity, obj: Object) => {
+  document.body.style.overflow = 'hidden';
   return modalService.show(obj, {
     backdrop: true,
     keyboard: true,
     focus: true,
     show: false,
-    ignoreBackdropClick: false,
+    ignoreBackdropClick: true,
     class: 'modal-dialog-centered',
     containerClass: '',
     animated: true,
@@ -37,12 +38,13 @@ export const openDialog = (item: Entity, obj: Object) => {
 };
 
 export const openConfimDialog = (confirmDialogModel: ConfirmDialogModel) => {
+  document.body.style.overflow = 'hidden';
   return modalService.show(ConfirmDialogComponent, {
     backdrop: true,
     keyboard: true,
     focus: true,
     show: false,
-    ignoreBackdropClick: false,
+    ignoreBackdropClick: true,
     class: 'modal-dialog-centered',
     containerClass: '',
     animated: true,

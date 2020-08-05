@@ -23,8 +23,10 @@ export class TableComponent implements OnInit {
   @Output() deleteItem: EventEmitter<number> = new EventEmitter();
   @Input() tableValues: TableValues[] = [];
   @Input() set pageValues(value: Page<any>) {
-    this.tableItems = value.content;
-    this.totalItems = value.totalElements;
+    if (typeof value !== 'undefined') {
+      this.tableItems = value.content;
+      this.totalItems = value.totalElements;
+    }
   }
   @Input() set updateCurrentPage(page: number) {
     this.controlCurrentPage = true;
@@ -32,7 +34,11 @@ export class TableComponent implements OnInit {
   }
   @Input() showBtnAdd = true;
   @Input() selectableLine = true;
-  @Input() showDelete = false;
+
+  showDelete = false;
+  @Input() set showDeleteValue(show: boolean){
+    this.showDelete = show;
+  }
 
   constructor(private maskPipe: MaskPipe,
               private translate: TranslateService,

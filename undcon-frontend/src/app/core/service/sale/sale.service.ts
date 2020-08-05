@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 import { Sale } from '@model/sale';
 import { EntityService } from '@service/entity/entity.service';
 import { StorageService } from '@service/storage/storage.service';
-import { Observable } from 'rxjs';
 import { Page } from '@model/page';
 import { SaleItem } from '@model/sale-item';
 import { Item } from '@model/item';
+import { SaleTotal } from '@model/sale-total';
 
 @Injectable({
   providedIn: 'root',
@@ -38,5 +39,9 @@ export class SaleService extends EntityService<Sale> {
 
   deleteServiceItem(saleId: number, servicetItemId: number): Observable<any> {
     return this.deleteCustomUrl(`${this.baseUrl}/${this.entityUrl}/${saleId}/itensServices/${servicetItemId}`);
+  }
+
+  getSaleTotal(saleId: number): Observable<SaleTotal> {
+    return this.getCustomUrl(`${this.baseUrl}/${this.entityUrl}/${saleId}/total`) as Observable<SaleTotal>;
   }
 }

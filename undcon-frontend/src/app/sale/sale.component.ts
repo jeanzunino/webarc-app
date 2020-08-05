@@ -39,7 +39,6 @@ export class SaleComponent extends GridViewComponent<Sale> {
   }
 
   onClickItem(sale: Sale) {
-    this.spinner.show();
     this.router.navigate((sale === null ? ['new'] : [sale.id]), { relativeTo: this.rt });
   }
 

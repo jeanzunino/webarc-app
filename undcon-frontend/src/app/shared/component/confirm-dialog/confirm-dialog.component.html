@@ -1,6 +1,6 @@
 <app-dialog [modalTitle]="item.modalTitle" [modalRef]="modalRef">
   <div body>
-    <p>{{item.msg}}</p>
+    <div [innerHTML]="item.msg"></div>
   </div>
   <div footer>
     <button mdbBtn type="button" color="primary" (click)="confirm()" outline="true" mdbWavesEffect>{{item.labelBtnConfirm}}</button>

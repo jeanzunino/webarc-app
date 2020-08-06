@@ -20,13 +20,18 @@ import org.springframework.util.Assert;
 
 import com.undcon.app.dtos.ItemRequestDto;
 import com.undcon.app.dtos.ProductSaledInfoDto;
+import com.undcon.app.dtos.SaleIncomeRequestDto;
+import com.undcon.app.dtos.SaleIncomeResponseDto;
 import com.undcon.app.dtos.SaleInfoDto;
 import com.undcon.app.dtos.SaleItemDto;
 import com.undcon.app.dtos.SaleRequestDto;
+import com.undcon.app.dtos.SaleSimpleDto;
 import com.undcon.app.dtos.SaleTotalDto;
 import com.undcon.app.exceptions.UndconException;
 import com.undcon.app.model.SaleEntity;
 import com.undcon.app.model.SaleItemEntity;
+import com.undcon.app.services.SaleItemProductService;
+import com.undcon.app.services.SaleItemServiceTypeService;
 import com.undcon.app.services.SaleService;
 
 /**
@@ -38,6 +43,12 @@ public class SaleApi {
 
 	@Autowired
 	private SaleService service;
+
+	@Autowired
+	private SaleItemProductService itemProductService;
+
+	@Autowired
+	private SaleItemServiceTypeService itemServiceTypeService;
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -69,7 +80,7 @@ public class SaleApi {
 	public SaleInfoDto getTotal() {
 		return service.getTotalSale();
 	}
-	
+
 	@GET
 	@Path("/{id}/total")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -117,7 +128,25 @@ public class SaleApi {
 		Assert.notNull(item.getEmployeeId(), "employeeId is required");
 		Assert.notNull(item.getItemId(), "itemId is required");
 		Assert.notNull(item.getQuantity(), "quantity is required");
-		return service.addItemProduct(id, item);
+		return itemProductService.addItemProduct(id, item);
+	}
+
+	@POST
+	@Path("/{id}/toBill")
+	@Produces(MediaType.APPLICATION_JSON)
+	public SaleIncomeResponseDto toBillSale(@PathParam("id") long id, SaleIncomeRequestDto saleIncomeDto)
+			throws UndconException {
+		Assert.notNull(saleIncomeDto.getPaymentType(), "paymentType is required");
+		Assert.notNull(saleIncomeDto.getValue(), "value is required");
+		Assert.isTrue(saleIncomeDto.getValue() > 0, "value is invalid");
+		return service.toBill(id, saleIncomeDto);
+	}
+
+	@POST
+	@Path("/{id}/toCancel")
+	@Produces(MediaType.APPLICATION_JSON)
+	public SaleSimpleDto toCancel(@PathParam("id") long id) throws UndconException {
+		return service.toCancel(id);
 	}
 
 	@POST
@@ -127,21 +156,21 @@ public class SaleApi {
 		Assert.notNull(item.getEmployeeId(), "employeeId is required");
 		Assert.notNull(item.getItemId(), "itemId is required");
 		Assert.notNull(item.getQuantity(), "quantity is required");
-		return service.addItemService(id, item);
+		return itemServiceTypeService.addItemService(id, item);
 	}
 
 	@PUT
 	@Path("/{id}/itensProducts")
 	@Produces(MediaType.APPLICATION_JSON)
 	public SaleItemEntity putProductItem(@PathParam("id") long id, ItemRequestDto item) throws UndconException {
-		return service.updateProductItem(id, item);
+		return itemProductService.updateProductItem(id, item);
 	}
 
 	@PUT
 	@Path("/{id}/itensServices")
 	@Produces(MediaType.APPLICATION_JSON)
 	public SaleItemEntity putServiceItem(@PathParam("id") long id, ItemRequestDto item) throws UndconException {
-		return service.updateServiceItem(id, item);
+		return itemServiceTypeService.updateServiceItem(id, item);
 	}
 
 	@DELETE
@@ -149,7 +178,7 @@ public class SaleApi {
 	@Produces(MediaType.APPLICATION_JSON)
 	public void deleteProductItem(@PathParam("saleId") long saleId, @PathParam("itemId") long itemId)
 			throws UndconException {
-		service.deleteProductItem(saleId, itemId);
+		itemProductService.deleteProductItem(saleId, itemId);
 	}
 
 	@DELETE
@@ -157,6 +186,6 @@ public class SaleApi {
 	@Produces(MediaType.APPLICATION_JSON)
 	public void deleteServiceItem(@PathParam("saleId") long saleId, @PathParam("itemId") long itemId)
 			throws UndconException {
-		service.deleteServiceItem(saleId, itemId);
+		itemServiceTypeService.deleteServiceItem(saleId, itemId);
 	}
 }

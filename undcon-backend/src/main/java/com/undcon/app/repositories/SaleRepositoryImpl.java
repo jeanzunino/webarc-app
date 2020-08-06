@@ -116,7 +116,6 @@ public class SaleRepositoryImpl {
 		JPAQuery<SaleItemProductEntity> query = jpaQueryFactory.selectFrom(QSaleItemProductEntity.saleItemProductEntity)
 				.where(QSaleItemProductEntity.saleItemProductEntity.sale.id.eq(id));
 		List<SaleItemProductEntity> itensProduct = query.fetch();
-		List<SaleItemDto> result = new ArrayList<SaleItemDto>();
 		double total = 0;
 		for (SaleItemProductEntity saleItemProductEntity : itensProduct) {
 			double subTotalItem = saleItemProductEntity.getPrice() * saleItemProductEntity.getQuantity();

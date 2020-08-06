@@ -48,7 +48,13 @@ public enum UndconError {
 	
 	SALE_ITEM_STOCK_NOT_AVAIABLE("Saldo não disponível"),
 	
-	PURCHASE_ENTITY_INVALID_PROVIDER("Fornecedor inválido para a compra");
+	PURCHASE_ENTITY_INVALID_PROVIDER("Fornecedor inválido para a compra"),
+	
+	SALE_INCOME_AMOUNT_PAID_IS_MAJOR_SALE_TOTAL_VALUE("O Valor pago ultrapassou o valor da venda, verifique o valor a pagar"),
+	
+	SALE_INCOME_TO_BILL_SALE_TOTAL_BILLED("Não é possível gerar novo pagamento para venda totalmente faturada"),
+	
+	SALE_INCOME_CANCELED_SALE("Não é possível gerar novo pagamento para venda cancelada");
 	
 	private String message;
 

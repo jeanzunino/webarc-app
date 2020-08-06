@@ -39,10 +39,17 @@ public class TenantEntity {
 	@JoinColumn(name = "menu_template_id", nullable = false)
 	private MenuTemplateEntity menu;
 
+	@ManyToOne
+	@JoinColumn(name = "vendedor_id", nullable = false)
+	private SystemSalesmanEntity salesman;
+	
 	protected TenantEntity() {
 	}
 
-	public TenantEntity(Long id, String name, String email, String phone, String schemaName, Timestamp registrationDate) {
+
+
+	public TenantEntity(Long id, String name, String email, String phone, String schemaName, Timestamp registrationDate,
+			MenuTemplateEntity menu, SystemSalesmanEntity salesman) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -50,7 +57,10 @@ public class TenantEntity {
 		this.phone = phone;
 		this.schemaName = schemaName;
 		this.registrationDate = registrationDate;
+		this.menu = menu;
+		this.salesman = salesman;
 	}
+
 
 	public Long getId() {
 		return id;
@@ -74,6 +84,10 @@ public class TenantEntity {
 
 	public Timestamp getRegistrationDate() {
 		return registrationDate;
+	}
+	
+	public SystemSalesmanEntity getSalesman() {
+		return salesman;
 	}
  
 }

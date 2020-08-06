@@ -37,7 +37,7 @@ public class DataSourceConfiguration  implements ApplicationRunner {
 		Flyway flyway = new Flyway();
 		flyway.setDataSource(dataSource);
 		flyway.setLocations(schemaType.getLocation());
-		flyway.setBaselineOnMigrate(true);
+		flyway.setBaselineOnMigrate(false);
 		flyway.migrate();
 	}
 

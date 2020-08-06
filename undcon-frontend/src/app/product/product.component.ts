@@ -22,7 +22,7 @@ export class ProductComponent extends GridViewComponent<Product> {
     .set('salePrice', 'product.salePrice')
     .set('stock', 'product.stock')
     .set('stockMin', 'product.stockMin')
-    .set('productCategory.name', 'product.stockMin')
+    .set('productCategory.name', 'product.productCategoryName')
     .get();
   name = null;
   unit = null;

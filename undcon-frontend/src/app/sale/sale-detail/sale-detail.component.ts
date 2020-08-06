@@ -1,3 +1,4 @@
+import { ButtonGroup } from './../../shared/model/button-group';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Component, ViewEncapsulation, ViewChild, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -52,6 +53,13 @@ export class SaleDetailComponent implements OnDestroy {
     .set('quantity', 'sale-item.quantity')
     .set('isProduct', 'sale-item.type', FormatEnum.IS_PRODUCT)
     .set('subTotalItem', 'sale-item.subTotalItem')
+    .get();
+
+  buttonGroupValues = new ButtonGroup()
+    .set('avista', 'Á vista')
+    .set('parcelado', 'Parcelado')
+    .set('cheque', 'Cheque')
+    .set('entrada', 'Entrada')
     .get();
 
   entity: Sale;

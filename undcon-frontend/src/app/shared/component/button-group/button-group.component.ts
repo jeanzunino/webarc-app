@@ -1,4 +1,4 @@
-import { Customer } from './../../../core/model/customer';
+import { ButtonGroupValues } from '@shared/model/button-group';
 import { Component, Input, Output, EventEmitter, AfterViewInit } from '@angular/core';
 
 @Component({
@@ -11,14 +11,8 @@ export class ButtonGroupComponent implements AfterViewInit {
   private buttonSelected;
 
   @Output() itemSelected: EventEmitter<string> = new EventEmitter();
-
-  @Input() button1;
-  @Input() button2;
-  @Input() button3;
-  @Input() button4;
+  @Input() buttonGroupValues: ButtonGroupValues[] = [];
   @Input() selectDefaultItem;
-
-  heroes = HEROES;
 
   ngAfterViewInit() {
     if (this.selectDefaultItem) {
@@ -63,16 +57,3 @@ export class ButtonGroupComponent implements AfterViewInit {
     document.getElementById(id).style.backgroundColor = color;
   }
 }
-
-export const HEROES: Customer[] = [
-  { id: 11, name: 'Dr Nice', phone: '' },
-  { id: 12, name: 'Narco', phone: '' },
-  { id: 13, name: 'Bombasto', phone: '' },
-  { id: 14, name: 'Celeritas', phone: '' },
-  { id: 15, name: 'Magneta', phone: '' },
-  { id: 16, name: 'RubberMan', phone: '' },
-  { id: 17, name: 'Dynama', phone: '' },
-  { id: 18, name: 'Dr IQ', phone: '' },
-  { id: 19, name: 'Magma', phone: '' },
-  { id: 20, name: 'Tornado', phone: '' }
-];

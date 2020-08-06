@@ -1,13 +1,6 @@
 
 <div class="button-group margin-b-0">
-  <label id="button1" class="margin-b-0" (mouseover)="mouseover('button1')" (mouseout)="mousedown('button1')"
-         (click)="select('button1')" *ngIf="button1">{{button1}}</label>
-  <label id="button2" class="margin-b-0" (mouseover)="mouseover('button2')" (mouseout)="mousedown('button2')"
-         (click)="select('button2')" *ngIf="button2">{{button2}}</label>
-  <label id="button3" class="margin-b-0" (mouseover)="mouseover('button3')" (mouseout)="mousedown('button3')"
-         (click)="select('button3')" *ngIf="button3">{{button3}}</label>
-  <label id="button4" class="margin-b-0" (mouseover)="mouseover('button4')" (mouseout)="mousedown('button4')"
-         (click)="select('button4')" *ngIf="button4">{{button4}}</label>
-
-  <!-- <label *ngFor="let h of heroes" id="{{h.id}}">{{h.name}}</label> -->
+  <label *ngFor="let button of buttonGroupValues" id="{{button.buttonId}}" class="margin-b-0"
+         (mouseover)="mouseover(button.buttonId)" (mouseout)="mousedown(button.buttonId)"
+         (click)="select(button.buttonId)">{{button.buttonName}}</label>
 </div>

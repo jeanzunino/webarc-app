@@ -25,6 +25,7 @@ import com.undcon.app.dtos.SaleIncomeResponseDto;
 import com.undcon.app.dtos.SaleInfoDto;
 import com.undcon.app.dtos.SaleItemDto;
 import com.undcon.app.dtos.SaleRequestDto;
+import com.undcon.app.dtos.SaleSimpleDto;
 import com.undcon.app.dtos.SaleTotalDto;
 import com.undcon.app.exceptions.UndconException;
 import com.undcon.app.model.SaleEntity;
@@ -42,10 +43,10 @@ public class SaleApi {
 
 	@Autowired
 	private SaleService service;
-	
+
 	@Autowired
 	private SaleItemProductService itemProductService;
-	
+
 	@Autowired
 	private SaleItemServiceTypeService itemServiceTypeService;
 
@@ -133,11 +134,19 @@ public class SaleApi {
 	@POST
 	@Path("/{id}/toBill")
 	@Produces(MediaType.APPLICATION_JSON)
-	public SaleIncomeResponseDto toBillSale(@PathParam("id") long id, SaleIncomeRequestDto saleIncomeDto) throws UndconException {
+	public SaleIncomeResponseDto toBillSale(@PathParam("id") long id, SaleIncomeRequestDto saleIncomeDto)
+			throws UndconException {
 		Assert.notNull(saleIncomeDto.getPaymentType(), "paymentType is required");
 		Assert.notNull(saleIncomeDto.getValue(), "value is required");
 		Assert.isTrue(saleIncomeDto.getValue() > 0, "value is invalid");
 		return service.toBill(id, saleIncomeDto);
+	}
+
+	@POST
+	@Path("/{id}/toCancel")
+	@Produces(MediaType.APPLICATION_JSON)
+	public SaleSimpleDto toCancel(@PathParam("id") long id) throws UndconException {
+		return service.toCancel(id);
 	}
 
 	@POST

@@ -60,10 +60,10 @@ public class SaleService extends AbstractService<SaleEntity> {
 
 	@Autowired
 	private IncomeService incomeService;
-	
+
 	@Autowired
 	private SaleMapper saleMapper;
-	
+
 	@Autowired
 	private IncomeMapper incomeMapper;
 
@@ -145,50 +145,71 @@ public class SaleService extends AbstractService<SaleEntity> {
 		if (sale == null) {
 			throw new UndconException(UndconError.SALE_NOT_FOUND);
 		}
-		
-		if(sale.getStatus() == SaleStatus.TOTAL_BILLED) {
+
+		if (sale.getStatus() == SaleStatus.TOTAL_BILLED) {
 			throw new UndconException(UndconError.SALE_INCOME_TO_BILL_SALE_TOTAL_BILLED);
 		}
-		
-		if(sale.getStatus() == SaleStatus.CANCELED) {
+
+		if (sale.getStatus() == SaleStatus.CANCELED) {
 			throw new UndconException(UndconError.SALE_INCOME_CANCELED_SALE);
 		}
 
 		Date paymentDate = saleIncomeDto.getPaymentDate();
-		if(saleIncomeDto.isSettled() && paymentDate == null) {
+		if (saleIncomeDto.isSettled() && paymentDate == null) {
 			paymentDate = new Date(System.currentTimeMillis());
 		}
-		
+
 		IncomeEntity income = new IncomeEntity(null, "Pagamento de Venda - " + sale.getSaleDate() + " #" + sale.getId(),
-				saleIncomeDto.getDuaDate(), paymentDate, saleIncomeDto.getValue(),
-				saleIncomeDto.isSettled(), sale, sale.getCustomer(), saleIncomeDto.getPaymentType());
-		
-		//TODO Verificar se o usuário precisará de permissão para gravar Venda e Receita para realizar o Pagamento da Venda. Hoje é necessário.
+				saleIncomeDto.getDuaDate(), paymentDate, saleIncomeDto.getValue(), saleIncomeDto.isSettled(), sale,
+				sale.getCustomer(), saleIncomeDto.getPaymentType());
+
+		// TODO Verificar se o usuário precisará de permissão para gravar Venda e
+		// Receita para realizar o Pagamento da Venda. Hoje é necessário.
 		incomeService.persist(income);
 
 		double amountPaid = incomeService.getIncomeValueBilledBySale(sale);
 		Double totalValueSale = getSaleTotal(sale.getId()).getTotalValue();
-		
-		if(amountPaid > totalValueSale) {
-			//Não temos juros na venda, por isso hoje o valor total da venda e das receitas sempre é soma dos valores dos itens da venda
+
+		if (amountPaid > totalValueSale) {
+			// Não temos juros na venda, por isso hoje o valor total da venda e das receitas
+			// sempre é soma dos valores dos itens da venda
 			throw new UndconException(UndconError.SALE_INCOME_AMOUNT_PAID_IS_MAJOR_SALE_TOTAL_VALUE);
 		}
 		double amountPayable = totalValueSale - amountPaid;
 
-		if(amountPayable > 0) {
+		if (amountPayable > 0) {
 			sale.setStatus(SaleStatus.BILLED);
 		} else {
 			sale.setStatus(SaleStatus.TOTAL_BILLED);
 		}
 
 		sale = saleRepository.save(sale);
-		
+
 		amountPayable = new BigDecimal(amountPayable).setScale(2, RoundingMode.HALF_EVEN).doubleValue();
 		amountPaid = new BigDecimal(amountPaid).setScale(2, RoundingMode.HALF_EVEN).doubleValue();
-		
+
 		IncomeDto incomeDto = incomeMapper.toDto(income);
 		SaleSimpleDto saleDto = saleMapper.toSimpleDto(sale);
 		return new SaleIncomeResponseDto(incomeDto, saleDto, amountPayable, amountPaid);
+	}
+
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+	public SaleSimpleDto toCancel(long id) throws UndconException {
+		permissionService.checkPermission(ResourceType.SALE);
+
+		SaleEntity sale = findById(id);
+		if (sale == null) {
+			throw new UndconException(UndconError.SALE_NOT_FOUND);
+		}
+
+		//TODO Cancelar Receitas ao cancelar a venda 
+		
+		sale.setStatus(SaleStatus.CANCELED);
+
+		sale = saleRepository.save(sale);
+
+		SaleSimpleDto saleDto = saleMapper.toSimpleDto(sale);
+		return saleDto;
 	}
 
 	@Override

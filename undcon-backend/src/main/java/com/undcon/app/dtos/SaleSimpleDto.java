@@ -10,8 +10,6 @@ public class SaleSimpleDto {
 
 	private Date saleDate;
 
-	private Boolean billed;
-
 	private SaleStatus status;
 
 	private IdDto customer;
@@ -20,12 +18,11 @@ public class SaleSimpleDto {
 
 	private IdDto salesman;
 
-	public SaleSimpleDto(Long id, Date saleDate, Boolean billed, SaleStatus status, IdDto customer, IdDto user,
+	public SaleSimpleDto(Long id, Date saleDate, SaleStatus status, IdDto customer, IdDto user,
 			IdDto salesman) {
 		super();
 		this.id = id;
 		this.saleDate = saleDate;
-		this.billed = billed;
 		this.status = status;
 		this.customer = customer;
 		this.user = user;
@@ -38,10 +35,6 @@ public class SaleSimpleDto {
 
 	public Date getSaleDate() {
 		return saleDate;
-	}
-
-	public Boolean getBilled() {
-		return billed;
 	}
 
 	public SaleStatus getStatus() {

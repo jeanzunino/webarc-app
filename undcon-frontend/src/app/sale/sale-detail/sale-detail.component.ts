@@ -50,10 +50,10 @@ export class SaleDetailComponent implements OnDestroy {
   currentPage = 0;
   tableValues = new Table()
     .set('name', 'sale-item.name')
-    .set('price', 'sale-item.price')
+    .set('price', 'sale-item.price', FormatEnum.MONEY)
     .set('quantity', 'sale-item.quantity')
-    .set('isProduct', 'sale-item.type', FormatEnum.IS_PRODUCT)
-    .set('subTotalItem', 'sale-item.subTotalItem')
+    .set('itemType', 'sale-item.itemType', FormatEnum.ITEM_TYPE)
+    .set('subTotalItem', 'sale-item.subTotalItem', FormatEnum.MONEY)
     .get();
 
   entity: Sale;

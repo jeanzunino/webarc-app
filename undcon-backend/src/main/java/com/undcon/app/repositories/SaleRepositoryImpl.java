@@ -21,6 +21,7 @@ import com.querydsl.core.types.Path;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.undcon.app.dtos.ItemType;
 import com.undcon.app.dtos.ProductSaledInfoDto;
 import com.undcon.app.dtos.SaleItemDto;
 import com.undcon.app.dtos.SaleTotalDto;
@@ -73,9 +74,9 @@ public class SaleRepositoryImpl {
 		for (SaleItemProductEntity saleItemProductEntity : itensProduct) {
 			double subTotalItem = saleItemProductEntity.getPrice() * saleItemProductEntity.getQuantity();
 			result.add(new SaleItemDto(saleItemProductEntity.getId(), saleItemProductEntity.getProduct().getName(),
-					saleItemProductEntity.getSale().getId(), true, saleItemProductEntity.getUser().getLogin(),
+					saleItemProductEntity.getSale().getId(), saleItemProductEntity.getUser().getLogin(),
 					saleItemProductEntity.getSalesman().getName(), saleItemProductEntity.getPrice(),
-					saleItemProductEntity.getQuantity(), subTotalItem));
+					saleItemProductEntity.getQuantity(), subTotalItem, ItemType.PRODUCT));
 		}
 		long countItensProductTotal = saleItemProductRepository
 				.count(QSaleItemProductEntity.saleItemProductEntity.sale.id.eq(id));
@@ -99,9 +100,9 @@ public class SaleRepositoryImpl {
 			for (SaleItemServiceEntity saleItemServiceEntity : itensService) {
 				double subTotalItem = saleItemServiceEntity.getPrice() * saleItemServiceEntity.getQuantity();
 				result.add(new SaleItemDto(saleItemServiceEntity.getId(), saleItemServiceEntity.getService().getName(),
-						saleItemServiceEntity.getSale().getId(), false, saleItemServiceEntity.getUser().getLogin(),
+						saleItemServiceEntity.getSale().getId(), saleItemServiceEntity.getUser().getLogin(),
 						saleItemServiceEntity.getSalesman().getName(), saleItemServiceEntity.getPrice(),
-						saleItemServiceEntity.getQuantity(), subTotalItem));
+						saleItemServiceEntity.getQuantity(), subTotalItem, ItemType.SERVICE));
 			}
 		}
 

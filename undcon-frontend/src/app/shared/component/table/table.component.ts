@@ -61,10 +61,12 @@ export class TableComponent implements OnInit {
         return this.maskPipe.transform(finalValue, this.translate.instant(tableValue.formatEnum));
       } else if (tableValue.formatEnum === FormatEnum.YES_NO) {
         return finalValue ? this.translate.instant('yes') : this.translate.instant('no');
-      } else if (tableValue.formatEnum === FormatEnum.IS_PRODUCT) {
-        return finalValue ? this.translate.instant('product') : this.translate.instant('service');
+      } else if (tableValue.formatEnum === FormatEnum.ITEM_TYPE) {
+        return this.translate.instant('enums.itemType.' + finalValue);
       } else if (tableValue.formatEnum === FormatEnum.DATE_TIME_PIPE) {
         return this.datePipe.transform(finalValue, 'dd/MM/yyyy hh:mm');
+      } else if (tableValue.formatEnum === FormatEnum.MONEY) {
+        return 'R$ ' + finalValue;
       }
     }
 

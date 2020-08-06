@@ -33,6 +33,14 @@
     "user-login": "Usuário"
   },
 
+  "sale-item": {
+    "name": "Item",
+    "price": "Valor do Item",
+    "quantity": "Quantidade",
+    "itemType": "Tipo",
+    "subTotalItem": "Vendedor"
+  },
+
   "COMENTARIO_MENU_GERAIS": "Traduções das telas do Menu Gerais",
   "service-type": {
     "name": "Nome",
@@ -115,5 +123,11 @@
   "filtros": "Filtros",
   "total_registros_encontrados": "Total de registros encontrados: {{total}}",
   "yes": "Sim",
-  "no": "Não"
+  "no": "Não",
+  "enums": {
+    "itemType":{
+      "PRODUCT": "Produto",
+      "SERVICE": "Serviço"
+    }
+  }
 }

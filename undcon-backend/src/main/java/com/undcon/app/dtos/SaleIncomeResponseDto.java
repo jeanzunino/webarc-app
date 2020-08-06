@@ -1,19 +1,16 @@
 package com.undcon.app.dtos;
 
-import com.undcon.app.model.IncomeEntity;
-import com.undcon.app.model.SaleEntity;
-
 public class SaleIncomeResponseDto {
 
-	private IncomeEntity income;
+	private IncomeDto income;
 
-	private SaleEntity sale;
+	private SaleSimpleDto sale;
 
 	private double amountPayable;
 
 	private double amountPaid;
 
-	public SaleIncomeResponseDto(IncomeEntity income, SaleEntity sale, double amountPayable, double amountPaid) {
+	public SaleIncomeResponseDto(IncomeDto income, SaleSimpleDto sale, double amountPayable, double amountPaid) {
 		super();
 		this.income = income;
 		this.sale = sale;
@@ -21,36 +18,20 @@ public class SaleIncomeResponseDto {
 		this.amountPaid = amountPaid;
 	}
 
-	public IncomeEntity getIncome() {
+	public IncomeDto getIncome() {
 		return income;
 	}
 
-	public void setIncome(IncomeEntity income) {
-		this.income = income;
-	}
-
-	public SaleEntity getSale() {
+	public SaleSimpleDto getSale() {
 		return sale;
-	}
-
-	public void setSale(SaleEntity sale) {
-		this.sale = sale;
 	}
 
 	public double getAmountPayable() {
 		return amountPayable;
 	}
 
-	public void setAmountPayable(double amountPayable) {
-		this.amountPayable = amountPayable;
-	}
-
 	public double getAmountPaid() {
 		return amountPaid;
-	}
-
-	public void setAmountPaid(double amountPaid) {
-		this.amountPaid = amountPaid;
 	}
 
 }

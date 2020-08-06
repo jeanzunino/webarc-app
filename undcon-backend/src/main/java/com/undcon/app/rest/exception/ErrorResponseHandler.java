@@ -1,9 +1,11 @@
 package com.undcon.app.rest.exception;
 
+import javax.persistence.EntityManager;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 
 import com.undcon.app.enums.UndconError;
@@ -28,11 +30,10 @@ public class ErrorResponseHandler implements ExceptionMapper<Throwable> {
 			return error(error, HttpStatus.BAD_REQUEST, bodyOfResponse);
 		}
 		error.printStackTrace();
-		ErrorMessageModel bodyOfResponse = new ErrorMessageModel(UndconError.GENERIC_ERROR,
-				error.getMessage());
+		ErrorMessageModel bodyOfResponse = new ErrorMessageModel(UndconError.GENERIC_ERROR, error.getMessage());
 		return error(error, HttpStatus.INTERNAL_SERVER_ERROR, bodyOfResponse);
 	}
-	
+
 	private Response error(final Throwable exception, final HttpStatus httpStatus,
 			final ErrorMessageModel bodyOfResponse) {
 		return Response.status(httpStatus.value()).entity(bodyOfResponse).build();

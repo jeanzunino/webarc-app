@@ -202,7 +202,7 @@ public class SaleService extends AbstractService<SaleEntity> {
 			throw new UndconException(UndconError.SALE_NOT_FOUND);
 		}
 
-		//TODO Cancelar Receitas ao cancelar a venda 
+		//TODO Cancelar Receitas/Pagamentos ao cancelar a venda 
 		
 		sale.setStatus(SaleStatus.CANCELED);
 

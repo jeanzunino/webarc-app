@@ -2,20 +2,19 @@
                   [icon]="iconPanelHeader" [headerColor]="colorPanelHeader">
   <div body>
 
-    <div class="row" *ngIf="isToBill()" class="row margin-b-20">
+    <div *ngIf="isToBill()" class="row margin-b-20">
       <div class="col-6">
         <app-simple-panel panelColor="secondary-system-color" [showHeader]="true" panelTitle="Formas de pagamento">
-          <div body>
-
-
-            <div class="input-group mb-3">
-              <div class="input-group-prepend" id="button-addon3">
-                <button mdbBtn color="primary" size="md" class="m-0 px-3 py-2" type="button" mdbWavesEffect>Button</button>
-                <button mdbBtn color="primary" size="md" class="m-0 px-3 py-2" type="button" mdbWavesEffect>Button</button>
+          <div body class="text-align-center">
+            <div class="row">
+              <div class="col-12">
+                <app-button-group button1="Cartão" button2="Á vista"
+                                  button3="Parcelado" button4="Teste"
+                                  selectDefaultItem="button1"
+                                  (itemSelected)="teste($event)">
+                </app-button-group>
               </div>
             </div>
-
-
           </div>
         </app-simple-panel>
       </div>
@@ -34,6 +33,7 @@
         <button mdbBtn type="button" color="success" outline="true" (click)="onConfirmBill()" *ngIf="isToBill()" mdbWavesEffect>Faturar</button>
         <button mdbBtn type="button" color="danger" outline="true" (click)="onConfirmCancel()" *ngIf="!isNew() && !isBilled() && !isCanceled()" mdbWavesEffect>Cancelar</button>
         <button mdbBtn type="button" color="mdb-color" outline="true" (click)="goBack()" mdbWavesEffect>Voltar</button>
+
       </div>
     </div>
 

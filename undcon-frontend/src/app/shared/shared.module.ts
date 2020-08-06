@@ -3,9 +3,7 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import {
   CollapseModule,
   MDBBootstrapModule,
-  CheckboxModule,
-  ButtonsModule,
-  WavesModule
+  CheckboxModule
 } from 'angular-bootstrap-md';
 import { CommonModule, DatePipe } from '@angular/common';
 import { NgxSpinnerModule } from 'ngx-spinner';
@@ -29,6 +27,7 @@ import { ValidationComponent } from '@component/validation/validation.component'
 import { EmptyComponent } from '@component/empty/empty.component';
 import { EmptyChildrenComponent } from '@component/empty-children/empty-children.component';
 import { ConfirmDialogComponent } from '@component/confirm-dialog/confirm-dialog.component';
+import { ButtonGroupComponent } from '@component/button-group/button-group.component';
 
 export let SharedInjector: Injector;
 
@@ -45,7 +44,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     ValidationComponent,
     EmptyComponent,
     EmptyChildrenComponent,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    ButtonGroupComponent
   ],
   exports: [
     CommonModule,
@@ -60,12 +60,11 @@ export function HttpLoaderFactory(http: HttpClient) {
     PanelComponent,
     SimplePanelComponent,
     CheckboxModule,
-    ButtonsModule,
-    WavesModule,
     ValidationComponent,
     EmptyComponent,
     EmptyChildrenComponent,
-    AutocompleteLibModule
+    AutocompleteLibModule,
+    ButtonGroupComponent
   ],
   imports: [
     CommonModule,

@@ -524,4 +524,8 @@ export class SaleDetailComponent implements OnDestroy {
       });
     this.spinner.hide();
   }
+
+  teste(btn: string) {
+    alert(btn)
+  }
 }

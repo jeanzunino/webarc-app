@@ -8,9 +8,9 @@
           <div body class="text-align-center">
             <div class="row">
               <div class="col-12">
-                <app-button-group selectDefaultItem="avista"
-                                  (itemSelected)="teste($event)"
-                                  [buttonGroupValues]="buttonGroupValues">
+                <app-button-group (itemSelected)="teste($event)"
+                                  selectDefaultItem="cash"
+                                  [buttonGroupValues]="bgPaymentTypeValues">
                 </app-button-group>
               </div>
             </div>
@@ -21,7 +21,6 @@
       <div class="col-6">
         <app-simple-panel panelColor="secondary-system-color" [showHeader]="true" panelTitle="Pagamentos efetuados">
           <div body>
-            faturar
           </div>
         </app-simple-panel>
       </div>

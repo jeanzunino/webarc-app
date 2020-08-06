@@ -1,6 +1,7 @@
-import { ButtonGroup } from './../../shared/model/button-group';
+import { PaymentType } from './../../core/enum/payment-type';
+import { ButtonGroup, ButtonGroupValues } from './../../shared/model/button-group';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { Component, ViewEncapsulation, ViewChild, OnDestroy } from '@angular/core';
+import { Component, ViewEncapsulation, ViewChild, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
@@ -55,16 +56,10 @@ export class SaleDetailComponent implements OnDestroy {
     .set('subTotalItem', 'sale-item.subTotalItem')
     .get();
 
-  buttonGroupValues = new ButtonGroup()
-    .set('avista', 'Á vista')
-    .set('parcelado', 'Parcelado')
-    .set('cheque', 'Cheque')
-    .set('entrada', 'Entrada')
-    .get();
-
   entity: Sale;
   colorPanelHeader = '';
   iconPanelHeader = '';
+  bgPaymentTypeValues: ButtonGroupValues[];
 
   @ViewChild('ngAutoCompleteCustomer') ngAutoCompleteCustomer;
   customers: Customer[];
@@ -120,7 +115,18 @@ export class SaleDetailComponent implements OnDestroy {
       this.showPanelHeader = true;
       this.saleItems = this.rt.snapshot.data.saleItens;
       this.setSaleTotalValue();
+      this.setBgPaymentType();
     }
+  }
+
+  setBgPaymentType() {
+    const bgPaymentType = new ButtonGroup();
+    Object.keys(PaymentType).filter((type) => isNaN(type as any) && type !== 'values')
+      .forEach(paymentType => {
+        const payment = paymentType.toLowerCase();
+        bgPaymentType.set(payment, payment);
+      });
+    this.bgPaymentTypeValues = bgPaymentType.get();
   }
 
   private async setSaleTotalValue() {

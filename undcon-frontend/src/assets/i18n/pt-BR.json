@@ -1,10 +1,72 @@
 {
+  
   "error": {
     "authentication": {
       "title": "Erro de autenticação",
       "message": "Usuário ou senha inválido."
     },
     "save.title": "Não foi possível salvar o(a) {{entity}}"
+  },
+
+
+  "COMENTARIO_COMPRAS": "Traduções das telas do Menu Compras",
+  "provider": {
+    "name": "Nome",
+    "phone": "Telefone"
+  },
+  "purchase": {
+    "name": "Nome",
+    "purchaseDate": "Data da Compra"
+  },
+
+  "COMENTARIO_VENDAS": "Traduções das telas do Menu Vendas",
+  "customer": {
+    "name": "Nome",
+    "phone": "Telefone"
+  },
+  "sale": {
+    "id": "Id",
+    "customer-name": "Cliente",
+    "saleDate": "Data da Venda",
+    "salesman-name": "Vendedor",
+    "status": "Status",
+    "user-login": "Usuário"
+  },
+
+  "COMENTARIO_MENU_GERAIS": "Traduções das telas do Menu Gerais",
+  "service-type": {
+    "name": "Nome",
+    "description": "Descrição",
+    "price": "Valor"
+  },
+  "product-category": {
+    "name": "Nome",
+    "parent-name": "Subcategoria De"
+  },
+  "product": {
+    "name": "Nome",
+    "unit": "Unidade de Medida",
+    "purchasePrice": "Valor de Compra",
+    "salePrice": "Valor de Venda",
+    "stock": "Saldo em Estoque",
+    "stockMin": "Estoque Mínimo",
+    "productCategoryName": "Categoria de Produto"
+  },
+
+      
+  "COMENTARIO_MENU_CONFIGURACOES": "Traduções das telas do Menu Configurações",
+  "tenant": {
+    "name": "Nome",
+    "email": "E-mail",
+    "schemaName": "Nome do schema",
+    "phone": "Telefone do Resposável"
+  },
+  "permission": {
+    "name": "Nome"
+  },
+  "employee": {
+    "name": "Nome",
+    "phone": "Telefone"
   },
   "user": {
     "entity": "Usuário",
@@ -13,6 +75,7 @@
     "active": "Ativo",
     "permission": "Permissões"
   },
+
   "menu": {
     "home": "Home",
     "compra": {
@@ -31,6 +94,7 @@
       "categorias-produtos": "Categorias de Produtos",
       "produtos": "Produtos"
     },
+
     "configuracao": {
       "title": "Configurações",
       "tenants": "Tenants",
@@ -38,6 +102,7 @@
       "funcionarios": "Funcionários",
       "usuarios": "Usuários"
     },
+
     "sair": "Sair"
   },
   "table": {
@@ -50,7 +115,5 @@
   "filtros": "Filtros",
   "total_registros_encontrados": "Total de registros encontrados: {{total}}",
   "yes": "Sim",
-  "no": "Não",
-  "product": "Produto",
-  "service": "Serviço"
+  "no": "Não"
 }

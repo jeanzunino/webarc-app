@@ -24,7 +24,6 @@ export class SaleComponent extends GridViewComponent<Sale> {
     .set('salesman.name', 'sale.salesman-name')
     .set('status', 'sale.status')
     .set('user.login', 'sale.user-login')
-    .set('billed', 'sale.billed', FormatEnum.YES_NO)
     .get();
   name = null;
 

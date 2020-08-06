@@ -32,6 +32,8 @@ public class ProductCategoryApi {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Page<ProductCategoryEntity> getAll(@QueryParam("filter") String filter, @QueryParam("page") Integer page,
 			@QueryParam("size") Integer size) {
+		
+		//TODO BUG - Não está retornando a categoria PAI, mesmo colocando o Pai como EAGER.
 		return service.getAll(filter, page, size);
 	}
 

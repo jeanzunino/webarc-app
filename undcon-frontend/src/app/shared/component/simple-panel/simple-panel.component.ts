@@ -9,6 +9,7 @@ export class SimplePanelComponent implements OnInit {
   @Input() showHeader = false;
   @Input() showFooter = false;
   @Input() panelColor = 'primary-system-color';
+  @Input() rightValue = null;
 
   iconFinal = '';
   @Input() set icon(icon: string) {

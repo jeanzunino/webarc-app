@@ -20,7 +20,24 @@ export const getTranslate = (key, params = null) => {
   }
 };
 
-export const openDialog = (item: Entity, obj: Object) => {
+export const openDialog = (item: Entity, obj: any) => {
+  document.body.style.overflow = 'hidden';
+  return modalService.show(obj, {
+    backdrop: true,
+    keyboard: true,
+    focus: true,
+    show: false,
+    ignoreBackdropClick: true,
+    class: 'modal-dialog-centered',
+    containerClass: '',
+    animated: true,
+    data: {
+      content: item
+    }
+  });
+};
+
+export const openSimpleDialog = (item: any, obj: any) => {
   document.body.style.overflow = 'hidden';
   return modalService.show(obj, {
     backdrop: true,

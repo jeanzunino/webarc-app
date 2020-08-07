@@ -1,0 +1,40 @@
+<app-dialog modalTitle="Parcelamento - R$ {{valueToInstallments}}" [modalRef]="modalRef">
+  <div body>
+    <div class="row">
+      <div class="col-12 text-align-center">
+        <app-button-group (selected)="generateInputs($event)"
+                          [buttonGroupValues]="bgInstallmentValues"
+                          selectDefaultItem="6-x">
+        </app-button-group>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-10">
+        <div class="md-form">
+          <input type="number" id="name" class="form-control text-light" mdbInput />
+          <label for="name" class="text-light">Data</label>
+        </div>
+      </div>
+      <div class="col-2 margin-t-40">
+        <a type="button" (click)="calculateValues()" mdbTooltip="Sugetão de valores" placement="top">
+          <em class="fas fa-sync-alt"></em>
+        </a>
+      </div>
+    </div>
+
+    <div class="row">
+      <div *ngFor="let number of numberInputs; let installment = index" class="col-6">
+        <div class="md-form">
+          <input type="number" id="installment-{{installment}}" class="form-control text-light" mdbInput />
+          <label for="installment-{{installment}}" class="text-light">Parcela {{installment+1}}</label>
+        </div>
+        {{ recalculateValues(installment) }}
+      </div>
+    </div>
+  </div>
+  <div footer>
+    <button mdbBtn type="button" color="primary" (click)="confirm()" outline="true" mdbWavesEffect>Confirmar</button>
+    <button mdbBtn type="button" color="mdb-color" (click)="cancel()" outline="true" mdbWavesEffect>Cancelar</button>
+  </div>
+</app-dialog>

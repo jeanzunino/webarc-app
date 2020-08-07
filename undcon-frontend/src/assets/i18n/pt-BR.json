@@ -1,5 +1,5 @@
 {
-  
+
   "error": {
     "authentication": {
       "title": "Erro de autenticação",
@@ -38,7 +38,7 @@
     "price": "Valor do Item",
     "quantity": "Quantidade",
     "itemType": "Tipo",
-    "subTotalItem": "Vendedor"
+    "subTotalItem": "Subtotal"
   },
 
   "COMENTARIO_MENU_GERAIS": "Traduções das telas do Menu Gerais",
@@ -61,7 +61,7 @@
     "productCategoryName": "Categoria de Produto"
   },
 
-      
+
   "COMENTARIO_MENU_CONFIGURACOES": "Traduções das telas do Menu Configurações",
   "tenant": {
     "name": "Nome",

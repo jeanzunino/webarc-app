@@ -10,9 +10,10 @@ export class ButtonGroupComponent implements AfterViewInit {
 
   private buttonSelected;
 
-  @Output() itemSelected: EventEmitter<string> = new EventEmitter();
+  @Output() selected: EventEmitter<string> = new EventEmitter();
   @Input() buttonGroupValues: ButtonGroupValues[] = [];
   @Input() selectDefaultItem;
+  @Input() textColor = 'color-black';
 
   ngAfterViewInit() {
     if (this.selectDefaultItem) {
@@ -38,7 +39,7 @@ export class ButtonGroupComponent implements AfterViewInit {
     }
     this.setSelectColor(id);
     this.buttonSelected = id;
-    this.itemSelected.emit(this.buttonSelected);
+    this.selected.emit(this.buttonSelected);
   }
 
   private setDisableColor(id: string) {

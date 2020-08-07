@@ -72,7 +72,7 @@ export class TableComponent implements OnInit {
       } else if (tableValue.formatEnum === FormatEnum.DATE_TIME_PIPE) {
         return this.datePipe.transform(finalValue, 'dd/MM/yyyy hh:mm');
       } else if (tableValue.formatEnum === FormatEnum.MONEY) {
-        return 'R$ ' + finalValue;
+        return 'R$ ' + Number(finalValue).toFixed(2);
       }
     }
 

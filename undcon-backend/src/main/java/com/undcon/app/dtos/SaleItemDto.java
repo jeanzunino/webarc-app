@@ -17,6 +17,7 @@ public class SaleItemDto {
 	private long quantity;
 
 	private double subTotalItem;
+	
 	private ItemType itemType;
 
 	public SaleItemDto(Long id, String name, Long saleId, String userName, String salesmanName, double price,

@@ -1,7 +1,10 @@
+import { InstallmentDialogComponent } from '@component/installment-dialog/installment-dialog.component';
+import { openSimpleDialog } from '@shared/utils/utils';
+import { SaleIncome } from './../../core/model/sale-income';
 import { PaymentType } from './../../core/enum/payment-type';
 import { ButtonGroup, ButtonGroupValues } from './../../shared/model/button-group';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { Component, ViewEncapsulation, ViewChild, OnDestroy, OnInit } from '@angular/core';
+import { Component, ViewEncapsulation, ViewChild, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
@@ -32,6 +35,8 @@ import { openConfimDialog } from '@shared/utils/utils';
 import { ConfirmDialogModel } from '@app/shared/model/confirm-dialog-model';
 import { CloseDialogValues } from '@app/shared/model/close-dialog-values';
 import { ActionReturnDialog } from '@enum/action-return-dialog';
+import { ItemType } from '@app/core/enum/item-type';
+import { InstallmentDialog } from '@app/shared/model/installment-dialog-model';
 
 @Component({
   selector: 'app-sale-detail',
@@ -60,6 +65,11 @@ export class SaleDetailComponent implements OnDestroy {
   colorPanelHeader = '';
   iconPanelHeader = '';
   bgPaymentTypeValues: ButtonGroupValues[];
+  paymentTypeSelect = PaymentType.CASH;
+  paymentIncome = new SaleIncome();
+  reloadValuesPreviousScreen = false;
+  hasParcels = false;
+  paymentDuaDateLabel = 'Data de vencimeto';
 
   @ViewChild('ngAutoCompleteCustomer') ngAutoCompleteCustomer;
   customers: Customer[];
@@ -75,17 +85,17 @@ export class SaleDetailComponent implements OnDestroy {
   private productSelect: Product;
   products: Product[];
   productKeyword = 'name';
-  productPrice = 0;
+  productPrice = '0';
   productQtd = 0;
-  productPriceTotal = 0;
+  productPriceSubtotal = '0';
 
   @ViewChild('ngAutoCompleteService') ngAutoCompleteService;
   private serviceSelect: ServiceType;
   services: ServiceType[];
   serviceKeyword = 'name';
-  servicePrice = 0;
+  servicePrice = '0';
   serviceQtd = 0;
-  servicePriceTotal = 0;
+  servicePriceSubtotal = '0';
 
   constructor(private router: Router,
               private rt: ActivatedRoute,
@@ -123,8 +133,7 @@ export class SaleDetailComponent implements OnDestroy {
     const bgPaymentType = new ButtonGroup();
     Object.keys(PaymentType).filter((type) => isNaN(type as any) && type !== 'values')
       .forEach(paymentType => {
-        const payment = paymentType.toLowerCase();
-        bgPaymentType.set(payment, payment);
+        bgPaymentType.set(paymentType, paymentType.toLowerCase());
       });
     this.bgPaymentTypeValues = bgPaymentType.get();
   }
@@ -159,8 +168,7 @@ export class SaleDetailComponent implements OnDestroy {
   }
 
   goBack() {
-    const previousRoute = '../';
-    this.router.navigate([previousRoute], { relativeTo: this.rt.parent });
+    this.router.navigate(['../', {reload: this.reloadValuesPreviousScreen}], { relativeTo: this.rt.parent });
   }
 
   customerSelectEvent(customer: Customer) {
@@ -173,26 +181,22 @@ export class SaleDetailComponent implements OnDestroy {
 
   productSelectEvent(product: Product) {
     this.productSelect = product;
-    this.productPrice = product.salePrice;
-    this.productPriceTotal = this.productPrice * this.productQtd;
+    this.productPrice = product.salePrice.toFixed(2);
+    this.updateProductTotal();
   }
 
   updateProductTotal() {
-    this.productPriceTotal = this.productPrice * this.productQtd;
+    this.productPriceSubtotal = (Number(this.productPrice) * this.productQtd).toFixed(2);
   }
 
   serviceSelectEvent(serviceType: ServiceType) {
     this.serviceSelect = serviceType;
-    this.servicePrice = serviceType.price;
-    this.servicePriceTotal = this.servicePrice * this.serviceQtd;
-  }
-
-  serviceProductTotal() {
-    this.servicePriceTotal = this.servicePrice * this.serviceQtd;
+    this.servicePrice = serviceType.price.toFixed(2);
+    this.updateServiceTotal();
   }
 
   updateServiceTotal() {
-    this.servicePriceTotal = this.servicePrice * this.serviceQtd;
+    this.servicePriceSubtotal = (Number(this.servicePrice) * this.serviceQtd).toFixed(2);
   }
 
   async customerChangeEvent(name) {
@@ -240,9 +244,9 @@ export class SaleDetailComponent implements OnDestroy {
   productInputCleared() {
     this.products = [];
     this.productSelect = null;
-    this.productPrice = 0;
+    this.productPrice = '0';
     this.productQtd = 0;
-    this.productPriceTotal = 0;
+    this.productPriceSubtotal = '0';
     this.ngAutoCompleteProduct.clear();
     this.ngAutoCompleteProduct.close();
   }
@@ -250,9 +254,9 @@ export class SaleDetailComponent implements OnDestroy {
   serviceInputCleared() {
     this.services = [];
     this.serviceSelect = null;
-    this.servicePrice = 0;
+    this.servicePrice = '0';
     this.serviceQtd = 0;
-    this.servicePriceTotal = 0;
+    this.servicePriceSubtotal = '0';
     this.ngAutoCompleteService.clear();
     this.ngAutoCompleteService.close();
   }
@@ -314,6 +318,7 @@ export class SaleDetailComponent implements OnDestroy {
       .then(sale => {
         this.entity = sale;
         this.setPanelHeaderStatus();
+        this.reloadValuesPreviousScreen = true;
         if (this.isNew()) {
           this.showPanelHeader = true;
           this.router.navigate(['../', this.entity.id], { relativeTo: this.rt.parent });
@@ -418,12 +423,13 @@ export class SaleDetailComponent implements OnDestroy {
   }
 
   confirmDeleteSaleItem(saleItem: SaleItem) {
-    openConfimDialog(new ConfirmDialogModel(`Confirma a remoção do ${saleItem.isProduct ? 'produto' : 'serviço'} ${saleItem.name}`))
+    openConfimDialog(new ConfirmDialogModel(`Confirma a remoção do ${saleItem.itemType === ItemType.PRODUCT
+        ? 'produto' : 'serviço'} ${saleItem.name}`))
       .content.onClose
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((values: CloseDialogValues) => {
         if (values.action === ActionReturnDialog.CONFIRM) {
-          if (saleItem.isProduct) {
+          if (saleItem.itemType === ItemType.PRODUCT) {
             this.deleteProductItem(saleItem);
           } else {
             this.deleteServiceItem(saleItem);
@@ -531,6 +537,7 @@ export class SaleDetailComponent implements OnDestroy {
       .then(sale => {
         this.entity = sale;
         this.setPanelHeaderStatus();
+        this.reloadValuesPreviousScreen = true;
         this.toastr.success(
           this.translate.instant(msgSucess),
           this.translate.instant('Sucesso')
@@ -539,7 +546,42 @@ export class SaleDetailComponent implements OnDestroy {
     this.spinner.hide();
   }
 
-  teste(btn: string) {
-    alert(btn)
+  bgPaymentTypeSelect(paymentTypeSelect: PaymentType) {
+    debugger
+    this.paymentTypeSelect = paymentTypeSelect;
+    this.paymentIncome = new SaleIncome();
+  }
+
+  teste() {
+    console.log(this.paymentIncome);
+  }
+
+  installment() {
+    openSimpleDialog(new InstallmentDialog(this.paymentIncome.value), InstallmentDialogComponent)
+      .content.onClose
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe((values: CloseDialogValues) => {
+        if (values.action === ActionReturnDialog.CONFIRM) {
+          this.hasParcels = true;
+          this.paymentDuaDateLabel = '1ª Parcela';
+          this.paymentIncome.duaDate = new Date();
+        }
+      });
+  }
+
+  isCash() {
+    return this.paymentTypeSelect === PaymentType.CASH;
+  }
+
+  isBankCheck() {
+    return this.paymentTypeSelect === PaymentType.BANK_CHECK;
+  }
+
+  isCreditCard() {
+    return this.paymentTypeSelect === PaymentType.CREDIT_CARD;
+  }
+
+  isDebitCard() {
+    return this.paymentTypeSelect === PaymentType.DEBIT_CARD;
   }
 }

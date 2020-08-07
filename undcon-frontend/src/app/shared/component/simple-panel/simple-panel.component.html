@@ -1,12 +1,16 @@
 
 <div class="card {{panelColor}}">
   <div *ngIf="showHeader" class="card-header text-light {{headerColorFinal}}">
-    <div class="close pull-right">
+    <div *ngIf="iconFinal" class="right-header">
       <i class="{{iconFinal}} {{iconColorFinal}}" aria-hidden="true"></i>
+      <label *ngIf="rightValue" class="text-light">{{rightValue}}</label>
+    </div>
+    <div *ngIf="rightValue" class="right-header">
+      <label class="text-light">{{rightValue}}</label>
     </div>
     <p class="margin-b-0 {{panelTitleColor}}">{{ panelTitle | translate }}</p>
   </div>
-  <div class="card-body pad-t-0">
+  <div class="card-body">
     <ng-content select="[body]"></ng-content>
   </div>
   <div *ngIf="showFooter" class="card-footer secondary-system-color">

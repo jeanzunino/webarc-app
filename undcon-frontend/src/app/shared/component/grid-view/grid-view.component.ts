@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MDBModalService, MDBModalRef } from 'angular-bootstrap-md';
 import { takeUntil } from 'rxjs/operators';
-import { Subject } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 
 
 import { Page } from '@model/page';
@@ -28,7 +28,20 @@ export abstract class GridViewComponent<T> implements OnInit, OnDestroy {
     public modalService: MDBModalService
   ) {}
 
+  sub: Subscription;
+
   ngOnInit() {
+    this.sub = this.activatedRoute.params.subscribe(params => {
+        if (params['reload']) {
+          this.reloadItems(0);
+        } else {
+          this.loadItems();
+        }
+    });
+    this.sub.unsubscribe();
+  }
+
+  private loadItems() {
     this.items = this.activatedRoute.snapshot.data.items as Page<T>;
     this.spinner.hide();
   }
@@ -36,6 +49,7 @@ export abstract class GridViewComponent<T> implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
+    this.sub.unsubscribe();
   }
 
   async reloadItems(page) {

@@ -5,15 +5,53 @@
     <div *ngIf="isToBill()" class="row margin-b-20">
       <div class="col-6">
         <app-simple-panel panelColor="secondary-system-color" [showHeader]="true" panelTitle="Formas de pagamento">
-          <div body class="text-align-center">
-            <div class="row">
+          <div body>
+            <div class="row text-align-center">
               <div class="col-12">
-                <app-button-group (itemSelected)="teste($event)"
-                                  selectDefaultItem="cash"
+                <app-button-group (selected)="bgPaymentTypeSelect($event)"
+                                  [selectDefaultItem]="paymentTypeSelect"
                                   [buttonGroupValues]="bgPaymentTypeValues">
                 </app-button-group>
               </div>
             </div>
+
+            <!-- Dinheiro -->
+            <div class="row" *ngIf="isCash()">
+              <div class="col-5">
+                <div class="md-form">
+                  <input type="datetime-local" id="date" class="form-control text-light" [ngModel]="paymentIncome.duaDate | date: 'dd/MM/yyyy hh:mm'" [disabled]="hasParcels" mdbInput />
+                  <label for="date" class="text-light">{{paymentDuaDateLabel}}</label>
+                </div>
+              </div>
+              <div class="col-5">
+                <div class="md-form">
+                  <input type="text" id="value" class="form-control text-light" [(ngModel)]="paymentIncome.value" mdbInput />
+                  <label for="value" class="text-light">Valor</label>
+                </div>
+              </div>
+              <div class="col-2">
+                <div class="custom-control custom-checkbox margin-t-40">
+                  <input type="checkbox" class="custom-control-input" id="active" tabindex="0" [(ngModel)]="paymentIncome.settled">
+                  <label for="active" class="custom-control-label text-light">Pago</label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Cheque -->
+            <div class="row" *ngIf="isBankCheck()">
+              <div class="col-12 text-light">
+                Cheque
+              </div>
+            </div>
+
+            <!-- Crédito e Débito -->
+            <div class="row" *ngIf="isCreditCard() || isDebitCard()">
+              <div class="col-12 text-light">
+                Crédito e Débito
+              </div>
+            </div>
+            <button mdbBtn type="button" color="primary" outline="true" (click)="teste();" mdbWavesEffect>Lançar pagamento</button>
+            <button mdbBtn type="button" color="info" outline="true" (click)="installment();" [disabled]="!paymentIncome.value" *ngIf="isCash()" mdbWavesEffect>Parcelamento</button>
           </div>
         </app-simple-panel>
       </div>
@@ -64,7 +102,7 @@
         <button mdbBtn type="button" color="mdb-color" outline="true" (click)="goBack()" mdbWavesEffect>Voltar</button>
       </div>
       <div *ngIf="isCreated()" class="col-6">
-        <p class="text-light font-weight-bold font-size-38 margin-b-0">R$ {{saleTotalValue}}</p>
+        <p class="text-light font-weight-bold font-size-38 margin-b-0">R$ {{saleTotalValue.toFixed(2)}}</p>
       </div>
     </div>
 
@@ -96,7 +134,7 @@
               </div>
               <div class="col-4">
                 <p class="text-light">Subtotal</p>
-                <p class="text-light font-weight-bold font-size-25">R$ {{productPriceTotal}}</p>
+                <p class="text-light font-weight-bold font-size-25">R$ {{productPriceSubtotal}}</p>
               </div>
             </div>
             <button mdbBtn type="button" color="primary" outline="true" (click)="addProduct();" *ngIf="!isBilled() && !isCanceled()" mdbWavesEffect>Adicionar</button>
@@ -130,7 +168,7 @@
               </div>
               <div class="col-4">
                 <p class="text-light">Subtotal</p>
-                <p class="text-light font-weight-bold font-size-25">R$ {{servicePriceTotal}}</p>
+                <p class="text-light font-weight-bold font-size-25">R$ {{servicePriceSubtotal}}</p>
               </div>
             </div>
             <button mdbBtn type="button" color="primary" outline="true" (click)="addService();" *ngIf="!isBilled() && !isCanceled()" mdbWavesEffect>Adicionar</button>

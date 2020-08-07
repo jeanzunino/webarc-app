@@ -132,6 +132,16 @@ public class SaleApi {
 	}
 
 	@POST
+	@Path("/{id}/toBillList")
+	@Produces(MediaType.APPLICATION_JSON)
+	public SaleIncomeResponseDto toBillSale(@PathParam("id") long id, List<SaleIncomeRequestDto> saleIncomeDtoList)
+			throws UndconException {
+		Assert.notNull(saleIncomeDtoList, "saleIncomeDtoList is required");
+		Assert.isTrue(saleIncomeDtoList.size() > 0, "one element is required");
+		return service.toBill(id, saleIncomeDtoList);
+	}
+
+	@POST
 	@Path("/{id}/toBill")
 	@Produces(MediaType.APPLICATION_JSON)
 	public SaleIncomeResponseDto toBillSale(@PathParam("id") long id, SaleIncomeRequestDto saleIncomeDto)

@@ -43,6 +43,17 @@
 
       <li class="nav-item dropdown" dropdown>
         <a dropdownToggle mdbWavesEffect type="button" class="nav-link dropdown-toggle waves-light" mdbWavesEffect>
+          <mdb-icon fas icon="shopping-cart"></mdb-icon> {{ 'menu.finance.title' | translate }} <span class="caret"></span>
+        </a>
+        <div *dropdownMenu class="dropdown-menu dropdown-menu-right dropdown dropdown-primary primary-system-color"
+          role="menu">
+          <a class="dropdown-item waves-light text-light" mdbWavesEffect routerLink="/bank-check"
+            (click)="loadingPage()">{{ 'menu.finance.check' | translate }}</a>
+        </div>
+      </li>      
+
+      <li class="nav-item dropdown" dropdown>
+        <a dropdownToggle mdbWavesEffect type="button" class="nav-link dropdown-toggle waves-light" mdbWavesEffect>
           <mdb-icon fas icon="user"></mdb-icon> {{ 'menu.geral.title' | translate }} <span class="caret"></span>
         </a>
         <div *dropdownMenu class="dropdown-menu dropdown-menu-right dropdown dropdown-primary primary-system-color"

@@ -1,15 +1,18 @@
 package com.undcon.app.enums;
 
 public enum PaymentType {
-	/** Á vista */
+	/** 0 - Á vista */
 	CASH,
 
-	/** Cheque Bancário */
+	/** 1 - Cheque Bancário */
 	BANK_CHECK,
 
-	/** Cartão de Débito */
+	/** 2 - Boleto Bacário */
+	BACK_SLIP,
+
+	/** 3 - Cartão de Débito */
 	DEBIT_CARD,
 
-	/** Cartão de Crédito */
+	/** 4 - Cartão de Crédito */
 	CREDIT_CARD
 }

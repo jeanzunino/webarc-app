@@ -16,17 +16,20 @@ public class SaleIncomeRequestDto {
 
 	private PaymentType paymentType;
 
+	private BankCheckDto check;
+
 	public SaleIncomeRequestDto() {
 	}
 
-	public SaleIncomeRequestDto(Date duaDate, Date paymentDate, double value, boolean settled,
-			PaymentType paymentType) {
+	public SaleIncomeRequestDto(Date duaDate, Date paymentDate, double value, boolean settled, PaymentType paymentType,
+			BankCheckDto check) {
 		super();
 		this.duaDate = duaDate;
 		this.paymentDate = paymentDate;
 		this.value = value;
 		this.settled = settled;
 		this.paymentType = paymentType;
+		this.check = check;
 	}
 
 	public Date getDuaDate() {
@@ -67,6 +70,14 @@ public class SaleIncomeRequestDto {
 
 	public void setPaymentType(PaymentType paymentType) {
 		this.paymentType = paymentType;
+	}
+
+	public BankCheckDto getCheck() {
+		return check;
+	}
+
+	public void setCheck(BankCheckDto check) {
+		this.check = check;
 	}
 
 }

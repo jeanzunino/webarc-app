@@ -45,5 +45,8 @@ public enum ResourceType {
 	PURCHASE,
 
 	/** 14 - */
-	SALE
+	SALE,
+	
+	/** 15 - Cheque Bancário*/
+	BACK_CHECK
 }

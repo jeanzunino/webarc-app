@@ -1,8 +1,10 @@
 package com.undcon.app.dtos;
 
+import java.util.List;
+
 public class SaleIncomeResponseDto {
 
-	private IncomeDto income;
+	private List<IncomeDto> incomesCreated;
 
 	private SaleSimpleDto sale;
 
@@ -10,16 +12,16 @@ public class SaleIncomeResponseDto {
 
 	private double amountPaid;
 
-	public SaleIncomeResponseDto(IncomeDto income, SaleSimpleDto sale, double amountPayable, double amountPaid) {
+	public SaleIncomeResponseDto(List<IncomeDto> incomesCreated, SaleSimpleDto sale, double amountPayable, double amountPaid) {
 		super();
-		this.income = income;
+		this.incomesCreated = incomesCreated;
 		this.sale = sale;
 		this.amountPayable = amountPayable;
 		this.amountPaid = amountPaid;
 	}
 
-	public IncomeDto getIncome() {
-		return income;
+	public List<IncomeDto> getIncomesCreated() {
+		return incomesCreated;
 	}
 
 	public SaleSimpleDto getSale() {
@@ -32,6 +34,22 @@ public class SaleIncomeResponseDto {
 
 	public double getAmountPaid() {
 		return amountPaid;
+	}
+
+	public void setIncomesCreated(List<IncomeDto> incomesCreated) {
+		this.incomesCreated = incomesCreated;
+	}
+
+	public void setSale(SaleSimpleDto sale) {
+		this.sale = sale;
+	}
+
+	public void setAmountPayable(double amountPayable) {
+		this.amountPayable = amountPayable;
+	}
+
+	public void setAmountPaid(double amountPaid) {
+		this.amountPaid = amountPaid;
 	}
 
 }

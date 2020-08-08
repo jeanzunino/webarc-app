@@ -65,6 +65,13 @@ const routes: Routes = [
         (m) => m.ServiceTypeModule
       ),
   },
+  {
+    path: PageEnum.BANK_CHECK,
+    loadChildren: () =>
+      import('@app/bank-check/bank-check.module').then(
+        (m) => m.BankCheckModule
+      ),
+  },
   //{ path: PageEnum.FINANCIAL, loadChildren: '@app/financial/financial.module#FinancialModule'},
   {
     path: '',

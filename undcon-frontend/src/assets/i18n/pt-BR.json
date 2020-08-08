@@ -41,6 +41,13 @@
     "subTotalItem": "Subtotal"
   },
 
+  "COMENTARIO_FONANCEIRO": "Traduções das telas do Menu Financeiro",
+  "bank-check": {
+    "number": "Número do Cheque",
+    "emitter": "Titular da Conta",
+    "personDocument": "Documento do Titular"
+  },
+
   "COMENTARIO_MENU_GERAIS": "Traduções das telas do Menu Gerais",
   "service-type": {
     "name": "Nome",
@@ -95,6 +102,10 @@
       "title": "Vendas",
       "clientes": "Clientes",
       "vendas": "Vendas"
+    },
+    "finance": {
+      "title": "Financeiro",
+      "check": "Cheques"
     },
     "geral": {
       "title": "Gerais",

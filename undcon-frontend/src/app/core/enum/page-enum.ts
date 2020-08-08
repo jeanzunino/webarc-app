@@ -14,5 +14,6 @@ export enum PageEnum {
   PERMISSION = 'permission',
   MENU_TEMPLATE = 'menu-template',
   CONFIG = 'config',
-  TENANT = 'tenant'
+  TENANT = 'tenant',
+  BANK_CHECK = 'bank-check'
 }

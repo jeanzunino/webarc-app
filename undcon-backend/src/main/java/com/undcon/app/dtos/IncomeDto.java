@@ -2,13 +2,7 @@ package com.undcon.app.dtos;
 
 import java.sql.Date;
 
-import javax.persistence.Column;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-
 import com.undcon.app.enums.PaymentType;
-import com.undcon.app.model.CustomerEntity;
-import com.undcon.app.model.SaleEntity;
 
 public class IncomeDto {
 

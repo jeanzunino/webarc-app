@@ -3,6 +3,8 @@ package com.undcon.app.services;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 import com.undcon.app.dtos.IncomeDto;
 import com.undcon.app.dtos.ProductSaledInfoDto;
@@ -21,6 +24,7 @@ import com.undcon.app.dtos.SaleItemDto;
 import com.undcon.app.dtos.SaleRequestDto;
 import com.undcon.app.dtos.SaleSimpleDto;
 import com.undcon.app.dtos.SaleTotalDto;
+import com.undcon.app.enums.PaymentType;
 import com.undcon.app.enums.ResourceType;
 import com.undcon.app.enums.SaleStatus;
 import com.undcon.app.enums.UndconError;
@@ -67,6 +71,9 @@ public class SaleService extends AbstractService<SaleEntity> {
 	@Autowired
 	private IncomeMapper incomeMapper;
 
+	@Autowired
+	private BankCheckService bankCheckService;
+	
 	public Page<SaleEntity> getAll(String filter, Integer page, Integer size) {
 		return super.getAll(SaleEntity.class, filter, page, size);
 	}
@@ -151,6 +158,19 @@ public class SaleService extends AbstractService<SaleEntity> {
 	}
 
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+	public SaleIncomeResponseDto toBill(long id, List<SaleIncomeRequestDto> saleIncomeDto) throws UndconException {
+		permissionService.checkPermission(ResourceType.SALE);
+		List<IncomeDto> incomes = new ArrayList<IncomeDto>();
+		SaleIncomeResponseDto dtoResponse = null;
+		for (SaleIncomeRequestDto saleIncomeRequestDto : saleIncomeDto) {
+			dtoResponse = toBill(id, saleIncomeRequestDto);
+			incomes.addAll(dtoResponse.getIncomesCreated());
+		}
+		dtoResponse.setIncomesCreated(incomes);
+		return dtoResponse;
+	}
+	
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 	public SaleIncomeResponseDto toBill(long id, SaleIncomeRequestDto saleIncomeDto) throws UndconException {
 		permissionService.checkPermission(ResourceType.SALE);
 
@@ -170,6 +190,11 @@ public class SaleService extends AbstractService<SaleEntity> {
 		Date paymentDate = saleIncomeDto.getPaymentDate();
 		if (saleIncomeDto.isSettled() && paymentDate == null) {
 			paymentDate = new Date(System.currentTimeMillis());
+		}
+		
+		if(saleIncomeDto.getPaymentType() == PaymentType.BANK_CHECK) {
+			Assert.notNull(saleIncomeDto.getCheck(), "check is required");
+			bankCheckService.saveBankCheck(saleIncomeDto.getCheck());
 		}
 
 		IncomeEntity income = new IncomeEntity(null, "Pagamento de Venda - " + sale.getSaleDate() + " #" + sale.getId(),
@@ -203,7 +228,7 @@ public class SaleService extends AbstractService<SaleEntity> {
 
 		IncomeDto incomeDto = incomeMapper.toDto(income);
 		SaleSimpleDto saleDto = saleMapper.toSimpleDto(sale);
-		return new SaleIncomeResponseDto(incomeDto, saleDto, amountPayable, amountPaid);
+		return new SaleIncomeResponseDto(Arrays.asList(incomeDto), saleDto, amountPayable, amountPaid);
 	}
 
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)

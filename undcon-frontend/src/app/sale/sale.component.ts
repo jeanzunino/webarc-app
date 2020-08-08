@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Injector } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MDBModalService } from 'angular-bootstrap-md';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -32,7 +32,7 @@ export class SaleComponent extends GridViewComponent<Sale> {
     activatedRoute: ActivatedRoute,
     modalService: MDBModalService,
     private router: Router,
-    private rt: ActivatedRoute,
+    private rt: ActivatedRoute
   ) {
     super(service, activatedRoute, modalService);
   }

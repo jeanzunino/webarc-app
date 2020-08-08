@@ -17,12 +17,13 @@ export class AppComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
-    public translate: TranslateService, private router: Router
+    public translate: TranslateService,
+    private router: Router
   ) {}
 
   ngOnInit() {
     this.authService.displayMenuEmitter.subscribe(
-      (display) => (this.displayMenu = display)
+      display => (this.displayMenu = display)
     );
 
     this.router.events.subscribe((event: RouterEvent) => {

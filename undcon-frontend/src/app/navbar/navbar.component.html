@@ -12,7 +12,7 @@
 
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
-        <a class="nav-link waves-light" routerLink="/home" (click)="loadingPage()" mdbWavesEffect>{{ 'menu.home' | translate }}</a>
+        <a class="nav-link waves-light" routerLink="/home" mdbWavesEffect>{{ 'menu.home' | translate }}</a>
       </li>
 
       <li class="nav-item dropdown" dropdown>
@@ -21,10 +21,8 @@
         </a>
         <div *dropdownMenu class="dropdown-menu dropdown-menu-right dropdown dropdown-primary primary-system-color"
           role="menu">
-          <a class="dropdown-item waves-light text-light" mdbWavesEffect routerLink="/provider"
-            (click)="loadingPage()">{{ 'menu.compra.fornecedores' | translate }}</a>
-          <a class="dropdown-item waves-light text-light" mdbWavesEffect routerLink="/purchase"
-            (click)="loadingPage()">{{ 'menu.compra.compras' | translate }}</a>
+          <a class="dropdown-item waves-light text-light" mdbWavesEffect routerLink="/provider">{{ 'menu.compra.fornecedores' | translate }}</a>
+          <a class="dropdown-item waves-light text-light" mdbWavesEffect routerLink="/purchase">{{ 'menu.compra.compras' | translate }}</a>
         </div>
       </li>
 
@@ -34,10 +32,8 @@
         </a>
         <div *dropdownMenu class="dropdown-menu dropdown-menu-right dropdown dropdown-primary primary-system-color"
           role="menu">
-          <a class="dropdown-item waves-light text-light" mdbWavesEffect routerLink="/customer"
-            (click)="loadingPage()">{{ 'menu.venda.clientes' | translate }}</a>
-          <a class="dropdown-item waves-light text-light" mdbWavesEffect routerLink="/sale"
-            (click)="loadingPage()">{{ 'menu.venda.vendas' | translate }}</a>
+          <a class="dropdown-item waves-light text-light" mdbWavesEffect routerLink="/customer">{{ 'menu.venda.clientes' | translate }}</a>
+          <a class="dropdown-item waves-light text-light" mdbWavesEffect routerLink="/sale">{{ 'menu.venda.vendas' | translate }}</a>
         </div>
       </li>
 
@@ -47,12 +43,9 @@
         </a>
         <div *dropdownMenu class="dropdown-menu dropdown-menu-right dropdown dropdown-primary primary-system-color"
           role="menu">
-          <a class="dropdown-item waves-light text-light" mdbWavesEffect routerLink="/service-type"
-            (click)="loadingPage()">{{ 'menu.geral.tipos-servicos' | translate }}</a>
-          <a class="dropdown-item waves-light text-light" mdbWavesEffect routerLink="/productcategory"
-            (click)="loadingPage()">{{ 'menu.geral.categorias-produtos' | translate }}</a>
-          <a class="dropdown-item waves-light text-light" mdbWavesEffect routerLink="/product"
-            (click)="loadingPage()">{{ 'menu.geral.produtos' | translate }}</a>
+          <a class="dropdown-item waves-light text-light" mdbWavesEffect routerLink="/service-type">{{ 'menu.geral.tipos-servicos' | translate }}</a>
+          <a class="dropdown-item waves-light text-light" mdbWavesEffect routerLink="/productcategory">{{ 'menu.geral.categorias-produtos' | translate }}</a>
+          <a class="dropdown-item waves-light text-light" mdbWavesEffect routerLink="/product">{{ 'menu.geral.produtos' | translate }}</a>
         </div>
       </li>
     </ul>
@@ -65,14 +58,10 @@
         </a>
         <div *dropdownMenu class="dropdown-menu dropdown-menu-right dropdown dropdown-primary primary-system-color"
           role="menu">
-          <a class="dropdown-item waves-light text-light" mdbWavesEffect routerLink="/tenant"
-            (click)="loadingPage()">{{ 'menu.configuracao.tenants' | translate }}</a>
-          <a class="dropdown-item waves-light text-light" mdbWavesEffect routerLink="/permission"
-            (click)="loadingPage()">{{ 'menu.configuracao.permissoes' | translate }}</a>
-          <a class="dropdown-item waves-light text-light" mdbWavesEffect routerLink="/employee"
-            (click)="loadingPage()">{{ 'menu.configuracao.funcionarios' | translate }}</a>
-          <a class="dropdown-item waves-light text-light" mdbWavesEffect routerLink="/user"
-            (click)="loadingPage()">{{ 'menu.configuracao.usuarios' | translate }}</a>
+          <a class="dropdown-item waves-light text-light" mdbWavesEffect routerLink="/tenant">{{ 'menu.configuracao.tenants' | translate }}</a>
+          <a class="dropdown-item waves-light text-light" mdbWavesEffect routerLink="/permission">{{ 'menu.configuracao.permissoes' | translate }}</a>
+          <a class="dropdown-item waves-light text-light" mdbWavesEffect routerLink="/employee">{{ 'menu.configuracao.funcionarios' | translate }}</a>
+          <a class="dropdown-item waves-light text-light" mdbWavesEffect routerLink="/user">{{ 'menu.configuracao.usuarios' | translate }}</a>
         </div>
       </li>
 

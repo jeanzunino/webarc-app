@@ -67,6 +67,10 @@ export class TableComponent implements OnInit {
         return this.datePipe.transform(finalValue, 'dd/MM/yyyy hh:mm');
       } else if (tableValue.formatEnum === FormatEnum.MONEY) {
         return 'R$ ' + finalValue;
+      } else if (tableValue.formatEnum === FormatEnum.PAYMENT_TYPE) {
+        return this.translate.instant('enums.payment-type.' + finalValue);
+      } else if (tableValue.formatEnum === FormatEnum.PAYMENT_STATUS) {
+        return this.translate.instant('enums.payment-status.' + finalValue);
       }
     }
 

@@ -184,14 +184,6 @@ public class SaleApi {
 	}
 
 	@DELETE
-	@Path("/{saleId}/itensProducts/{itemId}")
-	@Produces(MediaType.APPLICATION_JSON)
-	public void deleteProductItem(@PathParam("saleId") long saleId, @PathParam("itemId") long itemId)
-			throws UndconException {
-		itemProductService.deleteProductItem(saleId, itemId);
-	}
-
-	@DELETE
 	@Path("/{saleId}/itensServices/{itemId}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public void deleteServiceItem(@PathParam("saleId") long saleId, @PathParam("itemId") long itemId)

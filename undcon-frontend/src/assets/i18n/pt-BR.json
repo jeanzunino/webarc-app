@@ -47,6 +47,24 @@
     "emitter": "Titular da Conta",
     "personDocument": "Documento do Titular"
   },
+  "income": {
+    "description": "Descrição",
+    "duaDate": "Data do Vencimento",
+    "paymentDate": "Data de Pagamento",
+    "value": "Valor",
+    "paymentStatus": "Status",
+    "customer": "Cliente",
+    "paymentType": "Forma de Pagamento"
+  },
+  "expense": {
+    "description": "Descrição",
+    "duaDate": "Data do Vencimento",
+    "paymentDate": "Data de Pagamento",
+    "value": "Valor",
+    "paymentStatus": "Status",
+    "provider": "Forncedor",
+    "paymentType": "Forma de Pagamento"
+  },
 
   "COMENTARIO_MENU_GERAIS": "Traduções das telas do Menu Gerais",
   "service-type": {
@@ -105,7 +123,9 @@
     },
     "finance": {
       "title": "Financeiro",
-      "check": "Cheques"
+      "check": "Cheques",
+      "income": "Contas a Receber",
+      "expense": "Contas a Pagar"
     },
     "geral": {
       "title": "Gerais",
@@ -136,9 +156,27 @@
   "yes": "Sim",
   "no": "Não",
   "enums": {
-    "itemType":{
+    "item-type":{
       "PRODUCT": "Produto",
       "SERVICE": "Serviço"
+    },
+    "client-status": {
+      "DEMO": "Demonstração",
+      "INACTIVE": "Inativo",
+      "ACTIVE": "Ativo",
+      "SUSPENDED": "Suspenso"
+    },
+    "payment-type":{
+      "CASH": "Dinheiro",
+      "BANK_CHECK": "Cheque",
+      "BANK_SLIP": "Boleto Bancário",
+      "DEBIT_CARD": "Cartão de Débito",
+      "CREDIT_CARD": "Cartão de Crédito"
+    },
+    "payment-status":{
+      "PENDING": "Pendente",
+      "SETTLED": "Pago",
+      "CANCELED": "Cancelado"
     }
   }
 }

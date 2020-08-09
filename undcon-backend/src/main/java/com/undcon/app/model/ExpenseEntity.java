@@ -11,6 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.undcon.app.enums.PaymentStatus;
 import com.undcon.app.enums.PaymentType;
 
 @Entity
@@ -32,10 +33,10 @@ public class ExpenseEntity {
 	private Date paymentDate;
 
 	@Column(name = "valor")
-	private String value;
+	private double value;
 
-	@Column(name = "baixado")
-	private int settled;
+	@Column(name = "status")
+	private PaymentStatus paymentStatus;
 
 	@ManyToOne
 	@JoinColumn(name = "fornecedor_id", nullable = false)
@@ -48,15 +49,15 @@ public class ExpenseEntity {
 		// TODO Auto-generated constructor stub
 	}
 
-	public ExpenseEntity(Long id, String description, Date duaDate, Date paymentDate, String value, int settled,
-			ProviderEntity provider, PaymentType paymentType) {
+	public ExpenseEntity(Long id, String description, Date duaDate, Date paymentDate, double value,
+			PaymentStatus paymentStatus, ProviderEntity provider, PaymentType paymentType) {
 		super();
 		this.id = id;
 		this.description = description;
 		this.duaDate = duaDate;
 		this.paymentDate = paymentDate;
 		this.value = value;
-		this.settled = settled;
+		this.paymentStatus = paymentStatus;
 		this.provider = provider;
 		this.paymentType = paymentType;
 	}
@@ -77,12 +78,12 @@ public class ExpenseEntity {
 		return paymentDate;
 	}
 
-	public String getValue() {
+	public double getValue() {
 		return value;
 	}
 
-	public int getSettled() {
-		return settled;
+	public PaymentStatus getPaymentStatus() {
+		return paymentStatus;
 	}
 
 	public ProviderEntity getProvider() {
@@ -91,6 +92,38 @@ public class ExpenseEntity {
 
 	public PaymentType getPaymentType() {
 		return paymentType;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public void setDuaDate(Date duaDate) {
+		this.duaDate = duaDate;
+	}
+
+	public void setPaymentDate(Date paymentDate) {
+		this.paymentDate = paymentDate;
+	}
+
+	public void setValue(double value) {
+		this.value = value;
+	}
+
+	public void setPaymentStatus(PaymentStatus paymentStatus) {
+		this.paymentStatus = paymentStatus;
+	}
+
+	public void setProvider(ProviderEntity provider) {
+		this.provider = provider;
+	}
+
+	public void setPaymentType(PaymentType paymentType) {
+		this.paymentType = paymentType;
 	}
 
 }

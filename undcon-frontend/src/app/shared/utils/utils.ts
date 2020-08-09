@@ -5,6 +5,7 @@ import { SharedInjector } from '@shared/shared.module';
 import { Entity } from '@model/entity';
 import { QueryFilterEnum } from '@app/core/enum/query-filter';
 import { FormatEnum } from '@app/core/enum/format-enum';
+import { ItemType } from '@app/core/enum/item-type';
 import { ConfirmDialogModel } from '../model/confirm-dialog-model';
 import { ConfirmDialogComponent } from '../component/confirm-dialog/confirm-dialog.component';
 
@@ -58,4 +59,8 @@ export const getQueryFilter = (field, operation: QueryFilterEnum) => {
 
 export const getPhoneMask = (formatEnum: FormatEnum) => {
   return getTranslate(formatEnum);
+};
+
+export const getEnumTranslation = (type: ItemType) => {
+  return getTranslate("enums.item-type." + type);
 };

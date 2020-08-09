@@ -24,6 +24,7 @@ import com.undcon.app.dtos.SaleItemDto;
 import com.undcon.app.dtos.SaleRequestDto;
 import com.undcon.app.dtos.SaleSimpleDto;
 import com.undcon.app.dtos.SaleTotalDto;
+import com.undcon.app.enums.PaymentStatus;
 import com.undcon.app.enums.PaymentType;
 import com.undcon.app.enums.ResourceType;
 import com.undcon.app.enums.SaleStatus;
@@ -73,7 +74,7 @@ public class SaleService extends AbstractService<SaleEntity> {
 
 	@Autowired
 	private BankCheckService bankCheckService;
-	
+
 	public Page<SaleEntity> getAll(String filter, Integer page, Integer size) {
 		return super.getAll(SaleEntity.class, filter, page, size);
 	}
@@ -156,7 +157,7 @@ public class SaleService extends AbstractService<SaleEntity> {
 		dtoResponse.setIncomesCreated(incomes);
 		return dtoResponse;
 	}
-	
+
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 	public SaleIncomeResponseDto toBill(long id, SaleIncomeRequestDto saleIncomeDto) throws UndconException {
 		permissionService.checkPermission(ResourceType.SALE);
@@ -178,14 +179,15 @@ public class SaleService extends AbstractService<SaleEntity> {
 		if (saleIncomeDto.isSettled() && paymentDate == null) {
 			paymentDate = new Date(System.currentTimeMillis());
 		}
-		
-		if(saleIncomeDto.getPaymentType() == PaymentType.BANK_CHECK) {
+
+		if (saleIncomeDto.getPaymentType() == PaymentType.BANK_CHECK) {
 			Assert.notNull(saleIncomeDto.getCheck(), "check is required");
 			bankCheckService.saveBankCheck(saleIncomeDto.getCheck());
 		}
 
+		PaymentStatus paymentStatus = saleIncomeDto.isSettled() ? PaymentStatus.SETTLED : PaymentStatus.PENDING;
 		IncomeEntity income = new IncomeEntity(null, "Pagamento de Venda - " + sale.getSaleDate() + " #" + sale.getId(),
-				saleIncomeDto.getDuaDate(), paymentDate, saleIncomeDto.getValue(), saleIncomeDto.isSettled(), sale,
+				saleIncomeDto.getDuaDate(), paymentDate, saleIncomeDto.getValue(), paymentStatus, sale,
 				sale.getCustomer(), saleIncomeDto.getPaymentType());
 
 		// TODO Verificar se o usuário precisará de permissão para gravar Venda e
@@ -227,8 +229,8 @@ public class SaleService extends AbstractService<SaleEntity> {
 			throw new UndconException(UndconError.SALE_NOT_FOUND);
 		}
 
-		//TODO Cancelar Receitas/Pagamentos ao cancelar a venda 
-		
+		// TODO Cancelar Receitas/Pagamentos ao cancelar a venda
+
 		sale.setStatus(SaleStatus.CANCELED);
 
 		sale = saleRepository.save(sale);

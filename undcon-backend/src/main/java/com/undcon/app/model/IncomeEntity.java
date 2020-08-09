@@ -11,6 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.undcon.app.enums.PaymentStatus;
 import com.undcon.app.enums.PaymentType;
 
 @Entity
@@ -34,8 +35,8 @@ public class IncomeEntity {
 	@Column(name = "valor")
 	private double value;
 
-	@Column(name = "baixado")
-	private boolean settled;
+	@Column(name = "status")
+	private PaymentStatus paymentStatus;
 
 	@ManyToOne
 	@JoinColumn(name = "venda_id", nullable = true)
@@ -51,15 +52,15 @@ public class IncomeEntity {
 	public IncomeEntity() {
 	}
 
-	public IncomeEntity(Long id, String description, Date duaDate, Date paymentDate, double value, boolean settled,
-			SaleEntity sale, CustomerEntity customer, PaymentType paymentType) {
+	public IncomeEntity(Long id, String description, Date duaDate, Date paymentDate, double value,
+			PaymentStatus paymentStatus, SaleEntity sale, CustomerEntity customer, PaymentType paymentType) {
 		super();
 		this.id = id;
 		this.description = description;
 		this.duaDate = duaDate;
 		this.paymentDate = paymentDate;
 		this.value = value;
-		this.settled = settled;
+		this.paymentStatus = paymentStatus;
 		this.sale = sale;
 		this.customer = customer;
 		this.paymentType = paymentType;
@@ -105,12 +106,12 @@ public class IncomeEntity {
 		this.value = value;
 	}
 
-	public boolean isSettled() {
-		return settled;
+	public PaymentStatus getPaymentStatus() {
+		return paymentStatus;
 	}
 
-	public void setSettled(boolean settled) {
-		this.settled = settled;
+	public void setPaymentStatus(PaymentStatus paymentStatus) {
+		this.paymentStatus = paymentStatus;
 	}
 
 	public SaleEntity getSale() {

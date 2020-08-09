@@ -8,7 +8,7 @@ public enum PaymentType {
 	BANK_CHECK,
 
 	/** 2 - Boleto Bacário */
-	BACK_SLIP,
+	BANK_SLIP,
 
 	/** 3 - Cartão de Débito */
 	DEBIT_CARD,

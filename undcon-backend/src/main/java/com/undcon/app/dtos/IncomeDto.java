@@ -2,6 +2,7 @@ package com.undcon.app.dtos;
 
 import java.sql.Date;
 
+import com.undcon.app.enums.PaymentStatus;
 import com.undcon.app.enums.PaymentType;
 
 public class IncomeDto {
@@ -16,7 +17,7 @@ public class IncomeDto {
 
 	private double value;
 
-	private boolean settled;
+	private PaymentStatus paymentStatus;
 
 	private PaymentType paymentType;
 
@@ -24,7 +25,7 @@ public class IncomeDto {
 
 	private IdDto customer;
 
-	public IncomeDto(Long id, String description, Date duaDate, Date paymentDate, double value, boolean settled,
+	public IncomeDto(Long id, String description, Date duaDate, Date paymentDate, double value, PaymentStatus paymentStatus,
 			PaymentType paymentType, IdDto sale, IdDto customer) {
 		super();
 		this.id = id;
@@ -32,7 +33,7 @@ public class IncomeDto {
 		this.duaDate = duaDate;
 		this.paymentDate = paymentDate;
 		this.value = value;
-		this.settled = settled;
+		this.paymentStatus = paymentStatus;
 		this.paymentType = paymentType;
 		this.sale = sale;
 		this.customer = customer;
@@ -58,8 +59,8 @@ public class IncomeDto {
 		return value;
 	}
 
-	public boolean isSettled() {
-		return settled;
+	public PaymentStatus isSettled() {
+		return paymentStatus;
 	}
 
 	public PaymentType getPaymentType() {

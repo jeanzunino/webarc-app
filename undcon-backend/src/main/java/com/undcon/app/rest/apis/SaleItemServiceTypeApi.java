@@ -15,37 +15,37 @@ import org.springframework.util.Assert;
 import com.undcon.app.dtos.ItemRequestDto;
 import com.undcon.app.exceptions.UndconException;
 import com.undcon.app.model.SaleItemEntity;
-import com.undcon.app.services.SaleItemProductService;
+import com.undcon.app.services.SaleItemServiceTypeService;
 
 @Component
 @Path("/sales")
-public class SaleItemProductApi {
+public class SaleItemServiceTypeApi {
 
 	@Autowired
-	private SaleItemProductService itemProductService;
-	
+	private SaleItemServiceTypeService itemServiceTypeService;
+
 	@POST
-	@Path("/{id}/itensProducts")
+	@Path("/{id}/itensServices")
 	@Produces(MediaType.APPLICATION_JSON)
-	public SaleItemEntity postItemProduct(@PathParam("id") long id, ItemRequestDto item) throws UndconException {
+	public SaleItemEntity postItemService(@PathParam("id") long id, ItemRequestDto item) throws UndconException {
 		Assert.notNull(item.getEmployeeId(), "employeeId is required");
 		Assert.notNull(item.getItemId(), "itemId is required");
 		Assert.notNull(item.getQuantity(), "quantity is required");
-		return itemProductService.addItemProduct(id, item);
+		return itemServiceTypeService.addItemService(id, item);
 	}
-	
+
 	@PUT
-	@Path("/{id}/itensProducts")
+	@Path("/{id}/itensServices")
 	@Produces(MediaType.APPLICATION_JSON)
-	public SaleItemEntity putProductItem(@PathParam("id") long id, ItemRequestDto item) throws UndconException {
-		return itemProductService.updateProductItem(id, item);
+	public SaleItemEntity putServiceItem(@PathParam("id") long id, ItemRequestDto item) throws UndconException {
+		return itemServiceTypeService.updateServiceItem(id, item);
 	}
-	
+
 	@DELETE
-	@Path("/{saleId}/itensProducts/{itemId}")
+	@Path("/{saleId}/itensServices/{itemId}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public void deleteProductItem(@PathParam("saleId") long saleId, @PathParam("itemId") long itemId)
+	public void deleteServiceItem(@PathParam("saleId") long saleId, @PathParam("itemId") long itemId)
 			throws UndconException {
-		itemProductService.deleteProductItem(saleId, itemId);
+		itemServiceTypeService.deleteServiceItem(saleId, itemId);
 	}
 }

@@ -83,7 +83,7 @@ public class SaleService extends AbstractService<SaleEntity> {
 		return new SaleInfoDto(saleRepositoryImpl.getTotalSale(true), saleRepositoryImpl.getTotalSale(false));
 	}
 
-	@Transactional
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 	public SaleEntity persist(SaleRequestDto saleDto) throws UndconException {
 		permissionService.checkPermission(ResourceType.SALE);
 
@@ -110,11 +110,14 @@ public class SaleService extends AbstractService<SaleEntity> {
 		}
 	}
 
-	@Transactional
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 	public SaleEntity update(SaleRequestDto saleDto) throws UndconException {
 		permissionService.checkPermission(ResourceType.SALE);
 		SaleEntity sale = findById(saleDto.getId());
 
+		if(sale.getStatus() != saleDto.getStatus()) {
+			throw new UndconException(UndconError.SALE_INVALID_STATUS);
+		}
 		CustomerEntity customer = customerService.findById(saleDto.getCustomer().getId());
 		validateClient(customer);
 		
@@ -133,7 +136,7 @@ public class SaleService extends AbstractService<SaleEntity> {
 		return saleRepository.save(sale);
 	}
 
-	@Transactional
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 	public void delete(long id) throws UndconException {
 		permissionService.checkPermission(ResourceType.SALE);
 		SaleEntity sale = findById(id);

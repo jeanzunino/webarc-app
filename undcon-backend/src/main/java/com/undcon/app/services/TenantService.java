@@ -37,6 +37,9 @@ public class TenantService extends AbstractService<TenantEntity> {
 
 	@Autowired
 	private DataSourceProperties dataSourceProperties;
+	
+	@Autowired
+	private EmailService emailService;
 
 	public Page<TenantEntity> getAll(String filter, Integer page, Integer size) throws UndconException {
 		permissionService.checkPermission(getResourceType());
@@ -61,6 +64,17 @@ public class TenantService extends AbstractService<TenantEntity> {
 	protected void validateBeforeUpdate(TenantEntity entity) throws UndconException {
 		super.validateBeforeUpdate(entity);
 		validateSalesman(entity);
+	}
+
+	@Override
+	protected void afterCommitPost(TenantEntity saved) {
+		super.afterCommitPost(saved);
+
+		String message = "<b>Novo tenant cadastro.</b>\n\n\n" //
+				+ "Nome do Cliente:" + saved.getName() + "\n\n" //
+				+ "Att, \nJean Victor Zunino";
+		
+		emailService.sendEmail(message);
 	}
 
 	private void validateSalesman(TenantEntity entity) throws UndconException {

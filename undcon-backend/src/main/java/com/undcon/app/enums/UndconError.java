@@ -34,6 +34,8 @@ public enum UndconError {
 	
 	SALE_NOT_FOUND("Venda não encontrada"),
 	
+	SALE_INVALID_STATUS("Não é possível alterar o status da venda dessa forma"),
+	
 	PRODUCT_NOT_FOUND("Produto não encontrado"),
 	
 	SERVICE_TYPE_NOT_FOUND("Serviço não encontrado"),

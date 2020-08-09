@@ -13,7 +13,7 @@ public class IncomeMapper {
 		IdDto sale = new IdDto(entity.getSale().getId());
 		IdDto customer = new IdDto(entity.getCustomer().getId());
 		return new IncomeDto(entity.getId(), entity.getDescription(), entity.getDuaDate(), entity.getPaymentDate(),
-				entity.getValue(), entity.isSettled(), entity.getPaymentType(), sale, customer);
+				entity.getValue(), entity.getPaymentStatus(), entity.getPaymentType(), sale, customer);
 	}
 
 }

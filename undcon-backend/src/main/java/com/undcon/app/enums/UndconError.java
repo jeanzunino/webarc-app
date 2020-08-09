@@ -42,6 +42,8 @@ public enum UndconError {
 	
 	EMPLOYEE_NOT_FOUND("Funcionário não encontrado"),
 	
+	SALESMAN_NOT_FOUND("Vendedor não encontrado"),
+	
 	SALE_ITEM_NOT_FOUND("Item de venda não encontrado"),
 	
 	SALE_ITEM_NOT_FOUND_IN_THE_SALE("Item de venda não encontrado na venda informada"),

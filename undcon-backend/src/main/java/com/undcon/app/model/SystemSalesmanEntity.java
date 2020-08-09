@@ -22,7 +22,7 @@ public class SystemSalesmanEntity {
 	@Column(name = "telefone")
 	private String phone;
 
-	protected SystemSalesmanEntity() {
+	public SystemSalesmanEntity() {
 	}
 
 	public SystemSalesmanEntity(Long id, String name, String phone) {

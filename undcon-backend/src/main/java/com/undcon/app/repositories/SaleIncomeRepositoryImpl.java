@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.undcon.app.dtos.ProductSaledInfoDto;
+import com.undcon.app.enums.PaymentStatus;
 import com.undcon.app.model.QIncomeEntity;
 import com.undcon.app.model.SaleEntity;
 
@@ -31,13 +32,13 @@ public class SaleIncomeRepositoryImpl {
 		return b;
 	}
 
-	public Double getIncomeValueBilledBySale(SaleEntity sale, Optional<Boolean> settledFilter) {
+	public Double getIncomeValueBilledBySale(SaleEntity sale, List<PaymentStatus> paymentStatusFilter) {
 		JPAQueryFactory jpaQueryFactory = new JPAQueryFactory(em);
 		JPAQuery<Double> query = jpaQueryFactory.select(QIncomeEntity.incomeEntity.value.sum()) //
 				.from(QIncomeEntity.incomeEntity) //
 				.where(QIncomeEntity.incomeEntity.sale.eq(sale));
-		if (settledFilter.isPresent()) {
-			query.where(QIncomeEntity.incomeEntity.settled.eq(settledFilter.get()));
+		if (!paymentStatusFilter.isEmpty()) {
+			query.where(QIncomeEntity.incomeEntity.paymentStatus.in(paymentStatusFilter));
 		}
 		return query.fetchOne();
 	}

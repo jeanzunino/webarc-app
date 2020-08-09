@@ -40,7 +40,7 @@ public class ProductService extends AbstractService<ProductEntity> {
 	}
 
 	private void validateName(Long id, String name) throws UndconException {
-		List<ProductEntity> findByIdNotAndName = productRepository.findByIdNotAndName(id, name);
+		List<ProductEntity> findByIdNotAndName = productRepository.findByIdNotAndNameIgnoreCase(id, name);
 		if (!findByIdNotAndName.isEmpty()) {
 			throw new UndconException(UndconError.NAME_ALREADY_EXISTS);
 		}

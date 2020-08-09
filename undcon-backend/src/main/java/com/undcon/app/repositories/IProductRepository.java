@@ -14,5 +14,5 @@ public interface IProductRepository
 
 	public Page<ProductEntity> findAllByNameContainingIgnoreCase(String name, Pageable pageable);
 
-	public List<ProductEntity> findByIdNotAndName(Long id, String name);
+	public List<ProductEntity> findByIdNotAndNameIgnoreCase(Long id, String name);
 }

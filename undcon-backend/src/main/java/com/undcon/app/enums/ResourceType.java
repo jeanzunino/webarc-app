@@ -46,7 +46,10 @@ public enum ResourceType {
 
 	/** 14 - */
 	SALE,
-	
-	/** 15 - Cheque Bancário*/
-	BACK_CHECK
+
+	/** 15 - Cheque Bancário */
+	BACK_CHECK,
+
+	/** 16 - Vendedor de Sistema */
+	SYSTEM_SALESMAN
 }

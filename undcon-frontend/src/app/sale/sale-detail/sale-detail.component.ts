@@ -32,6 +32,7 @@ import { SaleService } from '@service/sale/sale.service';
 import { FormatEnum } from '@enum/format-enum';
 import { Item } from '@core/model/item';
 import { openConfimDialog } from '@shared/utils/utils';
+import { getEnumTranslation } from '@shared/utils/utils';
 import { ConfirmDialogModel } from '@app/shared/model/confirm-dialog-model';
 import { CloseDialogValues } from '@app/shared/model/close-dialog-values';
 import { ActionReturnDialog } from '@enum/action-return-dialog';
@@ -423,9 +424,8 @@ export class SaleDetailComponent implements OnDestroy {
   }
 
   confirmDeleteSaleItem(saleItem: SaleItem) {
-    openConfimDialog(new ConfirmDialogModel(`Confirma a remoção do ${saleItem.itemType === ItemType.PRODUCT
-        ? 'produto' : 'serviço'} ${saleItem.name}`))
-      .content.onClose
+    const value = getEnumTranslation(saleItem.itemType);
+    openConfimDialog(new ConfirmDialogModel(`Confirma a remoção do ${value} ${saleItem.name}`)).content.onClose
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((values: CloseDialogValues) => {
         if (values.action === ActionReturnDialog.CONFIRM) {
@@ -437,6 +437,7 @@ export class SaleDetailComponent implements OnDestroy {
         }
       });
   }
+
 
   private deleteProductItem(saleItem: SaleItem) {
     this.spinner.show();

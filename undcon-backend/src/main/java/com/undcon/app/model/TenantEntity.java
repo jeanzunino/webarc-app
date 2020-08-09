@@ -11,6 +11,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.undcon.app.enums.ClientStatus;
+
 @Entity
 @Table(schema = "public", name = "tenant")
 public class TenantEntity {
@@ -35,6 +37,9 @@ public class TenantEntity {
 	@Column(name = "data_cadastro")
 	private Timestamp registrationDate;
 	
+	@Column(name = "status", nullable = false)
+	private ClientStatus status;
+	
 	@ManyToOne
 	@JoinColumn(name = "menu_template_id", nullable = false)
 	private MenuTemplateEntity menu;
@@ -46,10 +51,8 @@ public class TenantEntity {
 	protected TenantEntity() {
 	}
 
-
-
 	public TenantEntity(Long id, String name, String email, String phone, String schemaName, Timestamp registrationDate,
-			MenuTemplateEntity menu, SystemSalesmanEntity salesman) {
+			MenuTemplateEntity menu, SystemSalesmanEntity salesman, ClientStatus status) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -59,6 +62,7 @@ public class TenantEntity {
 		this.registrationDate = registrationDate;
 		this.menu = menu;
 		this.salesman = salesman;
+		this.status = status;
 	}
 
 
@@ -88,6 +92,18 @@ public class TenantEntity {
 	
 	public SystemSalesmanEntity getSalesman() {
 		return salesman;
+	}
+	
+	public void setSalesman(SystemSalesmanEntity salesman) {
+		this.salesman = salesman;
+	}
+	
+	public ClientStatus getStatus() {
+		return status;
+	}
+	
+	public void setStatus(ClientStatus status) {
+		this.status = status;
 	}
  
 }

@@ -66,6 +66,11 @@ input::-webkit-inner-spin-button {
   margin: 0;
 }
 
+input::-webkit-calendar-picker-indicator:hover {
+  background: transparent;
+  cursor: pointer;
+}
+
 .pad-0 {
   padding: 0px;
 }
@@ -152,4 +157,13 @@ input::-webkit-inner-spin-button {
   font-weight: 700;
   line-height: 1;
   color: #000;
+}
+
+input {
+  border: 1px solid #FFFFFF !important;
+  border-radius: 4px !important;
+}
+
+.md-form label.active {
+  transform: translateY(-25px) scale(0.8);
 }

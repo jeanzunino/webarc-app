@@ -35,7 +35,6 @@ export class UserComponent extends GridViewComponent<User> {
   }
 
   onClickItem(item) {
-    debugger
     this.openDialog(item, UserEditComponent);
   }
 

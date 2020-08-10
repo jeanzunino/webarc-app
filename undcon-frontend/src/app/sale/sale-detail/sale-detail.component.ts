@@ -1,6 +1,6 @@
+import { SaleIncome } from '@model/sale-income';
 import { InstallmentDialogComponent } from '@component/installment-dialog/installment-dialog.component';
 import { openSimpleDialog } from '@shared/utils/utils';
-import { SaleIncome } from './../../core/model/sale-income';
 import { PaymentType } from './../../core/enum/payment-type';
 import { ButtonGroup, ButtonGroupValues } from './../../shared/model/button-group';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -37,6 +37,8 @@ import { CloseDialogValues } from '@app/shared/model/close-dialog-values';
 import { ActionReturnDialog } from '@enum/action-return-dialog';
 import { ItemType } from '@app/core/enum/item-type';
 import { InstallmentDialog } from '@app/shared/model/installment-dialog-model';
+import { LocalizedDatePipe } from '@core/pipes/localized-date-pipe';
+import { CloseDialogInstallmentValeus } from '@app/shared/model/close-dialog-installment-valeus';
 
 @Component({
   selector: 'app-sale-detail',
@@ -66,7 +68,7 @@ export class SaleDetailComponent implements OnDestroy {
   iconPanelHeader = '';
   bgPaymentTypeValues: ButtonGroupValues[];
   paymentTypeSelect = PaymentType.CASH;
-  paymentIncome = new SaleIncome();
+  saleIncome = new SaleIncome();
   reloadValuesPreviousScreen = false;
   hasParcels = false;
   paymentDuaDateLabel = 'Data de vencimeto';
@@ -97,6 +99,8 @@ export class SaleDetailComponent implements OnDestroy {
   serviceQtd = 0;
   servicePriceSubtotal = '0';
 
+  salesIncomes: SaleIncome[] = [];
+
   constructor(private router: Router,
               private rt: ActivatedRoute,
               private cs: CustomerService,
@@ -106,7 +110,8 @@ export class SaleDetailComponent implements OnDestroy {
               private ss: SaleService,
               private datePipe: DatePipe,
               private toastr: ToastrService,
-              private translate: TranslateService) {
+              private translate: TranslateService,
+              private localizedDatePipe: LocalizedDatePipe) {
     this.loadPage();
   }
 
@@ -131,10 +136,8 @@ export class SaleDetailComponent implements OnDestroy {
 
   setBgPaymentType() {
     const bgPaymentType = new ButtonGroup();
-    Object.keys(PaymentType).filter((type) => isNaN(type as any) && type !== 'values')
-      .forEach(paymentType => {
-        bgPaymentType.set(paymentType, paymentType.toLowerCase());
-      });
+    Object.keys(PaymentType).filter(type => isNaN(type as any) && type !== 'values')
+      .forEach(paymentType => bgPaymentType.set(paymentType, paymentType.toLowerCase()));
     this.bgPaymentTypeValues = bgPaymentType.get();
   }
 
@@ -547,26 +550,36 @@ export class SaleDetailComponent implements OnDestroy {
   }
 
   bgPaymentTypeSelect(paymentTypeSelect: PaymentType) {
-    debugger
     this.paymentTypeSelect = paymentTypeSelect;
-    this.paymentIncome = new SaleIncome();
-  }
-
-  teste() {
-    console.log(this.paymentIncome);
+    this.saleIncome = new SaleIncome();
+    this.saleIncome.duaDate = this.localizedDatePipe.transform(new Date(), 'yyyy-MM-ddThh:mm');
   }
 
   installment() {
-    openSimpleDialog(new InstallmentDialog(this.paymentIncome.value), InstallmentDialogComponent)
+    openSimpleDialog(new InstallmentDialog(this.saleIncome.value), InstallmentDialogComponent)
       .content.onClose
       .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe((values: CloseDialogValues) => {
+      .subscribe((values: CloseDialogInstallmentValeus) => {
         if (values.action === ActionReturnDialog.CONFIRM) {
           this.hasParcels = true;
-          this.paymentDuaDateLabel = '1ª Parcela';
-          this.paymentIncome.duaDate = new Date();
+          this.paymentDuaDateLabel = 'Vencimento da 1ª Parcela';
+          this.saleIncome.duaDate = values.firstInstallmentDate;
+          this.salesIncomes = values.salesIncomes;
         }
       });
+  }
+
+  removeParcels() {
+    this.salesIncomes = [];
+    this.hasParcels = false;
+  }
+
+  launchPayment() {
+    if (this.hasParcels) {
+      this.salesIncomes.forEach((saleIncome: SaleIncome) => {
+
+      });
+    }
   }
 
   isCash() {

@@ -1,4 +1,7 @@
-import { Component, ViewEncapsulation, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { PaymentType } from './../../../core/enum/payment-type';
+import { SaleIncome } from '@model/sale-income';
+import { LocalizedDatePipe } from '@core/pipes/localized-date-pipe';
+import { Component, ViewEncapsulation, OnDestroy, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { MDBModalRef, ModalOptions } from 'angular-bootstrap-md';
 import { Subject } from 'rxjs';
@@ -23,11 +26,15 @@ export class InstallmentDialogComponent implements OnInit, OnDestroy {
   numberInputs = Array(0);
   valueToInstallments = '0';
   private recalculate = false;
+  firstInstallmentDate = '';
+  installments: number[] = [];
+  salesIncomes: SaleIncome[] = [];
 
   constructor(public translate: TranslateService,
               public modalRef: MDBModalRef,
               public modalOptions: ModalOptions,
-              private toastr: ToastrService) {}
+              private toastr: ToastrService,
+              private localizedDatePipe: LocalizedDatePipe) {}
 
   ngOnInit() {
     const data = this.modalOptions.data as Modal;
@@ -42,6 +49,8 @@ export class InstallmentDialogComponent implements OnInit, OnDestroy {
       this.bgInstallmentValues = bgInstallment.get();
       this.valueToInstallments = Number(installmentDialog.valueToInstallments).toFixed(2);
       this.recalculate = true;
+      const currentMonth = (new Date()).getMonth();
+      this.firstInstallmentDate = this.localizedDatePipe.transform((new Date()).setMonth(currentMonth + 1), 'yyyy-MM-ddThh:mm');
     }
   }
 
@@ -51,26 +60,12 @@ export class InstallmentDialogComponent implements OnInit, OnDestroy {
 
   confirm() {
     if (this.validInstallment()) {
+      this.createInstallment();
       this.closeDialogInstallmentValeus.action = ActionReturnDialog.CONFIRM;
+      this.closeDialogInstallmentValeus.firstInstallmentDate = this.firstInstallmentDate;
+      this.closeDialogInstallmentValeus.salesIncomes = this.salesIncomes;
       this.modalRef.hide();
     }
-  }
-
-  private validInstallment() {
-    const totalValue = Number(this.getTotalValueOfInstallmentsOrInstallmentZeroed());
-    if (totalValue === 0) {
-      this.toastr.error(
-        this.translate.instant('Existem parcelas com valores não definidos'),
-        this.translate.instant('Erro')
-      );
-    } else if (totalValue !== Number(this.valueToInstallments)) {
-      this.toastr.error(
-        this.translate.instant('O valor das parcelas não é igual ao valor final'),
-        this.translate.instant('Erro')
-      );
-      return false;
-    }
-    return true;
   }
 
   cancel() {
@@ -98,6 +93,41 @@ export class InstallmentDialogComponent implements OnInit, OnDestroy {
     }
   }
 
+  recalculateValues(installment) {
+    if (this.recalculate && installment === (this.numberInstallments - 1)) {
+      this.calculateValues();
+      this.recalculate = false;
+    }
+  }
+
+  private validInstallment() {
+    const totalValue = Number(this.getTotalValueOfInstallmentsOrInstallmentZeroed());
+    if (totalValue === 0) {
+      this.toastr.error(
+        this.translate.instant('Existem parcelas com valores não definidos'),
+        this.translate.instant('Erro')
+      );
+      return false;
+    }
+
+    if (totalValue !== Number(this.valueToInstallments)) {
+      this.toastr.error(
+        this.translate.instant('O valor das parcelas não é igual ao valor final'),
+        this.translate.instant('Erro')
+      );
+      return false;
+    }
+
+    if (!this.firstInstallmentDate) {
+      this.toastr.error(
+        this.translate.instant('Não possuí a data da 1ª parcela informada'),
+        this.translate.instant('Erro')
+      );
+      return false;
+    }
+    return true;
+  }
+
   private getTotalValueOfInstallmentsOrInstallmentZeroed() {
     let total = 0;
     for (let qtd = 0; qtd < this.numberInstallments; qtd++) {
@@ -116,10 +146,34 @@ export class InstallmentDialogComponent implements OnInit, OnDestroy {
     return document.getElementById(id) as HTMLInputElement;
   }
 
-  recalculateValues(installment) {
-    if (this.recalculate && installment === (this.numberInstallments - 1)) {
-      this.calculateValues();
-      this.recalculate = false;
+  private createInstallment() {
+    this.setInstallments();
+    let dateInstallment = this.firstInstallmentDate;
+    this.installments.forEach(value => {
+      const nextMonth = (new Date(dateInstallment)).getMonth() + 1;
+      const saleIncome = new SaleIncome();
+      saleIncome.paymentType = PaymentType.CASH;
+      saleIncome.value = value;
+      saleIncome.duaDate = dateInstallment;
+      this.salesIncomes.push(saleIncome);
+      dateInstallment = this.localizedDatePipe.transform((new Date(dateInstallment)).setMonth(nextMonth), 'yyyy-MM-ddThh:mm');
+    });
+  }
+
+  private setInstallments() {
+    for (let qtd = 0; qtd < this.numberInstallments; qtd++) {
+      let finalValue = (Number(this.valueToInstallments) / this.numberInstallments).toFixed(2);
+      if ((qtd + 1) === this.numberInstallments) {
+        const value = (Number(this.valueToInstallments) - (Number(finalValue) * this.numberInstallments)).toFixed(2);
+        finalValue = (Number(finalValue) + Number(value)).toFixed(2);
+      }
+      this.installments.push(Number(finalValue));
     }
+  }
+
+  getInstallmentDateLabel(parcelNumber: number) {
+    const firstInstallmentDate = (new Date(this.firstInstallmentDate)).getMonth();
+    return this.localizedDatePipe.transform((new Date(this.firstInstallmentDate))
+      .setMonth(firstInstallmentDate + parcelNumber), 'dd/MM/yyyy hh:mm');
   }
 }

@@ -1,4 +1,4 @@
-import { Component, Injector } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MDBModalService } from 'angular-bootstrap-md';
 import { NgxSpinnerService } from 'ngx-spinner';

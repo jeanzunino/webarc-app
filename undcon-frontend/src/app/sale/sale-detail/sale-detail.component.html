@@ -4,7 +4,7 @@
 
     <div *ngIf="isToBill()" class="row margin-b-20">
       <div class="col-6">
-        <app-simple-panel panelColor="secondary-system-color" [showHeader]="true" panelTitle="Formas de pagamento">
+        <app-simple-panel panelColor="secondary-system-color">
           <div body>
             <div class="row text-align-center">
               <div class="col-12">
@@ -19,21 +19,26 @@
             <div class="row" *ngIf="isCash()">
               <div class="col-5">
                 <div class="md-form">
-                  <input type="datetime-local" id="date" class="form-control text-light" [ngModel]="paymentIncome.duaDate | date: 'dd/MM/yyyy hh:mm'" [disabled]="hasParcels" mdbInput />
+                  <input type="datetime-local" class="form-control text-light" [(ngModel)]="saleIncome.duaDate" [disabled]="hasParcels" mdbInput />
                   <label for="date" class="text-light">{{paymentDuaDateLabel}}</label>
                 </div>
               </div>
               <div class="col-5">
                 <div class="md-form">
-                  <input type="text" id="value" class="form-control text-light" [(ngModel)]="paymentIncome.value" mdbInput />
+                  <input type="text" id="value" class="form-control text-light" [(ngModel)]="saleIncome.value" [disabled]="hasParcels" mdbInput />
                   <label for="value" class="text-light">Valor</label>
                 </div>
               </div>
-              <div class="col-2">
+              <div class="col-2" [hidden]="hasParcels">
                 <div class="custom-control custom-checkbox margin-t-40">
-                  <input type="checkbox" class="custom-control-input" id="active" tabindex="0" [(ngModel)]="paymentIncome.settled">
+                  <input *ngIf="!hasParcels" type="checkbox" class="custom-control-input" id="active" tabindex="0" [(ngModel)]="saleIncome.settled">
                   <label for="active" class="custom-control-label text-light">Pago</label>
                 </div>
+              </div>
+            </div>
+            <div class="row" *ngIf="isCash() && hasParcels" class="text-light">
+              <div *ngFor="let saleIncome of salesIncomes">
+                <label>{{saleIncome.duaDate | date: 'dd/MM/yyyy hh:mm'}} - R$ {{saleIncome.value.toFixed(2)}}</label>
               </div>
             </div>
 
@@ -50,15 +55,19 @@
                 Crédito e Débito
               </div>
             </div>
-            <button mdbBtn type="button" color="primary" outline="true" (click)="teste();" mdbWavesEffect>Lançar pagamento</button>
-            <button mdbBtn type="button" color="info" outline="true" (click)="installment();" [disabled]="!paymentIncome.value" *ngIf="isCash()" mdbWavesEffect>Parcelamento</button>
+            <button mdbBtn type="button" color="primary" outline="true" (click)="launchPayment();" mdbWavesEffect>Lançar pagamento</button>
+            <button mdbBtn type="button" color="info" outline="true" (click)="installment();" [disabled]="!saleIncome.value" *ngIf="isCash()" mdbWavesEffect>Parcelamento</button>
+            <button mdbBtn type="button" color="danger" outline="true" (click)="removeParcels();" [hidden]="!hasParcels" *ngIf="isCash()" mdbWavesEffect>Remover Parcelas</button>
           </div>
         </app-simple-panel>
       </div>
 
       <div class="col-6">
-        <app-simple-panel panelColor="secondary-system-color" [showHeader]="true" panelTitle="Pagamentos efetuados">
+        <app-simple-panel panelColor="secondary-system-color">
           <div body>
+            <app-table [pageValues]="saleItems" [tableValues]="tableValues" [updateCurrentPage]="currentPage"
+                      (reloadItems)="reloadItems($event)" [showBtnAdd]="false" [selectableLine]="false"
+                      [showDeleteValue]="isCreated()" (deleteItem)="confirmDeleteSaleItem($event)"></app-table>
           </div>
         </app-simple-panel>
       </div>

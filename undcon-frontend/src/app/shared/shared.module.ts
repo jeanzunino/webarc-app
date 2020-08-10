@@ -30,6 +30,8 @@ import { EmptyChildrenComponent } from '@component/empty-children/empty-children
 import { ConfirmDialogComponent } from '@component/confirm-dialog/confirm-dialog.component';
 import { ButtonGroupComponent } from '@component/button-group/button-group.component';
 import { InstallmentDialogComponent } from '@component/installment-dialog/installment-dialog.component';
+import { LocalizedDatePipe } from '@core/pipes/localized-date-pipe';
+
 
 export let SharedInjector: Injector;
 
@@ -72,6 +74,7 @@ export function HttpLoaderFactory(http: HttpClient) {
   ],
   imports: [
     CommonModule,
+    FormsModule,
     NgxSpinnerModule,
     MDBBootstrapModule.forRoot(),
     TranslateModule.forRoot({
@@ -87,7 +90,8 @@ export function HttpLoaderFactory(http: HttpClient) {
   ],
   providers: [
     MaskPipe,
-    DatePipe
+    DatePipe,
+    LocalizedDatePipe
   ]
 })
 export class SharedModule {

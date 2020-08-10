@@ -39,7 +39,7 @@ public class TenantService extends AbstractService<TenantEntity> {
 	private DataSourceProperties dataSourceProperties;
 	
 	@Autowired
-	private EmailService emailService;
+	private EmailSenderService emailService;
 
 	public Page<TenantEntity> getAll(String filter, Integer page, Integer size) throws UndconException {
 		permissionService.checkPermission(getResourceType());

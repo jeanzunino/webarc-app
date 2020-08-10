@@ -1,13 +1,11 @@
 package com.undcon.app.services;
 
-import java.util.Arrays;
-
 import org.springframework.stereotype.Component;
 
 import com.undcon.app.utils.EMailUtils;
 
 @Component
-public class EmailService {
+public class EmailSenderService {
 
 	public void sendEmail(String message) {
 		String smtp = "smtp.gmail.com";
@@ -16,7 +14,7 @@ public class EmailService {
 		String email = "jean.zunino@gmail.com";
 		
 		//TODO Remover senha do código, passar para configuração
-		String password = "j19870264";
+		String password = "";
 
 		String subject = "Undcon - Cadastro de Tenant";
 		String[] toEmails = {"jean.zunino@gmail.com"};

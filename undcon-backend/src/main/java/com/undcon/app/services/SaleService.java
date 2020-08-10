@@ -24,6 +24,7 @@ import com.undcon.app.dtos.SaleItemDto;
 import com.undcon.app.dtos.SaleRequestDto;
 import com.undcon.app.dtos.SaleSimpleDto;
 import com.undcon.app.dtos.SaleTotalDto;
+import com.undcon.app.enums.PaymentStatus;
 import com.undcon.app.enums.PaymentType;
 import com.undcon.app.enums.ResourceType;
 import com.undcon.app.enums.SaleStatus;
@@ -36,6 +37,8 @@ import com.undcon.app.model.EmployeeEntity;
 import com.undcon.app.model.IncomeEntity;
 import com.undcon.app.model.SaleEntity;
 import com.undcon.app.model.UserEntity;
+import com.undcon.app.repositories.ISaleItemProductRepository;
+import com.undcon.app.repositories.ISaleItemServiceRepository;
 import com.undcon.app.repositories.ISaleRepository;
 import com.undcon.app.repositories.SaleRepositoryImpl;
 import com.undcon.app.utils.NumberUtils;
@@ -74,6 +77,12 @@ public class SaleService extends AbstractService<SaleEntity> {
 	@Autowired
 	private BankCheckService bankCheckService;
 	
+	@Autowired
+	private ISaleItemProductRepository saleItemProductRepository;
+	
+	@Autowired
+	private ISaleItemServiceRepository saleItemServiceRepository;
+
 	public Page<SaleEntity> getAll(String filter, Integer page, Integer size) {
 		return super.getAll(SaleEntity.class, filter, page, size);
 	}
@@ -82,7 +91,7 @@ public class SaleService extends AbstractService<SaleEntity> {
 		return new SaleInfoDto(saleRepositoryImpl.getTotalSale(true), saleRepositoryImpl.getTotalSale(false));
 	}
 
-	@Transactional
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 	public SaleEntity persist(SaleRequestDto saleDto) throws UndconException {
 		permissionService.checkPermission(ResourceType.SALE);
 
@@ -102,6 +111,13 @@ public class SaleService extends AbstractService<SaleEntity> {
 		SaleEntity sale = new SaleEntity(null, customer, saleDate, billed, status, user, salesman);
 		return saleRepository.save(sale);
 	}
+	
+	public boolean hasItem(SaleEntity sale) {
+		if(saleItemProductRepository.existsBySale(sale)) {
+			return true;
+		}
+		return saleItemServiceRepository.existsBySale(sale);
+	}
 
 	private void validateClient(CustomerEntity customer) throws UndconException {
 		if (customer == null) {
@@ -109,11 +125,15 @@ public class SaleService extends AbstractService<SaleEntity> {
 		}
 	}
 
-	@Transactional
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 	public SaleEntity update(SaleRequestDto saleDto) throws UndconException {
 		permissionService.checkPermission(ResourceType.SALE);
 		SaleEntity sale = findById(saleDto.getId());
 
+		//TODO falta ajustar o Frontend pra chamar outro serviço para finalizar a venda
+//		if(sale.getStatus() != saleDto.getStatus()) {
+//			throw new UndconException(UndconError.SALE_INVALID_STATUS);
+//		}
 		CustomerEntity customer = customerService.findById(saleDto.getCustomer().getId());
 		validateClient(customer);
 		
@@ -132,7 +152,7 @@ public class SaleService extends AbstractService<SaleEntity> {
 		return saleRepository.save(sale);
 	}
 
-	@Transactional
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 	public void delete(long id) throws UndconException {
 		permissionService.checkPermission(ResourceType.SALE);
 		SaleEntity sale = findById(id);
@@ -169,7 +189,7 @@ public class SaleService extends AbstractService<SaleEntity> {
 		dtoResponse.setIncomesCreated(incomes);
 		return dtoResponse;
 	}
-	
+
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 	public SaleIncomeResponseDto toBill(long id, SaleIncomeRequestDto saleIncomeDto) throws UndconException {
 		permissionService.checkPermission(ResourceType.SALE);
@@ -191,14 +211,15 @@ public class SaleService extends AbstractService<SaleEntity> {
 		if (saleIncomeDto.isSettled() && paymentDate == null) {
 			paymentDate = new Date(System.currentTimeMillis());
 		}
-		
-		if(saleIncomeDto.getPaymentType() == PaymentType.BANK_CHECK) {
+
+		if (saleIncomeDto.getPaymentType() == PaymentType.BANK_CHECK) {
 			Assert.notNull(saleIncomeDto.getCheck(), "check is required");
 			bankCheckService.saveBankCheck(saleIncomeDto.getCheck());
 		}
 
+		PaymentStatus paymentStatus = saleIncomeDto.isSettled() ? PaymentStatus.SETTLED : PaymentStatus.PENDING;
 		IncomeEntity income = new IncomeEntity(null, "Pagamento de Venda - " + sale.getSaleDate() + " #" + sale.getId(),
-				saleIncomeDto.getDuaDate(), paymentDate, saleIncomeDto.getValue(), saleIncomeDto.isSettled(), sale,
+				saleIncomeDto.getDuaDate(), paymentDate, saleIncomeDto.getValue(), paymentStatus, sale,
 				sale.getCustomer(), saleIncomeDto.getPaymentType());
 
 		// TODO Verificar se o usuário precisará de permissão para gravar Venda e
@@ -240,14 +261,30 @@ public class SaleService extends AbstractService<SaleEntity> {
 			throw new UndconException(UndconError.SALE_NOT_FOUND);
 		}
 
-		//TODO Cancelar Receitas/Pagamentos ao cancelar a venda 
-		
+		// TODO Cancelar Receitas/Pagamentos ao cancelar a venda
+
 		sale.setStatus(SaleStatus.CANCELED);
 
 		sale = saleRepository.save(sale);
 
 		SaleSimpleDto saleDto = saleMapper.toSimpleDto(sale);
 		return saleDto;
+	}
+	
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+	public SaleSimpleDto finalize(long id) throws UndconException{
+		permissionService.checkPermission(ResourceType.SALE);
+
+		SaleEntity sale = findById(id);
+		if (sale == null) {
+			throw new UndconException(UndconError.SALE_NOT_FOUND);
+		}
+		
+		if(!hasItem(sale)) {
+			throw new UndconException(UndconError.SALE_WITHOUT_ITENS_INVALID_TO_BILL);
+		}
+		sale.setStatus(SaleStatus.TO_BILL);
+		return saleMapper.toSimpleDto(sale);
 	}
 
 	@Override

@@ -3,7 +3,7 @@ package com.undcon.app.multitenancy;
 /**
  * Tipos de schema da base de dados.
  */
-enum DatabaseSchemaType {
+public enum DatabaseSchemaType {
 
         /**
          * Caminho dos cripts para o schema publico.

@@ -9,4 +9,5 @@ export class Product extends Entity {
   stock: number;
   stockMin: number;
   productCategory: ProductCategory;
+  gtin: number;
 }

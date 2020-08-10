@@ -1,0 +1,1 @@
+ALTER TABLE produto ADD	column IF NOT EXISTS gtin VARCHAR(20);

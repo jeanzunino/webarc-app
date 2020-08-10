@@ -72,11 +72,25 @@ const routes: Routes = [
         (m) => m.BankCheckModule
       ),
   },
-  //{ path: PageEnum.FINANCIAL, loadChildren: '@app/financial/financial.module#FinancialModule'},
+  { 
+    path: PageEnum.INCOME, 
+    loadChildren: () =>
+    import('@app/income/income.module').then(
+      (m) => m.IncomeModule
+    ),
+  },
+  { 
+    path: PageEnum.EXPENSE, 
+    loadChildren: () =>
+    import('@app/expense/expense.module').then(
+      (m) => m.ExpenseModule
+    ),
+  },
   {
     path: '',
     loadChildren: () =>
-      import('@app/sale/sale.module').then((m) => m.SaleModule),
+      import('@app/sale/sale.module').then(
+        (m) => m.SaleModule),
   },
   {
     path: PageEnum.PURCHASE,

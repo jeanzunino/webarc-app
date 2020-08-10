@@ -58,6 +58,15 @@ public class PredicateBuilderTest {
 		assertEquals("=", criterias.get(1).getOperation());
 		assertEquals("1", criterias.get(1).getValue());
 	}
+	
+	@Test
+	public void getCriteriasComDataTest() {
+		List<SearchCriteria> criterias = PredicateBuilder.getCriterias("saleDate>2020-04-18");
+		assertEquals(1, criterias.size());
+		assertEquals("saleDate", criterias.get(0).getKey());
+		assertEquals(">", criterias.get(0).getOperation());
+		assertEquals("2020-04-18", criterias.get(0).getValue());
+	}
 
 	@Test
 	public void buildFilteredResultComUmFiltro() {

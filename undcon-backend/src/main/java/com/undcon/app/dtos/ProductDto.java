@@ -5,6 +5,7 @@ public class ProductDto {
 	private Long id;
 	private String name;
 	private String unit;
+	private String gtin;
 	private ProductCategoryDto productCategory;
 	private double purchasePrice;
 	private double salePrice;
@@ -14,12 +15,13 @@ public class ProductDto {
 	public ProductDto() {
 	}
 
-	public ProductDto(Long id, String name, String unit, ProductCategoryDto productCategory, double purchasePrice,
-			double salePrice, long stock, long stockMin) {
+	public ProductDto(Long id, String name, String unit, String gtin, ProductCategoryDto productCategory,
+			double purchasePrice, double salePrice, long stock, long stockMin) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.unit = unit;
+		this.gtin = gtin;
 		this.productCategory = productCategory;
 		this.purchasePrice = purchasePrice;
 		this.salePrice = salePrice;
@@ -49,6 +51,14 @@ public class ProductDto {
 
 	public void setUnit(String unit) {
 		this.unit = unit;
+	}
+
+	public String getGtin() {
+		return gtin;
+	}
+
+	public void setGtin(String gtin) {
+		this.gtin = gtin;
 	}
 
 	public ProductCategoryDto getProductCategory() {
@@ -91,4 +101,5 @@ public class ProductDto {
 		this.stockMin = stockMin;
 	}
 
+	
 }

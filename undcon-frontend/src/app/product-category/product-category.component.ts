@@ -19,7 +19,6 @@ export class ProductCategoryComponent extends GridViewComponent<
 > {
   tableValues = new Table()
     .set('name', 'product-category.name')
-    .set('parent.name', 'product-category.parent-name')
     .get();
   name = null;
 

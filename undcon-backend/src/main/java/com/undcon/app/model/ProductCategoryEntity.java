@@ -51,6 +51,10 @@ public class ProductCategoryEntity {
 		this.parent = parent;
 	}
 	
+	public void setId(Long id) {
+		this.id = id;
+	}
+	
 	
 
 }

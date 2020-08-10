@@ -1,12 +1,14 @@
 package com.undcon.app.services;
 
-import java.util.Optional;
+import java.util.Arrays;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Component;
 
+import com.undcon.app.enums.PaymentStatus;
 import com.undcon.app.enums.ResourceType;
 import com.undcon.app.exceptions.UndconException;
 import com.undcon.app.model.IncomeEntity;
@@ -49,7 +51,7 @@ public class IncomeService extends AbstractService<IncomeEntity> {
 	 * @return o valor total faturado
 	 */
 	public double getIncomeValueBilledBySale(SaleEntity sale) {
-		Optional<Boolean> of = Optional.empty();
+		List<PaymentStatus> of = Arrays.asList(PaymentStatus.PENDING, PaymentStatus.SETTLED);
 		return saleIncomeRepositoryImpl.getIncomeValueBilledBySale(sale, of);
 	}
 

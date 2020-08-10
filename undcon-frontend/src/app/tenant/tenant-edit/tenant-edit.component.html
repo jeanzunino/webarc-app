@@ -36,10 +36,34 @@
           <app-validation [form]="phoneForm" [validMessage]="'Válido'" [invalidMessage]="'Inválido'"></app-validation>
         </div>
       </div>
+
+      <div class="col-12 col-md-6">
+        <div class="md-form">
+          <select id="salesman" class="primary-system-color browser-default custom-select text-light" formControlName="salesman" mdbInput mdbValidate>
+            <option selected></option>
+            <option *ngFor="let salesman of salesmans" [value]="salesman.id">{{salesman.name}}</option>
+          </select>
+          <label for="salesman" class="text-light">Vendedor do Sistema</label>
+          <app-validation [form]="salesmanForm" [validMessage]="'Válido'" [invalidMessage]="'Inválido'"></app-validation>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-6">
+        <div class="md-form">
+          <select id="status" class="primary-system-color browser-default custom-select text-light" formControlName="status" mdbInput mdbValidate>
+            <option selected></option>
+            <option *ngFor="let status of statusList" [selected]="status" [value]="status">{{ ('enums.client-status.' + status) | translate }}</option>
+          </select>
+          <label for="status" class="text-light">Situação</label>
+          <app-validation [form]="statusForm" [validMessage]="'Válido'" [invalidMessage]="'Inválido'"></app-validation>
+        </div>
+      </div>
+
     </div>
   </form>
 
   <div footer>
+    <button mdbBtn type="button" *ngIf="data.content" color="danger" outline="true" (click)="onCreateDb()" mdbWavesEffect>Cria Base</button>
     <button mdbBtn type="button" *ngIf="data.content" color="danger" outline="true" (click)="onDelete()" mdbWavesEffect>Excluir</button>
     <button mdbBtn type="submit" [disabled]="formGroup.invalid" form="editForm" color="primary" outline="true" (click)="onSave()" mdbWavesEffect>Salvar</button>
   </div>

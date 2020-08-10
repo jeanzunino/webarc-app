@@ -29,7 +29,7 @@ public class DataSourceConfiguration  implements ApplicationRunner {
 				.forEach(tenant -> migrate(tenant, datasources.get(tenant), DatabaseSchemaType.TENANTS));
 	}
 
-	private void migrate(String tenant, DataSource dataSource, DatabaseSchemaType schemaType) {
+	public void migrate(String tenant, DataSource dataSource, DatabaseSchemaType schemaType) {
 		if (schemaType == DatabaseSchemaType.TENANTS && tenant.equals("public")) {
 			return;
 		}

@@ -34,6 +34,10 @@ public enum UndconError {
 	
 	SALE_NOT_FOUND("Venda não encontrada"),
 	
+	SALE_INVALID_STATUS("Não é possível alterar o status da venda dessa forma"),
+	
+	SALE_WITHOUT_ITENS_INVALID_TO_BILL("Venda sem itens não pode ser finalizada e enviada para faturamento"),
+	
 	PRODUCT_NOT_FOUND("Produto não encontrado"),
 	
 	SERVICE_TYPE_NOT_FOUND("Serviço não encontrado"),
@@ -41,6 +45,8 @@ public enum UndconError {
 	PERMISSION_NOT_FOUND("Permissão não encontrada"),
 	
 	EMPLOYEE_NOT_FOUND("Funcionário não encontrado"),
+	
+	SALESMAN_NOT_FOUND("Vendedor não encontrado"),
 	
 	SALE_ITEM_NOT_FOUND("Item de venda não encontrado"),
 	

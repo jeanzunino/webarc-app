@@ -41,9 +41,13 @@
         <a dropdownToggle mdbWavesEffect type="button" class="nav-link dropdown-toggle waves-light" mdbWavesEffect>
           <mdb-icon fas icon="shopping-cart"></mdb-icon> {{ 'menu.finance.title' | translate }} <span class="caret"></span>
         </a>
-        <div *dropdownMenu class="dropdown-menu dropdown-menu-right dropdown dropdown-primary primary-system-color"
-          role="menu">
-          <a class="dropdown-item waves-light text-light" mdbWavesEffect routerLink="/bank-check">{{ 'menu.finance.check' | translate }}</a>
+        <div *dropdownMenu class="dropdown-menu dropdown-menu-right dropdown dropdown-primary primary-system-color" role="menu">
+          <a class="dropdown-item waves-light text-light" mdbWavesEffect routerLink="/bank-check">
+            {{ 'menu.finance.check' | translate }}</a>
+          <a class="dropdown-item waves-light text-light" mdbWavesEffect routerLink="/income">
+            {{ 'menu.finance.income' | translate }}</a>
+          <a class="dropdown-item waves-light text-light" mdbWavesEffect routerLink="/expense">
+            {{ 'menu.finance.expense' | translate }}</a>
         </div>
       </li>
 

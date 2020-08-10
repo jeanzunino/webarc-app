@@ -5,6 +5,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.querydsl.QueryDslPredicateExecutor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronizationAdapter;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.PathBuilder;
@@ -47,18 +51,36 @@ public abstract class AbstractService<T> {
 		return getRepository().findOne(id);
 	}
 
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 	public T persist(T entity) throws UndconException {
 		permissionService.checkPermission(getResourceType());
 		validateBeforePost(entity);
-		return getRepository().save(entity);
+		T saved = getRepository().save(entity);
+		afterPost(saved);
+		return saved;
 	}
 
+	private void afterPost(T saved) {
+		TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronizationAdapter() {
+			public void afterCommit() {
+				afterCommitPost(saved);
+			}
+
+		});
+	}
+
+	protected void afterCommitPost(T saved) {
+
+	}
+
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 	public T update(T entity) throws UndconException {
 		permissionService.checkPermission(getResourceType());
 		validateBeforeUpdate(entity);
 		return getRepository().save(entity);
 	}
 
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 	public void delete(long id) throws UndconException {
 		permissionService.checkPermission(getResourceType());
 		T entity = findById(id);

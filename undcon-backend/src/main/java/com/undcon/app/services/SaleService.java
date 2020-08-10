@@ -37,6 +37,8 @@ import com.undcon.app.model.EmployeeEntity;
 import com.undcon.app.model.IncomeEntity;
 import com.undcon.app.model.SaleEntity;
 import com.undcon.app.model.UserEntity;
+import com.undcon.app.repositories.ISaleItemProductRepository;
+import com.undcon.app.repositories.ISaleItemServiceRepository;
 import com.undcon.app.repositories.ISaleRepository;
 import com.undcon.app.repositories.SaleRepositoryImpl;
 import com.undcon.app.utils.NumberUtils;
@@ -74,6 +76,12 @@ public class SaleService extends AbstractService<SaleEntity> {
 
 	@Autowired
 	private BankCheckService bankCheckService;
+	
+	@Autowired
+	private ISaleItemProductRepository saleItemProductRepository;
+	
+	@Autowired
+	private ISaleItemServiceRepository saleItemServiceRepository;
 
 	public Page<SaleEntity> getAll(String filter, Integer page, Integer size) {
 		return super.getAll(SaleEntity.class, filter, page, size);
@@ -103,6 +111,13 @@ public class SaleService extends AbstractService<SaleEntity> {
 		SaleEntity sale = new SaleEntity(null, customer, saleDate, billed, status, user, salesman);
 		return saleRepository.save(sale);
 	}
+	
+	public boolean hasItem(SaleEntity sale) {
+		if(saleItemProductRepository.existsBySale(sale)) {
+			return true;
+		}
+		return saleItemServiceRepository.existsBySale(sale);
+	}
 
 	private void validateClient(CustomerEntity customer) throws UndconException {
 		if (customer == null) {
@@ -115,9 +130,10 @@ public class SaleService extends AbstractService<SaleEntity> {
 		permissionService.checkPermission(ResourceType.SALE);
 		SaleEntity sale = findById(saleDto.getId());
 
-		if(sale.getStatus() != saleDto.getStatus()) {
-			throw new UndconException(UndconError.SALE_INVALID_STATUS);
-		}
+		//TODO falta ajustar o Frontend pra chamar outro serviço para finalizar a venda
+//		if(sale.getStatus() != saleDto.getStatus()) {
+//			throw new UndconException(UndconError.SALE_INVALID_STATUS);
+//		}
 		CustomerEntity customer = customerService.findById(saleDto.getCustomer().getId());
 		validateClient(customer);
 		
@@ -253,6 +269,22 @@ public class SaleService extends AbstractService<SaleEntity> {
 
 		SaleSimpleDto saleDto = saleMapper.toSimpleDto(sale);
 		return saleDto;
+	}
+	
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+	public SaleSimpleDto finalize(long id) throws UndconException{
+		permissionService.checkPermission(ResourceType.SALE);
+
+		SaleEntity sale = findById(id);
+		if (sale == null) {
+			throw new UndconException(UndconError.SALE_NOT_FOUND);
+		}
+		
+		if(!hasItem(sale)) {
+			throw new UndconException(UndconError.SALE_WITHOUT_ITENS_INVALID_TO_BILL);
+		}
+		sale.setStatus(SaleStatus.TO_BILL);
+		return saleMapper.toSimpleDto(sale);
 	}
 
 	@Override

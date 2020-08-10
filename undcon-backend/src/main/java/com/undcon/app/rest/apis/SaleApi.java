@@ -112,6 +112,14 @@ public class SaleApi {
 	}
 
 	@POST
+	@Path("/{id}/finalize")
+	@Produces(MediaType.APPLICATION_JSON)
+	public SaleSimpleDto finalize(@PathParam("id") long id) throws UndconException {
+		Assert.isTrue(id > 0, "id element is required");
+		return service.finalize(id);
+	}
+	
+	@POST
 	@Path("/{id}/toBillList")
 	@Produces(MediaType.APPLICATION_JSON)
 	public SaleIncomeResponseDto toBillSale(@PathParam("id") long id, List<SaleIncomeRequestDto> saleIncomeDtoList)

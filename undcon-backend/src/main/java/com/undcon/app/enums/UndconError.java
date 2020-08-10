@@ -36,6 +36,8 @@ public enum UndconError {
 	
 	SALE_INVALID_STATUS("Não é possível alterar o status da venda dessa forma"),
 	
+	SALE_WITHOUT_ITENS_INVALID_TO_BILL("Venda sem itens não pode ser finalizada e enviada para faturamento"),
+	
 	PRODUCT_NOT_FOUND("Produto não encontrado"),
 	
 	SERVICE_TYPE_NOT_FOUND("Serviço não encontrado"),

@@ -2,15 +2,15 @@ package com.undcon.app.enums;
 
 public enum SaleStatus {
 
-	/** 0 - A venda foi criada */
+	/** 0 - A venda foi criada e pode estar sendo realizada, incluindo itens */
 	CREATED,
 
-	/** 1 - A venda foi finalizada e já pode ser faturada */
+	/** 1 - A venda foi finalizada e e enviada para faturamento, então já pode ser faturada */
 	TO_BILL,
 
 	/**
 	 * 2 - Faturado Parcialmente - Valor faturado da venda (Receitas da venda) é
-	 * menor que o valor da venda
+	 * menor que o valor total da venda
 	 */
 	BILLED,
 

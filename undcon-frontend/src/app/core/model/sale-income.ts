@@ -1,7 +1,7 @@
 import { PaymentType } from '@enum/payment-type';
 
 export class SaleIncome {
-  duaDate: string;
+  duaDate: Date = new Date();
   paymentDate: Date;
   value: number;
   settled: boolean;

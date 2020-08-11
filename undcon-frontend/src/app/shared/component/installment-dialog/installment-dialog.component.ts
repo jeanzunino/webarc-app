@@ -26,15 +26,14 @@ export class InstallmentDialogComponent implements OnInit, OnDestroy {
   numberInputs = Array(0);
   valueToInstallments = '0';
   private recalculate = false;
-  firstInstallmentDate = '';
+  firstInstallmentDate: Date;
   installments: number[] = [];
   salesIncomes: SaleIncome[] = [];
 
   constructor(public translate: TranslateService,
               public modalRef: MDBModalRef,
               public modalOptions: ModalOptions,
-              private toastr: ToastrService,
-              private localizedDatePipe: LocalizedDatePipe) {}
+              private toastr: ToastrService) {}
 
   ngOnInit() {
     const data = this.modalOptions.data as Modal;
@@ -49,8 +48,9 @@ export class InstallmentDialogComponent implements OnInit, OnDestroy {
       this.bgInstallmentValues = bgInstallment.get();
       this.valueToInstallments = Number(installmentDialog.valueToInstallments).toFixed(2);
       this.recalculate = true;
-      const currentMonth = (new Date()).getMonth();
-      this.firstInstallmentDate = this.localizedDatePipe.transform((new Date()).setMonth(currentMonth + 1), 'yyyy-MM-ddThh:mm');
+      const nextMonth = new Date();
+      nextMonth.setMonth((new Date()).getMonth() + 1);
+      this.firstInstallmentDate = nextMonth;
     }
   }
 
@@ -149,13 +149,15 @@ export class InstallmentDialogComponent implements OnInit, OnDestroy {
     this.setInstallments();
     let dateInstallment = this.firstInstallmentDate;
     this.installments.forEach(value => {
-      const nextMonth = (new Date(dateInstallment)).getMonth() + 1;
+      const nextMonth = dateInstallment.getMonth() + 1;
       const saleIncome = new SaleIncome();
       saleIncome.paymentType = PaymentType.CASH;
       saleIncome.value = value;
       saleIncome.duaDate = dateInstallment;
       this.salesIncomes.push(saleIncome);
-      dateInstallment = this.localizedDatePipe.transform((new Date(dateInstallment)).setMonth(nextMonth), 'yyyy-MM-ddThh:mm');
+      const nextDate = new Date(dateInstallment);
+      nextDate.setMonth(nextMonth);
+      dateInstallment = nextDate;
     });
   }
 
@@ -171,8 +173,8 @@ export class InstallmentDialogComponent implements OnInit, OnDestroy {
   }
 
   getInstallmentDateLabel(parcelNumber: number) {
-    const firstInstallmentDate = (new Date(this.firstInstallmentDate)).getMonth();
-    return this.localizedDatePipe.transform((new Date(this.firstInstallmentDate))
-      .setMonth(firstInstallmentDate + parcelNumber), 'dd/MM/yyyy hh:mm');
+    const nextDate = new Date(this.firstInstallmentDate);
+    nextDate.setMonth(nextDate.getMonth() + parcelNumber);
+    return nextDate;
   }
 }

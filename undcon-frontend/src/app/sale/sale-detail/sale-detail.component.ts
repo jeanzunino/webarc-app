@@ -558,6 +558,7 @@ export class SaleDetailComponent implements OnDestroy {
     if (this.isCash()) {
       this.removeParcels();
       this.saleIncome = new SaleIncome();
+      this.saleIncome.value = this.saleTotalValue;
       this.saleIncome.duaDate = this.localizedDatePipe.transform(new Date(), 'yyyy-MM-ddThh:mm');
     }
   }

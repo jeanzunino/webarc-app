@@ -41,7 +41,7 @@
               <p class="bold italic font-size-12 margin-b-0 text-light" *ngIf="hasParcels">Vencimento da 1ª Parcela</p>
               <div class="row pad-l-15 pad-r-9 pad-b-20">
                 <div *ngFor="let saleIncome of salesIncomes; let installment = index" class="col-4 grid-item {{installment === 0 ? 'firts-item-grid' : ''}}">
-                  <p class="bold margin-b-0">{{saleIncome.duaDate | date: 'dd/MM/yyyy hh:mm'}}</p>
+                  <p class="bold margin-b-0">{{saleIncome.duaDate | date: 'dd/MM/yyyy'}}</p>
                   <p class="margin-b-0">R$ {{saleIncome.value.toFixed(2)}}</p>
                 </div>
               </div>

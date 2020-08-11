@@ -207,6 +207,13 @@ input.form-control.validate-success.ng-valid.ng-touched,
   margin-top: 0px !important;
 }
 
+.md-form > input[type=date]:not(.browser-default) + label {
+  transform: translateY(-19px) scale(0.8);
+  padding-left: 0px !important;
+  color: #FFFFFF !important;
+  margin-top: 0px !important;
+}
+
 .select-label {
   margin-top: -4px !important;
 }

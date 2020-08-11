@@ -217,11 +217,23 @@ input.form-control.validate-success.ng-valid.ng-touched,
   font-weight: bold;
 }
 
+.italic {
+  font-style: italic;
+}
+
+.font-size-12 {
+  font-size: 12px;
+}
+
 .grid-item {
   background-color: #b0b3b8;
   border: 1px solid rgba(0, 0, 0, 0.8);
   padding: 10px;
   text-align: center;
+}
+
+.firts-item-grid {
+  background-color: #33b5e5 !important;
 }
 
 .pad-l-15 {

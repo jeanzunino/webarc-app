@@ -72,7 +72,6 @@ export class SaleDetailComponent implements OnDestroy {
   saleIncome = new SaleIncome();
   reloadValuesPreviousScreen = false;
   hasParcels = false;
-  paymentDuaDateLabel = 'Data de vencimeto';
 
   @ViewChild('ngAutoCompleteCustomer') ngAutoCompleteCustomer;
   customers: Customer[];
@@ -570,8 +569,6 @@ export class SaleDetailComponent implements OnDestroy {
       .subscribe((values: CloseDialogInstallmentValeus) => {
         if (values.action === ActionReturnDialog.CONFIRM) {
           this.hasParcels = true;
-          this.paymentDuaDateLabel = 'Vencimento da 1ª Parcela';
-          this.saleIncome.duaDate = values.firstInstallmentDate;
           this.salesIncomes = values.salesIncomes;
         }
       });

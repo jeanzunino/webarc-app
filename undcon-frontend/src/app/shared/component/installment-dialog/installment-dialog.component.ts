@@ -62,7 +62,6 @@ export class InstallmentDialogComponent implements OnInit, OnDestroy {
     if (this.validInstallment()) {
       this.createInstallment();
       this.closeDialogInstallmentValeus.action = ActionReturnDialog.CONFIRM;
-      this.closeDialogInstallmentValeus.firstInstallmentDate = this.firstInstallmentDate;
       this.closeDialogInstallmentValeus.salesIncomes = this.salesIncomes;
       this.modalRef.hide();
     }

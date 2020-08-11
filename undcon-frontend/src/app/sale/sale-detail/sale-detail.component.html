@@ -16,29 +16,33 @@
             </div>
 
             <!-- Dinheiro -->
-            <div class="row" *ngIf="isCash()">
-              <div class="col-5">
-                <div class="md-form">
-                  <input type="datetime-local" class="form-control text-light" [(ngModel)]="saleIncome.duaDate" [disabled]="hasParcels" mdbInput />
-                  <label for="date" class="text-light">{{paymentDuaDateLabel}}</label>
+            <div *ngIf="isCash()">
+              <div class="row">
+                <div class="{{hasParcels ? 'col-6' : 'col-5'}}">
+                  <div class="md-form">
+                    <input type="datetime-local" id="duaDate" class="form-control text-light" [(ngModel)]="saleIncome.duaDate" [disabled]="hasParcels" mdbInput />
+                    <label for="duaDate" class="text-light">{{paymentDuaDateLabel}}</label>
+                  </div>
+                </div>
+                <div class="{{hasParcels ? 'col-6' : 'col-5'}}">
+                  <div class="md-form">
+                    <input type="text" id="value" class="form-control text-light" [(ngModel)]="saleIncome.value" [disabled]="hasParcels" mdbInput />
+                    <label for="value" class="text-light">Valor</label>
+                  </div>
+                </div>
+                <div class="col-2" [hidden]="hasParcels">
+                  <div class="custom-control custom-checkbox margin-t-40">
+                    <input *ngIf="!hasParcels" type="checkbox" class="custom-control-input" id="active" tabindex="0" [(ngModel)]="saleIncome.settled">
+                    <label for="active" class="custom-control-label text-light">Pago</label>
+                  </div>
                 </div>
               </div>
-              <div class="col-5">
-                <div class="md-form">
-                  <input type="text" id="value" class="form-control text-light" [(ngModel)]="saleIncome.value" [disabled]="hasParcels" mdbInput />
-                  <label for="value" class="text-light">Valor</label>
+
+              <div class="row pad-l-15 pad-r-9 pad-b-20" *ngIf="hasParcels">
+                <div *ngFor="let saleIncome of salesIncomes" class="col-4 grid-item">
+                  <p class="bold margin-b-0">{{saleIncome.duaDate | date: 'dd/MM/yyyy hh:mm'}}</p>
+                  <p class="margin-b-0">R$ {{saleIncome.value.toFixed(2)}}</p>
                 </div>
-              </div>
-              <div class="col-2" [hidden]="hasParcels">
-                <div class="custom-control custom-checkbox margin-t-40">
-                  <input *ngIf="!hasParcels" type="checkbox" class="custom-control-input" id="active" tabindex="0" [(ngModel)]="saleIncome.settled">
-                  <label for="active" class="custom-control-label text-light">Pago</label>
-                </div>
-              </div>
-            </div>
-            <div class="row" *ngIf="isCash() && hasParcels" class="text-light">
-              <div *ngFor="let saleIncome of salesIncomes">
-                <label>{{saleIncome.duaDate | date: 'dd/MM/yyyy hh:mm'}} - R$ {{saleIncome.value.toFixed(2)}}</label>
               </div>
             </div>
 

@@ -9,6 +9,7 @@ import { Page } from '@model/page';
 import { SaleItem } from '@model/sale-item';
 import { Item } from '@model/item';
 import { SaleTotal } from '@model/sale-total';
+import { SaleIncome } from '@model/sale-income';
 
 @Injectable({
   providedIn: 'root',
@@ -43,5 +44,9 @@ export class SaleService extends EntityService<Sale> {
 
   getSaleTotal(saleId: number): Observable<SaleTotal> {
     return this.getCustomUrl(`${this.baseUrl}/${this.entityUrl}/${saleId}/total`) as Observable<SaleTotal>;
+  }
+
+  launchPaymentSalesIncomes(saleId: number, salesIncomes: SaleIncome[]) {
+    return this.postCustomUrl(`${this.baseUrl}/${this.entityUrl}/${saleId}/toBillList`, salesIncomes);
   }
 }

@@ -551,9 +551,16 @@ export class SaleDetailComponent implements OnDestroy {
   }
 
   bgPaymentTypeSelect(paymentTypeSelect: PaymentType) {
+    this.clearPaymentType();
     this.paymentTypeSelect = paymentTypeSelect;
-    this.saleIncome = new SaleIncome();
-    this.saleIncome.duaDate = this.localizedDatePipe.transform(new Date(), 'yyyy-MM-ddThh:mm');
+  }
+
+  private clearPaymentType() {
+    if (this.isCash()) {
+      this.removeParcels();
+      this.saleIncome = new SaleIncome();
+      this.saleIncome.duaDate = this.localizedDatePipe.transform(new Date(), 'yyyy-MM-ddThh:mm');
+    }
   }
 
   installment() {
@@ -577,9 +584,11 @@ export class SaleDetailComponent implements OnDestroy {
 
   launchPayment() {
     if (this.hasParcels) {
-      this.salesIncomes.forEach((saleIncome: SaleIncome) => {
-
-      });
+      this.ss.launchPaymentSalesIncomes(this.entity.id, this.salesIncomes)
+        .toPromise()
+        .then(asd => {
+          console.log(asd)
+        });
     }
   }
 

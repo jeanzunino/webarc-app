@@ -30,7 +30,7 @@
             <option selected></option>
             <option *ngFor="let employee of employees" [value]="employee.id">{{employee.name}}</option>
           </select>
-          <label for="employee" class="text-light">Funcionário</label>
+          <label for="employee" class="text-light select-label">Funcionário</label>
           <app-validation [form]="employeeForm" [validMessage]="'Válido'" [invalidMessage]="'Inválido'"></app-validation>
         </div>
       </div>
@@ -41,7 +41,7 @@
             <option selected></option>
             <option *ngFor="let permission of permissions" [value]="permission.id">{{permission.name}}</option>
           </select>
-          <label for="permission" class="text-light">Permissão</label>
+          <label for="permission" class="text-light select-label">Permissão</label>
           <app-validation [form]="permissionForm" [validMessage]="'Válido'" [invalidMessage]="'Inválido'"></app-validation>
         </div>
       </div>

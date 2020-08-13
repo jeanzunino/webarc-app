@@ -1,21 +1,18 @@
 package com.undcon.app.dtos;
 
-public class EmployeeDto {
-
+public class PersonSimpleDto {
+	
 	private Long id;
 
 	private String name;
 
-	private String phone;
-
-	public EmployeeDto() {
+	public PersonSimpleDto() {
 	}
 
-	public EmployeeDto(Long id, String name, String phone) {
+	public PersonSimpleDto(Long id, String name) {
 		super();
 		this.id = id;
 		this.name = name;
-		this.phone = phone;
 	}
 
 	public Long getId() {
@@ -24,10 +21,6 @@ public class EmployeeDto {
 
 	public String getName() {
 		return name;
-	}
-
-	public String getPhone() {
-		return phone;
 	}
 
 }

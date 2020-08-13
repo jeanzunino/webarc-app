@@ -59,7 +59,7 @@ public class IncomeDto {
 		return value;
 	}
 
-	public PaymentStatus isSettled() {
+	public PaymentStatus getPaymentStatus() {
 		return paymentStatus;
 	}
 

@@ -12,21 +12,11 @@ public class SaleSimpleDto {
 
 	private SaleStatus status;
 
-	private IdDto customer;
-
-	private IdDto user;
-
-	private IdDto salesman;
-
-	public SaleSimpleDto(Long id, Date saleDate, SaleStatus status, IdDto customer, IdDto user,
-			IdDto salesman) {
+	public SaleSimpleDto(Long id, Date saleDate, SaleStatus status) {
 		super();
 		this.id = id;
 		this.saleDate = saleDate;
 		this.status = status;
-		this.customer = customer;
-		this.user = user;
-		this.salesman = salesman;
 	}
 
 	public Long getId() {
@@ -39,18 +29,6 @@ public class SaleSimpleDto {
 
 	public SaleStatus getStatus() {
 		return status;
-	}
-
-	public IdDto getCustomer() {
-		return customer;
-	}
-
-	public IdDto getUser() {
-		return user;
-	}
-
-	public IdDto getSalesman() {
-		return salesman;
 	}
 
 }

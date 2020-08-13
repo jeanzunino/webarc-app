@@ -24,7 +24,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.undcon.app.dtos.ItemType;
 import com.undcon.app.dtos.ProductSaledInfoDto;
 import com.undcon.app.dtos.SaleItemDto;
-import com.undcon.app.dtos.SaleTotalDto;
 import com.undcon.app.model.QSaleItemProductEntity;
 import com.undcon.app.model.QSaleItemServiceEntity;
 import com.undcon.app.model.SaleItemProductEntity;
@@ -112,7 +111,7 @@ public class SaleRepositoryImpl {
 		return new PageImpl<SaleItemDto>(result, pageable, total);
 	}
 
-	public SaleTotalDto getSaleTotal(Long id) {
+	public Double getSaleTotal(Long id) {
 		JPAQueryFactory jpaQueryFactory = new JPAQueryFactory(em);
 		JPAQuery<SaleItemProductEntity> query = jpaQueryFactory.selectFrom(QSaleItemProductEntity.saleItemProductEntity)
 				.where(QSaleItemProductEntity.saleItemProductEntity.sale.id.eq(id));
@@ -132,7 +131,7 @@ public class SaleRepositoryImpl {
 			double subTotalItem = saleItemServiceEntity.getPrice() * saleItemServiceEntity.getQuantity();
 			total += subTotalItem;
 		}
-		return new SaleTotalDto(new BigDecimal(total).setScale(2, RoundingMode.HALF_EVEN).doubleValue());
+		return new BigDecimal(total).setScale(2, RoundingMode.HALF_EVEN).doubleValue();
 	}
 
 	private static long calcOffSetService(Pageable pageable, long countItensProductTotal) {

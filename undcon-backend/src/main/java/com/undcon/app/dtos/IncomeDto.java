@@ -23,10 +23,10 @@ public class IncomeDto {
 
 	private IdDto sale;
 
-	private IdDto customer;
+	private PersonSimpleDto customer;
 
 	public IncomeDto(Long id, String description, Date duaDate, Date paymentDate, double value, PaymentStatus paymentStatus,
-			PaymentType paymentType, IdDto sale, IdDto customer) {
+			PaymentType paymentType, IdDto sale, PersonSimpleDto customer) {
 		super();
 		this.id = id;
 		this.description = description;
@@ -71,7 +71,7 @@ public class IncomeDto {
 		return sale;
 	}
 
-	public IdDto getCustomer() {
+	public PersonSimpleDto getCustomer() {
 		return customer;
 	}
 

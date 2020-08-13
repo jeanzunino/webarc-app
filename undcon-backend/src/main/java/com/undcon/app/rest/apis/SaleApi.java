@@ -74,7 +74,7 @@ public class SaleApi {
 	@GET
 	@Path("/{id}/total")
 	@Produces(MediaType.APPLICATION_JSON)
-	public SaleTotalDto getSaleTotal(@PathParam("id") long id) {
+	public SaleTotalDto getSaleTotal(@PathParam("id") long id) throws UndconException {
 		return service.getSaleTotal(id);
 	}
 

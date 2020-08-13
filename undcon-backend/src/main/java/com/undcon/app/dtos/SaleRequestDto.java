@@ -5,16 +5,15 @@ import com.undcon.app.enums.SaleStatus;
 public class SaleRequestDto {
 
 	private Long id;
-	private CustomerDto customer;
-	private EmployeeDto salesman;
+	private PersonDto customer;
+	private PersonDto salesman;
 	private SaleStatus status;
 	
 
 	public SaleRequestDto() {
-		// TODO Auto-generated constructor stub
 	}
 
-	public SaleRequestDto(Long id, CustomerDto customer, EmployeeDto salesman, SaleStatus status) {
+	public SaleRequestDto(Long id, PersonDto customer, PersonDto salesman, SaleStatus status) {
 		super();
 		this.id = id;
 		this.customer = customer;
@@ -30,19 +29,19 @@ public class SaleRequestDto {
 		this.id = id;
 	}
 
-	public CustomerDto getCustomer() {
+	public PersonDto getCustomer() {
 		return customer;
 	}
 
-	public void setCustomer(CustomerDto customer) {
+	public void setCustomer(PersonDto customer) {
 		this.customer = customer;
 	}
 
-	public EmployeeDto getSalesman() {
+	public PersonDto getSalesman() {
 		return salesman;
 	}
 
-	public void setSalesman(EmployeeDto salesman) {
+	public void setSalesman(PersonDto salesman) {
 		this.salesman = salesman;
 	}
 	

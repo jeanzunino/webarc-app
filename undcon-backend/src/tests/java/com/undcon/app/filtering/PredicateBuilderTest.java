@@ -4,14 +4,18 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.PathBuilder;
+import com.undcon.app.enums.PaymentType;
 import com.undcon.app.enums.SaleStatus;
 import com.undcon.app.model.ExpenseEntity;
+import com.undcon.app.model.IncomeEntity;
 import com.undcon.app.model.MenuTemplateItemEntity;
 import com.undcon.app.model.ProductEntity;
+import com.undcon.app.model.QIncomeEntity;
 import com.undcon.app.model.QMenuTemplateItemEntity;
 import com.undcon.app.model.QProductEntity;
 import com.undcon.app.model.QSaleEntity;
@@ -59,6 +63,7 @@ public class PredicateBuilderTest {
 		assertEquals("1", criterias.get(1).getValue());
 	}
 	
+	@Ignore("Ainda não finalizado a parte de filtro com datas")
 	@Test
 	public void getCriteriasComDataTest() {
 		List<SearchCriteria> criterias = PredicateBuilder.getCriterias("saleDate>2020-04-18");
@@ -66,6 +71,15 @@ public class PredicateBuilderTest {
 		assertEquals("saleDate", criterias.get(0).getKey());
 		assertEquals(">", criterias.get(0).getOperation());
 		assertEquals("2020-04-18", criterias.get(0).getValue());
+	}
+	
+	@Test
+	public void getCriteriasParamNameComPonto() {
+		List<SearchCriteria> criterias = PredicateBuilder.getCriterias("sale.id=1");
+		assertEquals(1, criterias.size());
+		assertEquals("sale.id", criterias.get(0).getKey());
+		assertEquals("=", criterias.get(0).getOperation());
+		assertEquals("1", criterias.get(0).getValue());
 	}
 
 	@Test
@@ -86,14 +100,14 @@ public class PredicateBuilderTest {
 	public void buildFilteredResultComIgualEnum() {
 		PathBuilder<SaleEntity> pathBuilder = new PathBuilder<SaleEntity>(SaleEntity.class, "saleEntity");
 		Predicate predicate = new PredicateBuilder<SaleEntity>(pathBuilder).buildFilteredResult("status=TO_BILL");
-		assertEquals(QSaleEntity.saleEntity.status.stringValue().eq(SaleStatus.TO_BILL.toString()), predicate);
+		assertEquals(QSaleEntity.saleEntity.status.eq(SaleStatus.TO_BILL), predicate);
 	}
 	
 	@Test
 	public void buildFilteredResultComDiferenteEnum() {
 		PathBuilder<SaleEntity> pathBuilder = new PathBuilder<SaleEntity>(SaleEntity.class, "saleEntity");
 		Predicate predicate = new PredicateBuilder<SaleEntity>(pathBuilder).buildFilteredResult("status!=TO_BILL");
-		assertEquals(QSaleEntity.saleEntity.status.stringValue().ne(SaleStatus.TO_BILL.toString()), predicate);
+		assertEquals(QSaleEntity.saleEntity.status.ne(SaleStatus.TO_BILL), predicate);
 	}
 	
 	@Test
@@ -150,6 +164,13 @@ public class PredicateBuilderTest {
 		PathBuilder<ProductEntity> pathBuilder = new PathBuilder<ProductEntity>(ProductEntity.class, "productEntity");
 		Predicate predicate = new PredicateBuilder<ProductEntity>(pathBuilder).buildFilteredResult("stock<=10");
 		assertEquals(QProductEntity.productEntity.stock.lt(Long.valueOf("10")).or(QProductEntity.productEntity.stock.eq(10L)), predicate);
+	}
+	
+	@Test
+	public void buildFilteredResultWithParamNameComPonto() {
+		PathBuilder<IncomeEntity> pathBuilder = new PathBuilder<IncomeEntity>(IncomeEntity.class, "incomeEntity");
+		Predicate predicate = new PredicateBuilder<IncomeEntity>(pathBuilder).buildFilteredResult("sale.id=4&paymentType=BANK_CHECK");
+		assertEquals(QIncomeEntity.incomeEntity.sale.id.eq(4L).and(QIncomeEntity.incomeEntity.paymentType.eq(PaymentType.BANK_CHECK)), predicate);
 	}
 	
 	@Test

@@ -168,8 +168,16 @@ public class SaleService extends AbstractService<SaleEntity> {
 		return saleRepositoryImpl.findAllById(id, PageUtils.createPageRequest(page, size));
 	}
 
-	public SaleTotalDto getSaleTotal(Long id) {
-		return saleRepositoryImpl.getSaleTotal(id);
+	public SaleTotalDto getSaleTotal(Long id) throws UndconException {
+		SaleEntity sale = findById(id);
+		if (sale == null) {
+			throw new UndconException(UndconError.SALE_NOT_FOUND);
+		}
+		Double saleTotal = saleRepositoryImpl.getSaleTotal(id);
+		double amountPaid = incomeService.getIncomeValueBilledBySale(sale);
+		double amountPayable = saleTotal - amountPaid;
+		amountPayable = new BigDecimal(amountPayable).setScale(2, RoundingMode.HALF_EVEN).doubleValue();
+		return new SaleTotalDto(saleTotal, amountPayable, amountPaid);
 	}
 
 	@Override

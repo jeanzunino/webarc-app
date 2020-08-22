@@ -177,6 +177,13 @@
       "PENDING": "Pendente",
       "SETTLED": "Pago",
       "CANCELED": "Cancelado"
+    },
+    "sale-status": {
+      "CREATED": "Criado",
+      "TO_BILL": "Para faturar",
+      "BILLED": "Parcialmente faturado",
+      "TOTAL_BILLED": "Totalmente faturado",
+      "CANCELED": "Cancelado"
     }
   }
 }

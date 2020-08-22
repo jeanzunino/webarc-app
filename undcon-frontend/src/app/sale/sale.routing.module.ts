@@ -4,10 +4,11 @@ import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from '@guard/auth/auth.guard';
 import { SaleComponent } from '@app/sale/sale.component';
 import { SaleResolver, SaleDetailResolver, SaleItensResolver } from '@app/sale/sale.resolver';
-import { PageEnum } from '@app/core/enum/page-enum';
+import { PageEnum } from '@enum/page-enum';
 import { SaleDetailComponent } from './sale-detail/sale-detail.component';
 import { EmptyComponent } from '@component/empty/empty.component';
-import { EmptyChildrenComponent } from '@app/shared/component/empty-children/empty-children.component';
+import { EmptyChildrenComponent } from '@shared/component/empty-children/empty-children.component';
+import { SaleIncomeResolver } from './sale.resolver';
 
 const routes: Routes = [
   {
@@ -27,7 +28,8 @@ const routes: Routes = [
         component: EmptyChildrenComponent,
         resolve: {
           entity: SaleDetailResolver,
-          saleItens: SaleItensResolver
+          saleItens: SaleItensResolver,
+          incomeItens: SaleIncomeResolver
         },
         children: [
           {
@@ -46,7 +48,8 @@ const routes: Routes = [
   providers: [
     SaleResolver,
     SaleDetailResolver,
-    SaleItensResolver
+    SaleItensResolver,
+    SaleIncomeResolver
   ]
 })
 export class SaleRoutingModule {}

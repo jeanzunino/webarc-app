@@ -49,4 +49,16 @@ export class SaleService extends EntityService<Sale> {
   launchPaymentSalesIncomes(saleId: number, salesIncomes: SaleIncome[]) {
     return this.postCustomUrl(`${this.baseUrl}/${this.entityUrl}/${saleId}/toBillList`, salesIncomes);
   }
+
+  launchPaymentSaleIncome(saleId: number, saleIncome: SaleIncome) {
+    return this.postCustomUrl(`${this.baseUrl}/${this.entityUrl}/${saleId}/toBill`, saleIncome);
+  }
+
+  saleFinalize(saleId: number) {
+    return this.postCustomUrl(`${this.baseUrl}/${this.entityUrl}/${saleId}/finalize`);
+  }
+
+  saleCancel(saleId: number) {
+    return this.postCustomUrl(`${this.baseUrl}/${this.entityUrl}/${saleId}/toCancel`);
+  }
 }

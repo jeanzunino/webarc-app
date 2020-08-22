@@ -1,3 +1,5 @@
 export class SaleTotal {
-  totalValue: number;
+  totalValue = 0;
+  amountPayable = 0;
+  amountPaid = 0;
 }

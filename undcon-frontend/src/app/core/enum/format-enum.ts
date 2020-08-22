@@ -4,6 +4,6 @@ export enum FormatEnum {
   ITEM_TYPE = 'item-type',
   PAYMENT_TYPE = 'payment-type',
   PAYMENT_STATUS = 'payment-status',
-  DATE_TIME_PIPE = 'date-time-pipe',
+  DATE_PIPE = 'date-pipe',
   MONEY = 'money'
 }

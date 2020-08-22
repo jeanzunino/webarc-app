@@ -8,7 +8,7 @@
     <div *ngIf="rightValue" class="right-header">
       <label class="text-light">{{rightValue}}</label>
     </div>
-    <p class="margin-b-0 {{panelTitleColor}}">{{ panelTitle | translate }}</p>
+    <p class="margin-b-0 bold {{panelTitleColor}}">{{ panelTitle | translate }}</p>
   </div>
   <div class="card-body">
     <ng-content select="[body]"></ng-content>

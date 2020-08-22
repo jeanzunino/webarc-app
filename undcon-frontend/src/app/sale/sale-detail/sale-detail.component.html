@@ -2,37 +2,38 @@
                   [icon]="iconPanelHeader" [headerColor]="colorPanelHeader">
   <div body>
 
-    <div *ngIf="isToBill()" class="row margin-b-20">
+    <div *ngIf="isToBill() || isBilled() || isTotalBilled()" class="row margin-b-20">
       <div class="col-6">
         <app-simple-panel panelColor="secondary-system-color">
           <div body>
             <div class="row text-align-center">
               <div class="col-12">
                 <app-button-group (selected)="bgPaymentTypeSelect($event)"
-                                  [selectDefaultItem]="paymentTypeSelect"
+                                  [selectDefaultItem]="saleIncomeDto.paymentType"
                                   [buttonGroupValues]="bgPaymentTypeValues">
                 </app-button-group>
               </div>
             </div>
 
-            <!-- Dinheiro -->
-            <div *ngIf="isCash()">
+            <!-- Dinheiro e Boleto -->
+            <div *ngIf="isCash() || isBankSlip()">
               <div class="row">
                 <div class="col-5" *ngIf="!hasParcels">
                   <div class="md-form">
-                    <input type="datetime-local" id="duaDate" class="form-control text-light" [(ngModel)]="saleIncome.duaDate" [disabled]="hasParcels" mdbInput />
+                    <input type="date" id="duaDate" class="form-control text-light" [disabled]="hasParcels"
+                           [ngModel]="saleIncomeDto.duaDate | date:'yyyy-MM-dd'" (change)="updateDate($event)" mdbInput/>
                     <label for="duaDate" class="text-light">Data de vencimeto</label>
                   </div>
                 </div>
                 <div class="{{hasParcels ? 'col-6' : 'col-5'}}">
                   <div class="md-form">
-                    <input type="text" id="value" class="form-control text-light" [(ngModel)]="saleIncome.value" [disabled]="hasParcels" mdbInput />
+                    <input type="text" id="value" class="form-control text-light" [(ngModel)]="saleIncomeDto.value" [disabled]="hasParcels" mdbInput />
                     <label for="value" class="text-light">Valor</label>
                   </div>
                 </div>
-                <div class="col-2" *ngIf="!hasParcels">
+                <div class="col-2" *ngIf="!hasParcels && !isBankSlip()">
                   <div class="custom-control custom-checkbox margin-t-40">
-                    <input type="checkbox" class="custom-control-input" id="active" tabindex="0" [(ngModel)]="saleIncome.settled">
+                    <input type="checkbox" class="custom-control-input" id="active" tabindex="0" [(ngModel)]="saleIncomeDto.settled">
                     <label for="active" class="custom-control-label text-light">Pago</label>
                   </div>
                 </div>
@@ -48,21 +49,66 @@
             </div>
 
             <!-- Cheque -->
-            <div class="row" *ngIf="isBankCheck()">
-              <div class="col-12 text-light">
-                Cheque
+            <div *ngIf="isBankCheck()">
+              <div class="row">
+                <div class="col-5">
+                  <div class="md-form">
+                    <input type="date" id="duaDate" class="form-control text-light" [ngModel]="saleIncomeDto.duaDate | date:'yyyy-MM-dd'"
+                           (change)="updateDate($event)" mdbInput/>
+                    <label for="duaDate" class="text-light">Data de compensação</label>
+                  </div>
+                </div>
+                <div class="col-5">
+                  <div class="md-form">
+                    <input type="text" id="value" class="form-control text-light" [(ngModel)]="saleIncomeDto.value" mdbInput />
+                    <label for="value" class="text-light">Valor</label>
+                  </div>
+                </div>
+                <div class="col-2">
+                  <div class="custom-control custom-checkbox margin-t-40">
+                    <input type="checkbox" class="custom-control-input" id="active" tabindex="0" [(ngModel)]="saleIncomeDto.settled">
+                    <label for="active" class="custom-control-label text-light">Pago</label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-4">
+                  <div class="md-form">
+                    <input type="number" id="checkNumber" class="form-control text-light" [(ngModel)]="saleIncomeDto.check.number" mdbInput />
+                    <label for="checkNumber" class="text-light">Número do cheque</label>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="md-form">
+                    <input type="text" id="checkEmitter" class="form-control text-light" [(ngModel)]="saleIncomeDto.check.emitter" mdbInput />
+                    <label for="checkEmitter" class="text-light">Emissor do cheque</label>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="md-form">
+                    <input type="text" id="checkPD" class="form-control text-light" [(ngModel)]="saleIncomeDto.check.personDocument" mdbInput />
+                    <label for="checkPD" class="text-light">Documento do emissor</label>
+                  </div>
+                </div>
               </div>
             </div>
 
             <!-- Crédito e Débito -->
-            <div class="row" *ngIf="isCreditCard() || isDebitCard()">
-              <div class="col-12 text-light">
-                Crédito e Débito
+            <div *ngIf="isCreditCard() || isDebitCard()">
+              <div class="row">
+                <div class="col-6">
+                  <div class="md-form">
+                    <input type="text" id="value" class="form-control text-light" [(ngModel)]="saleIncomeDto.value" mdbInput />
+                    <label for="value" class="text-light">Valor</label>
+                  </div>
+                </div>
               </div>
             </div>
+
             <button mdbBtn type="button" color="primary" outline="true" (click)="launchPayment();" mdbWavesEffect>Lançar pagamento</button>
-            <button mdbBtn type="button" color="info" outline="true" (click)="installment();" [disabled]="!saleIncome.value" *ngIf="isCash()" mdbWavesEffect>Parcelamento</button>
-            <button mdbBtn type="button" color="danger" outline="true" (click)="removeParcels();" [hidden]="!hasParcels" *ngIf="isCash()" mdbWavesEffect>Remover Parcelas</button>
+            <button mdbBtn type="button" color="info" outline="true" (click)="installment();" [disabled]="!saleIncomeDto.value" *ngIf="isCash() || isBankSlip()" mdbWavesEffect>Parcelamento</button>
+            <button mdbBtn type="button" color="danger" outline="true" (click)="removeParcels();" [hidden]="!hasParcels" *ngIf="isCash() || isBankSlip()" mdbWavesEffect>Remover Parcelas</button>
           </div>
         </app-simple-panel>
       </div>
@@ -70,20 +116,39 @@
       <div class="col-6">
         <app-simple-panel panelColor="secondary-system-color">
           <div body>
-            <app-table [pageValues]="saleItems" [tableValues]="tableValues" [updateCurrentPage]="currentPage"
-                      (reloadItems)="reloadItems($event)" [showBtnAdd]="false" [selectableLine]="false"
-                      [showDeleteValue]="isCreated()" (deleteItem)="confirmDeleteSaleItem($event)"></app-table>
+            <div class="row">
+              <div class="col-12">
+                <app-table [pageValues]="incomeItems" [tableValues]="incomeTableValues" [updateCurrentPage]="incomeCurrentPage"
+                      (reloadItems)="reloadIncomeItems($event)" [showBtnAdd]="false" [selectableLine]="false"
+                      [showDeleteValue]="true" (deleteItem)="confirmDeleteIncomeItem($event)"
+                      [showTotalItems]="false">
+                </app-table>
+              </div>
+            </div>
+
+            <div class="row pad__income-values">
+              <div class="col-4 text-align-center amount-payable">
+                <p class="text-light margin-b-0">Total a pagar</p>
+                <p class="text-light font-weight-bold font-size-25 margin-b-0">R$ {{saleTotal.amountPayable.toFixed(2)}}</p>
+              </div>
+              <div class="col-4 text-align-center amount-paid">
+                <p class="text-light margin-b-0">Valor pago</p>
+                <p class="text-light font-weight-bold font-size-25 margin-b-0">R$ {{saleTotal.amountPaid.toFixed(2)}}</p>
+              </div>
+              <div class="col-4 text-align-center total-value">
+                <p class="text-light margin-b-0">Total da venda</p>
+                <p class="text-light font-weight-bold font-size-25 margin-b-0">R$ {{saleTotal.totalValue.toFixed(2)}}</p>
+              </div>
+            </div>
           </div>
         </app-simple-panel>
       </div>
     </div>
 
-    <div *ngIf="isToBill()" class="row margin-b-20">
+    <div *ngIf="isCreated() || isToBill() || isBilled() || isTotalBilled()" class="row margin-b-20">
       <div class="col-12">
-        <button mdbBtn type="button" color="success" outline="true" (click)="onConfirmBill()" *ngIf="isToBill()" mdbWavesEffect>Faturar</button>
-        <button mdbBtn type="button" color="danger" outline="true" (click)="onConfirmCancel()" *ngIf="!isNew() && !isBilled() && !isCanceled()" mdbWavesEffect>Cancelar</button>
+        <button mdbBtn type="button" color="danger" outline="true" (click)="onConfirmCancel()" mdbWavesEffect>Cancelar</button>
         <button mdbBtn type="button" color="mdb-color" outline="true" (click)="goBack()" mdbWavesEffect>Voltar</button>
-
       </div>
     </div>
 
@@ -93,8 +158,9 @@
           <label for="customers" class="text-light">Cliente</label>
           <ng-autocomplete id="customers" [data]="customers" [searchKeyword]="customerKeyword" [initialValue]="customerInitialValue" [itemTemplate]="customerTemplate"
                           [notFoundTemplate]="customerNotFoundTemplate" (selected)='customerSelectEvent($event)'
-                          (inputChanged)="customerChangeEvent($event)" minQueryLength="3" notFoundText="Nenhum cliente encontrado"
-                          (inputCleared)="customerInputCleared()" [disabled]="!isNew()" #ngAutoCompleteCustomer>
+                          (inputChanged)="customerChangeEvent($event)" notFoundText="Nenhum cliente encontrado"
+                          (inputCleared)="customerInputCleared()" [disabled]="!isNew()" #ngAutoCompleteCustomer
+                          placeHolder="Buscar cliente" [isLoading]="isLoadingCustomer">
           </ng-autocomplete>
         </div>
 
@@ -102,8 +168,9 @@
           <label for="employees" class="text-light">Vendedor</label>
           <ng-autocomplete id="employees" [data]="employees" [searchKeyword]="employeeKeyword" [initialValue]="employeeInitialValue" [itemTemplate]="employeeTemplate"
                           [notFoundTemplate]="employeeNotFoundTemplate" (selected)='employeeSelectEvent($event)'
-                          (inputChanged)="employeeChangeEvent($event)" minQueryLength="3" notFoundText="Nenhum funcionário encontrado"
-                          (inputCleared)="employeeInputCleared()" [disabled]="!isNew()" #ngAutoCompleteEmployee>
+                          (inputChanged)="employeeChangeEvent($event)" notFoundText="Nenhum funcionário encontrado"
+                          (inputCleared)="employeeInputCleared()" [disabled]="!isNew()" #ngAutoCompleteEmployee
+                          placeHolder="Buscar vendedor" [isLoading]="isLoadingEmployee">
           </ng-autocomplete>
         </div>
       </div>
@@ -116,7 +183,7 @@
         <button mdbBtn type="button" color="mdb-color" outline="true" (click)="goBack()" mdbWavesEffect>Voltar</button>
       </div>
       <div *ngIf="isCreated()" class="col-6">
-        <p class="text-light font-weight-bold font-size-38 margin-b-0">R$ {{saleTotalValue.toFixed(2)}}</p>
+        <p class="text-light font-weight-bold font-size-38 margin-b-0">R$ {{saleTotal.totalValue.toFixed(2)}}</p>
       </div>
     </div>
 
@@ -129,8 +196,9 @@
                 <label for="product" class="text-light">Produto</label>
                 <ng-autocomplete id="product" [data]="products" [searchKeyword]="productKeyword" [itemTemplate]="productTemplate"
                                 [notFoundTemplate]="productNotFoundTemplate" (selected)='productSelectEvent($event)'
-                                (inputChanged)="productChangeEvent($event)" minQueryLength="3" notFoundText="Nenhum produto encontrado"
-                                (inputCleared)="productInputCleared()" #ngAutoCompleteProduct>
+                                (inputChanged)="productChangeEvent($event)" notFoundText="Nenhum produto encontrado"
+                                (inputCleared)="productInputCleared()" #ngAutoCompleteProduct
+                                placeHolder="Buscar produto" [isLoading]="isLoadingProduct">
                 </ng-autocomplete>
               </div>
               <div class="col-4">
@@ -163,8 +231,9 @@
                 <label for="product" class="text-light">Serviço</label>
                 <ng-autocomplete id="product" [data]="services" [searchKeyword]="serviceKeyword" [itemTemplate]="serviceTemplate"
                                 [notFoundTemplate]="serviceNotFoundTemplate" (selected)='serviceSelectEvent($event)'
-                                (inputChanged)="serviceChangeEvent($event)" minQueryLength="3" notFoundText="Nenhum serviço encontrado"
-                                (inputCleared)="serviceInputCleared()" #ngAutoCompleteService>
+                                (inputChanged)="serviceChangeEvent($event)" notFoundText="Nenhum serviço encontrado"
+                                (inputCleared)="serviceInputCleared()" #ngAutoCompleteService
+                                placeHolder="Buscar serviço" [isLoading]="isLoadingService">
                 </ng-autocomplete>
               </div>
               <div class="col-4">
@@ -198,10 +267,8 @@
             <app-table [pageValues]="saleItems" [tableValues]="tableValues" [updateCurrentPage]="currentPage"
                       (reloadItems)="reloadItems($event)" [showBtnAdd]="false" [selectableLine]="false"
                       [showDeleteValue]="isCreated()" (deleteItem)="confirmDeleteSaleItem($event)"></app-table>
-          <!-- (clickItem)="onClickItem($event)" -->
           </div>
         </app-simple-panel>
-
       </div>
     </div>
   </div>

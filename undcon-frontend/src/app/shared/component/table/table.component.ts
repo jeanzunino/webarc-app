@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { MaskPipe } from 'ngx-mask';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -12,7 +12,7 @@ import { DatePipe } from '@angular/common';
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.scss'],
 })
-export class TableComponent implements OnInit {
+export class TableComponent {
   currentPage = 0;
   tableItems = [];
   totalItems = 0;
@@ -36,15 +36,16 @@ export class TableComponent implements OnInit {
   @Input() selectableLine = true;
 
   showDelete = false;
-  @Input() set showDeleteValue(show: boolean){
+  @Input() set showDeleteValue(show: boolean) {
     this.showDelete = show;
   }
+
+  @Input() showTotalItems = true;
+  idPaginator = Math.floor(Math.random() * 10).toString().replace('.', '');
 
   constructor(private maskPipe: MaskPipe,
               private translate: TranslateService,
               private datePipe: DatePipe) { }
-
-  ngOnInit(): void {}
 
   getHeaders(tableValue: TableValues) {
     return tableValue.columnTitle;
@@ -69,8 +70,8 @@ export class TableComponent implements OnInit {
         return finalValue ? this.translate.instant('yes') : this.translate.instant('no');
       } else if (tableValue.formatEnum === FormatEnum.ITEM_TYPE) {
         return this.translate.instant('enums.item-type.' + finalValue);
-      } else if (tableValue.formatEnum === FormatEnum.DATE_TIME_PIPE) {
-        return this.datePipe.transform(finalValue, 'dd/MM/yyyy hh:mm');
+      } else if (tableValue.formatEnum === FormatEnum.DATE_PIPE) {
+        return this.datePipe.transform(finalValue, 'dd/MM/yyyy');
       } else if (tableValue.formatEnum === FormatEnum.MONEY) {
         return 'R$ ' + Number(finalValue).toFixed(2);
       } else if (tableValue.formatEnum === FormatEnum.PAYMENT_TYPE) {

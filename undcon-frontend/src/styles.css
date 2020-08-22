@@ -88,7 +88,7 @@ input::-webkit-calendar-picker-indicator:hover {
 }
 
 .color-deepskyblue {
-  color:	#00BFFF;
+  color: #00BFFF;
 }
 
 .background-color-deepskyblue {
@@ -104,11 +104,19 @@ input::-webkit-calendar-picker-indicator:hover {
 }
 
 .color-orange {
-  color:	#f09b00;
+  color: #f09b00;
 }
 
 .background-color-orange {
   background-color:	#f09b00;
+}
+
+.color-hot-pink {
+  color: #FF69B4;
+}
+
+.background-color-hot-pink {
+  background-color:	#FF69B4;
 }
 
 .color-black {

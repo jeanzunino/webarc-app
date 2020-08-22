@@ -12,5 +12,5 @@ export class Income extends Entity {
   paymentStatus: PaymentStatus;
   sale: Sale;
   customer: Customer;
-	paymentType: PaymentType;
+  paymentType: PaymentType;
 }

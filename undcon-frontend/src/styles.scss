@@ -27,3 +27,48 @@
     }
   }
 }
+
+input:disabled {
+  color: #666 !important;
+}
+
+.ngx-pagination {
+  li {
+    .ng-star-inserted {
+      color: #FFFFFF !important;
+      font-weight: bold;
+      font-size: 18px;
+    }
+  }
+  li::before {
+    color: #FFFFFF !important;
+    font-weight: bold;
+    font-size: 18px;
+  }
+}
+
+.ngx-pagination {
+  .disabled {
+    .ng-star-inserted {
+      color: #666 !important;
+      cursor: default;
+    }
+  }
+  li::before {
+    color: #666 !important;
+    font-weight: bold;
+    font-size: 18px;
+  }
+}
+
+.ngx-pagination a:hover, .ngx-pagination button:hover {
+  background: #4285F4 !important;
+}
+
+.ngx-pagination .current {
+  background: #0E61EA !important;
+}
+
+.sk-fading-circle .sk-circle:before {
+  background-color: #FFFFFF !important;
+}

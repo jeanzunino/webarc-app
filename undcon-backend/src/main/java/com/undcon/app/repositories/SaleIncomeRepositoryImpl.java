@@ -40,7 +40,8 @@ public class SaleIncomeRepositoryImpl {
 		if (!paymentStatusFilter.isEmpty()) {
 			query.where(QIncomeEntity.incomeEntity.paymentStatus.in(paymentStatusFilter));
 		}
-		return query.fetchOne();
+		Double value = query.fetchOne();
+		return value == null ? 0d : value;
 	}
 
 }

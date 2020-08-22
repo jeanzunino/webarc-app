@@ -12,7 +12,7 @@ export class ButtonGroupComponent implements AfterViewInit {
 
   @Output() selected: EventEmitter<string> = new EventEmitter();
   @Input() buttonGroupValues: ButtonGroupValues[] = [];
-  @Input() selectDefaultItem;
+  @Input() selectDefaultItem: any;
   @Input() textColor = 'color-black';
 
   ngAfterViewInit() {

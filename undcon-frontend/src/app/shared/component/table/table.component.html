@@ -1,7 +1,7 @@
 <div class="card text-light primary-system-color">
   <div class="card-body">
     <div *ngIf="totalItems">
-      <div class="row div--header-align">
+      <div class="row div--header-align" *ngIf="showTotalItems">
         <div class="col-6 div--total-items-align">
           {{'total_registros_encontrados' | translate: {total: totalItems} }}
         </div>
@@ -10,17 +10,19 @@
         </div>
       </div>
       <div class="table-responsive">
-        <table class="table table-striped">
+        <table class="table table-striped margin-b-0">
           <thead class="secondary-system-color">
             <tr>
               <th *ngFor="let tableValue of tableValues" class="text-light">
                 {{ getHeaders(tableValue) | translate }}
               </th>
+              <th *ngIf="showDelete" class="text-light">
+              </th>
             </tr>
           </thead>
           <tbody>
             <tr
-              *ngFor="let item of tableItems | paginate: {itemsPerPage: 10, currentPage: currentPage, totalItems: totalItems}"
+              *ngFor="let item of tableItems | paginate: {id: idPaginator, itemsPerPage: 10, currentPage: currentPage, totalItems: totalItems}"
               class="{{selectableLine ? 'cursor-pointer' : ''}}">
               <th *ngFor="let tableValue of tableValues" class="text-light" (click)="onClickItem(item)">
                 {{ getFieldsOfTable(item, tableValue) }}
@@ -35,7 +37,7 @@
           <tfoot class="primary-system-color footer--align">
             <tr>
               <td colspan="10">
-                <pagination-controls previousLabel="{{ 'table.anterior' | translate }}"
+                <pagination-controls [id]=idPaginator previousLabel="{{ 'table.anterior' | translate }}"
                   nextLabel="{{ 'table.proximo' | translate }}" responsive="true" autoHide="true"
                   (pageChange)="updateItems($event)">
                 </pagination-controls>

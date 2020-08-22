@@ -1,6 +1,4 @@
-import { PaymentType } from './../../../core/enum/payment-type';
 import { SaleIncome } from '@model/sale-income';
-import { LocalizedDatePipe } from '@core/pipes/localized-date-pipe';
 import { Component, ViewEncapsulation, OnDestroy, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { MDBModalRef, ModalOptions } from 'angular-bootstrap-md';
@@ -11,7 +9,8 @@ import { CloseDialogInstallmentValeus } from '@app/shared/model/close-dialog-ins
 import { Modal } from '@shared/model/modal';
 import { ActionReturnDialog } from '@enum/action-return-dialog';
 import { ButtonGroupValues, ButtonGroup } from '@shared/model/button-group';
-import { InstallmentDialog } from '@app/shared/model/installment-dialog-model';
+import { InstallmentDialog } from '@shared/model/installment-dialog-model';
+import { PaymentType } from '@core/enum/payment-type';
 
 @Component({
   selector: 'app-installment-dialog',
@@ -29,6 +28,7 @@ export class InstallmentDialogComponent implements OnInit, OnDestroy {
   firstInstallmentDate: Date;
   installments: number[] = [];
   salesIncomes: SaleIncome[] = [];
+  selectDefaultItem = '6-x';
 
   constructor(public translate: TranslateService,
               public modalRef: MDBModalRef,
@@ -73,9 +73,11 @@ export class InstallmentDialogComponent implements OnInit, OnDestroy {
   }
 
   generateInputs(numberInputs: string) {
-    this.numberInstallments = Number(numberInputs.split('-')[0]);
-    this.numberInputs = Array(this.numberInstallments);
-    this.recalculate = true;
+    if (this.firstInstallmentDate) {
+      this.numberInstallments = Number(numberInputs.split('-')[0]);
+      this.numberInputs = Array(this.numberInstallments);
+      this.recalculate = true;
+    }
   }
 
   calculateValues() {
@@ -176,5 +178,21 @@ export class InstallmentDialogComponent implements OnInit, OnDestroy {
     const nextDate = new Date(this.firstInstallmentDate);
     nextDate.setMonth(nextDate.getMonth() + parcelNumber);
     return nextDate;
+  }
+
+  updateDate(event) {
+    if (!event.srcElement.value) {
+      this.firstInstallmentDate = null;
+      this.numberInputs = Array(0);
+    } else {
+      const date = new Date();
+      const separateDate = event.srcElement.value.split('-');
+      date.setUTCDate(separateDate[2]);
+      date.setUTCMonth(separateDate[1] - 1);
+      date.setUTCFullYear(separateDate[0]);
+      this.firstInstallmentDate = date;
+      this.generateInputs(`${this.numberInstallments}-x`);
+      this.calculateValues();
+    }
   }
 }

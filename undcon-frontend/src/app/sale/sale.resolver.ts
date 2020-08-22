@@ -4,6 +4,9 @@ import { Sale } from '@model/sale';
 import { SaleService } from '@service/sale/sale.service';
 import { GetAllResolver } from '@shared/resolver/generic.resolver';
 import { ActivatedRouteSnapshot } from '@angular/router';
+import { IncomeService } from '@service/income/income.service';
+import { Income } from '@model/income';
+import { Page } from '@model/page';
 
 @Injectable()
 export class SaleResolver extends GetAllResolver<Sale> {
@@ -17,10 +20,10 @@ export class SaleDetailResolver {
   constructor(private saleService: SaleService) {}
 
     public resolve(route: ActivatedRouteSnapshot) {
-        if (route.params.id === 'new') {
-          return;
-        }
-        return this.saleService.get(route.params.id);
+      if (route.params.id === 'new') {
+        return;
+      }
+      return this.saleService.get(route.params.id);
     }
 }
 
@@ -29,9 +32,23 @@ export class SaleItensResolver {
   constructor(private saleService: SaleService) {}
 
     public resolve(route: ActivatedRouteSnapshot) {
-        if (route.params.id === 'new') {
-          return;
-        }
-        return this.saleService.getSaleItens(route.params.id, 0);
+      if (route.params.id === 'new') {
+        return;
+      }
+      return this.saleService.getSaleItens(route.params.id, 0);
+    }
+}
+
+@Injectable()
+export class SaleIncomeResolver {
+  constructor(private incomeService: IncomeService) {}
+
+    public resolve(route: ActivatedRouteSnapshot) {
+      if (route.params.id === 'new') {
+        return;
+      }
+      const params = new Map<string, string>();
+      params.set('sale.id=', route.params.id);
+      return this.incomeService.getAll(params, 0).toPromise();
     }
 }

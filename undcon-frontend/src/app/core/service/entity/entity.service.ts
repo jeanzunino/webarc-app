@@ -18,12 +18,12 @@ export class EntityService<T> {
     if (filters) {
       filters.forEach((value: string, key: string) => {
         if (value) {
-          filterAsString += '&' + key + value;
+          filterAsString += ',' + key + value;
         }
       });
     }
     let params: {};
-    params = {filter: filterAsString, page: pageNumber, size: sizeNumber };
+    params = {filter: filterAsString.substr(1), page: pageNumber, size: sizeNumber };
     return this.http.get(`${this.baseUrl}/${this.entityUrl}`, { params });
   }
 
@@ -53,7 +53,7 @@ export class EntityService<T> {
     return this.http.post<T>(`${this.baseUrl}/${this.entityUrl}`, entity);
   }
 
-  public postCustomUrl(url: string, entity: any) {
+  public postCustomUrl(url: string, entity?: any) {
     return this.http.post<any>(url, entity);
   }
 

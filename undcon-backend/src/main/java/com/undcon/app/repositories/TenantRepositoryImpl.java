@@ -17,9 +17,6 @@ import com.undcon.app.multitenancy.ThreadLocalStorage;
 public class TenantRepositoryImpl {
 
 	@Autowired
-	private DataSourceProperties dataSourceProperties;
-
-	@Autowired
 	private EntityManager em;
 
 	public List<String> getAll() {

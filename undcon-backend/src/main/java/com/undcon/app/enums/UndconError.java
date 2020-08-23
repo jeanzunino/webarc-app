@@ -22,6 +22,8 @@ public enum UndconError {
 	
 	NAME_ALREADY_EXISTS("O nome informado já existe"),
 	
+	SCHEMA_NAME_ALREADY_EXISTS("O nome do schema informado já existe"),
+	
 	LOGIN_ALREADY_EXISTS("O login informado já existe"),
 	
 	LOGIN_ALREADY_EXISTS_IN_EMPLOYEE("O login já foi informado para este colaborador"),
@@ -45,6 +47,8 @@ public enum UndconError {
 	PERMISSION_NOT_FOUND("Permissão não encontrada"),
 	
 	EMPLOYEE_NOT_FOUND("Funcionário não encontrado"),
+	
+	INCOME_NOT_FOUND("Receita não encontrada"),
 	
 	SALESMAN_NOT_FOUND("Vendedor não encontrado"),
 	

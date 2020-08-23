@@ -269,7 +269,11 @@ public class SaleService extends AbstractService<SaleEntity> {
 			throw new UndconException(UndconError.SALE_NOT_FOUND);
 		}
 
-		// TODO Cancelar Receitas/Pagamentos ao cancelar a venda
+		List<IncomeEntity> incomesBySale = incomeService.getIncomesBySale(sale);
+		for (IncomeEntity incomeEntity : incomesBySale) {
+			incomeEntity.setPaymentStatus(PaymentStatus.CANCELED);
+			incomeService.update(incomeEntity);
+		}
 
 		sale.setStatus(SaleStatus.CANCELED);
 

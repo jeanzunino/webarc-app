@@ -1,7 +1,6 @@
 package com.undcon.app.repositories;
 
 import java.util.List;
-import java.util.Optional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -41,6 +40,9 @@ public class SaleIncomeRepositoryImpl {
 			query.where(QIncomeEntity.incomeEntity.paymentStatus.in(paymentStatusFilter));
 		}
 		Double value = query.fetchOne();
+		if (value == null) {
+			value = 0d;
+		}
 		return value == null ? 0d : value;
 	}
 

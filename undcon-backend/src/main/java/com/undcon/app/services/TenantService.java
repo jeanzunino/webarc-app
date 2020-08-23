@@ -1,5 +1,7 @@
 package com.undcon.app.services;
 
+import java.util.List;
+
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,6 +59,8 @@ public class TenantService extends AbstractService<TenantEntity> {
 		if (NumberUtils.longIsPositiveValue(entity.getId())) {
 			throw new UndconException(UndconError.NEW_REGISTER_INVALID_ID);
 		}
+		validateName(entity);
+		validateSchemaName(entity);
 		validateSalesman(entity);
 	}
 
@@ -75,6 +79,20 @@ public class TenantService extends AbstractService<TenantEntity> {
 				+ "Att, \nJean Victor Zunino";
 		
 		emailService.sendEmail(message);
+	}
+	
+	private void validateName(TenantEntity entity) throws UndconException{
+		List<TenantEntity> findByIdNotAndName = tenantRepository.findByIdNotAndNameIgnoreCase(entity.getId(), entity.getName());
+		if(!findByIdNotAndName.isEmpty()) {
+			throw new UndconException(UndconError.NAME_ALREADY_EXISTS);
+		}
+	}
+	
+	private void validateSchemaName(TenantEntity entity) throws UndconException{
+		List<TenantEntity> findByIdNotAndSchema = tenantRepository.findByIdNotAndSchemaNameIgnoreCase(entity.getId(), entity.getSchemaName());
+		if(!findByIdNotAndSchema.isEmpty()) {
+			throw new UndconException(UndconError.NAME_ALREADY_EXISTS);
+		}
 	}
 
 	private void validateSalesman(TenantEntity entity) throws UndconException {

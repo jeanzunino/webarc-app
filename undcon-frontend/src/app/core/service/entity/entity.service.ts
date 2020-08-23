@@ -21,11 +21,12 @@ export class EntityService<T> {
           filterAsString += ',' + key + value;
         }
       });
+      //Elimina a primeira vírgula do filtro
+      filterAsString = filterAsString.substr(1);
     }
-    //Elimina a primeira vírgula do filtro
-    filterAsString = filterAsString.substr(1);
+    
     let params: {};
-    params = {filter: filterAsString.substr(1), page: pageNumber, size: sizeNumber };
+    params = {filter: filterAsString, page: pageNumber, size: sizeNumber };
     return this.http.get(`${this.baseUrl}/${this.entityUrl}`, { params });
   }
 
@@ -37,9 +38,10 @@ export class EntityService<T> {
           filterAsString += ',' + key + value;
         }
       });
+      //Elimina a primeira vírgula do filtro
+       filterAsString = filterAsString.substr(1);
     }
-    //Elimina a primeira vírgula do filtro
-    filterAsString = filterAsString.substr(1);
+    
     let params: {};
     params = {filter: filterAsString, page: pageNumber, size: sizeNumber };
     return this.http.get(url, { params });

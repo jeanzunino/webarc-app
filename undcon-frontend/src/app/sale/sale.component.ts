@@ -9,6 +9,9 @@ import { GridViewComponent } from '@component/grid-view/grid-view.component';
 import { Table } from '@shared/model/table';
 import { SharedInjector } from '@shared/shared.module';
 import { FormatEnum } from '@app/core/enum/format-enum';
+import { SaleStatus } from '@app/core/enum/sale-status';
+import { QueryFilterEnum } from '@app/core/enum/query-filter';
+import { getQueryFilter } from '@app/shared/utils/utils';
 
 @Component({
   selector: 'app-sale',
@@ -26,6 +29,9 @@ export class SaleComponent extends GridViewComponent<Sale> {
     .set('user.login', 'sale.user-login')
     .get();
   name = null;
+  status: SaleStatus;
+
+  statusList = Object.values(SaleStatus);
 
   constructor(
     service: SaleService,
@@ -46,15 +52,18 @@ export class SaleComponent extends GridViewComponent<Sale> {
   }
 
   onSearch() {
-    // const params = new Map<string, string>();
-    // params.set(getQueryFilter('name', QueryFilterEnum.CONTAINS_IC), this.name);
-    // params.set(getQueryFilter('unit', QueryFilterEnum.CONTAINS_IC), this.unit);
-    // this.onSearchParams(params);
+    const params = new Map<string, string>();
+    params.set(getQueryFilter('customer.name', QueryFilterEnum.CONTAINS_IC), this.name);
+    params.set(getQueryFilter('status', QueryFilterEnum.EQUALS), this.status);
+    this.onSearchParams(params);
+  }
+
+  public onChangeStatus(status){
+    this.status = status;
   }
 
   onClear() {
-    // this.name = null;
-    // this.unit = null;
-    // this.onClearParams();
+    this.name = null;
+    this.onClearParams();
   }
 }

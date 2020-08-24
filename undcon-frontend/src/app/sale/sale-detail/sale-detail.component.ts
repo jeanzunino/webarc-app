@@ -482,20 +482,33 @@ export class SaleDetailComponent implements OnInit, OnDestroy {
   }
 
   confirmDeleteIncomeItem(income: Income) {
-    // const value = getEnumTranslation(saleItem.itemType);
-    // openConfimDialog(new ConfirmDialogModel(`Confirma a remoção do ${value} ${saleItem.name}`)).content.onClose
-    //   .pipe(takeUntil(this.ngUnsubscribe))
-    //   .subscribe((values: CloseDialogValues) => {
-    //     if (values.action === ActionReturnDialog.CONFIRM) {
-    //       if (saleItem.itemType === ItemType.PRODUCT) {
-    //         this.deleteProductItem(saleItem);
-    //       } else {
-    //         this.deleteServiceItem(saleItem);
-    //       }
-    //     }
-    //   });
+     openConfimDialog(new ConfirmDialogModel(`Confirma a remoção do pagamento`)).content.onClose
+       .pipe(takeUntil(this.ngUnsubscribe))
+       .subscribe((values: CloseDialogValues) => {
+         if (values.action === ActionReturnDialog.CONFIRM) {
+          this.deleteIncome(income);
+         }
+       });
   }
 
+  private deleteIncome(income: Income) {
+    this.spinner.show();
+    this.is.delete(income).toPromise()
+    .then(() => {
+      this.reloadIncomeItems(0);
+      this.ss.get(this.entity.id).toPromise()
+      .then((sale: Sale) => {
+        this.entity.status = sale.status;
+        this.getTitle();
+      });
+      this.setSaleTotal();
+      this.toastr.success(
+        this.translate.instant('Pagamento removido com sucesso'),
+        this.translate.instant('Sucesso')
+      );
+    });
+    this.spinner.hide();
+  }
 
   private deleteProductItem(saleItem: SaleItem) {
     this.spinner.show();

@@ -34,6 +34,9 @@ export class NavbarComponent {
   }
 
   public verifyPermissionMenu(resource: String) {
+    if(!this.permissions){
+      return false;
+    }
     return this.permissions.find(p => p.toString() === resource) != null;
   }
 }

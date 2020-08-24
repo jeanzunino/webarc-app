@@ -78,6 +78,8 @@ export class TableComponent {
         return this.translate.instant('enums.payment-type.' + finalValue);
       } else if (tableValue.formatEnum === FormatEnum.PAYMENT_STATUS) {
         return this.translate.instant('enums.payment-status.' + finalValue);
+      } else if (tableValue.formatEnum === FormatEnum.SALE_STATUS) {
+        return this.translate.instant('enums.sale-status.' + finalValue);
       }
     }
 

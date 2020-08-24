@@ -25,7 +25,7 @@ export class SaleComponent extends GridViewComponent<Sale> {
     .set('customer.name', 'sale.customer-name')
     .set('saleDate', 'sale.saleDate', FormatEnum.DATE_PIPE)
     .set('salesman.name', 'sale.salesman-name')
-    .set('status', 'sale.status')
+    .set('status', 'sale.status', FormatEnum.SALE_STATUS)
     .set('user.login', 'sale.user-login')
     .get();
   name = null;
@@ -58,12 +58,13 @@ export class SaleComponent extends GridViewComponent<Sale> {
     this.onSearchParams(params);
   }
 
-  public onChangeStatus(status){
-    this.status = status;
+  public onChangeStatus(saleStatus){
+    this.status = saleStatus;
   }
 
   onClear() {
     this.name = null;
+    this.status = null;
     this.onClearParams();
   }
 }

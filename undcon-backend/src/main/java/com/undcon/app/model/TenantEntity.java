@@ -41,7 +41,7 @@ public class TenantEntity {
 	private ClientStatus status;
 	
 	@ManyToOne
-	@JoinColumn(name = "menu_template_id", nullable = false)
+	@JoinColumn(name = "menu_template_id", nullable = true)
 	private MenuTemplateEntity menu;
 
 	@ManyToOne

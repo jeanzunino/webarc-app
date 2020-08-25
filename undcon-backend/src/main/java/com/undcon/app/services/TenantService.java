@@ -1,5 +1,6 @@
 package com.undcon.app.services;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.sql.DataSource;
@@ -20,6 +21,7 @@ import com.undcon.app.multitenancy.DataSourceConfiguration;
 import com.undcon.app.multitenancy.DataSourceProperties;
 import com.undcon.app.multitenancy.DatabaseSchemaType;
 import com.undcon.app.repositories.ITenantRepository;
+import com.undcon.app.repositories.TenantRepositoryImpl;
 import com.undcon.app.utils.NumberUtils;
 
 @Component
@@ -27,6 +29,9 @@ public class TenantService extends AbstractService<TenantEntity> {
 
 	@Autowired
 	private ITenantRepository tenantRepository;
+	
+	@Autowired
+	private TenantRepositoryImpl tenantRepositoryImpl;
 
 	@Autowired
 	private PermissionService permissionService;
@@ -59,8 +64,8 @@ public class TenantService extends AbstractService<TenantEntity> {
 		if (NumberUtils.longIsPositiveValue(entity.getId())) {
 			throw new UndconException(UndconError.NEW_REGISTER_INVALID_ID);
 		}
-		validateName(entity);
-		validateSchemaName(entity);
+		validateName(0, entity.getName());
+		validateSchemaName(0, entity.getSchemaName());
 		validateSalesman(entity);
 	}
 
@@ -81,15 +86,15 @@ public class TenantService extends AbstractService<TenantEntity> {
 		emailService.sendEmail(message);
 	}
 	
-	private void validateName(TenantEntity entity) throws UndconException{
-		List<TenantEntity> findByIdNotAndName = tenantRepository.findByIdNotAndNameIgnoreCase(entity.getId(), entity.getName());
+	private void validateName(long id, String name) throws UndconException{
+		List<TenantEntity> findByIdNotAndName = tenantRepository.findByIdNotAndNameIgnoreCase(id, name);
 		if(!findByIdNotAndName.isEmpty()) {
 			throw new UndconException(UndconError.NAME_ALREADY_EXISTS);
 		}
 	}
 	
-	private void validateSchemaName(TenantEntity entity) throws UndconException{
-		List<TenantEntity> findByIdNotAndSchema = tenantRepository.findByIdNotAndSchemaNameIgnoreCase(entity.getId(), entity.getSchemaName());
+	private void validateSchemaName(long id, String name) throws UndconException{
+		List<TenantEntity> findByIdNotAndSchema = tenantRepository.findByIdNotAndSchemaNameIgnoreCase(id, name);
 		if(!findByIdNotAndSchema.isEmpty()) {
 			throw new UndconException(UndconError.NAME_ALREADY_EXISTS);
 		}
@@ -116,6 +121,13 @@ public class TenantService extends AbstractService<TenantEntity> {
 	public void createDb(long id) throws UndconException {
 		TenantEntity entity = findById(id);
 		String tenant = entity.getSchemaName();
+		
+		List<String> tenants = new ArrayList<String>();
+		tenantRepositoryImpl.getAll().stream().forEach(schemaName -> tenants.add(schemaName));
+		dataSourceProperties.setTenants(tenants);
+		
+		dataSourceProperties.setDatasources();
+		
 		DataSource dataSource = dataSourceProperties.getDatasources().get(tenant);
 		DatabaseSchemaType database = DatabaseSchemaType.TENANTS;
 		dataSourceConfiguration.migrate(tenant, dataSource, database);

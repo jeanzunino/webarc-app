@@ -72,3 +72,11 @@ input:disabled {
 .sk-fading-circle .sk-circle:before {
   background-color: #FFFFFF !important;
 }
+
+.md-form > input[type]:-webkit-autofill:not(.browser-default):not([type=search]) + label, .md-form > input[type=time]:not(.browser-default) + label {
+  transform: translateY(-19px) scale(0.8);
+  padding-left: 0px !important;
+  color: #FFFFFF !important;
+  margin-top: 0px !important;
+  font-size: 1rem !important;
+}

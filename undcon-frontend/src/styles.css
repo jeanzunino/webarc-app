@@ -151,8 +151,20 @@ input::-webkit-calendar-picker-indicator:hover {
   margin-top: 40px;
 }
 
+.margin-t-35 {
+  margin-top: 35px;
+}
+
+.margin-l--8 {
+  margin-left: -8px;
+}
+
 .margin-t--4 {
   margin-top: -4px;
+}
+
+.border-default-color {
+  border-color: #4d4e56;
 }
 
 .right-header {
@@ -261,4 +273,46 @@ input.form-control.validate-success.ng-valid.ng-touched,
 
 .pad-b-20 {
   padding-bottom: 20px;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  border: 1px solid #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  transition: background-color 5000s ease-in-out 0s !important;
+}
+
+.md-form > input[type]:-webkit-autofill:not(.browser-default):not([type=search]) + label, .md-form > input[type=time]:not(.browser-default) + label {
+  transform: translateY(-19px) scale(0.8);
+  padding-left: 0px !important;
+  color: #FFFFFF !important;
+  margin-top: 0px !important;
+  font-size: 1rem !important;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  color: transparent;
+  background: none;
+  z-index: 1;
+}
+
+input[type="date"]:before {
+  color: transparent;
+  background: none;
+  display: block;
+  font-family: 'Font Awesome 5 Free';
+  content: '\f133';
+  width: 15px;
+  height: 20px;
+  position: absolute;
+  top: 12px;
+  right: 6px;
+  color: #FFFFFF;
 }

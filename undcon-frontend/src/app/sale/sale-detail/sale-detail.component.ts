@@ -157,7 +157,7 @@ export class SaleDetailComponent implements OnInit, OnDestroy {
   setBgPaymentType() {
     const bgPaymentType = new ButtonGroup();
     Object.keys(PaymentType).filter(type => isNaN(type as any) && type !== 'values')
-      .forEach(paymentType => bgPaymentType.set(paymentType, paymentType.toLowerCase()));
+      .forEach(paymentType => bgPaymentType.set(paymentType, this.translate.instant(`enums.payment-type.${paymentType}`)));
     this.bgPaymentTypeValues = bgPaymentType.get();
   }
 
@@ -440,9 +440,9 @@ export class SaleDetailComponent implements OnInit, OnDestroy {
             this.translate.instant('Produto adicionado com sucesso'),
             this.translate.instant('Sucesso')
           );
+          this.spinner.hide();
         });
     }
-    this.spinner.hide();
   }
 
   async addService() {
@@ -461,9 +461,9 @@ export class SaleDetailComponent implements OnInit, OnDestroy {
             this.translate.instant('Serviço adicionado com sucesso'),
             this.translate.instant('Sucesso')
           );
+          this.spinner.hide();
         });
     }
-    this.spinner.hide();
   }
 
   confirmDeleteSaleItem(saleItem: SaleItem) {
@@ -500,6 +500,7 @@ export class SaleDetailComponent implements OnInit, OnDestroy {
       .then((sale: Sale) => {
         this.entity.status = sale.status;
         this.getTitle();
+        this.setPanelHeaderStatus();
       });
       this.setSaleTotal();
       this.toastr.success(

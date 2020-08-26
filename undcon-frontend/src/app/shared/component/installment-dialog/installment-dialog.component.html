@@ -10,14 +10,14 @@
     </div>
 
     <div class="row">
-      <div class="{{numberInputs.length ? 'col-10' : 'col-12'}}">
+      <div class="{{numberInputs.length ? 'col-11' : 'col-12'}}">
         <div class="md-form">
           <input type="date" id="firstDate" class="form-control text-light"
                  [ngModel]="firstInstallmentDate | date:'yyyy-MM-dd'" (change)="updateDate($event)" mdbInput/>
           <label for="firstDate" class="text-light">Vencimento da 1ª Parcela</label>
         </div>
       </div>
-      <div class="col-2 margin-t-40" *ngIf="numberInputs.length">
+      <div class="col-1 margin-t-35 margin-l--8" *ngIf="numberInputs.length">
         <a type="button" (click)="calculateValues()" mdbTooltip="Sugetão de valores" placement="top">
           <em class="fas fa-sync-alt"></em>
         </a>

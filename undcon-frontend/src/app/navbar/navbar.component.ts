@@ -3,8 +3,6 @@ import { TranslateService } from '@ngx-translate/core';
 
 import { AuthService } from '@service/auth/auth.service';
 import { ResourceTypeEnum } from '@app/core/enum/resource-type-enum';
-import { PermissionItem } from '@app/core/model/permission-item';
-import { PermissionService } from '@app/core/service/permission/permission.service';
 import { UserService } from '@app/core/service/user/user.service';
 
 @Component({
@@ -28,13 +26,11 @@ export class NavbarComponent {
   }
 
   async loadPermissions(){
-    this.permissions = ((await this.userService.getPermissionOfLoggeduser().toPromise()) as Array<
-    ResourceTypeEnum
-    >);
+    this.permissions = await this.userService.getPermissionOfLoggeduser().toPromise();
   }
 
-  public verifyPermissionMenu(resource: String) {
-    if(!this.permissions){
+  public verifyPermissionMenu(resource: string) {
+    if(!this.permissions) {
       return false;
     }
     return this.permissions.find(p => p.toString() === resource) != null;

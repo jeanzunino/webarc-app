@@ -10,24 +10,24 @@
         </div>
       </div>
       <div class="table-responsive">
-        <table class="table table-striped margin-b-0">
-          <thead class="secondary-system-color">
+        <table class="table margin-b-0">
+          <thead class="primary-system-color">
             <tr>
-              <th *ngFor="let tableValue of tableValues" class="text-light">
+              <th *ngFor="let tableValue of tableValues" class="text-light border-color-table">
                 {{ getHeaders(tableValue) | translate }}
               </th>
-              <th *ngIf="showDelete" class="text-light">
+              <th *ngIf="showDelete" class="text-light border-color-table">
               </th>
             </tr>
           </thead>
           <tbody>
             <tr
-              *ngFor="let item of tableItems | paginate: {id: idPaginator, itemsPerPage: 10, currentPage: currentPage, totalItems: totalItems}"
-              class="{{selectableLine ? 'cursor-pointer' : ''}}">
-              <th *ngFor="let tableValue of tableValues" class="text-light" (click)="onClickItem(item)">
+              *ngFor="let item of tableItems | paginate: {id: idPaginator, itemsPerPage: 10, currentPage: currentPage, totalItems: totalItems}; let index = index"
+              class="{{selectableLine ? 'select-line' : ''}} {{index % 2 != 0 ? 'primary-background-color-line-table' : 'secondary-background-color-line-table'}}">
+              <th *ngFor="let tableValue of tableValues" class="text-light border-color-table" (click)="onClickItem(item)">
                 {{ getFieldsOfTable(item, tableValue) }}
               </th>
-              <th class="width-84 text-align-center" *ngIf="showDelete">
+              <th class="width-84 text-align-center border-color-table" *ngIf="showDelete">
                 <a type="button" (click)="deleteItemEvent(item)">
                   <mdb-icon fas class="color-crimson" icon="fa fa-trash"></mdb-icon>
                 </a>
@@ -36,7 +36,7 @@
           </tbody>
           <tfoot class="primary-system-color footer--align">
             <tr>
-              <td colspan="10">
+              <td colspan="10" class="border-color-table">
                 <pagination-controls [id]=idPaginator previousLabel="{{ 'table.anterior' | translate }}"
                   nextLabel="{{ 'table.proximo' | translate }}" responsive="true" autoHide="true"
                   (pageChange)="updateItems($event)">

@@ -5,8 +5,6 @@ import { SaleService } from '@service/sale/sale.service';
 import { GetAllResolver } from '@shared/resolver/generic.resolver';
 import { ActivatedRouteSnapshot } from '@angular/router';
 import { IncomeService } from '@service/income/income.service';
-import { Income } from '@model/income';
-import { Page } from '@model/page';
 
 @Injectable()
 export class SaleResolver extends GetAllResolver<Sale> {

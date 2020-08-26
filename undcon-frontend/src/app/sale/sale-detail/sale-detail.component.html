@@ -2,6 +2,8 @@
                   [icon]="iconPanelHeader" [headerColor]="colorPanelHeader">
   <div body>
 
+    <h1 class="text-light">TESTE</h1>
+
     <div *ngIf="isToBill() || isBilled() || isTotalBilled()" class="row margin-b-20">
       <div class="col-6">
         <app-simple-panel panelColor="secondary-system-color">
@@ -27,7 +29,7 @@
                 </div>
                 <div class="{{hasParcels ? 'col-6' : 'col-5'}}">
                   <div class="md-form">
-                    <input type="text" id="value" class="form-control text-light" [(ngModel)]="saleIncomeDto.value" [disabled]="hasParcels" mdbInput />
+                    <input id="value" class="form-control text-light" [(ngModel)]="saleIncomeDto.value" [disabled]="hasParcels" mask="separator.2" thousandSeparator="." mdbInput />
                     <label for="value" class="text-light">Valor</label>
                   </div>
                 </div>
@@ -210,8 +212,8 @@
             <div class="row">
               <div class="col-8">
                 <div class="md-form">
-                  <input type="text" id="qts" class="form-control text-light" [(ngModel)]="productQtd" mask="0000" (keyup)="updateProductTotal()" mdbInput />
-                  <label for="qts" class="text-light">Quantidade</label>
+                  <input type="text" id="qtsProduct" class="form-control text-light" [(ngModel)]="productQtd" mask="0000" (keyup)="updateProductTotal()" mdbInput />
+                  <label for="qtsProduct" class="text-light">Quantidade</label>
                 </div>
               </div>
               <div class="col-4">
@@ -245,8 +247,8 @@
             <div class="row">
               <div class="col-8">
                 <div class="md-form">
-                  <input type="text" id="qts" class="form-control text-light" [(ngModel)]="serviceQtd" mask="0000" (keyup)="updateServiceTotal()" mdbInput />
-                  <label for="qts" class="text-light">Quantidade</label>
+                  <input type="text" id="qtsService" class="form-control text-light" [(ngModel)]="serviceQtd" mask="0000" (keyup)="updateServiceTotal()" mdbInput />
+                  <label for="qtsService" class="text-light">Quantidade</label>
                 </div>
               </div>
               <div class="col-4">

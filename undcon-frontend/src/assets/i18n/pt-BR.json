@@ -149,7 +149,7 @@
     "proximo": "Próximo"
   },
   "format": {
-    "phone-mask": "(00) 00000-0000"
+    "phone-mask": "(00) 0000-0000"
   },
   "filtros": "Filtros",
   "total_registros_encontrados": "Total de registros encontrados: {{total}}",

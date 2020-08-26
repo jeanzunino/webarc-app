@@ -1,6 +1,6 @@
 
 <div class="button-group margin-b-0">
-  <label *ngFor="let button of buttonGroupValues" id="{{button.buttonId}}" class="margin-b-0 {{textColor}}"
+  <label *ngFor="let button of buttonGroupValues" id="{{button.buttonId}}" class="margin-b-0 {{textColor}} bold"
          (mouseover)="mouseover(button.buttonId)" (mouseout)="mousedown(button.buttonId)"
          (click)="select(button.buttonId)">{{button.buttonName}}</label>
 </div>

@@ -10,8 +10,9 @@ import org.hibernate.jpa.internal.EntityManagerFactoryImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.undcon.app.multitenancy.DataSourceProperties;
-import com.undcon.app.multitenancy.ThreadLocalStorage;
+import com.querydsl.jpa.impl.JPAQuery;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.undcon.app.model.QTenantEntity;
 
 @Repository
 public class TenantRepositoryImpl {
@@ -20,9 +21,9 @@ public class TenantRepositoryImpl {
 	private EntityManager em;
 
 	public List<String> getAll() {
-		ThreadLocalStorage.setTenantName("public");
-		Query query = em.createNativeQuery("SELECT schema_name FROM tenant");
-		return query.getResultList();
+		JPAQueryFactory jpaQueryFactory = new JPAQueryFactory(em);
+		JPAQuery<String> query = jpaQueryFactory.select(QTenantEntity.tenantEntity.schemaName).from(QTenantEntity.tenantEntity);
+		return query.fetch();
 	}
 
 	public boolean tenantExists(String tenant) {

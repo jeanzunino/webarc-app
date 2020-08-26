@@ -64,7 +64,6 @@
 
   <div footer>
     <button mdbBtn type="button" *ngIf="data.content" color="danger" outline="true" (click)="onCreateDb()" mdbWavesEffect>Cria Base</button>
-    <button mdbBtn type="button" *ngIf="data.content" color="danger" outline="true" (click)="onDelete()" mdbWavesEffect>Excluir</button>
     <button mdbBtn type="submit" [disabled]="formGroup.invalid" form="editForm" color="primary" outline="true" (click)="onSave()" mdbWavesEffect>Salvar</button>
   </div>
 </app-dialog>

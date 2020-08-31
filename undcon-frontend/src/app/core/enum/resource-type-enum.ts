@@ -36,7 +36,7 @@ export enum ResourceTypeEnum {
 	INCOME,
 
 	/** 12 - */
-	Permission,
+	PERMISSION,
 
 	/** 13 - */
 	PURCHASE,

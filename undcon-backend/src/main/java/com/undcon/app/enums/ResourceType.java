@@ -39,7 +39,7 @@ public enum ResourceType {
 	INCOME,
 
 	/** 12 - */
-	Permission,
+	PERMISSION,
 
 	/** 13 - */
 	PURCHASE,

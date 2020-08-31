@@ -98,6 +98,6 @@ public class PermissionService extends AbstractService<PermissionEntity>{
 
 	@Override
 	protected ResourceType getResourceType() {
-		return ResourceType.Permission;
+		return ResourceType.PERMISSION;
 	}
 }

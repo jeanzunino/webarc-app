@@ -4,18 +4,18 @@ import java.sql.Date;
 
 import com.undcon.app.enums.BillingStatus;
 
-public class SaleSimpleDto {
+public class PurchaseSimpleDto {
 
 	private Long id;
 
-	private Date saleDate;
+	private Date purchaseDate;
 
 	private BillingStatus status;
 
-	public SaleSimpleDto(Long id, Date saleDate, BillingStatus status) {
+	public PurchaseSimpleDto(Long id, Date purchaseDate, BillingStatus status) {
 		super();
 		this.id = id;
-		this.saleDate = saleDate;
+		this.purchaseDate = purchaseDate;
 		this.status = status;
 	}
 
@@ -23,8 +23,8 @@ public class SaleSimpleDto {
 		return id;
 	}
 
-	public Date getSaleDate() {
-		return saleDate;
+	public Date getPurchaseDate() {
+		return purchaseDate;
 	}
 
 	public BillingStatus getStatus() {

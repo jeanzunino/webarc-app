@@ -16,6 +16,8 @@ import com.undcon.app.rest.apis.ProductApi;
 import com.undcon.app.rest.apis.ProductCategoryApi;
 import com.undcon.app.rest.apis.ProviderApi;
 import com.undcon.app.rest.apis.PurchaseApi;
+import com.undcon.app.rest.apis.PurchaseItemProductApi;
+import com.undcon.app.rest.apis.PurchaseItemServiceTypeApi;
 import com.undcon.app.rest.apis.SaleApi;
 import com.undcon.app.rest.apis.SaleItemProductApi;
 import com.undcon.app.rest.apis.SaleItemServiceTypeApi;
@@ -61,6 +63,9 @@ public class JerseyConfig extends ResourceConfig {
 		register(IncomeApi.class);
 
 		register(PurchaseApi.class);
+		register(PurchaseItemProductApi.class);
+		register(PurchaseItemServiceTypeApi.class);
+		
 		register(SaleApi.class);
 		register(SaleItemProductApi.class);
 		register(SaleItemServiceTypeApi.class);

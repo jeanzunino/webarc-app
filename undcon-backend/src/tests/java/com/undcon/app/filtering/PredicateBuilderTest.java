@@ -10,7 +10,7 @@ import org.junit.Test;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.PathBuilder;
 import com.undcon.app.enums.PaymentType;
-import com.undcon.app.enums.SaleStatus;
+import com.undcon.app.enums.BillingStatus;
 import com.undcon.app.model.ExpenseEntity;
 import com.undcon.app.model.IncomeEntity;
 import com.undcon.app.model.MenuTemplateItemEntity;
@@ -100,14 +100,14 @@ public class PredicateBuilderTest {
 	public void buildFilteredResultComIgualEnum() {
 		PathBuilder<SaleEntity> pathBuilder = new PathBuilder<SaleEntity>(SaleEntity.class, "saleEntity");
 		Predicate predicate = new PredicateBuilder<SaleEntity>(pathBuilder).buildFilteredResult("status=TO_BILL");
-		assertEquals(QSaleEntity.saleEntity.status.eq(SaleStatus.TO_BILL), predicate);
+		assertEquals(QSaleEntity.saleEntity.status.eq(BillingStatus.TO_BILL), predicate);
 	}
 	
 	@Test
 	public void buildFilteredResultComDiferenteEnum() {
 		PathBuilder<SaleEntity> pathBuilder = new PathBuilder<SaleEntity>(SaleEntity.class, "saleEntity");
 		Predicate predicate = new PredicateBuilder<SaleEntity>(pathBuilder).buildFilteredResult("status!=TO_BILL");
-		assertEquals(QSaleEntity.saleEntity.status.ne(SaleStatus.TO_BILL), predicate);
+		assertEquals(QSaleEntity.saleEntity.status.ne(BillingStatus.TO_BILL), predicate);
 	}
 	
 	@Test

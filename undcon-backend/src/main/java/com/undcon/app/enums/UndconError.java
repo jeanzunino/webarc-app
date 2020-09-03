@@ -36,6 +36,10 @@ public enum UndconError {
 	
 	SALE_NOT_FOUND("Venda não encontrada"),
 	
+	PURCHASE_NOT_FOUND("Compra não encontrada"),
+	
+	PURCHASE_ITEM_NOT_FOUND("Item de compra não encontrado"),
+	
 	SALE_INVALID_STATUS("Não é possível alterar o status da venda dessa forma"),
 	
 	SALE_WITHOUT_ITENS_INVALID_TO_BILL("Venda sem itens não pode ser finalizada e enviada para faturamento"),

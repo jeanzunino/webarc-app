@@ -8,10 +8,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Component;
 
-import com.undcon.app.dtos.SaleTotalDto;
+import com.undcon.app.dtos.AmountTotalDto;
+import com.undcon.app.enums.BillingStatus;
 import com.undcon.app.enums.PaymentStatus;
 import com.undcon.app.enums.ResourceType;
-import com.undcon.app.enums.SaleStatus;
 import com.undcon.app.enums.UndconError;
 import com.undcon.app.exceptions.UndconException;
 import com.undcon.app.model.IncomeEntity;
@@ -55,11 +55,11 @@ public class IncomeService extends AbstractService<IncomeEntity> {
 
 		SaleEntity sale = entity.getSale();
 		if (sale != null) {
-			SaleTotalDto saleTotal = saleService.getSaleTotal(sale.getId());
+			AmountTotalDto saleTotal = saleService.getSaleTotal(sale.getId());
 			if (saleTotal.getAmountPaid() > entity.getValue()) {
-				sale.setStatus(SaleStatus.BILLED);
+				sale.setStatus(BillingStatus.BILLED);
 			} else {
-				sale.setStatus(SaleStatus.TO_BILL);
+				sale.setStatus(BillingStatus.TO_BILL);
 			}
 
 			saleService.update(sale);

@@ -45,12 +45,15 @@ public class ExpenseEntity {
 	@Column(name = "forma_pgto")
 	private PaymentType paymentType;
 
+	@ManyToOne
+	@JoinColumn(name = "compra_id", nullable = true)
+	private PurchaseEntity purchase;
+
 	public ExpenseEntity() {
-		// TODO Auto-generated constructor stub
 	}
 
 	public ExpenseEntity(Long id, String description, Date duaDate, Date paymentDate, double value,
-			PaymentStatus paymentStatus, ProviderEntity provider, PaymentType paymentType) {
+			PaymentStatus paymentStatus, ProviderEntity provider, PaymentType paymentType, PurchaseEntity purchase) {
 		super();
 		this.id = id;
 		this.description = description;
@@ -60,6 +63,7 @@ public class ExpenseEntity {
 		this.paymentStatus = paymentStatus;
 		this.provider = provider;
 		this.paymentType = paymentType;
+		this.purchase = purchase;
 	}
 
 	public Long getId() {
@@ -126,4 +130,11 @@ public class ExpenseEntity {
 		this.paymentType = paymentType;
 	}
 
+	public PurchaseEntity getPurchase() {
+		return purchase;
+	}
+
+	public void setPurchase(PurchaseEntity purchase) {
+		this.purchase = purchase;
+	}
 }

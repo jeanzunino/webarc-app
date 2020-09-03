@@ -1,17 +1,5 @@
 package com.undcon.app.utils;
 
-import java.util.Date;
-import java.util.Properties;
-
-import javax.mail.Address;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
-
 import org.apache.commons.mail.DefaultAuthenticator;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.HtmlEmail;
@@ -98,5 +86,19 @@ public class EMailUtils {
 //			msgEx.printStackTrace();
 //			throw new IllegalArgumentException("MessagingException: Cannot send message.\n" + msgEx.getMessage());
 //		}
+	}
+	
+	public static void main(String[] args) {
+		String smtp = "smtp.gmail.com";
+//		String smtp = "smtp.googlemail.com";
+		String from = "jean.zunino@gmail.com";
+		String email = "jean.zunino@gmail.com";
+		
+		//TODO Remover senha do código, passar para configuração
+		String password = "";
+
+		String subject = "Undcon - Cadastro de Tenant";
+		String[] toEmails = {"jean.zunino@gmail.com"};
+		sendMail(smtp, subject, toEmails, from, subject, from, password);
 	}
 }

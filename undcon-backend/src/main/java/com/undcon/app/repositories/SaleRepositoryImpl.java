@@ -134,7 +134,7 @@ public class SaleRepositoryImpl {
 		return new BigDecimal(total).setScale(2, RoundingMode.HALF_EVEN).doubleValue();
 	}
 
-	private static long calcOffSetService(Pageable pageable, long countItensProductTotal) {
+	public static long calcOffSetService(Pageable pageable, long countItensProductTotal) {
 		if (pageable.getPageNumber() == 0) {
 			return 0;
 		}

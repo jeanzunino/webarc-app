@@ -9,13 +9,15 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class PurchaseItemEntity {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "item_id_seq")
+	@SequenceGenerator(name = "item_id_seq", sequenceName = "item_compra_produto_id_seq")
 	@Column(name = "id")
 	private Long id;
 
@@ -27,10 +29,6 @@ public abstract class PurchaseItemEntity {
 	@JoinColumn(name = "usuario_id", nullable = false)
 	private UserEntity user;
 
-	@ManyToOne
-	@JoinColumn(name = "vendedor_id", nullable = false)
-	private EmployeeEntity salesman;
-
 	@Column(name = "valor_unitario")
 	private double price;
 
@@ -41,13 +39,11 @@ public abstract class PurchaseItemEntity {
 		// TODO Auto-generated constructor stub
 	}
 
-	public PurchaseItemEntity(Long id, PurchaseEntity purchase, UserEntity user, EmployeeEntity salesman,
-			double price, long quantity) {
+	public PurchaseItemEntity(Long id, PurchaseEntity purchase, UserEntity user, double price, long quantity) {
 		super();
 		this.id = id;
 		this.purchase = purchase;
 		this.user = user;
-		this.salesman = salesman;
 		this.price = price;
 		this.quantity = quantity;
 	}
@@ -60,7 +56,7 @@ public abstract class PurchaseItemEntity {
 		this.id = id;
 	}
 
-	public PurchaseEntity getSale() {
+	public PurchaseEntity getPurchase() {
 		return purchase;
 	}
 
@@ -90,14 +86,6 @@ public abstract class PurchaseItemEntity {
 
 	public void setUser(UserEntity user) {
 		this.user = user;
-	}
-
-	public EmployeeEntity getSalesman() {
-		return salesman;
-	}
-
-	public void setSalesman(EmployeeEntity salesman) {
-		this.salesman = salesman;
 	}
 
 }

@@ -10,22 +10,22 @@ import org.springframework.stereotype.Repository;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.undcon.app.enums.PaymentStatus;
-import com.undcon.app.model.QIncomeEntity;
-import com.undcon.app.model.SaleEntity;
+import com.undcon.app.model.PurchaseEntity;
+import com.undcon.app.model.QExpenseEntity;
 
 @Repository
-public class SaleIncomeRepositoryImpl {
+public class PurchaseExpenseRepositoryImpl {
 
 	@Autowired
 	private EntityManager em;
 
-	public Double getIncomeValueBilledBySale(SaleEntity sale, List<PaymentStatus> paymentStatusFilter) {
+	public Double getExpenseValueBilledByPurchase(PurchaseEntity purchase, List<PaymentStatus> paymentStatusFilter) {
 		JPAQueryFactory jpaQueryFactory = new JPAQueryFactory(em);
-		JPAQuery<Double> query = jpaQueryFactory.select(QIncomeEntity.incomeEntity.value.sum()) //
-				.from(QIncomeEntity.incomeEntity) //
-				.where(QIncomeEntity.incomeEntity.sale.eq(sale));
+		JPAQuery<Double> query = jpaQueryFactory.select(QExpenseEntity.expenseEntity.value.sum()) //
+				.from(QExpenseEntity.expenseEntity) //
+				.where(QExpenseEntity.expenseEntity.purchase.eq(purchase));
 		if (!paymentStatusFilter.isEmpty()) {
-			query.where(QIncomeEntity.incomeEntity.paymentStatus.in(paymentStatusFilter));
+			query.where(QExpenseEntity.expenseEntity.paymentStatus.in(paymentStatusFilter));
 		}
 		Double value = query.fetchOne();
 		if (value == null) {

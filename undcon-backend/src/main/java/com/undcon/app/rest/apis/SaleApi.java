@@ -25,7 +25,7 @@ import com.undcon.app.dtos.SaleInfoDto;
 import com.undcon.app.dtos.SaleItemDto;
 import com.undcon.app.dtos.SaleRequestDto;
 import com.undcon.app.dtos.SaleSimpleDto;
-import com.undcon.app.dtos.SaleTotalDto;
+import com.undcon.app.dtos.AmountTotalDto;
 import com.undcon.app.exceptions.UndconException;
 import com.undcon.app.model.SaleEntity;
 import com.undcon.app.services.SaleService;
@@ -74,7 +74,7 @@ public class SaleApi {
 	@GET
 	@Path("/{id}/total")
 	@Produces(MediaType.APPLICATION_JSON)
-	public SaleTotalDto getSaleTotal(@PathParam("id") long id) throws UndconException {
+	public AmountTotalDto getSaleTotal(@PathParam("id") long id) throws UndconException {
 		return service.getSaleTotal(id);
 	}
 
@@ -90,10 +90,8 @@ public class SaleApi {
 	@Produces(MediaType.APPLICATION_JSON)
 	public SaleEntity post(SaleRequestDto sale) throws UndconException {
 		Assert.notNull(sale.getCustomer(), "customer is required");
-		Assert.notNull(sale.getSalesman(), "salesman is required");
 
 		Assert.notNull(sale.getCustomer().getId(), "customer.id is required");
-		Assert.notNull(sale.getSalesman().getId(), "salesman.id is required");
 		return service.persist(sale);
 	}
 
@@ -101,6 +99,9 @@ public class SaleApi {
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public SaleEntity put(SaleRequestDto sale) throws UndconException {
+		Assert.notNull(sale.getCustomer(), "customer is required");
+
+		Assert.notNull(sale.getCustomer().getId(), "customer.id is required");
 		return service.update(sale);
 	}
 

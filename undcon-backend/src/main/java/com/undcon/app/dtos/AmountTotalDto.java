@@ -1,12 +1,12 @@
 package com.undcon.app.dtos;
 
-public class SaleTotalDto {
+public class AmountTotalDto {
 
 	private Double totalValue;
 	private double amountPayable;
 	private double amountPaid;
 
-	public SaleTotalDto(Double totalValue, double amountPayable, double amountPaid) {
+	public AmountTotalDto(Double totalValue, double amountPayable, double amountPaid) {
 		super();
 		this.totalValue = totalValue;
 		this.amountPayable = amountPayable;

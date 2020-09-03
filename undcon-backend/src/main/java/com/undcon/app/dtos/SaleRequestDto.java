@@ -1,19 +1,19 @@
 package com.undcon.app.dtos;
 
-import com.undcon.app.enums.SaleStatus;
+import com.undcon.app.enums.BillingStatus;
 
 public class SaleRequestDto {
 
 	private Long id;
 	private PersonDto customer;
 	private PersonDto salesman;
-	private SaleStatus status;
+	private BillingStatus status;
 	
 
 	public SaleRequestDto() {
 	}
 
-	public SaleRequestDto(Long id, PersonDto customer, PersonDto salesman, SaleStatus status) {
+	public SaleRequestDto(Long id, PersonDto customer, PersonDto salesman, BillingStatus status) {
 		super();
 		this.id = id;
 		this.customer = customer;
@@ -45,11 +45,11 @@ public class SaleRequestDto {
 		this.salesman = salesman;
 	}
 	
-	public SaleStatus getStatus() {
+	public BillingStatus getStatus() {
 		return status;
 	}
 
-	public void setStatus(SaleStatus status) {
+	public void setStatus(BillingStatus status) {
 		this.status = status;
 	}
 

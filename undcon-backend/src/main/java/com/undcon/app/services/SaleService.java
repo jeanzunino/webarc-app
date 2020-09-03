@@ -23,11 +23,11 @@ import com.undcon.app.dtos.SaleInfoDto;
 import com.undcon.app.dtos.SaleItemDto;
 import com.undcon.app.dtos.SaleRequestDto;
 import com.undcon.app.dtos.SaleSimpleDto;
-import com.undcon.app.dtos.SaleTotalDto;
+import com.undcon.app.dtos.AmountTotalDto;
+import com.undcon.app.enums.BillingStatus;
 import com.undcon.app.enums.PaymentStatus;
 import com.undcon.app.enums.PaymentType;
 import com.undcon.app.enums.ResourceType;
-import com.undcon.app.enums.SaleStatus;
 import com.undcon.app.enums.UndconError;
 import com.undcon.app.exceptions.UndconException;
 import com.undcon.app.mappers.IncomeMapper;
@@ -101,7 +101,7 @@ public class SaleService extends AbstractService<SaleEntity> {
 		validateClient(customer);
 		boolean billed = false;
 		Date saleDate = new Date(System.currentTimeMillis());
-		SaleStatus status = SaleStatus.CREATED;
+		BillingStatus status = BillingStatus.CREATED;
 
 		EmployeeEntity salesman = user.getEmployee();
 		// Se o Front não enviar o funcionário
@@ -156,7 +156,7 @@ public class SaleService extends AbstractService<SaleEntity> {
 	public void delete(long id) throws UndconException {
 		permissionService.checkPermission(ResourceType.SALE);
 		SaleEntity sale = findById(id);
-		sale.setStatus(SaleStatus.CANCELED);
+		sale.setStatus(BillingStatus.CANCELED);
 		saleRepository.save(sale);
 	}
 
@@ -168,7 +168,7 @@ public class SaleService extends AbstractService<SaleEntity> {
 		return saleRepositoryImpl.findAllById(id, PageUtils.createPageRequest(page, size));
 	}
 
-	public SaleTotalDto getSaleTotal(Long id) throws UndconException {
+	public AmountTotalDto getSaleTotal(Long id) throws UndconException {
 		SaleEntity sale = findById(id);
 		if (sale == null) {
 			throw new UndconException(UndconError.SALE_NOT_FOUND);
@@ -177,7 +177,7 @@ public class SaleService extends AbstractService<SaleEntity> {
 		double amountPaid = incomeService.getIncomeValueBilledBySale(sale);
 		double amountPayable = saleTotal - amountPaid;
 		amountPayable = new BigDecimal(amountPayable).setScale(2, RoundingMode.HALF_EVEN).doubleValue();
-		return new SaleTotalDto(saleTotal, amountPayable, amountPaid);
+		return new AmountTotalDto(saleTotal, amountPayable, amountPaid);
 	}
 
 	@Override
@@ -207,11 +207,11 @@ public class SaleService extends AbstractService<SaleEntity> {
 			throw new UndconException(UndconError.SALE_NOT_FOUND);
 		}
 
-		if (sale.getStatus() == SaleStatus.TOTAL_BILLED) {
+		if (sale.getStatus() == BillingStatus.TOTAL_BILLED) {
 			throw new UndconException(UndconError.SALE_INCOME_TO_BILL_SALE_TOTAL_BILLED);
 		}
 
-		if (sale.getStatus() == SaleStatus.CANCELED) {
+		if (sale.getStatus() == BillingStatus.CANCELED) {
 			throw new UndconException(UndconError.SALE_INCOME_CANCELED_SALE);
 		}
 
@@ -245,9 +245,9 @@ public class SaleService extends AbstractService<SaleEntity> {
 		double amountPayable = totalValueSale - amountPaid;
 
 		if (amountPayable > 0) {
-			sale.setStatus(SaleStatus.BILLED);
+			sale.setStatus(BillingStatus.BILLED);
 		} else {
-			sale.setStatus(SaleStatus.TOTAL_BILLED);
+			sale.setStatus(BillingStatus.TOTAL_BILLED);
 		}
 
 		sale = saleRepository.save(sale);
@@ -275,7 +275,7 @@ public class SaleService extends AbstractService<SaleEntity> {
 			incomeService.update(incomeEntity);
 		}
 
-		sale.setStatus(SaleStatus.CANCELED);
+		sale.setStatus(BillingStatus.CANCELED);
 
 		sale = saleRepository.save(sale);
 
@@ -295,7 +295,7 @@ public class SaleService extends AbstractService<SaleEntity> {
 		if(!hasItem(sale)) {
 			throw new UndconException(UndconError.SALE_WITHOUT_ITENS_INVALID_TO_BILL);
 		}
-		sale.setStatus(SaleStatus.TO_BILL);
+		sale.setStatus(BillingStatus.TO_BILL);
 		return saleMapper.toSimpleDto(sale);
 	}
 

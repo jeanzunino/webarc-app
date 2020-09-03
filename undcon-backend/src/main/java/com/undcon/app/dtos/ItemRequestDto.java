@@ -1,5 +1,7 @@
 package com.undcon.app.dtos;
 
+import com.undcon.app.model.PurchaseEntity;
+
 public class ItemRequestDto {
 
 	private Long id;
@@ -26,12 +28,12 @@ public class ItemRequestDto {
 		this.id = id;
 	}
 
-	public Long getItemId() {
-		return itemId;
-	}
-
 	public void setItemId(Long itemId) {
 		this.itemId = itemId;
+	}
+	
+	public Long getItemId() {
+		return itemId;
 	}
 
 	public Long getQuantity() {

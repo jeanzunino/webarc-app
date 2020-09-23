@@ -9,7 +9,7 @@ import { GridViewComponent } from '@component/grid-view/grid-view.component';
 import { Table } from '@shared/model/table';
 import { SharedInjector } from '@shared/shared.module';
 import { FormatEnum } from '@app/core/enum/format-enum';
-import { SaleStatus } from '@app/core/enum/sale-status';
+import { BillingStatus } from '@app/core/enum/billing-status';
 import { QueryFilterEnum } from '@app/core/enum/query-filter';
 import { getQueryFilter } from '@app/shared/utils/utils';
 
@@ -29,9 +29,9 @@ export class SaleComponent extends GridViewComponent<Sale> {
     .set('user.login', 'sale.user-login')
     .get();
   name = null;
-  status: SaleStatus;
+  status: BillingStatus;
 
-  statusList = Object.values(SaleStatus);
+  statusList = Object.values(BillingStatus);
 
   constructor(
     service: SaleService,

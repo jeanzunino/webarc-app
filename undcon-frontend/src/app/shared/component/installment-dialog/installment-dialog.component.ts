@@ -1,3 +1,4 @@
+import { InstallmentDto } from './../../dto/Installment-dto';
 import { SaleIncome } from '@model/sale-income';
 import { Component, ViewEncapsulation, OnDestroy, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
@@ -27,7 +28,7 @@ export class InstallmentDialogComponent implements OnInit, OnDestroy {
   private recalculate = false;
   firstInstallmentDate: Date;
   installments: number[] = [];
-  salesIncomes: SaleIncome[] = [];
+  installmentDtos: InstallmentDto[] = [];
   selectDefaultItem = '6-x';
 
   constructor(public translate: TranslateService,
@@ -62,7 +63,7 @@ export class InstallmentDialogComponent implements OnInit, OnDestroy {
     if (this.validInstallment()) {
       this.createInstallment();
       this.closeDialogInstallmentValeus.action = ActionReturnDialog.CONFIRM;
-      this.closeDialogInstallmentValeus.salesIncomes = this.salesIncomes;
+      this.closeDialogInstallmentValeus.installmentDtos = this.installmentDtos;
       this.modalRef.hide();
     }
   }
@@ -156,7 +157,7 @@ export class InstallmentDialogComponent implements OnInit, OnDestroy {
       saleIncome.paymentType = PaymentType.CASH;
       saleIncome.value = value;
       saleIncome.duaDate = dateInstallment;
-      this.salesIncomes.push(saleIncome);
+      this.installmentDtos.push(saleIncome);
       const nextDate = new Date(dateInstallment);
       nextDate.setMonth(nextMonth);
       dateInstallment = nextDate;

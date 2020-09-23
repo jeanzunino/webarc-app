@@ -1,14 +1,19 @@
-import { IncomeService } from '@app/core/service/income/income.service';
-import { Income } from '@app/core/model/income';
-import { SaleIncomeDto } from './../../core/service/dtos/sale-income-dto';
-import { SaleTotal } from '@model/sale-total';
-import { SaleIncomeResponse } from './../../core/service/dtos/sale-income-response';
+import { ExpenseService } from './../../core/service/expense/expense.service';
+import { Expense } from '@app/core/model/expense';
+import { PurchaseExpenseResponse } from '../../core/service/dtos/purchase-expense-response';
+import { PurchaseExpense } from '../../core/model/purchase-expense';
+import { PurchaseExpenseDto } from '../../core/service/dtos/purchase-expense-dto';
+import { PurchaseTotal } from './../../core/model/purchase-total';
+import { PurchaseItem } from './../../core/model/purchase-item';
+import { PurchaseService } from './../../core/service/purchase/purchase.service';
+import { Provider } from '@model/provider';
+import { Purchase } from '@model/purchase';
+import { ProviderService } from '@service/provider/provider.service';
 import { OnInit } from '@angular/core';
-import { SaleIncome } from '@model/sale-income';
 import { InstallmentDialogComponent } from '@component/installment-dialog/installment-dialog.component';
 import { openSimpleDialog } from '@shared/utils/utils';
-import { PaymentType } from './../../core/enum/payment-type';
-import { ButtonGroup, ButtonGroupValues } from './../../shared/model/button-group';
+import { PaymentType } from '../../core/enum/payment-type';
+import { ButtonGroup, ButtonGroupValues } from '../../shared/model/button-group';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Component, ViewEncapsulation, ViewChild, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -18,23 +23,16 @@ import { TranslateService } from '@ngx-translate/core';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 
-import { Customer } from '@model/customer';
-import { Sale } from '@model/sale';
 import { Page } from '@model/page';
 import { SharedInjector } from '@shared/shared.module';
-import { Employee } from '@model/employee';
-import { CustomerService } from '@service/customer/customer.service';
 import { getQueryFilter } from '@shared/utils/utils';
 import { QueryFilterEnum } from '@core/enum/query-filter';
 import { BillingStatus } from '@app/core/enum/billing-status';
-import { EmployeeService } from '@service/employee/employee.service';
 import { Product } from '@model/product';
 import { ProductService } from '@service/product/product.service';
 import { ServiceType } from '@model/service-type';
 import { ServiceTypeService } from '@service/service-type/service-type.service';
-import { SaleItem } from '@model/sale-item';
 import { Table } from '@shared/model/table';
-import { SaleService } from '@service/sale/sale.service';
 import { FormatEnum } from '@enum/format-enum';
 import { Item } from '@core/model/item';
 import { openConfimDialog } from '@shared/utils/utils';
@@ -47,55 +45,49 @@ import { InstallmentDialog } from '@app/shared/model/installment-dialog-model';
 import { CloseDialogInstallmentValeus } from '@app/shared/model/close-dialog-installment-valeus';
 
 @Component({
-  selector: 'app-sale-detail',
-  templateUrl: './sale-detail.component.html',
-  styleUrls: ['./sale-detail.component.scss'],
+  selector: 'app-purchase-detail',
+  templateUrl: './purchase-detail.component.html',
+  styleUrls: ['./purchase-detail.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class SaleDetailComponent implements OnInit, OnDestroy {
+export class PurchaseDetailComponent implements OnInit, OnDestroy {
 
   private ngUnsubscribe = new Subject();
   spinner = SharedInjector.get(NgxSpinnerService);
   showPanelHeader = false;
 
-  saleItems: Page<SaleItem>;
-  saleTotal = new SaleTotal();
+  purchaseItems: Page<PurchaseItem>;
+  purchaseTotal = new PurchaseTotal();
   currentPage = 0;
   tableValues = new Table()
-    .set('name', 'sale-item.name')
-    .set('price', 'sale-item.price', FormatEnum.MONEY)
-    .set('quantity', 'sale-item.quantity')
-    .set('itemType', 'sale-item.itemType', FormatEnum.ITEM_TYPE)
-    .set('subTotalItem', 'sale-item.subTotalItem', FormatEnum.MONEY)
+    .set('name', 'purchase-item.name')
+    .set('price', 'purchase-item.price', FormatEnum.MONEY)
+    .set('quantity', 'purchase-item.quantity')
+    .set('itemType', 'purchase-item.itemType', FormatEnum.ITEM_TYPE)
+    .set('subTotalItem', 'purchase-item.subTotalItem', FormatEnum.MONEY)
     .get();
 
-  incomeItems: Page<Income>;
-  incomeCurrentPage = 0;
-  incomeTableValues = new Table()
-    .set('duaDate', 'income.duaDate', FormatEnum.DATE_PIPE)
-    .set('paymentType', 'income.paymentType', FormatEnum.PAYMENT_TYPE)
-    .set('value', 'income.value', FormatEnum.MONEY)
+  expenseItems: Page<Expense>;
+  expenseCurrentPage = 0;
+  expenseTableValues = new Table()
+    .set('duaDate', 'expense.duaDate', FormatEnum.DATE_PIPE)
+    .set('paymentType', 'expense.paymentType', FormatEnum.PAYMENT_TYPE)
+    .set('value', 'expense.value', FormatEnum.MONEY)
     .get();
 
-  entity: Sale;
+  entity: Purchase;
   colorPanelHeader = '';
   iconPanelHeader = '';
   bgPaymentTypeValues: ButtonGroupValues[];
-  saleIncomeDto = new SaleIncomeDto();
+  purchaseExpenseDto = new PurchaseExpenseDto();
   reloadValuesPreviousScreen = false;
   hasParcels = false;
 
-  @ViewChild('ngAutoCompleteCustomer') ngAutoCompleteCustomer;
-  customers: Customer[];
-  customerKeyword = 'name';
-  customerInitialValue;
-  isLoadingCustomer = false;
-
-  @ViewChild('ngAutoCompleteEmployee') ngAutoCompleteEmployee;
-  employees: Employee[];
-  employeeKeyword = 'name';
-  employeeInitialValue;
-  isLoadingEmployee = false;
+  @ViewChild('ngAutoCompleteProvider') ngAutoCompleteProvider;
+  providers: Provider[];
+  providerKeyword = 'name';
+  providerInitialValue;
+  isLoadingProvider = false;
 
   @ViewChild('ngAutoCompleteProduct') ngAutoCompleteProduct;
   private productSelect: Product;
@@ -115,20 +107,19 @@ export class SaleDetailComponent implements OnInit, OnDestroy {
   servicePriceSubtotal = '0';
   isLoadingService = false;
 
-  salesIncomes: SaleIncome[] = [];
+  purchasesExpenses: PurchaseExpense[] = [];
   insertedPayments;
 
   constructor(private router: Router,
               private rt: ActivatedRoute,
-              private cs: CustomerService,
-              private es: EmployeeService,
+              private providerService: ProviderService,
               private ps: ProductService,
               private sts: ServiceTypeService,
-              private ss: SaleService,
               private datePipe: DatePipe,
               private toastr: ToastrService,
               private translate: TranslateService,
-              private is: IncomeService) { }
+              private expenseService: ExpenseService,
+              private purchaseService: PurchaseService) { }
 
   ngOnInit() {
     this.loadPage();
@@ -140,16 +131,15 @@ export class SaleDetailComponent implements OnInit, OnDestroy {
   }
 
   private async loadPage() {
-    this.entity = new Sale();
+    this.entity = new Purchase();
     if (!this.isNew()) {
-      this.entity = this.rt.snapshot.data.entity as Sale;
-      this.customerInitialValue = this.entity.customer;
-      this.employeeInitialValue = this.entity.salesman;
+      this.entity = this.rt.snapshot.data.entity as Purchase;
+      this.providerInitialValue = this.entity.provider;
       this.setPanelHeaderStatus();
       this.showPanelHeader = true;
-      this.saleItems = this.rt.snapshot.data.saleItens;
-      this.incomeItems = this.rt.snapshot.data.incomeItens;
-      this.setSaleTotal();
+      this.purchaseItems = this.rt.snapshot.data.purchaseItens;
+      this.expenseItems = this.rt.snapshot.data.expenseItens;
+      this.setPurchaseTotal();
       this.setBgPaymentType();
     }
   }
@@ -161,8 +151,8 @@ export class SaleDetailComponent implements OnInit, OnDestroy {
     this.bgPaymentTypeValues = bgPaymentType.get();
   }
 
-  private async setSaleTotal() {
-    this.saleTotal = await this.ss.getSaleTotal(this.entity.id).toPromise();
+  private async setPurchaseTotal() {
+    this.purchaseTotal = await this.purchaseService.getPurchaseTotal(this.entity.id).toPromise();
   }
 
   private setPanelHeaderStatus() {
@@ -199,17 +189,13 @@ export class SaleDetailComponent implements OnInit, OnDestroy {
     this.router.navigate(['../', {reload: this.reloadValuesPreviousScreen}], { relativeTo: this.rt.parent });
   }
 
-  customerSelectEvent(customer: Customer) {
-    this.entity.customer = customer;
-  }
-
-  employeeSelectEvent(employee: Employee) {
-    this.entity.salesman = employee;
+  providerSelectEvent(provider: Provider) {
+    this.entity.provider = provider;
   }
 
   productSelectEvent(product: Product) {
     this.productSelect = product;
-    this.productPrice = product.salePrice.toFixed(2);
+    this.productPrice = product.purchasePrice.toFixed(2);
     this.updateProductTotal();
   }
 
@@ -227,24 +213,14 @@ export class SaleDetailComponent implements OnInit, OnDestroy {
     this.servicePriceSubtotal = (Number(this.servicePrice) * this.serviceQtd).toFixed(2);
   }
 
-  async customerChangeEvent(name) {
-    this.isLoadingCustomer = true;
+  async providerChangeEvent(name) {
+    this.isLoadingProvider = true;
     const params = new Map<string, string>();
     params.set(getQueryFilter('name', QueryFilterEnum.CONTAINS_IC), name);
-    this.customers = ((await this.cs.getAll(params).toPromise()) as Page<
-      Customer
+    this.providers = ((await this.providerService.getAll(params).toPromise()) as Page<
+      Provider
     >).content;
-    this.isLoadingCustomer = false;
-  }
-
-  async employeeChangeEvent(name) {
-    this.isLoadingEmployee = true;
-    const params = new Map<string, string>();
-    params.set(getQueryFilter('name', QueryFilterEnum.CONTAINS_IC), name);
-    this.employees = ((await this.es.getAll(params).toPromise()) as Page<
-      Employee
-    >).content;
-    this.isLoadingEmployee = false;
+    this.isLoadingProvider = false;
   }
 
   async productChangeEvent(name) {
@@ -267,14 +243,9 @@ export class SaleDetailComponent implements OnInit, OnDestroy {
     this.isLoadingService = false;
   }
 
-  customerInputCleared() {
-    this.customers = [];
-    this.ngAutoCompleteCustomer.close();
-  }
-
-  employeeInputCleared() {
-    this.employees = [];
-    this.ngAutoCompleteEmployee.close();
+  providerInputCleared() {
+    this.providers = [];
+    this.ngAutoCompleteProvider.close();
   }
 
   productInputCleared() {
@@ -304,7 +275,7 @@ export class SaleDetailComponent implements OnInit, OnDestroy {
   public getTitle() {
     if (!this.isNew()) {
       const status = this.translate.instant(`enums.billing-status.${this.entity.status.toUpperCase()}`);
-      return `${status} - ${this.datePipe.transform(this.entity.saleDate, 'dd/MM/yyyy')}`.toUpperCase();
+      return `${status} - ${this.datePipe.transform(this.entity.purchaseDate, 'dd/MM/yyyy')}`.toUpperCase();
     }
     return '';
   }
@@ -312,17 +283,17 @@ export class SaleDetailComponent implements OnInit, OnDestroy {
   async reloadItems(page) {
     this.spinner.show();
     this.currentPage = page + 1;
-    this.saleItems = (await this.ss.getSaleItens(this.entity.id, page).toPromise());
+    this.purchaseItems = (await this.purchaseService.getPurchaseItens(this.entity.id, page).toPromise());
     this.spinner.hide();
   }
 
-  async reloadIncomeItems(page) {
+  async reloadExpenseItems(page) {
     this.spinner.show();
-    this.incomeCurrentPage = page + 1;
+    this.expenseCurrentPage = page + 1;
     const params = new Map<string, string>();
-    params.set('sale.id=', this.entity.id.toString());
-    this.incomeItems = ((await this.is.getAll(params, page).toPromise()) as Page<
-      Income
+    params.set('purchase.id=', this.entity.id.toString());
+    this.expenseItems = ((await this.expenseService.getAll(params, page).toPromise()) as Page<
+      Expense
     >);
     this.spinner.hide();
   }
@@ -331,8 +302,7 @@ export class SaleDetailComponent implements OnInit, OnDestroy {
     if (this.validEntity()) {
       const msg = `
         Confirma a inclusão da nova venda com os seguinte dados?<br>
-        Cliente: ${this.entity.customer.name}<br>
-        Vendedor: ${this.entity.salesman.name}<br><br>
+        Fornecedor: ${this.entity.provider.name}<br>
         Após a inclusão os dados não poderão ser alterados!
       `;
       openConfimDialog(new ConfirmDialogModel(msg)).content.onClose
@@ -347,10 +317,10 @@ export class SaleDetailComponent implements OnInit, OnDestroy {
 
   private async onSave() {
     this.spinner.show();
-    await this.ss.post(this.entity)
+    await this.purchaseService.post(this.entity)
       .toPromise()
-      .then(sale => {
-        this.entity = sale;
+      .then(purchase => {
+        this.entity = purchase;
         this.setPanelHeaderStatus();
         this.reloadValuesPreviousScreen = true;
         if (this.isNew()) {
@@ -375,14 +345,14 @@ export class SaleDetailComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe((values: CloseDialogValues) => {
           if (values.action === ActionReturnDialog.CONFIRM) {
-            this.saleFinalize();
+            this.purchaseFinalize();
           }
         });
     }
   }
 
-  private async saleFinalize() {
-    await this.ss.saleFinalize(this.entity.id).toPromise()
+  private async purchaseFinalize() {
+    await this.purchaseService.purchaseFinalize(this.entity.id).toPromise()
       .then(() => {
         this.entity.status = BillingStatus.TO_BILL;
         this.toastr.success(
@@ -393,7 +363,7 @@ export class SaleDetailComponent implements OnInit, OnDestroy {
   }
 
   private validFinalize() {
-    if (!this.saleItems || (this.saleItems && this.saleItems.content.length === 0)) {
+    if (!this.purchaseItems || (this.purchaseItems && this.purchaseItems.content.length === 0)) {
       this.toastr.error(
         this.translate.instant('Não possuí itens para finalizar.'),
         this.translate.instant('Erro')
@@ -405,17 +375,9 @@ export class SaleDetailComponent implements OnInit, OnDestroy {
   }
 
   private validEntity() {
-    if (!this.entity.customer) {
+    if (!this.entity.provider) {
       this.toastr.error(
-        this.translate.instant('Cliente não informado'),
-        this.translate.instant('Erro')
-      );
-      return false;
-    }
-
-    if (!this.entity.salesman) {
-      this.toastr.error(
-        this.translate.instant('Vendedor não informado'),
+        this.translate.instant('Fornecedor não informado'),
         this.translate.instant('Erro')
       );
       return false;
@@ -429,13 +391,12 @@ export class SaleDetailComponent implements OnInit, OnDestroy {
     if (this.validProduct()) {
       const item = new Item();
       item.itemId = this.productSelect.id;
-      item.employeeId = this.entity.salesman.id;
       item.quantity = this.productQtd;
-      await this.ss.addProductItem(this.entity.id, item).toPromise()
+      await this.purchaseService.addProductItem(this.entity.id, item).toPromise()
         .then(() => {
           this.reloadItems(0);
           this.productInputCleared();
-          this.setSaleTotal();
+          this.setPurchaseTotal();
           this.toastr.success(
             this.translate.instant('Produto adicionado com sucesso'),
             this.translate.instant('Sucesso')
@@ -450,13 +411,12 @@ export class SaleDetailComponent implements OnInit, OnDestroy {
     if (this.validService()) {
       const item = new Item();
       item.itemId = this.serviceSelect.id;
-      item.employeeId = this.entity.salesman.id;
       item.quantity = this.serviceQtd;
-      await this.ss.addServiceItem(this.entity.id, item).toPromise()
+      await this.purchaseService.addServiceItem(this.entity.id, item).toPromise()
         .then(() => {
           this.reloadItems(0);
           this.serviceInputCleared();
-          this.setSaleTotal();
+          this.setPurchaseTotal();
           this.toastr.success(
             this.translate.instant('Serviço adicionado com sucesso'),
             this.translate.instant('Sucesso')
@@ -466,43 +426,43 @@ export class SaleDetailComponent implements OnInit, OnDestroy {
     }
   }
 
-  confirmDeleteSaleItem(saleItem: SaleItem) {
-    const value = getEnumTranslation(saleItem.itemType);
-    openConfimDialog(new ConfirmDialogModel(`Confirma a remoção do ${value} ${saleItem.name}`)).content.onClose
+  confirmDeletePurchaseItem(purchaseItem: PurchaseItem) {
+    const value = getEnumTranslation(purchaseItem.itemType);
+    openConfimDialog(new ConfirmDialogModel(`Confirma a remoção do ${value} ${purchaseItem.name}`)).content.onClose
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((values: CloseDialogValues) => {
         if (values.action === ActionReturnDialog.CONFIRM) {
-          if (saleItem.itemType === ItemType.PRODUCT) {
-            this.deleteProductItem(saleItem);
+          if (purchaseItem.itemType === ItemType.PRODUCT) {
+            this.deleteProductItem(purchaseItem);
           } else {
-            this.deleteServiceItem(saleItem);
+            this.deleteServiceItem(purchaseItem);
           }
         }
       });
   }
 
-  confirmDeleteIncomeItem(income: Income) {
+  confirmDeleteExpenseItem(expense: Expense) {
      openConfimDialog(new ConfirmDialogModel(`Confirma a remoção do pagamento`)).content.onClose
        .pipe(takeUntil(this.ngUnsubscribe))
        .subscribe((values: CloseDialogValues) => {
          if (values.action === ActionReturnDialog.CONFIRM) {
-          this.deleteIncome(income);
+          this.deleteExpense(expense);
          }
        });
   }
 
-  private deleteIncome(income: Income) {
+  private deleteExpense(expense: Expense) {
     this.spinner.show();
-    this.is.delete(income).toPromise()
+    this.expenseService.delete(expense).toPromise()
     .then(() => {
-      this.reloadIncomeItems(0);
-      this.ss.get(this.entity.id).toPromise()
-      .then((sale: Sale) => {
-        this.entity.status = sale.status;
+      this.reloadExpenseItems(0);
+      this.purchaseService.get(this.entity.id).toPromise()
+      .then((purchase: Purchase) => {
+        this.entity.status = purchase.status;
         this.getTitle();
         this.setPanelHeaderStatus();
       });
-      this.setSaleTotal();
+      this.setPurchaseTotal();
       this.toastr.success(
         this.translate.instant('Pagamento removido com sucesso'),
         this.translate.instant('Sucesso')
@@ -511,12 +471,12 @@ export class SaleDetailComponent implements OnInit, OnDestroy {
     this.spinner.hide();
   }
 
-  private deleteProductItem(saleItem: SaleItem) {
+  private deleteProductItem(purchaseItem: PurchaseItem) {
     this.spinner.show();
-    this.ss.deleteProductItem(this.entity.id, saleItem.id).toPromise()
+    this.purchaseService.deleteProductItem(this.entity.id, purchaseItem.id).toPromise()
     .then(() => {
       this.reloadItems(0);
-      this.setSaleTotal();
+      this.setPurchaseTotal();
       this.toastr.success(
         this.translate.instant('Produto removido com sucesso'),
         this.translate.instant('Sucesso')
@@ -525,12 +485,12 @@ export class SaleDetailComponent implements OnInit, OnDestroy {
     this.spinner.hide();
   }
 
-  private deleteServiceItem(saleItem: SaleItem) {
+  private deleteServiceItem(purchaseItem: PurchaseItem) {
     this.spinner.show();
-    this.ss.deleteServiceItem(this.entity.id, saleItem.id).toPromise()
+    this.purchaseService.deleteServiceItem(this.entity.id, purchaseItem.id).toPromise()
     .then(() => {
       this.reloadItems(0);
-      this.setSaleTotal();
+      this.setPurchaseTotal();
       this.toastr.success(
         this.translate.instant('Serviço removido com sucesso'),
         this.translate.instant('Sucesso')
@@ -585,13 +545,13 @@ export class SaleDetailComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((values: CloseDialogValues) => {
         if (values.action === ActionReturnDialog.CONFIRM) {
-          this.saleCancel();
+          this.purchaseCancel();
         }
       });
   }
 
-  private async saleCancel() {
-    await this.ss.saleCancel(this.entity.id).toPromise()
+  private async purchaseCancel() {
+    await this.purchaseService.purchaseCancel(this.entity.id).toPromise()
       .then(() => {
         this.entity.status = BillingStatus.CANCELED;
         this.toastr.success(
@@ -603,8 +563,8 @@ export class SaleDetailComponent implements OnInit, OnDestroy {
 
   bgPaymentTypeSelect(paymentTypeSelect: PaymentType) {
     this.clearPaymentType();
-    this.saleIncomeDto = new SaleIncomeDto();
-    this.saleIncomeDto.paymentType = paymentTypeSelect;
+    this.purchaseExpenseDto = new PurchaseExpenseDto();
+    this.purchaseExpenseDto.paymentType = paymentTypeSelect;
   }
 
   private clearPaymentType() {
@@ -612,40 +572,40 @@ export class SaleDetailComponent implements OnInit, OnDestroy {
   }
 
   installment() {
-    openSimpleDialog(new InstallmentDialog(this.saleIncomeDto.value), InstallmentDialogComponent)
+    openSimpleDialog(new InstallmentDialog(this.purchaseExpenseDto.value), InstallmentDialogComponent)
       .content.onClose
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((values: CloseDialogInstallmentValeus) => {
         if (values.action === ActionReturnDialog.CONFIRM) {
           this.hasParcels = true;
-          this.salesIncomes = values.installmentDtos;
+          this.purchasesExpenses = values.installmentDtos;
         }
       });
   }
 
   removeParcels() {
-    this.salesIncomes = [];
+    this.purchasesExpenses = [];
     this.hasParcels = false;
   }
 
   launchPayment() {
     if (this.hasParcels) {
-      this.ss.launchPaymentSalesIncomes(this.entity.id, this.salesIncomes)
+      this.purchaseService.launchPaymentPurchasesExpenses(this.entity.id, this.purchasesExpenses)
         .toPromise()
-        .then((response: SaleIncomeResponse) => {
-          this.saleTotal.amountPaid = response.amountPaid;
-          this.saleTotal.amountPayable = response.amountPayable;
-          this.entity.status = response.sale.status;
+        .then((response: PurchaseExpenseResponse) => {
+          this.purchaseTotal.amountPaid = response.amountPaid;
+          this.purchaseTotal.amountPayable = response.amountPayable;
+          this.entity.status = response.purchase.status;
           this.launchPaymentSucess();
         });
     } else {
       if (this.validLaunchPayment()) {
-        this.ss.launchPaymentSaleIncome(this.entity.id, this.saleIncomeDto)
+        this.purchaseService.launchPaymentPurchaseExpense(this.entity.id, this.purchaseExpenseDto)
           .toPromise()
-          .then((response: SaleIncomeResponse) => {
-            this.saleTotal.amountPaid = response.amountPaid;
-            this.saleTotal.amountPayable = response.amountPayable;
-            this.entity.status = response.sale.status;
+          .then((response: PurchaseExpenseResponse) => {
+            this.purchaseTotal.amountPaid = response.amountPaid;
+            this.purchaseTotal.amountPayable = response.amountPayable;
+            this.entity.status = response.purchase.status;
             this.launchPaymentSucess();
           });
       }
@@ -653,12 +613,12 @@ export class SaleDetailComponent implements OnInit, OnDestroy {
   }
 
   private launchPaymentSucess() {
-    this.reloadIncomeItems(0);
+    this.reloadExpenseItems(0);
     this.setPanelHeaderStatus();
   }
 
   private validLaunchPayment() {
-    if (!this.saleIncomeDto.value) {
+    if (!this.purchaseExpenseDto.value) {
       this.toastr.error(
         this.translate.instant('Nenhum valor informado'),
         this.translate.instant('Erro')
@@ -667,7 +627,7 @@ export class SaleDetailComponent implements OnInit, OnDestroy {
     }
 
     if (this.isCash || this.isBankCheck || this.isBankSlip) {
-      if (!this.saleIncomeDto.duaDate) {
+      if (!this.purchaseExpenseDto.duaDate) {
         this.toastr.error(
           this.translate.instant('Nenhuma data de vencimento informada'),
           this.translate.instant('Erro')
@@ -677,7 +637,7 @@ export class SaleDetailComponent implements OnInit, OnDestroy {
     }
 
     if (this.isBankCheck()) {
-      if (!this.saleIncomeDto.check.number) {
+      if (!this.purchaseExpenseDto.check.number) {
         this.toastr.error(
           this.translate.instant('Número do cheque não informado'),
           this.translate.instant('Erro')
@@ -685,7 +645,7 @@ export class SaleDetailComponent implements OnInit, OnDestroy {
         return false;
       }
 
-      if (!this.saleIncomeDto.check.emitter) {
+      if (!this.purchaseExpenseDto.check.emitter) {
         this.toastr.error(
           this.translate.instant('Emissor do cheque não informado'),
           this.translate.instant('Erro')
@@ -693,7 +653,7 @@ export class SaleDetailComponent implements OnInit, OnDestroy {
         return false;
       }
 
-      if (!this.saleIncomeDto.check.personDocument) {
+      if (!this.purchaseExpenseDto.check.personDocument) {
         this.toastr.error(
           this.translate.instant('Documento do emissor do cheque não informado'),
           this.translate.instant('Erro')
@@ -707,35 +667,35 @@ export class SaleDetailComponent implements OnInit, OnDestroy {
 
   updateDate(event) {
     if (!event.srcElement.value) {
-      this.saleIncomeDto.duaDate = null;
+      this.purchaseExpenseDto.duaDate = null;
     } else {
       const date = new Date();
       const separateDate = event.srcElement.value.split('-');
       date.setUTCDate(separateDate[2]);
       date.setUTCMonth(separateDate[1] - 1);
       date.setUTCFullYear(separateDate[0]);
-      this.saleIncomeDto.duaDate = date;
+      this.purchaseExpenseDto.duaDate = date;
     }
   }
 
   isCash() {
-    return this.saleIncomeDto.paymentType === PaymentType.CASH;
+    return this.purchaseExpenseDto.paymentType === PaymentType.CASH;
   }
 
   isBankCheck() {
-    return this.saleIncomeDto.paymentType === PaymentType.BANK_CHECK;
+    return this.purchaseExpenseDto.paymentType === PaymentType.BANK_CHECK;
   }
 
   isCreditCard() {
-    return this.saleIncomeDto.paymentType === PaymentType.CREDIT_CARD;
+    return this.purchaseExpenseDto.paymentType === PaymentType.CREDIT_CARD;
   }
 
   isBankSlip() {
-    return this.saleIncomeDto.paymentType === PaymentType.BANK_SLIP;
+    return this.purchaseExpenseDto.paymentType === PaymentType.BANK_SLIP;
   }
 
   isDebitCard() {
-    return this.saleIncomeDto.paymentType === PaymentType.DEBIT_CARD;
+    return this.purchaseExpenseDto.paymentType === PaymentType.DEBIT_CARD;
   }
 
   isToBill() {

@@ -1,7 +1,5 @@
 package com.undcon.app.dtos;
 
-import com.undcon.app.model.PurchaseEntity;
-
 public class ItemRequestDto {
 
 	private Long id;

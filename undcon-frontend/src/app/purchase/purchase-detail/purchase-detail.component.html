@@ -9,7 +9,7 @@
             <div class="row text-align-center">
               <div class="col-12">
                 <app-button-group (selected)="bgPaymentTypeSelect($event)"
-                                  [selectDefaultItem]="saleIncomeDto.paymentType"
+                                  [selectDefaultItem]="purchaseExpenseDto.paymentType"
                                   [buttonGroupValues]="bgPaymentTypeValues">
                 </app-button-group>
               </div>
@@ -21,19 +21,19 @@
                 <div class="col-5" *ngIf="!hasParcels">
                   <div class="md-form">
                     <input type="date" id="duaDate" class="form-control text-light" [disabled]="hasParcels"
-                           [ngModel]="saleIncomeDto.duaDate | date:'yyyy-MM-dd'" (change)="updateDate($event)" mdbInput/>
+                           [ngModel]="purchaseExpenseDto.duaDate | date:'yyyy-MM-dd'" (change)="updateDate($event)" mdbInput/>
                     <label for="duaDate" class="text-light">Data de vencimeto</label>
                   </div>
                 </div>
                 <div class="{{hasParcels ? 'col-6' : 'col-5'}}">
                   <div class="md-form">
-                    <input id="value" class="form-control text-light" [(ngModel)]="saleIncomeDto.value" [disabled]="hasParcels" mask="separator.2" thousandSeparator="." mdbInput />
+                    <input id="value" class="form-control text-light" [(ngModel)]="purchaseExpenseDto.value" [disabled]="hasParcels" mask="separator.2" thousandSeparator="." mdbInput />
                     <label for="value" class="text-light">Valor</label>
                   </div>
                 </div>
                 <div class="col-2" *ngIf="!hasParcels && !isBankSlip()">
                   <div class="custom-control custom-checkbox margin-t-40">
-                    <input type="checkbox" class="custom-control-input" id="active" tabindex="0" [(ngModel)]="saleIncomeDto.settled">
+                    <input type="checkbox" class="custom-control-input" id="active" tabindex="0" [(ngModel)]="purchaseExpenseDto.settled">
                     <label for="active" class="custom-control-label text-light">Pago</label>
                   </div>
                 </div>
@@ -41,9 +41,9 @@
 
               <p class="bold italic font-size-12 margin-b-0 text-light" *ngIf="hasParcels">Vencimento da 1ª Parcela</p>
               <div class="row pad-l-15 pad-r-9 pad-b-20">
-                <div *ngFor="let saleIncome of salesIncomes; let installment = index" class="col-4 grid-item {{installment === 0 ? 'firts-item-grid' : ''}}">
-                  <p class="bold margin-b-0">{{saleIncome.duaDate | date: 'dd/MM/yyyy'}}</p>
-                  <p class="margin-b-0">R$ {{saleIncome.value.toFixed(2)}}</p>
+                <div *ngFor="let purchasesExpense of purchasesExpenses; let installment = index" class="col-4 grid-item {{installment === 0 ? 'firts-item-grid' : ''}}">
+                  <p class="bold margin-b-0">{{purchasesExpense.duaDate | date: 'dd/MM/yyyy'}}</p>
+                  <p class="margin-b-0">R$ {{purchasesExpense.value.toFixed(2)}}</p>
                 </div>
               </div>
             </div>
@@ -53,20 +53,20 @@
               <div class="row">
                 <div class="col-5">
                   <div class="md-form">
-                    <input type="date" id="duaDate" class="form-control text-light" [ngModel]="saleIncomeDto.duaDate | date:'yyyy-MM-dd'"
+                    <input type="date" id="duaDate" class="form-control text-light" [ngModel]="purchaseExpenseDto.duaDate | date:'yyyy-MM-dd'"
                            (change)="updateDate($event)" mdbInput/>
                     <label for="duaDate" class="text-light">Data de compensação</label>
                   </div>
                 </div>
                 <div class="col-5">
                   <div class="md-form">
-                    <input type="text" id="value" class="form-control text-light" [(ngModel)]="saleIncomeDto.value" mdbInput />
+                    <input type="text" id="value" class="form-control text-light" [(ngModel)]="purchaseExpenseDto.value" mdbInput />
                     <label for="value" class="text-light">Valor</label>
                   </div>
                 </div>
                 <div class="col-2">
                   <div class="custom-control custom-checkbox margin-t-40">
-                    <input type="checkbox" class="custom-control-input" id="active" tabindex="0" [(ngModel)]="saleIncomeDto.settled">
+                    <input type="checkbox" class="custom-control-input" id="active" tabindex="0" [(ngModel)]="purchaseExpenseDto.settled">
                     <label for="active" class="custom-control-label text-light">Pago</label>
                   </div>
                 </div>
@@ -75,19 +75,19 @@
               <div class="row">
                 <div class="col-4">
                   <div class="md-form">
-                    <input type="number" id="checkNumber" class="form-control text-light" [(ngModel)]="saleIncomeDto.check.number" mdbInput />
+                    <input type="number" id="checkNumber" class="form-control text-light" [(ngModel)]="purchaseExpenseDto.check.number" mdbInput />
                     <label for="checkNumber" class="text-light">Número do cheque</label>
                   </div>
                 </div>
                 <div class="col-4">
                   <div class="md-form">
-                    <input type="text" id="checkEmitter" class="form-control text-light" [(ngModel)]="saleIncomeDto.check.emitter" mdbInput />
+                    <input type="text" id="checkEmitter" class="form-control text-light" [(ngModel)]="purchaseExpenseDto.check.emitter" mdbInput />
                     <label for="checkEmitter" class="text-light">Emissor do cheque</label>
                   </div>
                 </div>
                 <div class="col-4">
                   <div class="md-form">
-                    <input type="text" id="checkPD" class="form-control text-light" [(ngModel)]="saleIncomeDto.check.personDocument" mdbInput />
+                    <input type="text" id="checkPD" class="form-control text-light" [(ngModel)]="purchaseExpenseDto.check.personDocument" mdbInput />
                     <label for="checkPD" class="text-light">Documento do emissor</label>
                   </div>
                 </div>
@@ -99,7 +99,7 @@
               <div class="row">
                 <div class="col-6">
                   <div class="md-form">
-                    <input type="text" id="value" class="form-control text-light" [(ngModel)]="saleIncomeDto.value" mdbInput />
+                    <input type="text" id="value" class="form-control text-light" [(ngModel)]="purchaseExpenseDto.value" mdbInput />
                     <label for="value" class="text-light">Valor</label>
                   </div>
                 </div>
@@ -107,7 +107,7 @@
             </div>
 
             <button mdbBtn type="button" color="primary" outline="true" (click)="launchPayment();" mdbWavesEffect>Lançar pagamento</button>
-            <button mdbBtn type="button" color="info" outline="true" (click)="installment();" [disabled]="!saleIncomeDto.value" *ngIf="isCash() || isBankSlip()" mdbWavesEffect>Parcelamento</button>
+            <button mdbBtn type="button" color="info" outline="true" (click)="installment();" [disabled]="!purchaseExpenseDto.value" *ngIf="isCash() || isBankSlip()" mdbWavesEffect>Parcelamento</button>
             <button mdbBtn type="button" color="danger" outline="true" (click)="removeParcels();" [hidden]="!hasParcels" *ngIf="isCash() || isBankSlip()" mdbWavesEffect>Remover Parcelas</button>
           </div>
         </app-simple-panel>
@@ -118,9 +118,9 @@
           <div body>
             <div class="row">
               <div class="col-12">
-                <app-table [pageValues]="incomeItems" [tableValues]="incomeTableValues" [updateCurrentPage]="incomeCurrentPage"
-                      (reloadItems)="reloadIncomeItems($event)" [showBtnAdd]="false" [selectableLine]="false"
-                      [showDeleteValue]="true" (deleteItem)="confirmDeleteIncomeItem($event)"
+                <app-table [pageValues]="expenseItems" [tableValues]="expenseTableValues" [updateCurrentPage]="expenseCurrentPage"
+                      (reloadItems)="reloadExpenseItems($event)" [showBtnAdd]="false" [selectableLine]="false"
+                      [showDeleteValue]="true" (deleteItem)="confirmDeleteExpenseItem($event)"
                       [showTotalItems]="false">
                 </app-table>
               </div>
@@ -129,15 +129,15 @@
             <div class="row pad__income-values">
               <div class="col-4 text-align-center amount-payable">
                 <p class="text-light margin-b-0">Total a pagar</p>
-                <p class="text-light font-weight-bold font-size-25 margin-b-0">R$ {{saleTotal.amountPayable.toFixed(2)}}</p>
+                <p class="text-light font-weight-bold font-size-25 margin-b-0">R$ {{purchaseTotal.amountPayable.toFixed(2)}}</p>
               </div>
               <div class="col-4 text-align-center amount-paid">
                 <p class="text-light margin-b-0">Valor pago</p>
-                <p class="text-light font-weight-bold font-size-25 margin-b-0">R$ {{saleTotal.amountPaid.toFixed(2)}}</p>
+                <p class="text-light font-weight-bold font-size-25 margin-b-0">R$ {{purchaseTotal.amountPaid.toFixed(2)}}</p>
               </div>
               <div class="col-4 text-align-center total-value">
-                <p class="text-light margin-b-0">Total da venda</p>
-                <p class="text-light font-weight-bold font-size-25 margin-b-0">R$ {{saleTotal.totalValue.toFixed(2)}}</p>
+                <p class="text-light margin-b-0">Total da compra</p>
+                <p class="text-light font-weight-bold font-size-25 margin-b-0">R$ {{purchaseTotal.totalValue.toFixed(2)}}</p>
               </div>
             </div>
           </div>
@@ -156,21 +156,11 @@
       <div class="row">
         <div class="col-6 ng-autocomplete">
           <label for="customers" class="text-light">Cliente</label>
-          <ng-autocomplete id="customers" [data]="customers" [searchKeyword]="customerKeyword" [initialValue]="customerInitialValue" [itemTemplate]="customerTemplate"
-                          [notFoundTemplate]="customerNotFoundTemplate" (selected)='customerSelectEvent($event)'
-                          (inputChanged)="customerChangeEvent($event)" notFoundText="Nenhum cliente encontrado"
-                          (inputCleared)="customerInputCleared()" [disabled]="!isNew()" #ngAutoCompleteCustomer
-                          placeHolder="Buscar cliente" [isLoading]="isLoadingCustomer">
-          </ng-autocomplete>
-        </div>
-
-        <div class="col-6 ng-autocomplete">
-          <label for="employees" class="text-light">Vendedor</label>
-          <ng-autocomplete id="employees" [data]="employees" [searchKeyword]="employeeKeyword" [initialValue]="employeeInitialValue" [itemTemplate]="employeeTemplate"
-                          [notFoundTemplate]="employeeNotFoundTemplate" (selected)='employeeSelectEvent($event)'
-                          (inputChanged)="employeeChangeEvent($event)" notFoundText="Nenhum funcionário encontrado"
-                          (inputCleared)="employeeInputCleared()" [disabled]="!isNew()" #ngAutoCompleteEmployee
-                          placeHolder="Buscar vendedor" [isLoading]="isLoadingEmployee">
+          <ng-autocomplete id="providers" [data]="providers" [searchKeyword]="providerKeyword" [initialValue]="providerInitialValue" [itemTemplate]="providerTemplate"
+                          [notFoundTemplate]="providerNotFoundTemplate" (selected)='providerSelectEvent($event)'
+                          (inputChanged)="providerChangeEvent($event)" notFoundText="Nenhum fornecedor encontrado"
+                          (inputCleared)="providerInputCleared()" [disabled]="!isNew()" #ngAutoCompleteProvider
+                          placeHolder="Buscar fornecedor" [isLoading]="isLoadingProvider">
           </ng-autocomplete>
         </div>
       </div>
@@ -183,7 +173,7 @@
         <button mdbBtn type="button" color="mdb-color" outline="true" (click)="goBack()" mdbWavesEffect>Voltar</button>
       </div>
       <div *ngIf="isCreated()" class="col-6">
-        <p class="text-light font-weight-bold font-size-38 margin-b-0">R$ {{saleTotal.totalValue.toFixed(2)}}</p>
+        <p class="text-light font-weight-bold font-size-38 margin-b-0">R$ {{purchaseTotal.totalValue.toFixed(2)}}</p>
       </div>
     </div>
 
@@ -262,11 +252,11 @@
 
     <div class="row" *ngIf="!isNew()">
       <div class="col-12">
-        <app-simple-panel panelColor="secondary-system-color" [showHeader]="true" [panelTitle]="'Itens da venda'.toUpperCase()">
+        <app-simple-panel panelColor="secondary-system-color" [showHeader]="true" [panelTitle]="'Itens da compra'.toUpperCase()">
           <div body>
-            <app-table [pageValues]="saleItems" [tableValues]="tableValues" [updateCurrentPage]="currentPage"
+            <app-table [pageValues]="purchaseItems" [tableValues]="tableValues" [updateCurrentPage]="currentPage"
                       (reloadItems)="reloadItems($event)" [showBtnAdd]="false" [selectableLine]="false"
-                      [showDeleteValue]="isCreated()" (deleteItem)="confirmDeleteSaleItem($event)"></app-table>
+                      [showDeleteValue]="isCreated()" (deleteItem)="confirmDeletePurchaseItem($event)"></app-table>
           </div>
         </app-simple-panel>
       </div>
@@ -274,10 +264,10 @@
   </div>
 </app-simple-panel>
 
-<ng-template #customerTemplate let-item>
+<ng-template #providerTemplate let-item>
   <a [innerHTML]="item.name"></a>
 </ng-template>
-<ng-template #customerNotFoundTemplate let-notFound>
+<ng-template #providerNotFoundTemplate let-notFound>
   <div [innerHTML]="notFound"></div>
 </ng-template>
 

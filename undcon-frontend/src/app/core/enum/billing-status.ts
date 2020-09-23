@@ -1,4 +1,4 @@
-export enum SaleStatus {
+export enum BillingStatus {
   CREATED = 'CREATED',
   TO_BILL = 'TO_BILL',
   BILLED = 'BILLED',

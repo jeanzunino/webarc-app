@@ -178,7 +178,7 @@
       "SETTLED": "Pago",
       "CANCELED": "Cancelado"
     },
-    "sale-status": {
+    "billing-status": {
       "CREATED": "Criado",
       "TO_BILL": "Para faturar",
       "BILLED": "Parcialmente faturado",

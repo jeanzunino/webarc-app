@@ -13,6 +13,7 @@ import { SaleDetailComponent } from './sale-detail/sale-detail.component';
     SharedModule,
     MDBBootstrapModule.forRoot(),
     SaleRoutingModule,
-    NgxMaskModule.forRoot()]
+    NgxMaskModule.forRoot()
+  ]
 })
 export class SaleModule {}

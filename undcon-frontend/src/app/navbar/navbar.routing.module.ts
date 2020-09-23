@@ -72,15 +72,15 @@ const routes: Routes = [
         (m) => m.BankCheckModule
       ),
   },
-  { 
-    path: PageEnum.INCOME, 
+  {
+    path: PageEnum.INCOME,
     loadChildren: () =>
     import('@app/income/income.module').then(
       (m) => m.IncomeModule
     ),
   },
-  { 
-    path: PageEnum.EXPENSE, 
+  {
+    path: PageEnum.EXPENSE,
     loadChildren: () =>
     import('@app/expense/expense.module').then(
       (m) => m.ExpenseModule
@@ -89,11 +89,10 @@ const routes: Routes = [
   {
     path: '',
     loadChildren: () =>
-      import('@app/sale/sale.module').then(
-        (m) => m.SaleModule),
+      import('@app/sale/sale.module').then((m) => m.SaleModule),
   },
   {
-    path: PageEnum.PURCHASE,
+    path: '',
     loadChildren: () =>
       import('@app/purchase/purchase.module').then((m) => m.PurchaseModule),
   },
@@ -104,9 +103,8 @@ const routes: Routes = [
     path: PageEnum.TENANT,
     loadChildren: () =>
       import('@app/tenant/tenant.module').then((m) => m.TenantModule),
-  }
-
-  // { path: '**', component: PageNotFoundComponent, canActivate: [AuthGuard] },
+  },
+  { path: '**', component: PageNotFoundComponent, canActivate: [AuthGuard] }
 ];
 
 @NgModule({

@@ -170,7 +170,7 @@ public class PurchaseService extends AbstractService<PurchaseEntity> {
 
 		PaymentStatus paymentStatus = purchaseExpenseDto.isSettled() ? PaymentStatus.SETTLED : PaymentStatus.PENDING;
 		ExpenseEntity expense = new ExpenseEntity(null,
-				"Pagamento de Venda - " + purchase.getPurchaseDate() + " #" + purchase.getId(),
+				"Pagamento de Compra - " + purchase.getPurchaseDate() + " #" + purchase.getId(),
 				purchaseExpenseDto.getDuaDate(), paymentDate, purchaseExpenseDto.getValue(), paymentStatus,
 				purchase.getProvider(), purchaseExpenseDto.getPaymentType(), purchase);
 

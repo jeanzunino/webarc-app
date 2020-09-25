@@ -47,7 +47,6 @@ public class PurchaseItemProductService extends AbstractService<PurchaseItemProd
 		if (product == null) {
 			throw new UndconException(UndconError.PRODUCT_NOT_FOUND);
 		}
-		stockService.checkStockAvaiable(product, itemDto.getQuantity());
 
 		UserEntity user = userService.getCurrentUser();
 

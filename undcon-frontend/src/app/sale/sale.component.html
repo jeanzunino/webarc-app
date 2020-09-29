@@ -11,7 +11,7 @@
        <div class="md-form">
           <select id="status" class="primary-system-color browser-default custom-select text-light" [(ngModel)]="status" (ngModelChange)="onChangeStatus($event)" mdbInput>
             <option selected></option>
-            <option *ngFor="let status of statusList" [value]="status">{{ ('enums.sale-status.' + status) | translate }}</option>
+            <option *ngFor="let status of statusList" [value]="status">{{ ('enums.billing-status.' + status) | translate }}</option>
           </select>
           <label for="status" class="text-light">Situação</label>
         </div>

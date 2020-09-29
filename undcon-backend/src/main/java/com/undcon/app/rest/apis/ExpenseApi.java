@@ -1,5 +1,7 @@
 package com.undcon.app.rest.apis;
 
+import java.util.List;
+
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -12,11 +14,15 @@ import javax.ws.rs.core.MediaType;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
 
+import com.undcon.app.dtos.ExpenseDto;
 import com.undcon.app.exceptions.UndconException;
+import com.undcon.app.mappers.ExpenseMapper;
 import com.undcon.app.model.ExpenseEntity;
 import com.undcon.app.services.ExpenseService;
+import com.undcon.app.utils.PageUtils;
 
 /**
  * Api de Despesas
@@ -27,34 +33,39 @@ public class ExpenseApi {
 
 	@Autowired
 	private ExpenseService service;
+	
+	@Autowired
+	private ExpenseMapper mapper;
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Page<ExpenseEntity> getAll(@QueryParam("filter") String filter, @QueryParam("page") Integer page,
+	public Page<ExpenseDto> getAll(@QueryParam("filter") String filter, @QueryParam("page") Integer page,
 			@QueryParam("size") Integer size) {
-		return service.getAll(filter, page, size);
+		Page<ExpenseEntity> all = service.getAll(filter, page, size);
+		List<ExpenseDto> content = mapper.toDto(all.getContent());
+		Page<ExpenseDto> pageDto = new PageImpl<ExpenseDto>(content, PageUtils.createPageRequest(page, size), all.getTotalElements());
+		return pageDto;
 	}
 
 	@GET
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ExpenseEntity get(@PathParam("id") long id) throws UndconException {
+	public ExpenseDto get(@PathParam("id") long id) throws UndconException {
 		ExpenseEntity customer = service.findById(id);
-
-		return customer;
+		return mapper.toDto(customer);
 	}
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	public ExpenseEntity post(ExpenseEntity customer) throws UndconException {
-		return service.persist(customer);
+	public ExpenseDto post(ExpenseEntity customer) throws UndconException {
+		return mapper.toDto(service.persist(customer));
 	}
 
 	@PUT
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ExpenseEntity put(ExpenseEntity customer) throws UndconException {
-		return service.update(customer);
+	public ExpenseDto put(ExpenseEntity customer) throws UndconException {
+		return mapper.toDto(service.update(customer));
 	}
 
 	@DELETE

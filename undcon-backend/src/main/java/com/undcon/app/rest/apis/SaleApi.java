@@ -18,14 +18,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
-import com.undcon.app.dtos.ProductSaledInfoDto;
+import com.undcon.app.dtos.AmountTotalDto;
 import com.undcon.app.dtos.SaleIncomeRequestDto;
 import com.undcon.app.dtos.SaleIncomeResponseDto;
-import com.undcon.app.dtos.SaleInfoDto;
 import com.undcon.app.dtos.SaleItemDto;
 import com.undcon.app.dtos.SaleRequestDto;
 import com.undcon.app.dtos.SaleSimpleDto;
-import com.undcon.app.dtos.AmountTotalDto;
 import com.undcon.app.exceptions.UndconException;
 import com.undcon.app.model.SaleEntity;
 import com.undcon.app.services.SaleService;
@@ -65,24 +63,10 @@ public class SaleApi {
 	}
 
 	@GET
-	@Path("/total")
-	@Produces(MediaType.APPLICATION_JSON)
-	public SaleInfoDto getTotal() {
-		return service.getTotalSale();
-	}
-
-	@GET
 	@Path("/{id}/total")
 	@Produces(MediaType.APPLICATION_JSON)
 	public AmountTotalDto getSaleTotal(@PathParam("id") long id) throws UndconException {
 		return service.getSaleTotal(id);
-	}
-
-	@GET
-	@Path("/topProductSaled")
-	@Produces(MediaType.APPLICATION_JSON)
-	public List<ProductSaledInfoDto> getTopProductSaled() {
-		return service.getTopProductSaled(true);
 	}
 
 	@POST

@@ -33,7 +33,7 @@ public class IncomeApi {
 
 	@Autowired
 	private IncomeMapper mapper;
-	
+
 	@Autowired
 	private IncomeService service;
 
@@ -43,29 +43,30 @@ public class IncomeApi {
 			@QueryParam("size") Integer size) {
 		Page<IncomeEntity> all = service.getAll(filter, page, size);
 		List<IncomeDto> content = mapper.toDto(all.getContent());
-		Page<IncomeDto> pageDto = new PageImpl<IncomeDto>(content, PageUtils.createPageRequest(page, size), all.getTotalElements());
+		Page<IncomeDto> pageDto = new PageImpl<IncomeDto>(content, PageUtils.createPageRequest(page, size),
+				all.getTotalElements());
 		return pageDto;
 	}
 
 	@GET
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public IncomeEntity get(@PathParam("id") long id) throws UndconException {
+	public IncomeDto get(@PathParam("id") long id) throws UndconException {
 		IncomeEntity customer = service.findById(id);
-		return customer;
+		return mapper.toDto(customer);
 	}
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	public IncomeEntity post(IncomeEntity customer) throws UndconException {
-		return service.persist(customer);
+	public IncomeDto post(IncomeEntity customer) throws UndconException {
+		return mapper.toDto(service.persist(customer));
 	}
 
 	@PUT
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public IncomeEntity put(IncomeEntity customer) throws UndconException {
-		return service.update(customer);
+	public IncomeDto put(IncomeEntity customer) throws UndconException {
+		return mapper.toDto(service.update(customer));
 	}
 
 	@DELETE

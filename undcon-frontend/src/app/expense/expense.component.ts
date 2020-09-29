@@ -25,7 +25,6 @@ export class ExpenseComponent extends GridViewComponent<Expense> {
   .set('value', 'expense.value', FormatEnum.MONEY)
   .set('paymentStatus', 'expense.paymentStatus', FormatEnum.PAYMENT_STATUS)
   .set('provider.name', 'expense.provider')
-  .set('paymentType', 'expense.paymentType')
   .get();
   description = null;
 

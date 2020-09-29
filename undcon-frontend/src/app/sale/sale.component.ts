@@ -21,7 +21,6 @@ export class SaleComponent extends GridViewComponent<Sale> {
 
   spinner = SharedInjector.get(NgxSpinnerService);
   tableValues = new Table()
-    .set('id', 'sale.id')
     .set('customer.name', 'sale.customer-name')
     .set('saleDate', 'sale.saleDate', FormatEnum.DATE_PIPE)
     .set('salesman.name', 'sale.salesman-name')

@@ -22,12 +22,10 @@ export class PurchaseComponent extends GridViewComponent<Purchase> {
 
   spinner = SharedInjector.get(NgxSpinnerService);
   tableValues = new Table()
-    .set('id', 'sale.id')
-    .set('customer.name', 'sale.customer-name')
-    .set('saleDate', 'sale.saleDate', FormatEnum.DATE_PIPE)
-    .set('salesman.name', 'sale.salesman-name')
-    .set('status', 'sale.status', FormatEnum.SALE_STATUS)
-    .set('user.login', 'sale.user-login')
+    .set('provider.name', 'purchase.customer-name')
+    .set('purchaseDate', 'purchase.purchaseDate', FormatEnum.DATE_PIPE)
+    .set('status', 'purchase.status', FormatEnum.SALE_STATUS)
+    .set('user.login', 'purchase.user-login')
     .get();
   name = null;
   status: BillingStatus;

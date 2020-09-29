@@ -14,9 +14,20 @@
     "name": "Nome",
     "phone": "Telefone"
   },
+
   "purchase": {
-    "name": "Nome",
-    "purchaseDate": "Data da Compra"
+    "customer-name": "Cliente",
+    "purchaseDate": "Data da Compra",
+    "status": "Status",
+    "user-login": "Usuário"
+  },
+
+  "purchase-item": {
+    "name": "Item",
+    "price": "Valor do Item",
+    "quantity": "Quantidade",
+    "itemType": "Tipo",
+    "subTotalItem": "Subtotal"
   },
 
   "COMENTARIO_VENDAS": "Traduções das telas do Menu Vendas",
@@ -24,8 +35,8 @@
     "name": "Nome",
     "phone": "Telefone"
   },
+
   "sale": {
-    "id": "Id",
     "customer-name": "Cliente",
     "saleDate": "Data da Venda",
     "salesman-name": "Vendedor",

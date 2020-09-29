@@ -9,6 +9,8 @@ import { getQueryFilter } from '@shared/utils/utils';
 import { FormatEnum } from '@core/enum/format-enum';
 import { Income } from '@app/core/model/income';
 import { IncomeService } from '@app/core/service/income/income.service';
+import { PaymentStatus } from '@app/core/enum/payment-status';
+import { BillingStatus } from '@app/core/enum/billing-status';
 
 @Component({
   selector: 'app-income',
@@ -25,6 +27,9 @@ export class IncomeComponent extends GridViewComponent<Income> {
     .set('customer.name', 'income.customer')
     .get();
   description = null;
+  status: PaymentStatus = PaymentStatus.PENDING;
+
+  statusList = Object.values(PaymentStatus);
 
   constructor(
     service: IncomeService,
@@ -45,11 +50,13 @@ export class IncomeComponent extends GridViewComponent<Income> {
   onSearch() {
     const params = new Map<string, string>();
     params.set(getQueryFilter('description', QueryFilterEnum.CONTAINS_IC), this.description);
+    params.set(getQueryFilter('paymentStatus', QueryFilterEnum.EQUALS), this.status);
     this.onSearchParams(params);
   }
 
   onClear() {
     this.description = null;
+    this.status = PaymentStatus.PENDING;
     this.onClearParams();
   }
 }

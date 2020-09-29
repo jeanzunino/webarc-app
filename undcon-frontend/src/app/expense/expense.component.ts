@@ -11,6 +11,7 @@ import { Income } from '@app/core/model/income';
 import { IncomeService } from '@app/core/service/income/income.service';
 import { Expense } from '@app/core/model/expense';
 import { ExpenseService } from '@app/core/service/expense/expense.service';
+import { PaymentStatus } from '@app/core/enum/payment-status';
 
 @Component({
   selector: 'app-expense',
@@ -27,7 +28,10 @@ export class ExpenseComponent extends GridViewComponent<Expense> {
   .set('provider.name', 'expense.provider')
   .get();
   description = null;
+  status: PaymentStatus = PaymentStatus.PENDING;
 
+  statusList = Object.values(PaymentStatus);
+  
   constructor(
     service: ExpenseService,
     activatedRoute: ActivatedRoute,
@@ -44,14 +48,16 @@ export class ExpenseComponent extends GridViewComponent<Expense> {
     //Não possui tela de adionar
   }
 
-  onSearch() {
+  public onSearch() {
     const params = new Map<string, string>();
     params.set(getQueryFilter('description', QueryFilterEnum.CONTAINS_IC), this.description);
+    params.set(getQueryFilter('paymentStatus', QueryFilterEnum.EQUALS), this.status);
     this.onSearchParams(params);
   }
 
   onClear() {
     this.description = null;
+    this.status = PaymentStatus.PENDING;
     this.onClearParams();
   }
 }

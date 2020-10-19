@@ -18,14 +18,18 @@
               </th>
               <th *ngIf="showDelete" class="text-light border-color-table">
               </th>
+              <th *ngIf="labelActionPrimaryButtonItem" class="text-light border-color-table">
+              </th>
             </tr>
           </thead>
           <tbody>
-            <tr
-              *ngFor="let item of tableItems | paginate: {id: idPaginator, itemsPerPage: 10, currentPage: currentPage, totalItems: totalItems}; let index = index"
+            <tr *ngFor="let item of tableItems | paginate: {id: idPaginator, itemsPerPage: 10, currentPage: currentPage, totalItems: totalItems}; let index = index"
               class="{{selectableLine ? 'select-line' : ''}} {{index % 2 != 0 ? 'primary-background-color-line-table' : 'secondary-background-color-line-table'}}">
               <th *ngFor="let tableValue of tableValues" class="text-light border-color-table" (click)="onClickItem(item)">
                 {{ getFieldsOfTable(item, tableValue) }}
+              </th>
+              <th class="width-84 text-align-center border-color-table pad-0" *ngIf="labelActionPrimaryButtonItem">
+                <button mdbBtn class="pad-t-5 pad-b-5" type="button" color="primary" outline="true" (click)="actionPrimaryButtonItemEvent(item)" mdbWavesEffect>{{ labelActionPrimaryButtonItem }}</button>
               </th>
               <th class="width-84 text-align-center border-color-table" *ngIf="showDelete">
                 <a type="button" (click)="deleteItemEvent(item)">

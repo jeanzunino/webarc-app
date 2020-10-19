@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 
 import com.undcon.app.dtos.ExpenseDto;
 import com.undcon.app.exceptions.UndconException;
@@ -33,7 +34,7 @@ public class ExpenseApi {
 
 	@Autowired
 	private ExpenseService service;
-	
+
 	@Autowired
 	private ExpenseMapper mapper;
 
@@ -43,7 +44,8 @@ public class ExpenseApi {
 			@QueryParam("size") Integer size) {
 		Page<ExpenseEntity> all = service.getAll(filter, page, size);
 		List<ExpenseDto> content = mapper.toDto(all.getContent());
-		Page<ExpenseDto> pageDto = new PageImpl<ExpenseDto>(content, PageUtils.createPageRequest(page, size), all.getTotalElements());
+		Page<ExpenseDto> pageDto = new PageImpl<ExpenseDto>(content, PageUtils.createPageRequest(page, size),
+				all.getTotalElements());
 		return pageDto;
 	}
 
@@ -57,15 +59,25 @@ public class ExpenseApi {
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	public ExpenseDto post(ExpenseEntity customer) throws UndconException {
-		return mapper.toDto(service.persist(customer));
+	public ExpenseDto post(ExpenseEntity expense) throws UndconException {
+		Assert.notNull(expense.getProvider(), "provider is required");
+		Assert.notNull(expense.getProvider().getId(), "provider.id is required");
+		Assert.notNull(expense.getPaymentType(), "paymentType is required");
+		Assert.notNull(expense.getPaymentStatus(), "paymentStatus is required");
+		Assert.isTrue(expense.getValue() > 0, "value is invalid");
+		return mapper.toDto(service.persist(expense));
 	}
 
 	@PUT
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ExpenseDto put(ExpenseEntity customer) throws UndconException {
-		return mapper.toDto(service.update(customer));
+	public ExpenseDto put(ExpenseEntity expense) throws UndconException {
+		Assert.notNull(expense.getProvider(), "provider is required");
+		Assert.notNull(expense.getProvider().getId(), "provider.id is required");
+		Assert.notNull(expense.getPaymentType(), "paymentType is required");
+		Assert.notNull(expense.getPaymentStatus(), "paymentStatus is required");
+		Assert.isTrue(expense.getValue() > 0, "value is invalid");
+		return mapper.toDto(service.update(expense));
 	}
 
 	@DELETE

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import com.undcon.app.rest.apis.BankCheckApi;
 import com.undcon.app.rest.apis.ConfigApi;
 import com.undcon.app.rest.apis.CustomerApi;
+import com.undcon.app.rest.apis.DashBoardApi;
 import com.undcon.app.rest.apis.EmployeeApi;
 import com.undcon.app.rest.apis.ExpenseApi;
 import com.undcon.app.rest.apis.IncomeApi;
@@ -73,6 +74,9 @@ public class JerseyConfig extends ResourceConfig {
 		register(BankCheckApi.class);
 		
 		register(SystemSalesmanApi.class);
+		
+		
+		register(DashBoardApi.class);
 		
 		register(ErrorResponseHandler.class);
 		// Uncomment to disable WADL Generation:

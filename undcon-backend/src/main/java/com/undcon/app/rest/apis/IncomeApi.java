@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 
 import com.undcon.app.dtos.IncomeDto;
 import com.undcon.app.exceptions.UndconException;
@@ -59,6 +60,11 @@ public class IncomeApi {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	public IncomeDto post(IncomeEntity income) throws UndconException {
+		Assert.notNull(income.getCustomer(), "customer is required");
+		Assert.notNull(income.getCustomer().getId(), "customer.id is required");
+		Assert.notNull(income.getPaymentType(), "paymentType is required");
+		Assert.notNull(income.getPaymentStatus(), "paymentStatus is required");
+		Assert.isTrue(income.getValue() > 0, "value is invalid");
 		return mapper.toDto(service.persist(income));
 	}
 
@@ -66,6 +72,11 @@ public class IncomeApi {
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public IncomeDto put(IncomeEntity income) throws UndconException {
+		Assert.notNull(income.getCustomer(), "customer is required");
+		Assert.notNull(income.getCustomer().getId(), "customer.id is required");
+		Assert.notNull(income.getPaymentType(), "paymentType is required");
+		Assert.notNull(income.getPaymentStatus(), "paymentStatus is required");
+		Assert.isTrue(income.getValue() > 0, "value is invalid");
 		return mapper.toDto(service.update(income));
 	}
 

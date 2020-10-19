@@ -1,6 +1,6 @@
 <div class="container-fluid screen-top screen-bottom">
   <div class="row row-stat">
-    <div class="col-lg-5">
+    <!--div class="col-lg-5">
       <div class="panel panel-light">
         <canvas mdbChart [chartType]="chartTypeBar" [datasets]="chartDatasetsStock" [labels]="chartLabels" [colors]="chartColors" [options]="getChartOptionsBar('Estoque Baixo')" [legend]="true" (chartHover)="chartHovered($event)" (chartClick)="chartClicked($event)">
           </canvas>
@@ -9,28 +9,29 @@
         <canvas mdbChart [chartType]="chartTypeBar" [datasets]="chartDatasetsProdSales" [labels]="chartLabels" [colors]="chartColors" [options]="getChartOptionsBar('Produtos Mais Vendidos (Unid.)')" [legend]="true" (chartHover)="chartHovered($event)" (chartClick)="chartClicked($event)">
           </canvas>
       </div>
-    </div>
+    </div -->
     <div class="col-lg-3">
-      <div class="panel panel-light">
+      <!--div class="panel panel-light">
         <canvas mdbChart [chartType]="chartTypeBar" [datasets]="chartDatasetsProviders" [labels]="['Total de Vendas']" [colors]="chartColorsPie" [options]="getChartOptionsPie('Vendas')" [legend]="false">
           </canvas>
       </div>
       <div class="panel panel-light">
         <canvas mdbChart [chartType]="chartTypeBar" [datasets]="chartDatasetsProviders" [labels]="['Resultado']" [colors]="chartColorsPie" [options]="getChartOptionsPie('Resultado (Receita-Despesa)')" [legend]="false">
           </canvas>
-      </div>
+      </div -->
+      
+    </div>
+    <div class="col-lg-3">
       <div class="panel panel-light">
         <canvas mdbChart [chartType]="chartTypeBar" [datasets]="chartDatasetsCustomers" [labels]="['Clientes']" [colors]="chartColorsPie" [options]="getChartOptionsPie('Clientes')" [legend]="false">
           </canvas>
       </div>
-    </div>
-    <div class="col-lg-3">
       <div class="panel panel-light">
         <canvas mdbChart [chartType]="chartTypeBar" [datasets]="chartDatasetsProviders" [labels]="['Fornecedores']" [colors]="chartColorsPie" [options]="getChartOptionsPie('Fornecedores')" [legend]="false">
           </canvas>
       </div>
       <div class="panel panel-light">
-        <canvas mdbChart [chartType]="chartTypeBar" [datasets]="chartDatasetsProviders" [labels]="['Produtos']" [colors]="chartColorsPie" [options]="getChartOptionsPie('Produtos')" [legend]="false">
+        <canvas mdbChart [chartType]="chartTypeBar" [datasets]="chartDatasetsProducts" [labels]="['Produtos']" [colors]="chartColorsPie" [options]="getChartOptionsPie('Produtos')" [legend]="false">
           </canvas>
       </div>
     </div>

@@ -21,6 +21,7 @@ export class TableComponent {
   @Output() reloadItems: EventEmitter<number> = new EventEmitter();
   @Output() clickItem: EventEmitter<any> = new EventEmitter();
   @Output() deleteItem: EventEmitter<number> = new EventEmitter();
+  @Output() actionPrimaryButtonItem: EventEmitter<number> = new EventEmitter();
   @Input() tableValues: TableValues[] = [];
   @Input() set pageValues(value: Page<any>) {
     if (typeof value !== 'undefined') {
@@ -39,6 +40,8 @@ export class TableComponent {
   @Input() set showDeleteValue(show: boolean) {
     this.showDelete = show;
   }
+
+  @Input() labelActionPrimaryButtonItem: string;
 
   @Input() showTotalItems = true;
   idPaginator = Math.floor(Math.random() * 10).toString().replace('.', '');
@@ -99,5 +102,9 @@ export class TableComponent {
 
   deleteItemEvent(item) {
     this.deleteItem.emit(item);
+  }
+
+  actionPrimaryButtonItemEvent(item) {
+    this.actionPrimaryButtonItem.emit(item);
   }
 }

@@ -22,8 +22,8 @@
   </app-panel>
   <div class="card-filter--margin-top">
     <app-table [pageValues]="items" [tableValues]="tableValues" [updateCurrentPage]="currentPage"
-      (reloadItems)="reloadItems($event)" (clickItem)="onClickItem($event)" 
-      [selectableLine]="false" 
-      [showBtnAdd]="false"></app-table>
+      (reloadItems)="reloadItems($event)" (clickItem)="onClickItem($event)"
+      [selectableLine]="false"  [showBtnAdd]="false"
+      labelActionPrimaryButtonItem="Alterar Situação" (actionPrimaryButtonItem)="addRemoveIncomeItem($event)"></app-table>
   </div>
 </div>

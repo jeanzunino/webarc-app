@@ -58,15 +58,15 @@ public class IncomeApi {
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	public IncomeDto post(IncomeEntity customer) throws UndconException {
-		return mapper.toDto(service.persist(customer));
+	public IncomeDto post(IncomeEntity income) throws UndconException {
+		return mapper.toDto(service.persist(income));
 	}
 
 	@PUT
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public IncomeDto put(IncomeEntity customer) throws UndconException {
-		return mapper.toDto(service.update(customer));
+	public IncomeDto put(IncomeEntity income) throws UndconException {
+		return mapper.toDto(service.update(income));
 	}
 
 	@DELETE

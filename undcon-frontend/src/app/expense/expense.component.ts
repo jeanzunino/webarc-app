@@ -1,23 +1,28 @@
-import { Component } from '@angular/core';
+import { ActionReturnDialog } from '@enum/action-return-dialog';
+import { CloseDialogValues } from '@shared/model/close-dialog-values';
+import { takeUntil } from 'rxjs/operators';
+import { ToastrService } from 'ngx-toastr';
+import { Component, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MDBModalService } from 'angular-bootstrap-md';
+import { Subject } from 'rxjs';
 
 import { GridViewComponent } from '@component/grid-view/grid-view.component';
 import { Table } from '@shared/model/table';
 import { QueryFilterEnum } from '@core/enum/query-filter';
 import { getQueryFilter } from '@shared/utils/utils';
 import { FormatEnum } from '@core/enum/format-enum';
-import { Income } from '@app/core/model/income';
-import { IncomeService } from '@app/core/service/income/income.service';
 import { Expense } from '@app/core/model/expense';
 import { ExpenseService } from '@app/core/service/expense/expense.service';
 import { PaymentStatus } from '@app/core/enum/payment-status';
+import { openConfimDialog } from '@shared/utils/utils';
+import { ConfirmDialogModel } from '@app/shared/model/confirm-dialog-model';
 
 @Component({
   selector: 'app-expense',
   templateUrl: 'expense.component.html',
 })
-export class ExpenseComponent extends GridViewComponent<Expense> {
+export class ExpenseComponent extends GridViewComponent<Expense> implements OnDestroy {
   tableValues = new Table()
   .set('description', 'expense.description')
   .set('duaDate', 'expense.duaDate')
@@ -31,13 +36,21 @@ export class ExpenseComponent extends GridViewComponent<Expense> {
   status: PaymentStatus = PaymentStatus.PENDING;
 
   statusList = Object.values(PaymentStatus);
-  
+  private ngUnsubscribeLocal = new Subject();
+
   constructor(
     service: ExpenseService,
     activatedRoute: ActivatedRoute,
-    modalService: MDBModalService
+    modalService: MDBModalService,
+    public es: ExpenseService,
+    private toastr: ToastrService
   ) {
     super(service, activatedRoute, modalService);
+  }
+
+  ngOnDestroy() {
+    this.ngUnsubscribeLocal.next();
+    this.ngUnsubscribeLocal.complete();
   }
 
   onClickItem(item) {
@@ -59,5 +72,29 @@ export class ExpenseComponent extends GridViewComponent<Expense> {
     this.description = null;
     this.status = PaymentStatus.PENDING;
     this.onClearParams();
+  }
+
+  addRemoveExpenseItem(expense: Expense) {
+    console.log(expense);
+    const pago = expense.paymentDate ? 'NÃO PAGO' : 'PAGO';
+    openConfimDialog(new ConfirmDialogModel(`Deseja alterar a situação do pagamento ${expense.description} para ${pago}?`)).content.onClose
+      .pipe(takeUntil(this.ngUnsubscribeLocal))
+      .subscribe((values: CloseDialogValues) => {
+        if (values.action === ActionReturnDialog.CONFIRM) {
+          this.addRemoveExpense(expense);
+        }
+      });
+  }
+
+  private async addRemoveExpense(expense: Expense) {
+    expense.paymentDate = expense.paymentDate ? null : new Date();
+    await this.es.put(expense).toPromise()
+      .then(() => {
+        this.toastr.success(
+          'Pagamento atualizado!',
+          'Sucesso'
+        );
+        this.reloadItems(0);
+      });
   }
 }

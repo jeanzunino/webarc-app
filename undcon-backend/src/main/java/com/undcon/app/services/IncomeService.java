@@ -1,5 +1,6 @@
 package com.undcon.app.services;
 
+import java.sql.Date;
 import java.util.Arrays;
 import java.util.List;
 
@@ -9,6 +10,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Component;
 
 import com.undcon.app.dtos.AmountTotalDto;
+import com.undcon.app.dtos.IncomeDto;
 import com.undcon.app.enums.BillingStatus;
 import com.undcon.app.enums.PaymentStatus;
 import com.undcon.app.enums.ResourceType;
@@ -89,6 +91,18 @@ public class IncomeService extends AbstractService<IncomeEntity> {
 	@Override
 	protected ResourceType getResourceType() {
 		return ResourceType.INCOME;
+	}
+
+	public IncomeEntity updateStatus(IncomeDto income) {
+		IncomeEntity entity = incomeRepository.findOne(income.getId());
+		if (income.getPaymentStatus() == PaymentStatus.SETTLED) {
+			if (entity.getPaymentDate() == null) {
+				entity.setPaymentDate(new Date(System.currentTimeMillis()));
+			}
+		} else {
+			entity.setPaymentDate(null);
+		}
+		return incomeRepository.save(entity);
 	}
 
 }

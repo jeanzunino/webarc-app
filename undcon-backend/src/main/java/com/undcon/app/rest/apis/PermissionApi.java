@@ -57,6 +57,7 @@ public class PermissionApi {
 	@Path("/resources")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<ResourceType> getResources() {
+		//TODO Alterar para retornar as permissões
 		return Arrays.asList(ResourceType.values());
 	}
 

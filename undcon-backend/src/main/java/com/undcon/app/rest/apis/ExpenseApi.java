@@ -19,6 +19,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 import com.undcon.app.dtos.ExpenseDto;
+import com.undcon.app.dtos.IncomeDto;
 import com.undcon.app.exceptions.UndconException;
 import com.undcon.app.mappers.ExpenseMapper;
 import com.undcon.app.model.ExpenseEntity;
@@ -80,6 +81,15 @@ public class ExpenseApi {
 		return mapper.toDto(service.update(expense));
 	}
 
+	@PUT
+	@Path("/{id}/updateStatus")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ExpenseDto put(ExpenseDto expense) throws UndconException {
+		Assert.notNull(expense.getId(), "id is required");
+		Assert.notNull(expense.getPaymentStatus(), "paymentStatus is required");
+		return mapper.toDto(service.updateStatus(expense));
+	}
+	
 	@DELETE
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)

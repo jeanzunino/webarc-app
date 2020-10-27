@@ -80,6 +80,16 @@ public class IncomeApi {
 		return mapper.toDto(service.update(income));
 	}
 
+	@PUT
+	@Path("/{id}/updateStatus")
+	@Produces(MediaType.APPLICATION_JSON)
+	public IncomeDto put(IncomeDto income) throws UndconException {
+		Assert.notNull(income.getId(), "id is required");
+		Assert.notNull(income.getPaymentStatus(), "paymentStatus is required");
+		return mapper.toDto(service.updateStatus(income));
+	}
+	
+
 	@DELETE
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)

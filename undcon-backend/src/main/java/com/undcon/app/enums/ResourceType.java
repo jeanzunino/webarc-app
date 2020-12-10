@@ -39,11 +39,17 @@ public enum ResourceType {
 	INCOME,
 
 	/** 12 - */
-	Permission,
+	PERMISSION,
 
 	/** 13 - */
 	PURCHASE,
 
 	/** 14 - */
-	SALE
+	SALE,
+
+	/** 15 - Cheque Bancário */
+	BACK_CHECK,
+
+	/** 16 - Vendedor de Sistema */
+	SYSTEM_SALESMAN
 }

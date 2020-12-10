@@ -23,6 +23,9 @@ public class ProductEntity {
 
 	@Column(name = "unidade")
 	private String unit;
+	
+	@Column(name = "gtin")
+	private String gtin;
 
 	@Column(name = "preco_compra")
 	private double purchasePrice;
@@ -43,12 +46,13 @@ public class ProductEntity {
 	public ProductEntity() {
 	}
 
-	public ProductEntity(Long id, String name, String unit, double purchasePrice, double salePrice, long stock,
+	public ProductEntity(Long id, String name, String unit, String gtin, double purchasePrice, double salePrice, long stock,
 			long stockMin, ProductCategoryEntity productCategory) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.unit = unit;
+		this.gtin = gtin;
 		this.purchasePrice = purchasePrice;
 		this.salePrice = salePrice;
 		this.stock = stock;
@@ -66,6 +70,10 @@ public class ProductEntity {
 
 	public String getUnit() {
 		return unit;
+	}
+	
+	public String getGtin() {
+		return gtin;
 	}
 
 	public double getPurchasePrice() {
@@ -102,6 +110,10 @@ public class ProductEntity {
 
 	public void setUnit(String unit) {
 		this.unit = unit;
+	}
+	
+	public void setGtin(String gtin) {
+		this.gtin = gtin;
 	}
 
 	public void setPurchasePrice(double purchasePrice) {

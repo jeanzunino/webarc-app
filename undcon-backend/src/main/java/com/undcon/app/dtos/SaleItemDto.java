@@ -8,8 +8,6 @@ public class SaleItemDto {
 
 	private Long saleId;
 
-	private boolean isProduct;
-
 	private String userName;
 
 	private String salesmanName;
@@ -18,17 +16,22 @@ public class SaleItemDto {
 
 	private long quantity;
 
-	public SaleItemDto(Long id, String name, Long saleId, boolean isProduct, String userName, String salesmanName,
-			double price, long quantity) {
+	private double subTotalItem;
+	
+	private ItemType itemType;
+
+	public SaleItemDto(Long id, String name, Long saleId, String userName, String salesmanName, double price,
+			long quantity, double subTotalItem, ItemType itemType) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.saleId = saleId;
-		this.isProduct = isProduct;
 		this.userName = userName;
 		this.salesmanName = salesmanName;
 		this.price = price;
 		this.quantity = quantity;
+		this.subTotalItem = subTotalItem;
+		this.itemType = itemType;
 	}
 
 	public SaleItemDto() {
@@ -56,14 +59,6 @@ public class SaleItemDto {
 
 	public void setSaleId(Long saleId) {
 		this.saleId = saleId;
-	}
-
-	public boolean getIsProduct() {
-		return isProduct;
-	}
-
-	public void setIsProduct(boolean isProduct) {
-		this.isProduct = isProduct;
 	}
 
 	public String getUserName() {
@@ -98,4 +93,15 @@ public class SaleItemDto {
 		this.quantity = quantity;
 	}
 
+	public void setSubTotalItem(double subTotalItem) {
+		this.subTotalItem = subTotalItem;
+	}
+
+	public double getSubTotalItem() {
+		return subTotalItem;
+	}
+
+	public ItemType getItemType() {
+		return itemType;
+	}
 }

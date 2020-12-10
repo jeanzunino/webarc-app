@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MDBModalService, MDBModalRef } from 'angular-bootstrap-md';
 import { takeUntil } from 'rxjs/operators';
-import { Subject } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 
 
 import { Page } from '@model/page';
@@ -18,32 +18,46 @@ export abstract class GridViewComponent<T> implements OnInit, OnDestroy {
   spinner = SharedInjector.get(NgxSpinnerService);
   items: Page<T>;
   modalRef: MDBModalRef;
-  currentPage = 0;
+  currentPage = 1;
   private ngUnsubscribe = new Subject();
   private filterParams = new Map<string, string>();
 
   constructor(
-    private service: EntityService<T>,
+    protected service: EntityService<T>,
     private activatedRoute: ActivatedRoute,
     public modalService: MDBModalService
   ) {}
 
+  sub: Subscription;
+
   ngOnInit() {
-    this.items = this.activatedRoute.snapshot.data.items as Page<T>;
-    this.spinner.hide();
+    this.sub = this.activatedRoute.params.subscribe(params => {
+        if (params['reload']) {
+          this.reloadItems(0);
+        } else {
+          this.loadItems();
+        }
+    });
+    this.sub.unsubscribe();
+  }
+
+  private loadItems() {
+    this.onSearch();
+    //this.items = this.activatedRoute.snapshot.data.items as Page<T>;
+    //this.spinner.hide();
   }
 
   ngOnDestroy() {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
+    this.sub.unsubscribe();
   }
 
   async reloadItems(page) {
     this.spinner.show();
     this.currentPage = page + 1;
 
-    this.items = (await this.service.getAll(this.filterParams, page).toPromise()) as Page<T>;
-    this.spinner.hide();
+    this.onSearch();
   }
 
   openDialog(item: Entity, obj: Object) {
@@ -59,21 +73,17 @@ export abstract class GridViewComponent<T> implements OnInit, OnDestroy {
       });
   }
 
+  abstract onSearch();
+
   async onSearchParams(filters: Map<string, string>) {
     this.spinner.show();
     this.filterParams = filters;
-    this.items = (await this.service.getAll(this.filterParams).toPromise()) as Page<T>;
-    this.currentPage = 1;
+    this.items = (await this.service.getAll(this.filterParams, this.currentPage - 1).toPromise()) as Page<T>;
     this.spinner.hide();
   }
 
   async onClearParams() {
     this.spinner.show();
-    this.filterParams = new Map<string, string>();
-    this.items = (await this.service.getAll(this.filterParams).toPromise()) as Page<
-      T
-    >;
-    this.currentPage = 1;
-    this.spinner.hide();
+    this.onSearch();
   }
 }

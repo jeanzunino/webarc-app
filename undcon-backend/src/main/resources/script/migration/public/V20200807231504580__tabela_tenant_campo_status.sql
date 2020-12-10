@@ -1,0 +1,1 @@
+ALTER TABLE public.tenant ADD column IF NOT EXISTS status int NOT NULL DEFAULT 2;

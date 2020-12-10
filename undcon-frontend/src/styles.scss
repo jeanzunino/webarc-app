@@ -1,0 +1,82 @@
+.ng-autocomplete {
+  .autocomplete-container {
+    .input-container {
+      input {
+        background-color: transparent;
+        color: #FFFFFF;
+      }
+      input:disabled {
+        background-color: transparent;
+        color: #666;
+      }
+      .ng-star-inserted {
+        i {
+          color: #FFFFFF;
+        }
+      }
+    }
+    .suggestions-container {
+      background-color: #282a36;
+      ul li a {
+        color: #FFFFFF;
+      }
+    }
+    .not-found {
+      background-color: #282a36;
+      color: #FFFFFF;
+    }
+  }
+}
+
+input:disabled {
+  color: #666 !important;
+}
+
+.ngx-pagination {
+  li {
+    .ng-star-inserted {
+      color: #FFFFFF !important;
+      font-weight: bold;
+      font-size: 18px;
+    }
+  }
+  li::before {
+    color: #FFFFFF !important;
+    font-weight: bold;
+    font-size: 18px;
+  }
+}
+
+.ngx-pagination {
+  .disabled {
+    .ng-star-inserted {
+      color: #666 !important;
+      cursor: default;
+    }
+  }
+  li::before {
+    color: #666 !important;
+    font-weight: bold;
+    font-size: 18px;
+  }
+}
+
+.ngx-pagination a:hover, .ngx-pagination button:hover {
+  background: #4285F4 !important;
+}
+
+.ngx-pagination .current {
+  background: #0E61EA !important;
+}
+
+.sk-fading-circle .sk-circle:before {
+  background-color: #FFFFFF !important;
+}
+
+.md-form > input[type]:-webkit-autofill:not(.browser-default):not([type=search]) + label, .md-form > input[type=time]:not(.browser-default) + label {
+  transform: translateY(-19px) scale(0.8);
+  padding-left: 0px !important;
+  color: #FFFFFF !important;
+  margin-top: 0px !important;
+  font-size: 1rem !important;
+}

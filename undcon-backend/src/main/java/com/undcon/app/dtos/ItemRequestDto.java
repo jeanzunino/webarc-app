@@ -1,20 +1,19 @@
 package com.undcon.app.dtos;
 
-public class ProductItemRequestDto {
+public class ItemRequestDto {
 
 	private Long id;
-	private Long productId;
+	private Long itemId;
 	private Long quantity;
 	private Long employeeId;
 
-	public ProductItemRequestDto() {
-		// TODO Auto-generated constructor stub
+	public ItemRequestDto() {
 	}
 
-	public ProductItemRequestDto(long id, long productId, long quantity, long employeeId) {
+	public ItemRequestDto(long id, long itemId, long quantity, long employeeId) {
 		super();
 		this.id = id;
-		this.productId = productId;
+		this.itemId = itemId;
 		this.quantity = quantity;
 		this.employeeId = employeeId;
 	}
@@ -27,12 +26,12 @@ public class ProductItemRequestDto {
 		this.id = id;
 	}
 
-	public Long getProductId() {
-		return productId;
+	public void setItemId(Long itemId) {
+		this.itemId = itemId;
 	}
-
-	public void setProductId(Long productId) {
-		this.productId = productId;
+	
+	public Long getItemId() {
+		return itemId;
 	}
 
 	public Long getQuantity() {

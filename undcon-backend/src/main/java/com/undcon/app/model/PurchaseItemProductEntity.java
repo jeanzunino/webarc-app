@@ -17,9 +17,8 @@ public class PurchaseItemProductEntity extends PurchaseItemEntity {
 		// TODO Auto-generated constructor stub
 	}
 
-	public PurchaseItemProductEntity(Long id, ProductEntity product, PurchaseEntity purchase, UserEntity user,
-			EmployeeEntity salesman, double price, long quantity) {
-		super(id, purchase, user, salesman, price, quantity);
+	public PurchaseItemProductEntity(Long id, ProductEntity product, PurchaseEntity purchase, UserEntity user, double price, long quantity) {
+		super(id, purchase, user, price, quantity);
 		this.product = product;
 	}
 

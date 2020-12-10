@@ -1,0 +1,41 @@
+<app-dialog modalTitle="Parcelamento - R$ {{valueToInstallments}}" [modalRef]="modalRef">
+  <div body>
+    <div class="row">
+      <div class="col-12 text-align-center">
+        <app-button-group (selected)="generateInputs($event)"
+                          [buttonGroupValues]="bgInstallmentValues"
+                          selectDefaultItem="6-x">
+        </app-button-group>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="{{numberInputs.length ? 'col-11' : 'col-12'}}">
+        <div class="md-form">
+          <input type="date" id="firstDate" class="form-control text-light"
+                 [ngModel]="firstInstallmentDate | date:'yyyy-MM-dd'" (change)="updateDate($event)" mdbInput/>
+          <label for="firstDate" class="text-light">Vencimento da 1ª Parcela</label>
+        </div>
+      </div>
+      <div class="col-1 margin-t-35 margin-l--8" *ngIf="numberInputs.length">
+        <a type="button" (click)="calculateValues()" mdbTooltip="Sugetão de valores" placement="top">
+          <em class="fas fa-sync-alt"></em>
+        </a>
+      </div>
+    </div>
+
+    <div class="row">
+      <div *ngFor="let number of numberInputs; let installment = index" class="col-12">
+        <div class="md-form">
+          <input type="number" id="installment-{{installment}}" class="form-control text-light" mdbInput />
+          <label for="installment-{{installment}}" class="text-light active">{{getInstallmentDateLabel(installment) | date: 'dd/MM/yyyy'}}</label>
+        </div>
+        {{ recalculateValues(installment) }}
+      </div>
+    </div>
+  </div>
+  <div footer>
+    <button mdbBtn type="button" color="primary" (click)="confirm()" outline="true" mdbWavesEffect>Confirmar</button>
+    <button mdbBtn type="button" color="mdb-color" (click)="cancel()" outline="true" mdbWavesEffect>Cancelar</button>
+  </div>
+</app-dialog>

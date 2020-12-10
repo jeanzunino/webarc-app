@@ -1,13 +1,16 @@
 package com.undcon.app.filtering;
 
+import java.sql.Date;
+import java.text.Normalizer;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.DatePath;
 import com.querydsl.core.types.dsl.EnumPath;
-import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.core.types.dsl.StringPath;
@@ -35,7 +38,12 @@ public class PredicateBuilder<T> {
 		for (SearchCriteria filter : filters) {
 			Class type;
 			try {
-				type = pathBuilder.getType().getDeclaredField(filter.getKey()).getType();
+				String key = filter.getKey();
+				String[] fieldWithDot = key.split("\\.");
+				if(fieldWithDot.length > 0) {
+					key = fieldWithDot[0];
+				}
+				type = pathBuilder.getType().getDeclaredField(key).getType();
 			} catch (NoSuchFieldException e) {
 				e.printStackTrace();
 				throw new IllegalArgumentException(
@@ -94,11 +102,11 @@ public class PredicateBuilder<T> {
 					NumberPath<Double> propertyGtDouble = pathBuilder.getNumber(filter.getKey(), Double.class);
 					expression = expressionAnd(expression, propertyGtDouble.gt(Double.valueOf(filter.getValue())));
 					break;
-//				case "java.sql.Date":
-//					DatePath propertyGtDate = pathBuilder.getDate(filter.getKey(), Date.class);
-//					expression = expressionAnd(expression,
-//							propertyGtDate.gt(Date.from(Instant.parse(filter.getValue()))));
-//					break;
+				case "java.sql.Date":
+					DatePath propertyGtDate = pathBuilder.getDate(filter.getKey(), Date.class);
+					expression = expressionAnd(expression,
+							propertyGtDate.gt(java.util.Date.from(Instant.parse(filter.getValue()))));
+					break;
 				default:
 					throw new IllegalArgumentException(
 							"Invalid operation filter " + filter.getOperation() + " for type " + type.getName());
@@ -221,6 +229,10 @@ public class PredicateBuilder<T> {
 		default:
 			break;
 		}
+		
+		if(type.getName().contains("Entity")) {
+			return Long.parseLong(value);
+		}
 		return null;
 	}
 
@@ -234,7 +246,8 @@ public class PredicateBuilder<T> {
 	public static List<SearchCriteria> getCriterias(String search) {
 		search = search == null ? "" : search.trim();
 		// https://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html
-		Pattern pattern = Pattern.compile("(\\w+?)(:|<|>|>=|<=|contains|=|!=)((\\w|\\s)+?),");
+		search = deAccent(search);
+		Pattern pattern = Pattern.compile("(\\w+?|\\w+.\\w+)(:|<|>|>=|<=|contains|=|!=)((\\w|\\s|-)+?),");
 		Matcher matcher = pattern.matcher(search + ",");
 		List<SearchCriteria> criterias = new ArrayList<SearchCriteria>();
 		while (matcher.find()) {
@@ -246,5 +259,11 @@ public class PredicateBuilder<T> {
 		}
 		return criterias;
 	}
-
+	
+	public static String deAccent(String str) {
+	    String nfdNormalizedString = Normalizer.normalize(str, Normalizer.Form.NFD); 
+	    Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+	    return pattern.matcher(nfdNormalizedString).replaceAll("");
+	}
+	
 }

@@ -17,8 +17,8 @@ public class PurchaseItemServiceEntity extends PurchaseItemEntity {
 	}
 
 	public PurchaseItemServiceEntity(Long id, ServiceTypeEntity service, PurchaseEntity purchase, UserEntity user,
-			EmployeeEntity salesman, double price, long quantity) {
-		super(id, purchase, user, salesman, price, quantity);
+			double price, long quantity) {
+		super(id, purchase, user, price, quantity);
 		this.service = service;
 	}
 

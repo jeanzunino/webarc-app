@@ -1,0 +1,35 @@
+<div class="container-fluid screen-top screen-bottom">
+  <div class="h2 text-light">
+    Cheques
+  </div>
+  <app-panel panelTitle="filtros" (search)="onSearch()" (clear)="onClear()">
+    <div body>
+      <div class="row">
+        <div class="col-6">
+          <div class="md-form">
+            <input type="text" id="number" class="form-control text-light" [(ngModel)]="number" mdbInput />
+            <label for="number" class="text-light">Número do Cheque</label>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="md-form">
+            <input type="text" id="emitter" class="form-control text-light" [(ngModel)]="emitter" mdbInput />
+            <label for="emitter" class="text-light">Emissor do Cheque</label>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="md-form">
+            <input type="text" id="personDocument" class="form-control text-light" [(ngModel)]="personDocument" mdbInput />
+            <label for="personDocument" class="text-light">Documento da Pessoa</label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </app-panel>
+  <div class="card-filter--margin-top">
+    <app-table [pageValues]="items" [tableValues]="tableValues" [updateCurrentPage]="currentPage"
+      (reloadItems)="reloadItems($event)" (clickItem)="onClickItem($event)" 
+      [selectableLine]="false" 
+      [showBtnAdd]="false"></app-table>
+  </div>
+</div>

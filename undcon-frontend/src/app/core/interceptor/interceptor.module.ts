@@ -1,19 +1,23 @@
-import { NgModule, Injectable } from "@angular/core";
+import { NgxSpinnerService } from 'ngx-spinner';
+import { NgModule, Injectable } from '@angular/core';
 import {
   HttpInterceptor,
   HttpRequest,
   HttpHandler,
   HttpEvent,
   HTTP_INTERCEPTORS,
-} from "@angular/common/http";
-import { Observable, throwError } from "rxjs";
-import { tap } from "rxjs/operators";
+} from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { tap } from 'rxjs/operators';
+import { ToastrService } from 'ngx-toastr';
 
-import { StorageService } from "@core/service/storage/storage.service";
+import { StorageService } from '@core/service/storage/storage.service';
 
 @Injectable()
 export class HttpsRequestInterceptor implements HttpInterceptor {
-  constructor(private storageService: StorageService) {}
+  constructor(private storageService: StorageService,
+              public toastr: ToastrService,
+              public spinner: NgxSpinnerService) {}
 
   intercept(
     req: HttpRequest<any>,
@@ -21,12 +25,12 @@ export class HttpsRequestInterceptor implements HttpInterceptor {
   ): Observable<HttpEvent<any>> {
     const dupReq = req.clone({
       headers: req.headers
-        .set("Content-Type", "application/json")
+        .set('Content-Type', 'application/json')
         .set(
-          "Authorization",
+          'Authorization',
           this.storageService.getUser()
             ? this.storageService.getUser().token
-            : ""
+            : ''
         ),
     });
     return next.handle(dupReq).pipe(
@@ -40,13 +44,24 @@ export class HttpsRequestInterceptor implements HttpInterceptor {
   }
 
   handleErrors(error) {
-    let errorMessage = "";
+    let errorMessage = '';
     if (error.error instanceof ErrorEvent) {
       // client-side error
       errorMessage = `Error: ${error.error.message}`;
     } else {
       // server-side error
-      errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
+      switch(error.status) {
+        case 400:
+        case 403:
+          this.toastr.error(
+            error.error.message,
+            'Erro'
+          );
+          break;
+        default:
+          errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
+      }
+      this.spinner.hide();
     }
     console.log(errorMessage);
     return throwError(errorMessage);

@@ -9,14 +9,14 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-import com.undcon.app.repositories.ITenantRepository;
+import com.undcon.app.repositories.TenantRepositoryImpl;
 
 @Component
 @Order(0)
 public class DataSourceLoadTenants implements ApplicationRunner{
 
 	@Autowired
-	private ITenantRepository tenantRepository;
+	private TenantRepositoryImpl tenantRepository;
 	
 	@Autowired
 	private  DataSourceProperties dataSourceProperties;
@@ -29,7 +29,7 @@ public class DataSourceLoadTenants implements ApplicationRunner{
 	public void loadTenants() {
 		System.err.println("Carregando tenants...");
 		List<String> tenants = new ArrayList<String>();
-		tenantRepository.findAll().stream().forEach(tenant -> tenants.add(tenant.getSchemaName()));
+		tenantRepository.getAll().stream().forEach(schemaName -> tenants.add(schemaName));
 		dataSourceProperties.setTenants(tenants);
 	}
 

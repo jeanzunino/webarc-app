@@ -38,7 +38,8 @@ export class ProductEditComponent extends DefaultEditViewComponent<Product> {
       salePrice: new FormControl('', Validators.required),
       stock: new FormControl('', Validators.required),
       stockMin: new FormControl('', Validators.required),
-      productCategory: new FormControl(null, Validators.required)
+      productCategory: new FormControl(null, Validators.required),
+      gtin: new FormControl(null)
     });
   }
 
@@ -51,7 +52,8 @@ export class ProductEditComponent extends DefaultEditViewComponent<Product> {
       salePrice: item.salePrice,
       stock: item.stock,
       stockMin: item.stock,
-      productCategory: item.productCategory.id
+      productCategory: item.productCategory.id,
+      gtin: item.gtin
     });
   }
 
@@ -93,5 +95,9 @@ export class ProductEditComponent extends DefaultEditViewComponent<Product> {
 
   get productCategoryForm() {
     return this.getFormGroup().get('productCategory');
+  }
+
+  get gtinForm() {
+    return this.getFormGroup().get('gtin');
   }
 }

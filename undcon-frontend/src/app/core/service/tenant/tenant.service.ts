@@ -13,6 +13,10 @@ export class TenantService extends EntityService<Tenant> {
     protected http: HttpClient,
     protected storageService: StorageService
   ) {
-    super(http, storageService, "tenants");
+    super(http, storageService, "system/tenants");
+  }
+
+  public createDb(id: number){
+    return this.http.post<any>(`${this.baseUrl}/${this.entityUrl}/${id}/createDb`, null);
   }
 }

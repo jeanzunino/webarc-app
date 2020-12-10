@@ -1,13 +1,14 @@
+
 <div class="card primary-system-color">
   <div class="card-header text-light secondary-system-color cursor-pointer" (click)="filters.toggle()">
     <div class="close pull-right">
-      <i *ngIf="isTheFilterPanelExpanded" class="fas fa-angle-up text-light"></i>
-      <i *ngIf="!isTheFilterPanelExpanded" class="fas fa-angle-down text-light"></i>
+      <i *ngIf="isTheFilterPanelExpanded" class="fas fa-angle-up text-light" aria-hidden="true"></i>
+      <i *ngIf="!isTheFilterPanelExpanded" class="fas fa-angle-down text-light" aria-hidden="true"></i>
     </div>
     {{ panelTitle | translate }}
   </div>
   <div mdbCollapse [isCollapsed]="true" (expanded)="updateExpandedFlagPanel()" (collapsed)="updateExpandedFlagPanel()" #filters="bs-collapse">
-    <div class="card-body">
+    <div class="card-body pad-t-0">
       <ng-content select="[body]"></ng-content>
     </div>
     <div class="card-footer secondary-system-color">

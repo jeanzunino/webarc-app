@@ -9,6 +9,7 @@ import { ProviderEditComponent } from '@app/provider/provider-edit/provider-edit
 import { Table } from '@shared/model/table';
 import { QueryFilterEnum } from '@core/enum/query-filter';
 import { getQueryFilter } from '@shared/utils/utils';
+import { FormatEnum } from '@core/enum/format-enum';
 
 @Component({
   selector: 'app-provider',
@@ -17,7 +18,7 @@ import { getQueryFilter } from '@shared/utils/utils';
 export class ProviderComponent extends GridViewComponent<Provider> {
   tableValues = new Table()
     .set('name', 'provider.name')
-    .set('phone', 'provider.phone', '(00) 00000-0000')
+    .set('phone', 'provider.phone', FormatEnum.PHONE_MASK)
     .get();
   name = null;
   phone = null;

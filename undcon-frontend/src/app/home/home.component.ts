@@ -1,77 +1,89 @@
-import { Component, OnInit } from "@angular/core";
-import { NgxSpinnerService } from "ngx-spinner";
+import { Component, OnInit } from '@angular/core';
+import { DashBoardService } from '@app/core/service/dashboard/dashboard.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
-  selector: "app-home",
-  templateUrl: "./home.component.html",
+  selector: 'app-home',
+  templateUrl: './home.component.html',
 })
-export class HomeComponent implements OnInit {
-  public chartTypeBar: string = "bar";
+export class HomeComponent implements OnInit{
+  public chartTypeBar: string = 'bar';
 
-  public chartTypeDoughnut: string = "doughnut";
+  public chartTypeDoughnut: string = 'doughnut';
 
-  public chartTypePie: string = "pie";
+  public chartTypePie: string = 'pie';
 
+  constructor(
+    public spinner: NgxSpinnerService,
+    public service: DashBoardService
+  ) {
+    
+  }
+
+  /** INÍCIO - DADOS FIXOS */
   public chartDatasetsStock: Array<any> = [
-    { data: [65, 70, 100, 20, 56, 55, 40], label: "Estoque Mínimo" },
-    { data: [30, 60, 90, 5, 36, 45, 0], label: "Estoque Atual" },
+    { data: [65, 70, 100, 20, 56, 55, 40], label: 'Estoque Mínimo' },
+    { data: [30, 60, 90, 5, 36, 45, 0], label: 'Estoque Atual' },
   ];
 
   public chartDatasetsProdSales: Array<any> = [
-    { data: [200, 100, 100, 200, 560, 505], label: "Produtos Vendidos" },
+    { data: [200, 100, 100, 200, 560, 505], label: 'Produtos Vendidos' },
   ];
 
-  public chartDatasetsCustomers: Array<any> = [{ data: [120] }];
+  public chartDatasetsCustomers: Array<any> = [{ data: [15, 10, 20]}];
 
-  public chartDatasetsProviders: Array<any> = [{ data: [230] }];
+  pruductsCount: Number = 0; 
+  public chartDatasetsProviders: Array<any> = [{ data: [0] }];
+
+  public chartDatasetsProducts: Array<any>= [{ data: [0] }];
 
   public chartLabels: Array<any> = [
-    "Skol lt 350ml",
-    "Coca-cola 2L",
-    "Kaiser lt 350ml",
-    "Arroz 5kg",
-    "Trigo",
-    "Subzero lt 350ml",
+    'Skol lt 350ml',
+    'Coca-cola 2L',
+    'Kaiser lt 350ml',
+    'Arroz 5kg',
+    'Trigo',
+    'Subzero lt 350ml',
   ];
 
-  public chartLabelsPie: Array<any> = ["Teste"];
+  public chartLabelsPie: Array<any> = ['Teste'];
 
   public chartColors: Array<any> = [
     {
       backgroundColor: [
-        "rgba(255, 99, 132, 0.2)",
-        "rgba(255, 99, 132, 0.2)",
-        "rgba(255, 99, 132, 0.2)",
-        "rgba(255, 99, 132, 0.2)",
-        "rgba(255, 99, 132, 0.2)",
-        "rgba(255, 99, 132, 0.2)",
+        'rgba(255, 99, 132, 0.2)',
+        'rgba(255, 99, 132, 0.2)',
+        'rgba(255, 99, 132, 0.2)',
+        'rgba(255, 99, 132, 0.2)',
+        'rgba(255, 99, 132, 0.2)',
+        'rgba(255, 99, 132, 0.2)',
       ],
       borderColor: [
-        "rgba(255, 99, 132, 1)",
-        "rgba(255, 99, 132, 1)",
-        "rgba(255, 99, 132, 1)",
-        "rgba(255, 99, 132, 1)",
-        "rgba(255, 99, 132, 1)",
-        "rgba(255, 99, 132, 1)",
+        'rgba(255, 99, 132, 1)',
+        'rgba(255, 99, 132, 1)',
+        'rgba(255, 99, 132, 1)',
+        'rgba(255, 99, 132, 1)',
+        'rgba(255, 99, 132, 1)',
+        'rgba(255, 99, 132, 1)',
       ],
       borderWidth: 2,
     },
     {
       backgroundColor: [
-        "rgba(54, 162, 235, 0.2)",
-        "rgba(54, 162, 235, 0.2)",
-        "rgba(54, 162, 235, 0.2)",
-        "rgba(54, 162, 235, 0.2)",
-        "rgba(54, 162, 235, 0.2)",
-        "rgba(54, 162, 235, 0.2)",
+        'rgba(54, 162, 235, 0.2)',
+        'rgba(54, 162, 235, 0.2)',
+        'rgba(54, 162, 235, 0.2)',
+        'rgba(54, 162, 235, 0.2)',
+        'rgba(54, 162, 235, 0.2)',
+        'rgba(54, 162, 235, 0.2)',
       ],
       borderColor: [
-        "rgba(54, 162, 235, 1)",
-        "rgba(54, 162, 235, 1)",
-        "rgba(54, 162, 235, 1)",
-        "rgba(54, 162, 235, 1)",
-        "rgba(54, 162, 235, 1)",
-        "rgba(54, 162, 235, 1)",
+        'rgba(54, 162, 235, 1)',
+        'rgba(54, 162, 235, 1)',
+        'rgba(54, 162, 235, 1)',
+        'rgba(54, 162, 235, 1)',
+        'rgba(54, 162, 235, 1)',
+        'rgba(54, 162, 235, 1)',
       ],
       borderWidth: 2,
     },
@@ -80,20 +92,20 @@ export class HomeComponent implements OnInit {
   public chartColorsPie: Array<any> = [
     {
       backgroundColor: [
-        "rgba(255, 99, 132, 0.2)",
-        "rgba(54, 162, 235, 0.2)",
-        "rgba(255, 99, 132, 0.2)",
-        "rgba(255, 99, 132, 0.2)",
-        "rgba(255, 99, 132, 0.2)",
-        "rgba(255, 99, 132, 0.2)",
+        'rgba(255, 99, 132, 0.2)',
+        'rgba(54, 162, 235, 0.2)',
+        'rgba(255, 99, 132, 0.2)',
+        'rgba(255, 99, 132, 0.2)',
+        'rgba(255, 99, 132, 0.2)',
+        'rgba(255, 99, 132, 0.2)',
       ],
       borderColor: [
-        "rgba(255, 99, 132, 1)",
-        "rgba(255, 99, 132, 1)",
-        "rgba(255, 99, 132, 1)",
-        "rgba(255, 99, 132, 1)",
-        "rgba(255, 99, 132, 1)",
-        "rgba(255, 99, 132, 1)",
+        'rgba(255, 99, 132, 1)',
+        'rgba(255, 99, 132, 1)',
+        'rgba(255, 99, 132, 1)',
+        'rgba(255, 99, 132, 1)',
+        'rgba(255, 99, 132, 1)',
+        'rgba(255, 99, 132, 1)',
       ],
       borderWidth: 2,
     },
@@ -111,11 +123,31 @@ export class HomeComponent implements OnInit {
     },
     title: {
       display: true,
-      text: "",
+      text: '',
       fontSize: 30,
-      fontStyle: "bold",
+      fontStyle: 'bold',
     },
   };
+
+  /** FIM - DADOS FIXOS */
+
+  ngOnInit() {
+    this.loadData();
+  }
+
+  loadData(){
+    this.service.getCountCustomersTotal().toPromise().then((result) => {
+      this.chartDatasetsCustomers= [{ data: [result]}];
+    });
+
+    this.service.getCountProductsTotal().toPromise().then((result) => {
+      this.chartDatasetsProducts = [{ data: [result]}];
+    });
+
+    this.service.getCountProvidersTotal().toPromise().then((result) => {
+      this.chartDatasetsProviders = [{ data: [result]}];
+    });
+  }
 
   public getChartOptionsBar(chartTitle: string) {
     this.chartOptions.title.text = chartTitle;
@@ -142,25 +174,25 @@ export class HomeComponent implements OnInit {
       ],
     },
     pieceLabel: {
-      mode: "value",
-      position: "outside",
-      fontColor: "#FFFFFF",
-      indexLabel: "{label} - #percent%",
-      toolTipContent: "<b>{label}:</b> {y} (#percent%)",
+      mode: 'value',
+      position: 'outside',
+      fontColor: '#FFFFFF',
+      indexLabel: '{label} - #percent%',
+      toolTipContent: '<b>{label}:</b> {y} (#percent%)',
       format: function (value) {
-        return "$" + value;
+        return '$' + value;
       },
     },
     title: {
       display: true,
-      text: "",
+      text: '',
       fontSize: 30,
-      fontStyle: "bold",
+      fontStyle: 'bold',
     },
     legend: {
-      position: "bottom",
+      position: 'bottom',
       labels: {
-        pointStyle: "circle",
+        pointStyle: 'circle',
         usePointStyle: true,
       },
     },
@@ -168,10 +200,4 @@ export class HomeComponent implements OnInit {
 
   public chartClicked(e: any): void {}
   public chartHovered(e: any): void {}
-
-  constructor(public spinner: NgxSpinnerService) {}
-
-  ngOnInit() {
-    this.spinner.hide();
-  }
 }

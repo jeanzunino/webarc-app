@@ -1,4 +1,5 @@
 {
+
   "error": {
     "authentication": {
       "title": "Erro de autenticação",
@@ -6,13 +7,120 @@
     },
     "save.title": "Não foi possível salvar o(a) {{entity}}"
   },
+
+
+  "COMENTARIO_COMPRAS": "Traduções das telas do Menu Compras",
+  "provider": {
+    "name": "Nome",
+    "phone": "Telefone"
+  },
+
+  "purchase": {
+    "customer-name": "Cliente",
+    "purchaseDate": "Data da Compra",
+    "status": "Status",
+    "user-login": "Usuário"
+  },
+
+  "purchase-item": {
+    "name": "Item",
+    "price": "Valor do Item",
+    "quantity": "Quantidade",
+    "itemType": "Tipo",
+    "subTotalItem": "Subtotal"
+  },
+
+  "COMENTARIO_VENDAS": "Traduções das telas do Menu Vendas",
+  "customer": {
+    "name": "Nome",
+    "phone": "Telefone"
+  },
+
+  "sale": {
+    "customer-name": "Cliente",
+    "saleDate": "Data da Venda",
+    "salesman-name": "Vendedor",
+    "status": "Status",
+    "user-login": "Usuário"
+  },
+
+  "sale-item": {
+    "name": "Item",
+    "price": "Valor do Item",
+    "quantity": "Quantidade",
+    "itemType": "Tipo",
+    "subTotalItem": "Subtotal"
+  },
+
+  "COMENTARIO_FONANCEIRO": "Traduções das telas do Menu Financeiro",
+  "bank-check": {
+    "number": "Número do Cheque",
+    "emitter": "Titular da Conta",
+    "personDocument": "Documento do Titular"
+  },
+  "income": {
+    "description": "Descrição",
+    "duaDate": "Data do Vencimento",
+    "paymentDate": "Data de Pagamento",
+    "value": "Valor",
+    "paymentStatus": "Status",
+    "customer": "Cliente",
+    "paymentType": "Forma de Pagamento"
+  },
+  "expense": {
+    "description": "Descrição",
+    "duaDate": "Data do Vencimento",
+    "paymentDate": "Data de Pagamento",
+    "value": "Valor",
+    "paymentStatus": "Status",
+    "provider": "Forncedor",
+    "paymentType": "Forma de Pagamento"
+  },
+
+  "COMENTARIO_MENU_GERAIS": "Traduções das telas do Menu Gerais",
+  "service-type": {
+    "name": "Nome",
+    "description": "Descrição",
+    "price": "Valor"
+  },
+  "product-category": {
+    "name": "Nome",
+    "parent-name": "Subcategoria De"
+  },
+  "product": {
+    "name": "Nome",
+    "unit": "Unidade de Medida",
+    "purchasePrice": "Valor de Compra",
+    "salePrice": "Valor de Venda",
+    "stock": "Saldo em Estoque",
+    "stockMin": "Estoque Mínimo",
+    "productCategoryName": "Categoria de Produto"
+  },
+
+
+  "COMENTARIO_MENU_CONFIGURACOES": "Traduções das telas do Menu Configurações",
+  "tenant": {
+    "name": "Nome",
+    "email": "E-mail",
+    "schemaName": "Nome do schema",
+    "phone": "Telefone do Resposável"
+  },
+  "permission": {
+    "name": "Nome"
+  },
+  "employee": {
+    "name": "Nome",
+    "phone": "Telefone"
+  },
   "user": {
     "entity": "Usuário",
     "id": "Id",
     "login": "Login",
     "active": "Ativo",
+    "employee-name": "Funcionário",
     "permission": "Permissões"
   },
+
   "menu": {
     "home": "Home",
 	"pdv": "PDV",
@@ -26,12 +134,19 @@
       "clientes": "Clientes",
       "vendas": "Vendas"
     },
+    "finance": {
+      "title": "Financeiro",
+      "check": "Cheques",
+      "income": "Contas a Receber",
+      "expense": "Contas a Pagar"
+    },
     "geral": {
       "title": "Gerais",
       "tipos-servicos": "Tipos de Serviços",
       "categorias-produtos": "Categorias de Produtos",
       "produtos": "Produtos"
     },
+
     "configuracao": {
       "title": "Configurações",
       "tenants": "Tenants",
@@ -39,12 +154,50 @@
       "funcionarios": "Funcionários",
       "usuarios": "Usuários"
     },
+
     "sair": "Sair"
   },
   "table": {
     "anterior": "Anterior",
     "proximo": "Próximo"
   },
+  "format": {
+    "phone-mask11": "(00) 0 0000-0000",
+    "phone-mask10": "(00) 0000-0000"
+  },
   "filtros": "Filtros",
-  "total_registros_encontrados": "Total de registros encontrados: {{total}}"
+  "total_registros_encontrados": "Total de registros encontrados: {{total}}",
+  "yes": "Sim",
+  "no": "Não",
+  "enums": {
+    "item-type":{
+      "PRODUCT": "Produto",
+      "SERVICE": "Serviço"
+    },
+    "client-status": {
+      "DEMO": "Demonstração",
+      "INACTIVE": "Inativo",
+      "ACTIVE": "Ativo",
+      "SUSPENDED": "Suspenso"
+    },
+    "payment-type":{
+      "CASH": "Dinheiro",
+      "BANK_CHECK": "Cheque",
+      "BANK_SLIP": "Boleto Bancário",
+      "DEBIT_CARD": "Cartão de Débito",
+      "CREDIT_CARD": "Cartão de Crédito"
+    },
+    "payment-status":{
+      "PENDING": "Pendente",
+      "SETTLED": "Pago",
+      "CANCELED": "Cancelado"
+    },
+    "billing-status": {
+      "CREATED": "Criado",
+      "TO_BILL": "Para faturar",
+      "BILLED": "Parcialmente faturado",
+      "TOTAL_BILLED": "Totalmente faturado",
+      "CANCELED": "Cancelado"
+    }
+  }
 }

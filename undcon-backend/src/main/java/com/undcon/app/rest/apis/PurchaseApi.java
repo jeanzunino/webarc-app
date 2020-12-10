@@ -1,5 +1,7 @@
 package com.undcon.app.rest.apis;
 
+import java.util.List;
+
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -13,11 +15,16 @@ import javax.ws.rs.core.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 
-import com.undcon.app.dtos.ProductItemRequestDto;
+import com.undcon.app.dtos.AmountTotalDto;
+import com.undcon.app.dtos.PurchaseExpenseRequestDto;
+import com.undcon.app.dtos.PurchaseExpenseResponseDto;
+import com.undcon.app.dtos.PurchaseItemDto;
+import com.undcon.app.dtos.PurchaseRequestDto;
+import com.undcon.app.dtos.PurchaseSimpleDto;
 import com.undcon.app.exceptions.UndconException;
 import com.undcon.app.model.PurchaseEntity;
-import com.undcon.app.model.PurchaseItemEntity;
 import com.undcon.app.services.PurchaseService;
 
 /**
@@ -44,18 +51,31 @@ public class PurchaseApi {
 		PurchaseEntity Provider = service.findById(id);
 		return Provider;
 	}
+	
+	@GET
+	@Path("/{id}/itens")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Page<PurchaseItemDto> getitens(@PathParam("id") long id, @QueryParam("page") Integer page,
+			@QueryParam("size") Integer size) throws UndconException {
+		Page<PurchaseItemDto> itens = service.getItens(id, page, size);
+		return itens;
+	}
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	public PurchaseEntity post(PurchaseEntity Provider) throws UndconException {
-		return service.persist(Provider);
+	public PurchaseEntity post(PurchaseRequestDto purchaseDto) throws UndconException {
+		Assert.notNull(purchaseDto.getProvider(), "provider is required");
+		Assert.notNull(purchaseDto.getProvider().getId(), "provider.id is required");
+		return service.persist(purchaseDto);
 	}
 
 	@PUT
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public PurchaseEntity put(PurchaseEntity provider) throws UndconException {
-		return service.update(provider);
+	public PurchaseEntity put(PurchaseRequestDto purchaseDto) throws UndconException {
+		Assert.notNull(purchaseDto.getProvider(), "provider is required");
+		Assert.notNull(purchaseDto.getProvider().getId(), "provider.id is required");
+		return service.update(purchaseDto);
 	}
 
 	@DELETE
@@ -64,25 +84,47 @@ public class PurchaseApi {
 	public void delete(@PathParam("id") long id) throws UndconException {
 		service.delete(id);
 	}
+	
+	@GET
+	@Path("/{id}/total")
+	@Produces(MediaType.APPLICATION_JSON)
+	public AmountTotalDto getSaleTotal(@PathParam("id") long id) throws UndconException {
+		return service.getPurchaseTotal(id);
+	}
+	
+	@POST
+	@Path("/{id}/finalize")
+	@Produces(MediaType.APPLICATION_JSON)
+	public PurchaseSimpleDto finalize(@PathParam("id") long id) throws UndconException {
+		Assert.isTrue(id > 0, "id element is required");
+		return service.finalize(id);
+	}
+	
+	@POST
+	@Path("/{id}/toBillList")
+	@Produces(MediaType.APPLICATION_JSON)
+	public PurchaseExpenseResponseDto toBillPurchase(@PathParam("id") long id, List<PurchaseExpenseRequestDto> purchaseExpenseDtoList)
+			throws UndconException {
+		Assert.notNull(purchaseExpenseDtoList, "purchaseExpenseDtoList is required");
+		Assert.isTrue(purchaseExpenseDtoList.size() > 0, "one element is required");
+		return service.toBill(id, purchaseExpenseDtoList);
+	}
 
 	@POST
-	@Path("/{id}/itensProducts")
+	@Path("/{id}/toBill")
 	@Produces(MediaType.APPLICATION_JSON)
-	public PurchaseItemEntity postItem(@PathParam("id") long id, ProductItemRequestDto item) throws UndconException {
-		return service.addItem(id, item);
+	public PurchaseExpenseResponseDto toBillSale(@PathParam("id") long id, PurchaseExpenseRequestDto purchaseExpenseDto)
+			throws UndconException {
+		Assert.notNull(purchaseExpenseDto.getPaymentType(), "paymentType is required");
+		Assert.notNull(purchaseExpenseDto.getValue(), "value is required");
+		Assert.isTrue(purchaseExpenseDto.getValue() > 0, "value is invalid");
+		return service.toBill(id, purchaseExpenseDto);
 	}
 
-	@PUT
-	@Path("/{id}/itensProducts")
+	@POST
+	@Path("/{id}/toCancel")
 	@Produces(MediaType.APPLICATION_JSON)
-	public PurchaseItemEntity putItem(@PathParam("id") long id, ProductItemRequestDto item) throws UndconException {
-			return service.updateItem(id, item);
-	}
-
-	@DELETE
-	@Path("/{id}/itensProducts/{itemId}")
-	@Produces(MediaType.APPLICATION_JSON)
-	public void deleteItem(@PathParam("saleId") long saleId, @PathParam("itemId") long itemId) throws UndconException {
-			service.deleteItem(saleId, itemId);
+	public PurchaseSimpleDto toCancel(@PathParam("id") long id) throws UndconException {
+		return service.toCancel(id);
 	}
 }

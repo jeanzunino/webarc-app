@@ -6,11 +6,11 @@ public class UserDto {
 
 	private Long id;
 	private String login;
-	private EmployeeDto employee;
+	private PersonDto employee;
 	private PermissionEntity permission;
 	private boolean active;
 
-	public UserDto(Long id, String login, boolean active, EmployeeDto employee, PermissionEntity permission) {
+	public UserDto(Long id, String login, boolean active, PersonDto employee, PermissionEntity permission) {
 		super();
 		this.id = id;
 		this.login = login;
@@ -27,7 +27,7 @@ public class UserDto {
 		return login;
 	}
 
-	public EmployeeDto getEmployee() {
+	public PersonDto getEmployee() {
 		return employee;
 	}
 

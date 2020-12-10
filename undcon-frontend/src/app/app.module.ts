@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, LOCALE_ID } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -13,6 +13,10 @@ import { AuthGuard } from '@guard/auth/auth.guard';
 import { SharedModule } from '@shared/shared.module';
 import { LoginModule } from '@app/login/login.module';
 import { InterceptorModule } from '@interceptor/interceptor.module';
+import { registerLocaleData } from '@angular/common';
+import ptBr from '@angular/common/locales/pt';
+
+registerLocaleData(ptBr);
 
 @NgModule({
   declarations: [AppComponent],
@@ -27,7 +31,11 @@ import { InterceptorModule } from '@interceptor/interceptor.module';
     RouterModule,
     BrowserAnimationsModule
   ],
-  providers: [StorageService, AuthService, AuthGuard],
+  providers: [
+    StorageService,
+    AuthService,
+    AuthGuard
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

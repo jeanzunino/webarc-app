@@ -11,7 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.undcon.app.enums.SaleStatus;
+import com.undcon.app.enums.BillingStatus;
 
 @Entity
 @Table(name = "compra")
@@ -33,7 +33,7 @@ public class PurchaseEntity {
 	private boolean billed;
 
 	@Column(name = "status", nullable = false)
-	private SaleStatus status;
+	private BillingStatus status;
 
 	@ManyToOne
 	@JoinColumn(name = "usuario_id", nullable = false)
@@ -43,7 +43,7 @@ public class PurchaseEntity {
 		super();
 	}
 
-	public PurchaseEntity(Long id, ProviderEntity provider, Date purchaseDate, boolean billed, SaleStatus status,
+	public PurchaseEntity(Long id, ProviderEntity provider, Date purchaseDate, boolean billed, BillingStatus status,
 			UserEntity user) {
 		super();
 		this.id = id;
@@ -86,11 +86,11 @@ public class PurchaseEntity {
 		this.billed = billed;
 	}
 
-	public SaleStatus getStatus() {
+	public BillingStatus getStatus() {
 		return status;
 	}
 
-	public void setStatus(SaleStatus status) {
+	public void setStatus(BillingStatus status) {
 		this.status = status;
 	}
 

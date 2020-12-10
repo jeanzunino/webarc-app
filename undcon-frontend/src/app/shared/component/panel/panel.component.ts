@@ -1,8 +1,8 @@
-import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
-  selector: "app-panel",
-  templateUrl: "./panel.component.html"
+  selector: 'app-panel',
+  templateUrl: './panel.component.html'
 })
 export class PanelComponent implements OnInit {
   @Output() search: EventEmitter<any> = new EventEmitter();
@@ -13,7 +13,7 @@ export class PanelComponent implements OnInit {
 
   constructor() {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   updateExpandedFlagPanel() {
     this.isTheFilterPanelExpanded = !this.isTheFilterPanelExpanded;

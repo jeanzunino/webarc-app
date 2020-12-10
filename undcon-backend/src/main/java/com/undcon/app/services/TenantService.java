@@ -1,15 +1,27 @@
 package com.undcon.app.services;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.sql.DataSource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.undcon.app.enums.ResourceType;
 import com.undcon.app.enums.UndconError;
 import com.undcon.app.exceptions.UndconException;
+import com.undcon.app.model.SystemSalesmanEntity;
 import com.undcon.app.model.TenantEntity;
+import com.undcon.app.multitenancy.DataSourceConfiguration;
+import com.undcon.app.multitenancy.DataSourceProperties;
+import com.undcon.app.multitenancy.DatabaseSchemaType;
 import com.undcon.app.repositories.ITenantRepository;
+import com.undcon.app.repositories.TenantRepositoryImpl;
 import com.undcon.app.utils.NumberUtils;
 
 @Component
@@ -17,9 +29,24 @@ public class TenantService extends AbstractService<TenantEntity> {
 
 	@Autowired
 	private ITenantRepository tenantRepository;
+	
+	@Autowired
+	private TenantRepositoryImpl tenantRepositoryImpl;
 
 	@Autowired
 	private PermissionService permissionService;
+
+	@Autowired
+	private SystemSalesmanService salesmanService;
+
+	@Autowired
+	private DataSourceConfiguration dataSourceConfiguration;
+
+	@Autowired
+	private DataSourceProperties dataSourceProperties;
+	
+	@Autowired
+	private EmailSenderService emailService;
 
 	public Page<TenantEntity> getAll(String filter, Integer page, Integer size) throws UndconException {
 		permissionService.checkPermission(getResourceType());
@@ -28,7 +55,7 @@ public class TenantService extends AbstractService<TenantEntity> {
 
 	public TenantEntity findById(Long id) throws UndconException {
 		permissionService.checkPermission(ResourceType.TENANT);
-		return tenantRepository.findOne(id);
+		return tenantRepository.findById(id);
 	}
 
 	@Override
@@ -36,6 +63,47 @@ public class TenantService extends AbstractService<TenantEntity> {
 		super.validateBeforePost(entity);
 		if (NumberUtils.longIsPositiveValue(entity.getId())) {
 			throw new UndconException(UndconError.NEW_REGISTER_INVALID_ID);
+		}
+		validateName(0, entity.getName());
+		validateSchemaName(0, entity.getSchemaName());
+		validateSalesman(entity);
+	}
+
+	@Override
+	protected void validateBeforeUpdate(TenantEntity entity) throws UndconException {
+		super.validateBeforeUpdate(entity);
+		validateSalesman(entity);
+	}
+
+	@Override
+	protected void afterCommitPost(TenantEntity saved) {
+		super.afterCommitPost(saved);
+
+		String message = "<b>Novo tenant cadastro.</b>\n\n\n" //
+				+ "Nome do Cliente:" + saved.getName() + "\n\n" //
+				+ "Att, \nJean Victor Zunino";
+		
+		emailService.sendEmail(message);
+	}
+	
+	private void validateName(long id, String name) throws UndconException{
+		List<TenantEntity> findByIdNotAndName = tenantRepository.findByIdNotAndNameIgnoreCase(id, name);
+		if(!findByIdNotAndName.isEmpty()) {
+			throw new UndconException(UndconError.NAME_ALREADY_EXISTS);
+		}
+	}
+	
+	private void validateSchemaName(long id, String name) throws UndconException{
+		List<TenantEntity> findByIdNotAndSchema = tenantRepository.findByIdNotAndSchemaNameIgnoreCase(id, name);
+		if(!findByIdNotAndSchema.isEmpty()) {
+			throw new UndconException(UndconError.NAME_ALREADY_EXISTS);
+		}
+	}
+
+	private void validateSalesman(TenantEntity entity) throws UndconException {
+		SystemSalesmanEntity salesman = salesmanService.findById(entity.getSalesman().getId());
+		if (salesman == null) {
+			throw new UndconException(UndconError.SALESMAN_NOT_FOUND);
 		}
 	}
 
@@ -47,6 +115,22 @@ public class TenantService extends AbstractService<TenantEntity> {
 	@Override
 	protected ResourceType getResourceType() {
 		return ResourceType.TENANT;
+	}
+
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+	public void createDb(long id) throws UndconException {
+		TenantEntity entity = findById(id);
+		String tenant = entity.getSchemaName();
+		
+		List<String> tenants = new ArrayList<String>();
+		tenantRepositoryImpl.getAll().stream().forEach(schemaName -> tenants.add(schemaName));
+		dataSourceProperties.setTenants(tenants);
+		
+		dataSourceProperties.setDatasources();
+		
+		DataSource dataSource = dataSourceProperties.getDatasources().get(tenant);
+		DatabaseSchemaType database = DatabaseSchemaType.TENANTS;
+		dataSourceConfiguration.migrate(tenant, dataSource, database);
 	}
 
 }

@@ -1,36 +1,47 @@
 <div class="card text-light primary-system-color">
   <div class="card-body">
     <div *ngIf="totalItems">
-      <div class="row div--header-align">
+      <div class="row div--header-align" *ngIf="showTotalItems">
         <div class="col-6 div--total-items-align">
           {{'total_registros_encontrados' | translate: {total: totalItems} }}
         </div>
-        <div class="col-6 div-button--table-header">
+        <div *ngIf="showBtnAdd" class="col-6 div-button--table-header">
           <button mdbBtn class="button--table-header" type="button" color="primary" outline="true" (click)="onClickItem(null)" mdbWavesEffect>Adicionar</button>
         </div>
       </div>
       <div class="table-responsive">
-        <table class="table table-striped">
-          <thead class="secondary-system-color">
+        <table class="table margin-b-0">
+          <thead class="primary-system-color">
             <tr>
-              <th *ngFor="let tableValue of tableValues" class="text-light">
+              <th *ngFor="let tableValue of tableValues" class="text-light border-color-table">
                 {{ getHeaders(tableValue) | translate }}
+              </th>
+              <th *ngIf="showDelete" class="text-light border-color-table">
+              </th>
+              <th *ngIf="labelActionPrimaryButtonItem" class="text-light border-color-table">
               </th>
             </tr>
           </thead>
           <tbody>
-            <tr
-              *ngFor="let item of tableItems | paginate: {itemsPerPage: 10, currentPage: currentPage, totalItems: totalItems}"
-              class="cursor-pointer">
-              <th *ngFor="let tableValue of tableValues" class="text-light" (click)="onClickItem(item)">
+            <tr *ngFor="let item of tableItems | paginate: {id: idPaginator, itemsPerPage: 10, currentPage: currentPage, totalItems: totalItems}; let index = index"
+              class="{{selectableLine ? 'select-line' : ''}} {{index % 2 != 0 ? 'primary-background-color-line-table' : 'secondary-background-color-line-table'}}">
+              <th *ngFor="let tableValue of tableValues" class="text-light border-color-table" (click)="onClickItem(item)">
                 {{ getFieldsOfTable(item, tableValue) }}
+              </th>
+              <th class="width-84 text-align-center border-color-table pad-0" *ngIf="labelActionPrimaryButtonItem">
+                <button mdbBtn class="pad-t-5 pad-b-5" type="button" color="primary" outline="true" (click)="actionPrimaryButtonItemEvent(item)" mdbWavesEffect>{{ labelActionPrimaryButtonItem }}</button>
+              </th>
+              <th class="width-84 text-align-center border-color-table" *ngIf="showDelete">
+                <a type="button" (click)="deleteItemEvent(item)">
+                  <mdb-icon fas class="color-crimson" icon="fa fa-trash"></mdb-icon>
+                </a>
               </th>
             </tr>
           </tbody>
           <tfoot class="primary-system-color footer--align">
             <tr>
-              <td colspan="10">
-                <pagination-controls previousLabel="{{ 'table.anterior' | translate }}"
+              <td colspan="10" class="border-color-table">
+                <pagination-controls [id]=idPaginator previousLabel="{{ 'table.anterior' | translate }}"
                   nextLabel="{{ 'table.proximo' | translate }}" responsive="true" autoHide="true"
                   (pageChange)="updateItems($event)">
                 </pagination-controls>
@@ -48,7 +59,7 @@
       <div>
         <label>Nenhum resultado foi encontrado.</label>
       </div>
-      <button mdbBtn type="button" color="primary" outline="true" (click)="onClickItem(null)" mdbWavesEffect>Adicionar</button>
+      <button *ngIf="showBtnAdd" mdbBtn type="button" color="primary" outline="true" (click)="onClickItem(null)" mdbWavesEffect>Adicionar</button>
     </div>
   </div>
 </div>

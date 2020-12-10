@@ -1,5 +1,7 @@
 package com.undcon.app.rest.apis;
 
+import java.util.List;
+
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -12,11 +14,17 @@ import javax.ws.rs.core.MediaType;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 
+import com.undcon.app.dtos.ExpenseDto;
+import com.undcon.app.dtos.IncomeDto;
 import com.undcon.app.exceptions.UndconException;
+import com.undcon.app.mappers.ExpenseMapper;
 import com.undcon.app.model.ExpenseEntity;
 import com.undcon.app.services.ExpenseService;
+import com.undcon.app.utils.PageUtils;
 
 /**
  * Api de Despesas
@@ -28,35 +36,60 @@ public class ExpenseApi {
 	@Autowired
 	private ExpenseService service;
 
+	@Autowired
+	private ExpenseMapper mapper;
+
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Page<ExpenseEntity> getAll(@QueryParam("filter") String filter, @QueryParam("page") Integer page,
+	public Page<ExpenseDto> getAll(@QueryParam("filter") String filter, @QueryParam("page") Integer page,
 			@QueryParam("size") Integer size) {
-		return service.getAll(filter, page, size);
+		Page<ExpenseEntity> all = service.getAll(filter, page, size);
+		List<ExpenseDto> content = mapper.toDto(all.getContent());
+		Page<ExpenseDto> pageDto = new PageImpl<ExpenseDto>(content, PageUtils.createPageRequest(page, size),
+				all.getTotalElements());
+		return pageDto;
 	}
 
 	@GET
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ExpenseEntity get(@PathParam("id") long id) throws UndconException {
+	public ExpenseDto get(@PathParam("id") long id) throws UndconException {
 		ExpenseEntity customer = service.findById(id);
-
-		return customer;
+		return mapper.toDto(customer);
 	}
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	public ExpenseEntity post(ExpenseEntity customer) throws UndconException {
-		return service.persist(customer);
+	public ExpenseDto post(ExpenseEntity expense) throws UndconException {
+		Assert.notNull(expense.getProvider(), "provider is required");
+		Assert.notNull(expense.getProvider().getId(), "provider.id is required");
+		Assert.notNull(expense.getPaymentType(), "paymentType is required");
+		Assert.notNull(expense.getPaymentStatus(), "paymentStatus is required");
+		Assert.isTrue(expense.getValue() > 0, "value is invalid");
+		return mapper.toDto(service.persist(expense));
 	}
 
 	@PUT
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ExpenseEntity put(ExpenseEntity customer) throws UndconException {
-		return service.update(customer);
+	public ExpenseDto put(ExpenseEntity expense) throws UndconException {
+		Assert.notNull(expense.getProvider(), "provider is required");
+		Assert.notNull(expense.getProvider().getId(), "provider.id is required");
+		Assert.notNull(expense.getPaymentType(), "paymentType is required");
+		Assert.notNull(expense.getPaymentStatus(), "paymentStatus is required");
+		Assert.isTrue(expense.getValue() > 0, "value is invalid");
+		return mapper.toDto(service.update(expense));
 	}
 
+	@PUT
+	@Path("/{id}/updateStatus")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ExpenseDto put(ExpenseDto expense) throws UndconException {
+		Assert.notNull(expense.getId(), "id is required");
+		Assert.notNull(expense.getPaymentStatus(), "paymentStatus is required");
+		return mapper.toDto(service.updateStatus(expense));
+	}
+	
 	@DELETE
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)

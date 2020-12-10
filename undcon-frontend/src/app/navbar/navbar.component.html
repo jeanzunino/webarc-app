@@ -12,7 +12,7 @@
 
     <ul class="navbar-nav mr-auto">
       <li class="nav-item">
-        <a class="nav-link waves-light" routerLink="/home" (click)="loadingPage()" mdbWavesEffect>{{ 'menu.home' | translate }}</a>
+        <a class="nav-link waves-light" routerLink="/home" mdbWavesEffect>{{ 'menu.home' | translate }}</a>
       </li>
 
       <li class="nav-item">
@@ -25,10 +25,8 @@
         </a>
         <div *dropdownMenu class="dropdown-menu dropdown-menu-right dropdown dropdown-primary primary-system-color"
           role="menu">
-          <a class="dropdown-item waves-light text-light" mdbWavesEffect routerLink="/provider"
-            (click)="loadingPage()">{{ 'menu.compra.fornecedores' | translate }}</a>
-          <a class="dropdown-item waves-light text-light" mdbWavesEffect routerLink="/purchase"
-            (click)="loadingPage()">{{ 'menu.compra.compras' | translate }}</a>
+          <a *ngIf="verifyPermissionMenu('PROVIDER')" class="dropdown-item waves-light text-light" mdbWavesEffect routerLink="/provider">{{ 'menu.compra.fornecedores' | translate }}</a>
+          <a *ngIf="verifyPermissionMenu('PURCHASE')" class="dropdown-item waves-light text-light" mdbWavesEffect routerLink="/purchase">{{ 'menu.compra.compras' | translate }}</a>
         </div>
       </li>
 
@@ -38,10 +36,22 @@
         </a>
         <div *dropdownMenu class="dropdown-menu dropdown-menu-right dropdown dropdown-primary primary-system-color"
           role="menu">
-          <a class="dropdown-item waves-light text-light" mdbWavesEffect routerLink="/customer"
-            (click)="loadingPage()">{{ 'menu.venda.clientes' | translate }}</a>
-          <a class="dropdown-item waves-light text-light" mdbWavesEffect routerLink="/sale"
-            (click)="loadingPage()">{{ 'menu.venda.vendas' | translate }}</a>
+          <a *ngIf="verifyPermissionMenu('CUSTOMER')" class="dropdown-item waves-light text-light" mdbWavesEffect routerLink="/customer">{{ 'menu.venda.clientes' | translate }}</a>
+          <a *ngIf="verifyPermissionMenu('SALE')" class="dropdown-item waves-light text-light" mdbWavesEffect routerLink="/sale">{{ 'menu.venda.vendas' | translate }}</a>
+        </div>
+      </li>
+
+      <li class="nav-item dropdown" dropdown>
+        <a dropdownToggle mdbWavesEffect type="button" class="nav-link dropdown-toggle waves-light" mdbWavesEffect>
+          <mdb-icon fas icon="shopping-cart"></mdb-icon> {{ 'menu.finance.title' | translate }} <span class="caret"></span>
+        </a>
+        <div *dropdownMenu class="dropdown-menu dropdown-menu-right dropdown dropdown-primary primary-system-color" role="menu">
+          <a *ngIf="verifyPermissionMenu('BACK_CHECK')" class="dropdown-item waves-light text-light" mdbWavesEffect routerLink="/bank-check">
+            {{ 'menu.finance.check' | translate }}</a>
+          <a *ngIf="verifyPermissionMenu('INCOME')" class="dropdown-item waves-light text-light" mdbWavesEffect routerLink="/income">
+            {{ 'menu.finance.income' | translate }}</a>
+          <a *ngIf="verifyPermissionMenu('EXPENSE')" class="dropdown-item waves-light text-light" mdbWavesEffect routerLink="/expense">
+            {{ 'menu.finance.expense' | translate }}</a>
         </div>
       </li>
 
@@ -51,12 +61,9 @@
         </a>
         <div *dropdownMenu class="dropdown-menu dropdown-menu-right dropdown dropdown-primary primary-system-color"
           role="menu">
-          <a class="dropdown-item waves-light text-light" mdbWavesEffect routerLink="/service-type"
-            (click)="loadingPage()">{{ 'menu.geral.tipos-servicos' | translate }}</a>
-          <a class="dropdown-item waves-light text-light" mdbWavesEffect routerLink="/productcategory"
-            (click)="loadingPage()">{{ 'menu.geral.categorias-produtos' | translate }}</a>
-          <a class="dropdown-item waves-light text-light" mdbWavesEffect routerLink="/product"
-            (click)="loadingPage()">{{ 'menu.geral.produtos' | translate }}</a>
+          <a *ngIf="verifyPermissionMenu('SERVICE_TYPE')" class="dropdown-item waves-light text-light" mdbWavesEffect routerLink="/service-type">{{ 'menu.geral.tipos-servicos' | translate }}</a>
+          <a *ngIf="verifyPermissionMenu('PRODUCT_CATEGORY')" class="dropdown-item waves-light text-light" mdbWavesEffect routerLink="/productcategory">{{ 'menu.geral.categorias-produtos' | translate }}</a>
+          <a *ngIf="verifyPermissionMenu('PRODUCT')" class="dropdown-item waves-light text-light" mdbWavesEffect routerLink="/product">{{ 'menu.geral.produtos' | translate }}</a>
         </div>
       </li>
     </ul>
@@ -69,14 +76,10 @@
         </a>
         <div *dropdownMenu class="dropdown-menu dropdown-menu-right dropdown dropdown-primary primary-system-color"
           role="menu">
-          <a class="dropdown-item waves-light text-light" mdbWavesEffect routerLink="/tenant"
-            (click)="loadingPage()">{{ 'menu.configuracao.tenants' | translate }}</a>
-          <a class="dropdown-item waves-light text-light" mdbWavesEffect routerLink="/permission"
-            (click)="loadingPage()">{{ 'menu.configuracao.permissoes' | translate }}</a>
-          <a class="dropdown-item waves-light text-light" mdbWavesEffect routerLink="/employee"
-            (click)="loadingPage()">{{ 'menu.configuracao.funcionarios' | translate }}</a>
-          <a class="dropdown-item waves-light text-light" mdbWavesEffect routerLink="/user"
-            (click)="loadingPage()">{{ 'menu.configuracao.usuarios' | translate }}</a>
+          <a *ngIf="verifyPermissionMenu('TENANT')" class="dropdown-item waves-light text-light" mdbWavesEffect routerLink="/tenant">{{ 'menu.configuracao.tenants' | translate }}</a>
+          <a *ngIf="verifyPermissionMenu('PERMISSION')" class="dropdown-item waves-light text-light" mdbWavesEffect routerLink="/permission">{{ 'menu.configuracao.permissoes' | translate }}</a>
+          <a *ngIf="verifyPermissionMenu('EMPLOYEE')" class="dropdown-item waves-light text-light" mdbWavesEffect routerLink="/employee">{{ 'menu.configuracao.funcionarios' | translate }}</a>
+          <a *ngIf="verifyPermissionMenu('USER')" class="dropdown-item waves-light text-light" mdbWavesEffect routerLink="/user">{{ 'menu.configuracao.usuarios' | translate }}</a>
         </div>
       </li>
 

@@ -22,6 +22,8 @@ public enum UndconError {
 	
 	NAME_ALREADY_EXISTS("O nome informado já existe"),
 	
+	SCHEMA_NAME_ALREADY_EXISTS("O nome do schema informado já existe"),
+	
 	LOGIN_ALREADY_EXISTS("O login informado já existe"),
 	
 	LOGIN_ALREADY_EXISTS_IN_EMPLOYEE("O login já foi informado para este colaborador"),
@@ -34,9 +36,25 @@ public enum UndconError {
 	
 	SALE_NOT_FOUND("Venda não encontrada"),
 	
+	PURCHASE_NOT_FOUND("Compra não encontrada"),
+	
+	PURCHASE_ITEM_NOT_FOUND("Item de compra não encontrado"),
+	
+	SALE_INVALID_STATUS("Não é possível alterar o status da venda dessa forma"),
+	
+	SALE_WITHOUT_ITENS_INVALID_TO_BILL("Venda sem itens não pode ser finalizada e enviada para faturamento"),
+	
+	PRODUCT_NOT_FOUND("Produto não encontrado"),
+	
+	SERVICE_TYPE_NOT_FOUND("Serviço não encontrado"),
+	
 	PERMISSION_NOT_FOUND("Permissão não encontrada"),
 	
 	EMPLOYEE_NOT_FOUND("Funcionário não encontrado"),
+	
+	INCOME_NOT_FOUND("Receita não encontrada"),
+	
+	SALESMAN_NOT_FOUND("Vendedor não encontrado"),
 	
 	SALE_ITEM_NOT_FOUND("Item de venda não encontrado"),
 	
@@ -46,7 +64,13 @@ public enum UndconError {
 	
 	PURCHASE_ENTITY_INVALID_PROVIDER("Fornecedor inválido para a compra"),
 	
-	PDV_ALREADY_OPEN_TO_THE_LOGGED_USER("O PDV já está aberto para o usuário logado");
+	PDV_ALREADY_OPEN_TO_THE_LOGGED_USER("O PDV já está aberto para o usuário logado"),
+
+	SALE_INCOME_AMOUNT_PAID_IS_MAJOR_SALE_TOTAL_VALUE("O Valor pago ultrapassou o valor da venda, verifique o valor a pagar"),
+	
+	SALE_INCOME_TO_BILL_SALE_TOTAL_BILLED("Não é possível gerar novo pagamento para venda totalmente faturada"),
+	
+	SALE_INCOME_CANCELED_SALE("Não é possível gerar novo pagamento para venda cancelada");
 	
 	private String message;
 

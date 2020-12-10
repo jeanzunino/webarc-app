@@ -11,6 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.undcon.app.enums.PaymentStatus;
 import com.undcon.app.enums.PaymentType;
 
 @Entity
@@ -32,10 +33,14 @@ public class IncomeEntity {
 	private Date paymentDate;
 
 	@Column(name = "valor")
-	private String value;
+	private double value;
 
-	@Column(name = "baixado")
-	private int settled;
+	@Column(name = "status")
+	private PaymentStatus paymentStatus;
+
+	@ManyToOne
+	@JoinColumn(name = "venda_id", nullable = true)
+	private SaleEntity sale;
 
 	@ManyToOne
 	@JoinColumn(name = "cliente_id", nullable = false)
@@ -47,15 +52,16 @@ public class IncomeEntity {
 	public IncomeEntity() {
 	}
 
-	public IncomeEntity(Long id, String description, Date duaDate, Date paymentDate, String value, int settled,
-			CustomerEntity customer, PaymentType paymentType) {
+	public IncomeEntity(Long id, String description, Date duaDate, Date paymentDate, double value,
+			PaymentStatus paymentStatus, SaleEntity sale, CustomerEntity customer, PaymentType paymentType) {
 		super();
 		this.id = id;
 		this.description = description;
 		this.duaDate = duaDate;
 		this.paymentDate = paymentDate;
 		this.value = value;
-		this.settled = settled;
+		this.paymentStatus = paymentStatus;
+		this.sale = sale;
 		this.customer = customer;
 		this.paymentType = paymentType;
 	}
@@ -64,32 +70,72 @@ public class IncomeEntity {
 		return id;
 	}
 
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 	public String getDescription() {
 		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public Date getDuaDate() {
 		return duaDate;
 	}
 
+	public void setDuaDate(Date duaDate) {
+		this.duaDate = duaDate;
+	}
+
 	public Date getPaymentDate() {
 		return paymentDate;
 	}
 
-	public String getValue() {
+	public void setPaymentDate(Date paymentDate) {
+		this.paymentDate = paymentDate;
+	}
+
+	public double getValue() {
 		return value;
 	}
 
-	public int getSettled() {
-		return settled;
+	public void setValue(double value) {
+		this.value = value;
 	}
 
-	public CustomerEntity getProvider() {
+	public PaymentStatus getPaymentStatus() {
+		return paymentStatus;
+	}
+
+	public void setPaymentStatus(PaymentStatus paymentStatus) {
+		this.paymentStatus = paymentStatus;
+	}
+
+	public SaleEntity getSale() {
+		return sale;
+	}
+
+	public void setSale(SaleEntity sale) {
+		this.sale = sale;
+	}
+
+	public CustomerEntity getCustomer() {
 		return customer;
+	}
+
+	public void setCustomer(CustomerEntity customer) {
+		this.customer = customer;
 	}
 
 	public PaymentType getPaymentType() {
 		return paymentType;
+	}
+
+	public void setPaymentType(PaymentType paymentType) {
+		this.paymentType = paymentType;
 	}
 
 }

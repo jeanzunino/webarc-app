@@ -1,7 +1,7 @@
 <div class="modal-dialog-scrollable text-light">
   <div class="modal-content">
-    <div class="modal-header secondary-system-color">
-      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+    <div class="modal-header secondary-system-color border-default-color">
+      <button type="button" class="close pull-right text-light" aria-label="Close" (click)="modalRef.hide()">
         <span aria-hidden="true">×</span>
       </button>
       <h4 class="modal-title w-100">{{ modalTitle }}</h4>
@@ -9,7 +9,7 @@
     <div class="modal-body container primary-system-color">
       <ng-content select="[body]"></ng-content>
     </div>
-    <div class="modal-footer secondary-system-color">
+    <div class="modal-footer secondary-system-color border-default-color">
       <ng-content select="[footer]"></ng-content>
     </div>
   </div>

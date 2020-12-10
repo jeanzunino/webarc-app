@@ -17,15 +17,13 @@ import { getQueryFilter } from '@shared/utils/utils';
 export class ProductComponent extends GridViewComponent<Product> {
   tableValues = new Table()
     .set('name', 'product.name')
-    .set('unit', 'product.unit')
-    .set('purchasePrice', 'product.purchasePrice')
+    .set('productCategory.name', 'product.productCategoryName')
     .set('salePrice', 'product.salePrice')
     .set('stock', 'product.stock')
-    .set('stockMin', 'product.stockMin')
-    .set('productCategory.name', 'product.stockMin')
     .get();
   name = null;
   unit = null;
+  gtin = null;
 
   constructor(
     service: ProductService,
@@ -47,6 +45,7 @@ export class ProductComponent extends GridViewComponent<Product> {
     const params = new Map<string, string>();
     params.set(getQueryFilter('name', QueryFilterEnum.CONTAINS_IC), this.name);
     params.set(getQueryFilter('unit', QueryFilterEnum.CONTAINS_IC), this.unit);
+    params.set(getQueryFilter('gtin', QueryFilterEnum.CONTAINS_IC), this.gtin);
     this.onSearchParams(params);
   }
 

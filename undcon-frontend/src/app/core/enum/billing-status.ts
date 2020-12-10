@@ -1,0 +1,7 @@
+export enum BillingStatus {
+  CREATED = 'CREATED',
+  TO_BILL = 'TO_BILL',
+  BILLED = 'BILLED',
+  TOTAL_BILLED = 'TOTAL_BILLED',
+  CANCELED = 'CANCELED',
+}

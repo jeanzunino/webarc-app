@@ -4,8 +4,9 @@ import {
   CollapseModule,
   MDBBootstrapModule,
   CheckboxModule,
+  TooltipModule
 } from 'angular-bootstrap-md';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import {
   TranslateModule,
@@ -16,11 +17,21 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HttpClient } from '@angular/common/http';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { NgxMaskModule, MaskPipe } from 'ngx-mask';
+import { RouterModule } from '@angular/router';
+import { AutocompleteLibModule } from 'angular-ng-autocomplete';
 
 import { DialogComponent } from '@component/dialog/dialog.component';
 import { TableComponent } from '@component/table/table.component';
 import { PanelComponent } from '@component/panel/panel.component';
+import { SimplePanelComponent } from '@component/simple-panel/simple-panel.component';
 import { ValidationComponent } from '@component/validation/validation.component';
+import { EmptyComponent } from '@component/empty/empty.component';
+import { EmptyChildrenComponent } from '@component/empty-children/empty-children.component';
+import { ConfirmDialogComponent } from '@component/confirm-dialog/confirm-dialog.component';
+import { ButtonGroupComponent } from '@component/button-group/button-group.component';
+import { InstallmentDialogComponent } from '@component/installment-dialog/installment-dialog.component';
+import { LocalizedDatePipe } from '@core/pipes/localized-date-pipe';
+
 
 export let SharedInjector: Injector;
 
@@ -33,7 +44,13 @@ export function HttpLoaderFactory(http: HttpClient) {
     DialogComponent,
     TableComponent,
     PanelComponent,
-    ValidationComponent
+    SimplePanelComponent,
+    ValidationComponent,
+    EmptyComponent,
+    EmptyChildrenComponent,
+    ConfirmDialogComponent,
+    ButtonGroupComponent,
+    InstallmentDialogComponent
   ],
   exports: [
     CommonModule,
@@ -46,11 +63,18 @@ export function HttpLoaderFactory(http: HttpClient) {
     NgxPaginationModule,
     TableComponent,
     PanelComponent,
+    SimplePanelComponent,
     CheckboxModule,
-    ValidationComponent
+    ValidationComponent,
+    EmptyComponent,
+    EmptyChildrenComponent,
+    AutocompleteLibModule,
+    ButtonGroupComponent,
+    TooltipModule
   ],
   imports: [
     CommonModule,
+    FormsModule,
     NgxSpinnerModule,
     MDBBootstrapModule.forRoot(),
     TranslateModule.forRoot({
@@ -61,10 +85,13 @@ export function HttpLoaderFactory(http: HttpClient) {
       },
     }),
     NgxPaginationModule,
-    NgxMaskModule.forRoot()
+    NgxMaskModule.forRoot(),
+    RouterModule
   ],
   providers: [
-    MaskPipe
+    MaskPipe,
+    DatePipe,
+    LocalizedDatePipe
   ]
 })
 export class SharedModule {

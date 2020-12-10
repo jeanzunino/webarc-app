@@ -1,19 +1,24 @@
 package com.undcon.app.dtos;
 
+import com.undcon.app.enums.BillingStatus;
+
 public class SaleRequestDto {
 
 	private Long id;
-	private Long customerId;
-	private Long salesmanId;
+	private PersonDto customer;
+	private PersonDto salesman;
+	private BillingStatus status;
+	
 
 	public SaleRequestDto() {
-		// TODO Auto-generated constructor stub
 	}
-	public SaleRequestDto(Long id, Long customerId, Long salesmanId) {
+
+	public SaleRequestDto(Long id, PersonDto customer, PersonDto salesman, BillingStatus status) {
 		super();
 		this.id = id;
-		this.customerId = customerId;
-		this.salesmanId = salesmanId;
+		this.customer = customer;
+		this.salesman = salesman;
+		this.status = status;
 	}
 
 	public Long getId() {
@@ -24,20 +29,28 @@ public class SaleRequestDto {
 		this.id = id;
 	}
 
-	public Long getCustomerId() {
-		return customerId;
+	public PersonDto getCustomer() {
+		return customer;
 	}
 
-	public void setCustomerId(Long customerId) {
-		this.customerId = customerId;
+	public void setCustomer(PersonDto customer) {
+		this.customer = customer;
 	}
 
-	public Long getSalesmanId() {
-		return salesmanId;
+	public PersonDto getSalesman() {
+		return salesman;
 	}
 
-	public void setSalesmanId(Long salesmanId) {
-		this.salesmanId = salesmanId;
+	public void setSalesman(PersonDto salesman) {
+		this.salesman = salesman;
+	}
+	
+	public BillingStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(BillingStatus status) {
+		this.status = status;
 	}
 
 }

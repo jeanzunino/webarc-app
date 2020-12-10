@@ -1,4 +1,7 @@
 <div class="container-fluid screen-top screen-bottom">
+  <div class="h2 text-light">
+    Produtos
+  </div>
   <app-panel panelTitle="filtros" (search)="onSearch()" (clear)="onClear()">
     <div body>
       <div class="row">
@@ -12,6 +15,14 @@
           <div class="md-form">
             <input type="text" id="unit" class="form-control text-light" [(ngModel)]="unit" mdbInput />
             <label for="unit" class="text-light">Unidade</label>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-6">
+          <div class="md-form">
+            <input type="number" id="gtin" class="form-control text-light" [(ngModel)]="gtin" mdbInput />
+            <label for="gtin" class="text-light">Gtin</label>
           </div>
         </div>
       </div>

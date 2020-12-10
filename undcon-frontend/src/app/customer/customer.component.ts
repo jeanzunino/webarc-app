@@ -9,6 +9,7 @@ import { CustomerEditComponent } from '@app/customer/customer-edit/customer-edit
 import { Table } from '@shared/model/table';
 import { QueryFilterEnum } from '@core/enum/query-filter';
 import { getQueryFilter } from '@shared/utils/utils';
+import { FormatEnum } from '@core/enum/format-enum';
 
 @Component({
   selector: 'app-customer',
@@ -17,7 +18,7 @@ import { getQueryFilter } from '@shared/utils/utils';
 export class CustomerComponent extends GridViewComponent<Customer> {
   tableValues = new Table()
     .set('name', 'customer.name')
-    .set('phone', 'customer.phone', '(00) 00000-0000')
+    .set('phone', 'customer.phone', FormatEnum.PHONE_MASK)
     .get();
   name = null;
   phone = null;

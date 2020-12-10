@@ -9,11 +9,13 @@ export enum PageEnum {
   PRODUCT = 'product',
   PRODUCT_CATEGORY = 'productcategory',
   SERVICE_TYPE = 'service-type',
-  FINANCIAL = 'financial',
+  INCOME = 'income',
+  EXPENSE = 'expense',
   SALE = 'sale',
   PURCHASE = 'purchase',
   PERMISSION = 'permission',
   MENU_TEMPLATE = 'menu-template',
   CONFIG = 'config',
-  TENANT = 'tenant'
+  TENANT = 'tenant',
+  BANK_CHECK = 'bank-check'
 }

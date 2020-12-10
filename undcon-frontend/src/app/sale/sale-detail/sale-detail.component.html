@@ -1,7 +1,9 @@
 <app-simple-panel [panelTitle]="getTitle()" [panelTitleColor]="'color-black'" [showHeader]="showPanelHeader"
                   [icon]="iconPanelHeader" [headerColor]="colorPanelHeader">
   <div body>
-
+    <div class="h2 text-light">
+      Vendas
+    </div>
     <div *ngIf="isToBill() || isBilled() || isTotalBilled()" class="row margin-b-20">
       <div class="col-6">
         <app-simple-panel panelColor="secondary-system-color">

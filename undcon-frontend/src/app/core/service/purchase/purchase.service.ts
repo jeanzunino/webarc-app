@@ -61,4 +61,8 @@ export class PurchaseService extends EntityService<Purchase> {
   purchaseCancel(purchaseId: number) {
     return this.postCustomUrl(`${this.baseUrl}/${this.entityUrl}/${purchaseId}/toCancel`);
   }
+
+  //getDataToImportPurchase(data: FormData) {
+  //  return this.postFormData(`${this.baseUrl}/${this.entityUrl}/getDataToImportPurchase`, data);
+  //}
 }

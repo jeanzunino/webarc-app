@@ -68,7 +68,7 @@ export class TableComponent {
 
     if (tableValue.formatEnum) {
       if (tableValue.formatEnum === FormatEnum.PHONE_MASK) {
-        return this.maskPipe.transform(finalValue, this.translate.instant(tableValue.formatEnum));
+        return this.maskPipe.transform(finalValue, this.translate.instant(tableValue.formatEnum + finalValue.length));
       } else if (tableValue.formatEnum === FormatEnum.YES_NO) {
         return finalValue ? this.translate.instant('yes') : this.translate.instant('no');
       } else if (tableValue.formatEnum === FormatEnum.ITEM_TYPE) {

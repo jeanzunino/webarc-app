@@ -32,7 +32,7 @@ export class PurchaseComponent extends GridViewComponent<Purchase> {
   statusList = Object.values(BillingStatus);
 
   constructor(
-    service: PurchaseService,
+    protected service: PurchaseService,
     activatedRoute: ActivatedRoute,
     modalService: MDBModalService,
     private router: Router,
@@ -43,6 +43,17 @@ export class PurchaseComponent extends GridViewComponent<Purchase> {
 
   onClickItem(sale: Purchase) {
     this.router.navigate((sale === null ? ['new'] : [sale.id]), { relativeTo: this.rt });
+  }
+
+  public onClickImport(event) {
+    if (event.target.files.length > 0) {
+      const file = event.target.files[0];
+      const formData = new FormData();
+      formData.set('uploadedFile', file);
+      //this.service.getDataToImportPurchase(formData).toPromise().then((result) => {
+      //});
+    }
+   
   }
 
   open() {

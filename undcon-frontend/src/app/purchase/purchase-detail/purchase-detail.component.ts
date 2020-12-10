@@ -359,6 +359,9 @@ export class PurchaseDetailComponent implements OnInit, OnDestroy {
           this.translate.instant('Venda finalizada com sucesso'),
           this.translate.instant('Sucesso')
         );
+        this.setPanelHeaderStatus();
+        this.showPanelHeader = true;
+        this.setBgPaymentType();
       });
   }
 

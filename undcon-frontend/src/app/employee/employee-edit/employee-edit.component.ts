@@ -35,7 +35,7 @@ export class EmployeeEditComponent extends DefaultEditViewComponent<Employee> {
     this.getFormGroup().patchValue({
       id: employee.id,
       name: employee.name,
-      phone: employee.phone,
+      phone: employee.phone
     });
   }
 

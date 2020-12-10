@@ -23,7 +23,7 @@ export abstract class GridViewComponent<T> implements OnInit, OnDestroy {
   private filterParams = new Map<string, string>();
 
   constructor(
-    private service: EntityService<T>,
+    protected service: EntityService<T>,
     private activatedRoute: ActivatedRoute,
     public modalService: MDBModalService
   ) {}

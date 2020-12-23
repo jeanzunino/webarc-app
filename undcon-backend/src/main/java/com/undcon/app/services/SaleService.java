@@ -35,6 +35,7 @@ import com.undcon.app.mappers.SaleMapper;
 import com.undcon.app.model.CustomerEntity;
 import com.undcon.app.model.EmployeeEntity;
 import com.undcon.app.model.IncomeEntity;
+import com.undcon.app.model.PdvEntity;
 import com.undcon.app.model.SaleEntity;
 import com.undcon.app.model.UserEntity;
 import com.undcon.app.repositories.ISaleItemProductRepository;
@@ -108,7 +109,8 @@ public class SaleService extends AbstractService<SaleEntity> {
 		if (saleDto.getSalesman() != null && NumberUtils.longIsPositiveValue(saleDto.getSalesman().getId())) {
 			salesman = employeeService.findById(saleDto.getSalesman().getId());
 		}
-		SaleEntity sale = new SaleEntity(null, customer, saleDate, billed, status, user, salesman);
+		PdvEntity pdv = null;
+		SaleEntity sale = new SaleEntity(null, customer, saleDate, billed, status, user, salesman, pdv);
 		return saleRepository.save(sale);
 	}
 	

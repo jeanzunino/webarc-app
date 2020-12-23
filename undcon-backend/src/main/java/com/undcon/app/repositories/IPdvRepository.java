@@ -9,5 +9,5 @@ import com.undcon.app.model.UserEntity;
 
 public interface IPdvRepository extends JpaRepository<PdvEntity, Long> {
 	
-	public List<PdvEntity> findByUser(UserEntity user);
+	public List<PdvEntity> findByUserAndClosingDateIsNull(UserEntity user);
 }

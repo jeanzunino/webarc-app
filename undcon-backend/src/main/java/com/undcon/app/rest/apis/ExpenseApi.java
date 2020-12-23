@@ -19,7 +19,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 import com.undcon.app.dtos.ExpenseDto;
-import com.undcon.app.dtos.IncomeDto;
 import com.undcon.app.exceptions.UndconException;
 import com.undcon.app.mappers.ExpenseMapper;
 import com.undcon.app.model.ExpenseEntity;

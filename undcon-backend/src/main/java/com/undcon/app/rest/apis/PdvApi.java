@@ -15,8 +15,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import com.undcon.app.dtos.OpenPdvDto;
+import com.undcon.app.dtos.PdvResume;
 import com.undcon.app.exceptions.UndconException;
-import com.undcon.app.mappers.ProductMapper;
+import com.undcon.app.mappers.PdvMapper;
 import com.undcon.app.model.PdvEntity;
 import com.undcon.app.services.PdvService;
 
@@ -26,7 +27,7 @@ public class PdvApi {
 
 	@Autowired
 	private PdvService pdvService;
-
+	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Page<PdvEntity> getAll(@QueryParam("name") String name, @QueryParam("page") Integer page,
@@ -40,6 +41,13 @@ public class PdvApi {
 	public PdvEntity get(@PathParam("id") long id) {
 		PdvEntity entity = pdvService.findById(id);
 		return entity;
+	}
+	
+	@GET
+	@Path("/resume")
+	@Produces(MediaType.APPLICATION_JSON)
+	public PdvResume getResume() throws UndconException {
+		return pdvService.getResumePdv();
 	}
 
 	@POST

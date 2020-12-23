@@ -1,0 +1,1 @@
+ALTER TABLE venda ADD column IF NOT EXISTS pdv_id bigint;

@@ -4,20 +4,24 @@ import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import com.undcon.app.dtos.OpenPdvDto;
+import com.undcon.app.dtos.PdvResume;
 import com.undcon.app.enums.ResourceType;
 import com.undcon.app.enums.UndconError;
 import com.undcon.app.exceptions.LoginException;
 import com.undcon.app.exceptions.UndconException;
+import com.undcon.app.mappers.PdvMapper;
 import com.undcon.app.model.PdvEntity;
 import com.undcon.app.model.UserEntity;
 import com.undcon.app.repositories.IPdvRepository;
 import com.undcon.app.repositories.IUserRepository;
+import com.undcon.app.repositories.SaleRepositoryImpl;
 import com.undcon.app.utils.PageUtils;
 
 @Component
@@ -34,6 +38,12 @@ public class PdvService {
 
 	@Autowired
 	private IUserRepository userRepository;
+	
+	@Autowired
+	private PdvMapper pdvMapper;
+	
+	@Autowired
+	private SaleRepositoryImpl saleRepositoryImpl;
 
 	public Page<PdvEntity> getAll(String name, Integer page, Integer size) {
 		return repository.findAll(PageUtils.createPageRequest(page, size));
@@ -62,9 +72,9 @@ public class PdvService {
 		}
 
 		UserEntity user = userService.getCurrentUser();
-		
-		List<PdvEntity> findByUser = repository.findByUser(user);
-		if(!findByUser.isEmpty()) {
+
+		Optional<PdvEntity> findByUser = findByCurrentPdv();
+		if (findByUser.isPresent()) {
 			throw new UndconException(UndconError.PDV_ALREADY_OPEN_TO_THE_LOGGED_USER);
 		}
 		Date openingDate = new Date(System.currentTimeMillis());
@@ -93,8 +103,28 @@ public class PdvService {
 		return repository.save(findOne);
 	}
 
+	public Optional<PdvEntity> findByCurrentPdv() {
+		UserEntity user = userService.getCurrentUser();
+		List<PdvEntity> findByUserAndClosingDateIsNull = repository.findByUserAndClosingDateIsNull(user);
+		if (findByUserAndClosingDateIsNull.isEmpty()) {
+			Optional.empty();
+		}
+		return Optional.of(findByUserAndClosingDateIsNull.get(0));
+	}
+
 	public void delete(long id) throws UndconException {
 		permissionService.checkPermission(ResourceType.PROVIDER);
 		repository.delete(id);
+	}
+	
+	public PdvResume getResumePdv() throws UndconException {
+		Optional<PdvEntity> findPdv = findByCurrentPdv();
+		if (!findPdv.isPresent()) {
+			throw new UndconException(UndconError.PDV_CLOSED_TO_THE_LOGGED_USER);
+		}
+		PdvResume resume = new PdvResume();
+		resume.setPdv(pdvMapper.toDto(findPdv.get()));
+		resume.setSaleValue(saleRepositoryImpl.getSaleTotalByPdv(findPdv.get().getId()));
+		return resume;
 	}
 }

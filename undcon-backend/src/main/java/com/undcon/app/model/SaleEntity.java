@@ -43,12 +43,16 @@ public class SaleEntity {
 	@JoinColumn(name = "vendedor_id", nullable = false)
 	private EmployeeEntity salesman;
 
+	@ManyToOne
+	@JoinColumn(name = "pdv_id", nullable = true)
+	private PdvEntity pdv;
+
 	public SaleEntity() {
 		// TODO Auto-generated constructor stub
 	}
 
 	public SaleEntity(Long id, CustomerEntity customer, Date saleDate, boolean billed, BillingStatus status,
-			UserEntity user, EmployeeEntity salesman) {
+			UserEntity user, EmployeeEntity salesman, PdvEntity pdv) {
 		super();
 		this.id = id;
 		this.customer = customer;
@@ -57,6 +61,7 @@ public class SaleEntity {
 		this.status = status;
 		this.user = user;
 		this.salesman = salesman;
+		this.pdv = pdv;
 	}
 
 	public UserEntity getUser() {
@@ -115,4 +120,11 @@ public class SaleEntity {
 		this.status = status;
 	}
 
+	public void setPdv(PdvEntity pdv) {
+		this.pdv = pdv;
+	}
+
+	public PdvEntity getPdv() {
+		return pdv;
+	}
 }

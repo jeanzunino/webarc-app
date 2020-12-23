@@ -10,6 +10,7 @@ import { OpenPdvComponent } from '@app/pdv/open-pdv/open-pdv.component';
 import { Table } from '@shared/model/table';
 import { SharedInjector } from '@shared/shared.module';
 import { openDialog } from '@shared/utils/utils';
+import { ClosePdvComponent } from './close-pdv/close-pdv.component';
 
 @Component({
   selector: 'app-pdv',
@@ -29,9 +30,13 @@ export class PdvComponent implements OnInit {
      this.spinner.hide();
 
      //TODO Verificar se o caixa está fechado
-     let closed = true;
+     let closed = false;
      if (closed) {
        this.modalRef = openDialog(null, OpenPdvComponent);
      }
+  }
+
+  public onClose() {
+    this.modalRef = openDialog(null, ClosePdvComponent);
   }
 }

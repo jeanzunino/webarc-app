@@ -197,6 +197,26 @@
       "BILLED": "Parcialmente faturado",
       "TOTAL_BILLED": "Totalmente faturado",
       "CANCELED": "Cancelado"
+    },
+    "resource-type": {
+      "CONFIGURATION": "Configuração",
+      "MENU_TEMPLATE": "Template Menu",
+      "CUSTOMER": "Cliente",
+      "PROVIDER": "Fornecedor",
+      "EMPLOYEE": "Empregado",
+      "PRODUCT_CATEGORY": "Categoria de produto",
+      "PRODUCT": "Produto",
+      "SERVICE_TYPE": "Tipo de serviço",
+      "TENANT": "Tenant",
+      "USER": "Usuário",
+      "EXPENSE": "Despesa",
+      "INCOME": "Receita",
+      "PERMISSION": "Permissão",
+      "PURCHASE": "Compra",
+      "SALE": "Venda",
+      "BACK_CHECK": "Cheque bancário",
+      "SYSTEM_SALESMAN": "Vendedor do sistema"
     }
+	
   }
 }

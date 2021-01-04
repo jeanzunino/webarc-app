@@ -15,6 +15,7 @@ import { LoginModule } from '@app/login/login.module';
 import { InterceptorModule } from '@interceptor/interceptor.module';
 import { registerLocaleData } from '@angular/common';
 import ptBr from '@angular/common/locales/pt';
+import { PageForbiddenModule } from './page-forbidden/page-forbidden.module';
 
 registerLocaleData(ptBr);
 
@@ -24,6 +25,7 @@ registerLocaleData(ptBr);
     SharedModule,
     HttpClientModule,
     PageNotFoundModule,
+    PageForbiddenModule,
     NavbarModule,
     LoginModule,
     InterceptorModule,

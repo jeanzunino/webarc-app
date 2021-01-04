@@ -27,6 +27,7 @@ export class NavbarComponent {
 
   async loadPermissions(){
     this.permissions = await this.userService.getPermissionOfLoggeduser().toPromise();
+    localStorage.setItem('permissions', JSON.stringify(this.permissions));
   }
 
   public verifyPermissionMenu(resource: string) {
@@ -34,5 +35,23 @@ export class NavbarComponent {
       return false;
     }
     return this.permissions.find(p => p.toString() === resource) != null;
+  }
+
+  public verifyPermissionMainMenu(mainMenu: string) {
+    switch(mainMenu) {
+      case 'compra':
+        return this.verifyPermissionMenu('PROVIDER') || this.verifyPermissionMenu('PURCHASE');
+      case 'venda':
+        return this.verifyPermissionMenu('CUSTOMER') || this.verifyPermissionMenu('SALE');
+      case 'financeiro':
+        return this.verifyPermissionMenu('BACK_CHECK') || this.verifyPermissionMenu('INCOME') || this.verifyPermissionMenu('EXPENSE');
+      case 'geral':
+        return this.verifyPermissionMenu('SERVICE_TYPE') || this.verifyPermissionMenu('PRODUCT_CATEGORY') || this.verifyPermissionMenu('PRODUCT');
+      case 'configuracao':
+        return this.verifyPermissionMenu('TENANT') || this.verifyPermissionMenu('PERMISSION')
+          || this.verifyPermissionMenu('EMPLOYEE') || this.verifyPermissionMenu('USER');
+      default:
+        return false;
+    }
   }
 }

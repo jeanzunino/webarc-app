@@ -75,7 +75,6 @@ export class ExpenseComponent extends GridViewComponent<Expense> implements OnDe
   }
 
   addRemoveExpenseItem(expense: Expense) {
-    console.log(expense);
     const pago = expense.paymentDate ? 'NÃO PAGO' : 'PAGO';
     openConfimDialog(new ConfirmDialogModel(`Deseja alterar a situação do pagamento ${expense.description} para ${pago}?`)).content.onClose
       .pipe(takeUntil(this.ngUnsubscribeLocal))

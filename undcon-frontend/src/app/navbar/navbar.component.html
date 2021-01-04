@@ -15,7 +15,7 @@
         <a class="nav-link waves-light" routerLink="/home" mdbWavesEffect>{{ 'menu.home' | translate }}</a>
       </li>
 
-      <li class="nav-item dropdown" dropdown>
+      <li *ngIf="verifyPermissionMainMenu('compra')" class="nav-item dropdown" dropdown>
         <a dropdownToggle mdbWavesEffect type="button" class="nav-link dropdown-toggle waves-light" mdbWavesEffect>
           <mdb-icon fas icon="cart-arrow-down"></mdb-icon> {{ 'menu.compra.title' | translate }} <span class="caret"></span>
         </a>
@@ -26,7 +26,7 @@
         </div>
       </li>
 
-      <li class="nav-item dropdown" dropdown>
+      <li *ngIf="verifyPermissionMainMenu('venda')" class="nav-item dropdown" dropdown>
         <a dropdownToggle mdbWavesEffect type="button" class="nav-link dropdown-toggle waves-light" mdbWavesEffect>
           <mdb-icon fas icon="shopping-cart"></mdb-icon> {{ 'menu.venda.title' | translate }} <span class="caret"></span>
         </a>
@@ -37,7 +37,7 @@
         </div>
       </li>
 
-      <li class="nav-item dropdown" dropdown>
+      <li *ngIf="verifyPermissionMainMenu('financeiro')" class="nav-item dropdown" dropdown>
         <a dropdownToggle mdbWavesEffect type="button" class="nav-link dropdown-toggle waves-light" mdbWavesEffect>
           <mdb-icon fas icon="shopping-cart"></mdb-icon> {{ 'menu.finance.title' | translate }} <span class="caret"></span>
         </a>
@@ -51,7 +51,7 @@
         </div>
       </li>
 
-      <li class="nav-item dropdown" dropdown>
+      <li *ngIf="verifyPermissionMainMenu('geral')" class="nav-item dropdown" dropdown>
         <a dropdownToggle mdbWavesEffect type="button" class="nav-link dropdown-toggle waves-light" mdbWavesEffect>
           <mdb-icon fas icon="user"></mdb-icon> {{ 'menu.geral.title' | translate }} <span class="caret"></span>
         </a>
@@ -66,7 +66,7 @@
 
     <ul class="navbar-nav ml-auto">
 
-      <li class="nav-item dropdown" dropdown>
+      <li *ngIf="verifyPermissionMainMenu('configuracao')" class="nav-item dropdown" dropdown>
         <a dropdownToggle mdbWavesEffect type="button" class="nav-link dropdown-toggle waves-light" mdbWavesEffect>
           <mdb-icon fas icon="cog"></mdb-icon> {{ 'menu.configuracao.title' | translate }} <span class="caret"></span>
         </a>

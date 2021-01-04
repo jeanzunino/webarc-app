@@ -75,7 +75,6 @@ export class IncomeComponent extends GridViewComponent<Income> implements OnDest
   }
 
   addRemoveIncomeItem(income: Income) {
-    console.log(income);
     const pago = income.paymentDate ? 'NÃO PAGO' : 'PAGO';
     openConfimDialog(new ConfirmDialogModel(`Deseja alterar a situação do recebimento ${income.description} para ${pago}?`)).content.onClose
       .pipe(takeUntil(this.ngUnsubscribeLocal))

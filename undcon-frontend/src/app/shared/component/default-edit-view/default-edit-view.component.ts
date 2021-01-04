@@ -28,9 +28,12 @@ export abstract class DefaultEditViewComponent<T> implements OnInit, OnDestroy {
     this.formGroup = this.createFormGroup();
     this.onLoadValues();
     this.onLoadData();
+    this.loadPage();
 
     this.closeDialogValues.hasChange = false;
   }
+
+  loadPage() {}
 
   ngOnDestroy() {
     this.onClose.next(this.closeDialogValues);
@@ -79,7 +82,7 @@ export abstract class DefaultEditViewComponent<T> implements OnInit, OnDestroy {
         this.service
           .post(this.getFormGroup().value)
           .toPromise()
-          .then((teste) => {
+          .then(response => {
             this.closeDialogValues.hasChange = true;
             this.modalRef.hide();
           });
@@ -87,7 +90,7 @@ export abstract class DefaultEditViewComponent<T> implements OnInit, OnDestroy {
         this.service
           .put(this.getFormGroup().value)
           .toPromise()
-          .then((teste) => {
+          .then(response => {
             this.closeDialogValues.hasChange = true;
             this.modalRef.hide();
           });

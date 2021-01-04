@@ -19,7 +19,7 @@ export class UserService extends EntityService<User> {
   }
 
   getPermissionOfLoggeduser(): Observable<Array<ResourceTypeEnum>> {
-    return this.getAllCustomUrl(`${this.baseUrl}/${this.entityUrl}/current/permissions/`, null, null) as Observable<
+    return this.getAllCustomUrl(`${this.baseUrl}/${this.entityUrl}/current/permissions/`, null, 100) as Observable<
       Array<ResourceTypeEnum>
     >;
   }

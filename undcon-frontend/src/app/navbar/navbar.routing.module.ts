@@ -5,6 +5,7 @@ import { PageNotFoundComponent } from '@app/page-not-found/page-not-found.compon
 import { LoginComponent } from '@app/login/login.component';
 import { AuthGuard } from '@guard/auth/auth.guard';
 import { PageEnum } from '@enum/page-enum';
+import { PageForbiddenComponent } from '@app/page-forbidden/page-forbidden.component';
 
 const routes: Routes = [
   {
@@ -104,6 +105,7 @@ const routes: Routes = [
     loadChildren: () =>
       import('@app/tenant/tenant.module').then((m) => m.TenantModule),
   },
+  { path: 'forbidden', component: PageForbiddenComponent, canActivate: [AuthGuard] },
   { path: '**', component: PageNotFoundComponent, canActivate: [AuthGuard] }
 ];
 

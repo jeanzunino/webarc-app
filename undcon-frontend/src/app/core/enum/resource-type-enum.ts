@@ -1,5 +1,5 @@
 export enum ResourceTypeEnum {
-  /** 0 - Configuração */
+  	/** 0 - Configuração */
 	CONFIGURATION,
 
 	/** 1 - Template Menu */

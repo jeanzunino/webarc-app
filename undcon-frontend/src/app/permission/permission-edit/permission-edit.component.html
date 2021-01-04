@@ -9,6 +9,15 @@
         </div>
       </div>
     </div>
+
+    <div class="row" *ngFor="let res of resourceTypeEnumLista">
+      <div class="col-12">
+        <div class="custom-control custom-checkbox margin-t-40">
+          <input [checked]="permissionChecked(res)" type="checkbox" id="{{res}}" class="custom-control-input" (change)="change($event.target.checked, res)">
+          <label for="{{res}}" class="custom-control-label text-light">{{ getEnumTranslate(res) }}</label>
+        </div>
+      </div>
+    </div>
   </form>
 
   <div footer>

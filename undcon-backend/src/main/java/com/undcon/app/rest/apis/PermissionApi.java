@@ -2,6 +2,7 @@ package com.undcon.app.rest.apis;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import javax.ws.rs.DELETE;
 import javax.ws.rs.ForbiddenException;
@@ -19,11 +20,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import com.undcon.app.enums.ResourceType;
+import com.undcon.app.enums.UndconError;
 import com.undcon.app.exceptions.UndconException;
 import com.undcon.app.model.PermissionEntity;
 import com.undcon.app.model.PermissionItemEntity;
 import com.undcon.app.repositories.IPermissionItenRepository;
 import com.undcon.app.services.PermissionService;
+import com.undcon.app.services.UserService;
 
 /**
  * Api de Permissões
@@ -37,6 +40,9 @@ public class PermissionApi {
 
 	@Autowired
 	private IPermissionItenRepository repositoryIten;
+	
+	@Autowired
+	private UserService userService;
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -57,8 +63,7 @@ public class PermissionApi {
 	@Path("/resources")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<ResourceType> getResources() {
-		//TODO Alterar para retornar as permissões
-		return Arrays.asList(ResourceType.values());
+		return userService.getPermissionOfLoggeduser();
 	}
 
 	@POST
@@ -98,11 +103,15 @@ public class PermissionApi {
 	}
 
 	@DELETE
-	@Path("/{id}/itens/{itemId}")
+	@Path("/{permissionId}/itens/{resource}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public void postIten(@PathParam("itemId") long itemId) {
-		PermissionItemEntity findItenById = permissionService.findItenById(itemId);
-		repositoryIten.delete(findItenById);
+	public void postIten(@PathParam("permissionId") long permissionId, @PathParam("resource") ResourceType resource)
+			throws UndconException {
+		Optional<PermissionItemEntity> findItenById = permissionService.getPermissionIten(permissionId, resource);
+		if (findItenById.isEmpty()) {
+			throw new UndconException(UndconError.PERMISSION_ITEN_NOT_FOUND);
+		}
+		repositoryIten.delete(findItenById.get());
 	}
 
 }

@@ -1,0 +1,35 @@
+<app-dialog modalTitle="Fechamento de Caixa" [modalRef]="modalRef">
+    <form body [formGroup]="formGroup">
+       <div class="md-form">
+        <input type="text" id="valueOpen" class="form-control" formControlName="pdvValueOpen" mdbInput mdbValidate />
+        <label for="pdvValueOpen">Valor ao abrir o Caixa</label>
+       </div>
+
+       <div class="md-form">
+        <input type="text" id="valueSale" class="form-control" formControlName="pdvValueSale" mdbInput mdbValidate />
+        <label for="pdvValueSale">Valor de Venda</label>
+       </div>
+       
+      <div class="md-form">
+        <input type="text" id="valueClose" class="form-control" formControlName="pdvValueClose" mdbInput mdbValidate />
+        <label for="pdvValueClose">Informe o Valor em Caixa</label>
+      </div>
+  
+      <div class="md-form">
+        <input type="text" id="login" class="form-control text-light" formControlName="login" mdbInput mdbValidate>
+        <label for="login" class="text-light">Responsável</label>
+        <app-validation [form]="loginForm" [validMessage]="'Válido'" [invalidMessage]="'Inválido'"></app-validation>
+      </div>
+  
+      <div class="md-form">
+        <input type="password" id="password" class="form-control text-light" formControlName="password" mdbInput mdbValidate>
+        <label for="password" class="text-light">Senha</label>
+        <app-validation [form]="passwordForm" [validMessage]="'Válido'" [invalidMessage]="'Inválido'"></app-validation>
+      </div>
+  
+    </form>
+  
+    <div footer>
+      <button mdbBtn type="submit" color="primary" outline="true" (click)="onSave()" mdbWavesEffect>Ok</button>
+    </div>
+  </app-dialog>

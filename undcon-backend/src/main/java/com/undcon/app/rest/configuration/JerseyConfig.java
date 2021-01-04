@@ -78,6 +78,8 @@ public class JerseyConfig extends ResourceConfig {
 		
 		register(DashBoardApi.class);
 		
+		register(PdvApi.class);
+
 		register(ErrorResponseHandler.class);
 		// Uncomment to disable WADL Generation:
 		// property("jersey.config.server.wadl.disableWadl", true);

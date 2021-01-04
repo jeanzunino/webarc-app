@@ -20,6 +20,11 @@ const routes: Routes = [
     loadChildren: () =>
       import('@app/home/home.module').then((m) => m.HomeModule),
   },
+  { 
+	path: PageEnum.PDV, 
+	loadChildren: () => 
+	  import('@app/pdv/pdv.module').then(m => m.PdvModule )
+  },
   {
     path: PageEnum.USER,
     loadChildren: () =>

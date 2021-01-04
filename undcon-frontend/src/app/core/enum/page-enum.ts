@@ -1,6 +1,7 @@
 export enum PageEnum {
   LOGIN = 'login',
   HOME = 'home',
+  PDV = 'pdv',
   USER = 'user',
   EMPLOYEE = 'employee',
   PROVIDER = 'provider',

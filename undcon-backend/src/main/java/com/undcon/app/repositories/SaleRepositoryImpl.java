@@ -133,6 +133,29 @@ public class SaleRepositoryImpl {
 		}
 		return new BigDecimal(total).setScale(2, RoundingMode.HALF_EVEN).doubleValue();
 	}
+	
+	public Double getSaleTotalByPdv(Long pdvId) {
+		JPAQueryFactory jpaQueryFactory = new JPAQueryFactory(em);
+		JPAQuery<SaleItemProductEntity> query = jpaQueryFactory.selectFrom(QSaleItemProductEntity.saleItemProductEntity)
+				.where(QSaleItemProductEntity.saleItemProductEntity.sale.pdv.id.eq(pdvId));
+		List<SaleItemProductEntity> itensProduct = query.fetch();
+		double total = 0;
+		for (SaleItemProductEntity saleItemProductEntity : itensProduct) {
+			double subTotalItem = saleItemProductEntity.getPrice() * saleItemProductEntity.getQuantity();
+			total += subTotalItem;
+		}
+
+		jpaQueryFactory = new JPAQueryFactory(em);
+		JPAQuery<SaleItemServiceEntity> queryService = jpaQueryFactory
+				.select(QSaleItemServiceEntity.saleItemServiceEntity).from(QSaleItemServiceEntity.saleItemServiceEntity)
+				.where(QSaleItemServiceEntity.saleItemServiceEntity.sale.pdv.id.eq(pdvId));
+		List<SaleItemServiceEntity> itensService = queryService.fetch();
+		for (SaleItemServiceEntity saleItemServiceEntity : itensService) {
+			double subTotalItem = saleItemServiceEntity.getPrice() * saleItemServiceEntity.getQuantity();
+			total += subTotalItem;
+		}
+		return new BigDecimal(total).setScale(2, RoundingMode.HALF_EVEN).doubleValue();
+	}
 
 	public static long calcOffSetService(Pageable pageable, long countItensProductTotal) {
 		if (pageable.getPageNumber() == 0) {

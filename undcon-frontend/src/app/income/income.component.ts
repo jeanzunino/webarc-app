@@ -86,8 +86,14 @@ export class IncomeComponent extends GridViewComponent<Income> implements OnDest
   }
 
   private async addRemoveIncome(income: Income) {
-    income.paymentDate = income.paymentDate ? null : new Date();
-    await this.is.put(income).toPromise()
+    if(income.paymentStatus === PaymentStatus.CANCELED){
+      this.toastr.info(
+        'Recebimento cancelado não pode ser alterado!',
+        'Aviso'
+      );
+    }
+    income.paymentStatus = income.paymentStatus === PaymentStatus.PENDING ? PaymentStatus.SETTLED : PaymentStatus.PENDING;
+    await this.is.updateStatus(income).toPromise()
       .then(() => {
         this.toastr.success(
           'Recebimento atualizado!',

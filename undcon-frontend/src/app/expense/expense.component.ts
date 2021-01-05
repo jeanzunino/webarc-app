@@ -86,8 +86,14 @@ export class ExpenseComponent extends GridViewComponent<Expense> implements OnDe
   }
 
   private async addRemoveExpense(expense: Expense) {
-    expense.paymentDate = expense.paymentDate ? null : new Date();
-    await this.es.put(expense).toPromise()
+    if(expense.paymentStatus === PaymentStatus.CANCELED){
+      this.toastr.info(
+        'Pagamento cancelado não pode ser alterado!',
+        'Aviso'
+      );
+    }
+    expense.paymentStatus = expense.paymentStatus === PaymentStatus.PENDING ? PaymentStatus.SETTLED : PaymentStatus.PENDING;
+    await this.es.updateStatus(expense).toPromise()
       .then(() => {
         this.toastr.success(
           'Pagamento atualizado!',

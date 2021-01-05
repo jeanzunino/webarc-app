@@ -70,6 +70,10 @@ export class EntityService<T> {
     );
   }
 
+  public putCustomUrl(url: string, entity?: any) {
+    return this.http.put<any>(url, entity);
+  }
+
   public delete(entity: Entity) {
     return this.http.delete<T>(
       `${this.baseUrl}/${this.entityUrl}/${entity.id}`

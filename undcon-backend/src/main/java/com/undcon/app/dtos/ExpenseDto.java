@@ -23,10 +23,13 @@ public class ExpenseDto {
 
 	private IdDto purchase;
 
-	private PersonSimpleDto customer;
+	private PersonSimpleDto provider;
 
-	public ExpenseDto(Long id, String description, Date duaDate, Date paymentDate, double value, PaymentStatus paymentStatus,
-			PaymentType paymentType, IdDto purchase, PersonSimpleDto customer) {
+	public ExpenseDto() {
+	}
+
+	public ExpenseDto(Long id, String description, Date duaDate, Date paymentDate, double value,
+			PaymentStatus paymentStatus, PaymentType paymentType, IdDto purchase, PersonSimpleDto provider) {
 		super();
 		this.id = id;
 		this.description = description;
@@ -36,7 +39,7 @@ public class ExpenseDto {
 		this.paymentStatus = paymentStatus;
 		this.paymentType = paymentType;
 		this.purchase = purchase;
-		this.customer = customer;
+		this.provider = provider;
 	}
 
 	public Long getId() {
@@ -71,8 +74,44 @@ public class ExpenseDto {
 		return purchase;
 	}
 
-	public PersonSimpleDto getCustomer() {
-		return customer;
+	public PersonSimpleDto getProvider() {
+		return provider;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public void setDuaDate(Date duaDate) {
+		this.duaDate = duaDate;
+	}
+
+	public void setPaymentDate(Date paymentDate) {
+		this.paymentDate = paymentDate;
+	}
+
+	public void setValue(double value) {
+		this.value = value;
+	}
+
+	public void setPaymentStatus(PaymentStatus paymentStatus) {
+		this.paymentStatus = paymentStatus;
+	}
+
+	public void setPaymentType(PaymentType paymentType) {
+		this.paymentType = paymentType;
+	}
+
+	public void setPurchase(IdDto purchase) {
+		this.purchase = purchase;
+	}
+
+	public void setProvider(PersonSimpleDto provider) {
+		this.provider = provider;
 	}
 
 }

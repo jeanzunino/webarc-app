@@ -25,8 +25,11 @@ public class IncomeDto {
 
 	private PersonSimpleDto customer;
 
-	public IncomeDto(Long id, String description, Date duaDate, Date paymentDate, double value, PaymentStatus paymentStatus,
-			PaymentType paymentType, IdDto sale, PersonSimpleDto customer) {
+	public IncomeDto() {
+	}
+
+	public IncomeDto(Long id, String description, Date duaDate, Date paymentDate, double value,
+			PaymentStatus paymentStatus, PaymentType paymentType, IdDto sale, PersonSimpleDto customer) {
 		super();
 		this.id = id;
 		this.description = description;
@@ -73,6 +76,42 @@ public class IncomeDto {
 
 	public PersonSimpleDto getCustomer() {
 		return customer;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public void setDuaDate(Date duaDate) {
+		this.duaDate = duaDate;
+	}
+
+	public void setPaymentDate(Date paymentDate) {
+		this.paymentDate = paymentDate;
+	}
+
+	public void setValue(double value) {
+		this.value = value;
+	}
+
+	public void setPaymentStatus(PaymentStatus paymentStatus) {
+		this.paymentStatus = paymentStatus;
+	}
+
+	public void setPaymentType(PaymentType paymentType) {
+		this.paymentType = paymentType;
+	}
+
+	public void setSale(IdDto sale) {
+		this.sale = sale;
+	}
+
+	public void setCustomer(PersonSimpleDto customer) {
+		this.customer = customer;
 	}
 
 }

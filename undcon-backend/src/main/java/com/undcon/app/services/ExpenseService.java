@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import com.undcon.app.dtos.ExpenseDto;
 import com.undcon.app.enums.PaymentStatus;
 import com.undcon.app.enums.ResourceType;
+import com.undcon.app.enums.UndconError;
 import com.undcon.app.exceptions.UndconException;
 import com.undcon.app.model.ExpenseEntity;
 import com.undcon.app.model.PurchaseEntity;
@@ -34,11 +35,21 @@ public class ExpenseService extends AbstractService<ExpenseEntity> {
 	@Override
 	protected void validateBeforePost(ExpenseEntity entity) throws UndconException {
 		super.validateBeforePost(entity);
+		if(entity.getPaymentDate() != null) {
+			entity.setPaymentStatus(PaymentStatus.SETTLED);
+		} else {
+			entity.setPaymentStatus(PaymentStatus.PENDING);
+		}
 	}
 
 	@Override
 	protected void validateBeforeUpdate(ExpenseEntity entity) throws UndconException {
 		super.validateBeforeUpdate(entity);
+		if (entity.getPaymentDate() != null) {
+			entity.setPaymentStatus(PaymentStatus.SETTLED);
+		} else {
+			entity.setPaymentStatus(PaymentStatus.PENDING);
+		}
 	}
 
 	@Override
@@ -71,8 +82,12 @@ public class ExpenseService extends AbstractService<ExpenseEntity> {
 		return ResourceType.EXPENSE;
 	}
 
-	public ExpenseEntity updateStatus(ExpenseDto expense) {
+	public ExpenseEntity updateStatus(ExpenseDto expense) throws UndconException {
 		ExpenseEntity entity = expenseRepository.findOne(expense.getId());
+		if (entity.getPaymentStatus() == PaymentStatus.CANCELED) {
+			throw new UndconException(UndconError.UPDATE_ERROR_ITEM_CANCELLED);
+		}
+		
 		entity.setPaymentStatus(expense.getPaymentStatus());
 		if (expense.getPaymentStatus() == PaymentStatus.SETTLED) {
 			if (entity.getPaymentDate() == null) {

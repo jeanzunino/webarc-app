@@ -55,6 +55,8 @@ public enum UndconError {
 	EMPLOYEE_NOT_FOUND("Funcionário não encontrado"),
 
 	INCOME_NOT_FOUND("Receita não encontrada"),
+	
+	UPDATE_ERROR_ITEM_CANCELLED("Não é possível alterar item cancelado"),
 
 	SALESMAN_NOT_FOUND("Vendedor não encontrado"),
 

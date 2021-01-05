@@ -40,11 +40,24 @@ public class IncomeService extends AbstractService<IncomeEntity> {
 	@Override
 	protected void validateBeforePost(IncomeEntity entity) throws UndconException {
 		super.validateBeforePost(entity);
+		if (entity.getPaymentDate() != null) {
+			entity.setPaymentStatus(PaymentStatus.SETTLED);
+		} else {
+			entity.setPaymentStatus(PaymentStatus.PENDING);
+		}
 	}
 
 	@Override
 	protected void validateBeforeUpdate(IncomeEntity entity) throws UndconException {
 		super.validateBeforeUpdate(entity);
+		if (entity.getPaymentStatus() == PaymentStatus.CANCELED) {
+			throw new UndconException(UndconError.UPDATE_ERROR_ITEM_CANCELLED);
+		}
+		if (entity.getPaymentDate() != null) {
+			entity.setPaymentStatus(PaymentStatus.SETTLED);
+		} else {
+			entity.setPaymentStatus(PaymentStatus.PENDING);
+		}
 	}
 
 	@Override
@@ -93,8 +106,12 @@ public class IncomeService extends AbstractService<IncomeEntity> {
 		return ResourceType.INCOME;
 	}
 
-	public IncomeEntity updateStatus(IncomeDto income) {
+	public IncomeEntity updateStatus(IncomeDto income) throws UndconException {
 		IncomeEntity entity = incomeRepository.findOne(income.getId());
+		if (entity.getPaymentStatus() == PaymentStatus.CANCELED) {
+			throw new UndconException(UndconError.UPDATE_ERROR_ITEM_CANCELLED);
+		}
+		entity.setPaymentStatus(income.getPaymentStatus());
 		if (income.getPaymentStatus() == PaymentStatus.SETTLED) {
 			if (entity.getPaymentDate() == null) {
 				entity.setPaymentDate(new Date(System.currentTimeMillis()));

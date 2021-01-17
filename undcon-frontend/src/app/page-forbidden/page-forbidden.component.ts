@@ -5,11 +5,9 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './page-forbidden.component.html',
   styleUrls: ['./page-forbidden.component.scss']
 })
-export class PageForbiddenComponent implements OnInit {
+export class PageForbiddenComponent {
 
-  constructor() { }
-
-  ngOnInit(): void {
+  public openInstagram() {
+    window.open('https://instagram.com/undconsolutions?igshid=bvu7warltias');
   }
-
 }

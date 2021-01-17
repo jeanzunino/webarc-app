@@ -6,6 +6,6 @@ import { SaleDetailComponent } from '@app/sale/sale-detail/sale-detail.component
 
 @NgModule({
   declarations: [SaleDetailComponent],
-  imports: [SharedModule, MDBBootstrapModule.forRoot()],
+  imports: [SharedModule, MDBBootstrapModule.forRoot()]
 })
 export class SaleDetailModule {}

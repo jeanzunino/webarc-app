@@ -5,7 +5,7 @@ import { ProductRoutingModule } from '@app/product/product.routing.module';
 import { ProductComponent } from '@app/product/product.component';
 import { SharedModule } from '@shared/shared.module';
 import { ProductEditComponent } from '@app/product/product-edit/product-edit.component';
-import { DatePipe } from '@angular/common';
+import { ProductGuard } from '@guard/product.guard';
 
 @NgModule({
   declarations: [ProductComponent, ProductEditComponent],
@@ -13,6 +13,9 @@ import { DatePipe } from '@angular/common';
     SharedModule,
     MDBBootstrapModule.forRoot(),
     ProductRoutingModule
+  ],
+  providers: [
+    ProductGuard
   ]
 })
 export class ProductModule {}

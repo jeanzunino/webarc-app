@@ -9,12 +9,16 @@ import { SaleDetailComponent } from './sale-detail/sale-detail.component';
 import { EmptyComponent } from '@component/empty/empty.component';
 import { EmptyChildrenComponent } from '@shared/component/empty-children/empty-children.component';
 import { SaleIncomeResolver } from './sale.resolver';
+import { SaleGuard } from '@guard/sale.guard';
 
 const routes: Routes = [
   {
     path: PageEnum.SALE,
     component: EmptyComponent,
-    canActivate: [AuthGuard],
+    canActivate: [
+      AuthGuard,
+      SaleGuard
+    ],
     resolve: {
       items: SaleResolver,
     },

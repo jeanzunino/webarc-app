@@ -5,6 +5,7 @@ import { NgxMaskModule } from 'ngx-mask';
 import { IncomeRoutingModule } from '@app/income/income.routing.module';
 import { IncomeComponent } from '@app/income/income.component';
 import { SharedModule } from '@shared/shared.module';
+import { IncomeGuard } from '@guard/income.guard';
 
 @NgModule({
   declarations: [IncomeComponent],
@@ -14,5 +15,8 @@ import { SharedModule } from '@shared/shared.module';
     IncomeRoutingModule,
     NgxMaskModule.forRoot()
   ],
+  providers: [
+    IncomeGuard
+  ]
 })
 export class IncomeModule {}

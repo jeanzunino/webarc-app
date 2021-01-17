@@ -5,6 +5,7 @@ import { ProductCategoryRoutingModule } from '@app/product-category/product-cate
 import { ProductCategoryComponent } from '@app/product-category/product-category.component';
 import { ProductCategoryEditComponent } from '@app/product-category/product-category-edit/product-category-edit.component';
 import { SharedModule } from '@shared/shared.module';
+import { ProductCategoryGuard } from '@guard/product-category.guard';
 
 @NgModule({
   declarations: [ProductCategoryComponent, ProductCategoryEditComponent],
@@ -12,6 +13,9 @@ import { SharedModule } from '@shared/shared.module';
     SharedModule,
     MDBBootstrapModule.forRoot(),
     ProductCategoryRoutingModule
+  ],
+  providers: [
+    ProductCategoryGuard
   ]
 })
 export class ProductCategoryModule {}

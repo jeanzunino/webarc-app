@@ -27,7 +27,6 @@ export class NavbarComponent {
 
   async loadPermissions(){
     this.permissions = await this.userService.getPermissionOfLoggeduser().toPromise();
-    localStorage.setItem('permissions', JSON.stringify(this.permissions));
   }
 
   public verifyPermissionMenu(resource: string) {

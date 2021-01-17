@@ -6,6 +6,7 @@ import { TenantRoutingModule } from '@app/tenant/tenant.routing.module';
 import { TenantComponent } from '@app/tenant/tenant.component';
 import { SharedModule } from '@shared/shared.module';
 import { TenantEditComponent } from '@app/tenant/tenant-edit/tenant-edit.component';
+import { TenantGuard } from '@guard/tenant.guard';
 
 @NgModule({
   declarations: [TenantComponent, TenantEditComponent],
@@ -15,5 +16,8 @@ import { TenantEditComponent } from '@app/tenant/tenant-edit/tenant-edit.compone
     TenantRoutingModule,
     NgxMaskModule.forRoot()
   ],
+  providers: [
+    TenantGuard
+  ]
 })
 export class TenantModule {}

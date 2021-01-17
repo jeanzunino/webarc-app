@@ -4,12 +4,16 @@ import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from '@guard/auth/auth.guard';
 import { UserComponent } from '@app/user/user.component';
 import { UserResolver } from '@app/user/user.resolver';
+import { UserGuard } from '@guard/user.guard';
 
 const routes: Routes = [
   {
     path: '',
     component: UserComponent,
-    canActivate: [AuthGuard],
+    canActivate: [
+      AuthGuard,
+      UserGuard
+    ],
     resolve: {
       items: UserResolver,
     },

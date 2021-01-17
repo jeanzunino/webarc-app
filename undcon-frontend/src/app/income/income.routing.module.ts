@@ -4,12 +4,16 @@ import { Routes, RouterModule } from "@angular/router";
 import { AuthGuard } from "@guard/auth/auth.guard";
 import { IncomeComponent } from "@app/income/income.component";
 import { IncomeResolver } from "@app/income/income.resolver";
+import { IncomeGuard } from '@guard/income.guard';
 
 const routes: Routes = [
   {
     path: "",
     component: IncomeComponent,
-    canActivate: [AuthGuard],
+    canActivate: [
+      AuthGuard,
+      IncomeGuard
+    ],
     resolve: {
       items: IncomeResolver,
     },

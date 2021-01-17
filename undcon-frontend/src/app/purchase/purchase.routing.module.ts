@@ -9,12 +9,16 @@ import { PurchaseResolver } from '@app/purchase/purchase.resolver';
 import { EmptyChildrenComponent } from '@component/empty-children/empty-children.component';
 import { PurchaseDetailResolver, PurchaseItensResolver, PurchaseExpenseResolver } from './purchase.resolver';
 import { PurchaseDetailComponent } from './purchase-detail/purchase-detail.component';
+import { PurchaseGuard } from '@guard/purchase.guard';
 
 const routes: Routes = [
   {
     path: PageEnum.PURCHASE,
     component: EmptyComponent,
-    canActivate: [AuthGuard],
+    canActivate: [
+      AuthGuard,
+      PurchaseGuard
+    ],
     resolve: {
       items: PurchaseResolver,
     },

@@ -4,6 +4,6 @@ import { Injectable } from "@angular/core";
 import { PodeAcessarGuard } from './generic.guard';
 
 @Injectable()
-export class CustomerGuard extends PodeAcessarGuard {
-    res = ResourceTypeEnum.CUSTOMER;
+export class EmployeeGuard extends PodeAcessarGuard {
+    res = ResourceTypeEnum.EMPLOYEE;
 }

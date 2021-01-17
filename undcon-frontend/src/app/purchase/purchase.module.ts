@@ -6,6 +6,7 @@ import { MDBBootstrapModule } from 'angular-bootstrap-md';
 import { PurchaseRoutingModule } from '@app/purchase/purchase.routing.module';
 import { PurchaseComponent } from '@app/purchase/purchase.component';
 import { SharedModule } from '@shared/shared.module';
+import { PurchaseGuard } from '@guard/purchase.guard';
 
 @NgModule({
   declarations: [PurchaseComponent, PurchaseDetailComponent],
@@ -14,6 +15,9 @@ import { SharedModule } from '@shared/shared.module';
     MDBBootstrapModule.forRoot(),
     PurchaseRoutingModule,
     NgxMaskModule.forRoot()
+  ],
+  providers: [
+    PurchaseGuard
   ]
 })
 export class PurchaseModule {}

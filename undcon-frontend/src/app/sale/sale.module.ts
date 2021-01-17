@@ -6,6 +6,7 @@ import { SaleRoutingModule } from '@app/sale/sale.routing.module';
 import { SaleComponent } from '@app/sale/sale.component';
 import { SharedModule } from '@shared/shared.module';
 import { SaleDetailComponent } from './sale-detail/sale-detail.component';
+import { SaleGuard } from '@guard/sale.guard';
 
 @NgModule({
   declarations: [SaleComponent, SaleDetailComponent],
@@ -14,6 +15,9 @@ import { SaleDetailComponent } from './sale-detail/sale-detail.component';
     MDBBootstrapModule.forRoot(),
     SaleRoutingModule,
     NgxMaskModule.forRoot()
+  ],
+  providers: [
+    SaleGuard
   ]
 })
 export class SaleModule {}

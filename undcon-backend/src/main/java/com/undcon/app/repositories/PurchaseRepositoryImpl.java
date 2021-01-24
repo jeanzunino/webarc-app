@@ -2,10 +2,13 @@ package com.undcon.app.repositories;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,6 +24,8 @@ import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.undcon.app.dtos.ItemType;
 import com.undcon.app.dtos.PurchaseItemDto;
+import com.undcon.app.dtos.ValueByInterval;
+import com.undcon.app.enums.IntervalType;
 import com.undcon.app.model.PurchaseItemProductEntity;
 import com.undcon.app.model.PurchaseItemServiceEntity;
 import com.undcon.app.model.QPurchaseItemProductEntity;
@@ -112,5 +117,29 @@ public class PurchaseRepositoryImpl {
 			total += subTotalItem;
 		}
 		return new BigDecimal(total).setScale(2, RoundingMode.HALF_EVEN).doubleValue();
+	}
+	
+	public List<ValueByInterval> getTotalPurchasedProductByInterval(String startDate, String endDate, IntervalType type) {
+		type = type == null ? IntervalType.MONTHLY : type;
+		String groupBy =type.getGroupBy();
+		TypedQuery<ValueByInterval> query = em.createQuery(
+				"SELECT new com.undcon.app.dtos.ValueByInterval(to_char(s.purchase.purchaseDate, :groupBy) as purchaseDate, SUM((s.quantity * s.price)) AS totalSaled ) from PurchaseItemProductEntity s where s.purchase.purchaseDate >= :startDate AND s.purchase.purchaseDate <= :endDate GROUP BY 1 ORDER BY 1",
+				ValueByInterval.class);
+		query.setParameter("startDate", Date.from(Instant.parse(startDate)));
+		query.setParameter("endDate", Date.from(Instant.parse(endDate)));
+		query.setParameter("groupBy", groupBy);
+		return query.getResultList();
+	}
+	
+	public List<ValueByInterval> getTotalPurchasedServiceByInterval(String startDate, String endDate, IntervalType type) {
+		type = type == null ? IntervalType.MONTHLY : type;
+		String groupBy =type.getGroupBy();
+		TypedQuery<ValueByInterval> query = em.createQuery(
+				"SELECT new com.undcon.app.dtos.ValueByInterval(to_char(s.sale.saleDate, :groupBy) as saleDate, SUM((s.quantity * s.price)) AS totalSaled ) from PurchaseItemServiceEntity s where s.sale.saleDate >= :startDate AND s.sale.saleDate <= :endDate GROUP BY 1 ORDER BY 1",
+				ValueByInterval.class);
+		query.setParameter("startDate", Date.from(Instant.parse(startDate)));
+		query.setParameter("endDate", Date.from(Instant.parse(endDate)));
+		query.setParameter("groupBy", groupBy);
+		return query.getResultList();
 	}
 }

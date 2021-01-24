@@ -110,6 +110,11 @@ const routes: Routes = [
     loadChildren: () =>
       import('@app/tenant/tenant.module').then((m) => m.TenantModule),
   },
+  {
+    path: PageEnum.COST_CENTER,
+    loadChildren: () =>
+      import('@app/cost-center/cost-center.module').then((m) => m.CostCenterModule),
+  },
   { path: 'forbidden', component: PageForbiddenComponent, canActivate: [AuthGuard] },
   { path: '**', component: PageNotFoundComponent, canActivate: [AuthGuard] }
 ];

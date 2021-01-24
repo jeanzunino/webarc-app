@@ -11,7 +11,9 @@ import org.springframework.stereotype.Component;
 
 import com.undcon.app.dtos.AmountTotalDto;
 import com.undcon.app.dtos.IncomeDto;
+import com.undcon.app.dtos.ValueByInterval;
 import com.undcon.app.enums.BillingStatus;
+import com.undcon.app.enums.IntervalType;
 import com.undcon.app.enums.PaymentStatus;
 import com.undcon.app.enums.ResourceType;
 import com.undcon.app.enums.UndconError;
@@ -19,6 +21,7 @@ import com.undcon.app.exceptions.UndconException;
 import com.undcon.app.model.IncomeEntity;
 import com.undcon.app.model.SaleEntity;
 import com.undcon.app.repositories.IIncomeRepository;
+import com.undcon.app.repositories.IncomeRepositoryImpl;
 import com.undcon.app.repositories.SaleIncomeRepositoryImpl;
 
 @Component
@@ -26,6 +29,9 @@ public class IncomeService extends AbstractService<IncomeEntity> {
 
 	@Autowired
 	private IIncomeRepository incomeRepository;
+	
+	@Autowired
+	private IncomeRepositoryImpl incomeRepositoryImpl;
 
 	@Autowired
 	private SaleIncomeRepositoryImpl saleIncomeRepositoryImpl;
@@ -120,6 +126,10 @@ public class IncomeService extends AbstractService<IncomeEntity> {
 			entity.setPaymentDate(null);
 		}
 		return incomeRepository.save(entity);
+	}
+
+	public List<ValueByInterval> getTotalByInterval(String startDate, String endDate, IntervalType type) {
+		return incomeRepositoryImpl.getTotalByInterval(startDate, endDate, type);
 	}
 
 }

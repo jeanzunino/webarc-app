@@ -10,13 +10,17 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Component;
 
 import com.undcon.app.dtos.ExpenseDto;
+import com.undcon.app.dtos.ValueByInterval;
+import com.undcon.app.enums.IntervalType;
 import com.undcon.app.enums.PaymentStatus;
 import com.undcon.app.enums.ResourceType;
 import com.undcon.app.enums.UndconError;
 import com.undcon.app.exceptions.UndconException;
 import com.undcon.app.model.ExpenseEntity;
 import com.undcon.app.model.PurchaseEntity;
+import com.undcon.app.repositories.ExpenseRepositoryImpl;
 import com.undcon.app.repositories.IExpenseRepository;
+import com.undcon.app.repositories.IncomeRepositoryImpl;
 import com.undcon.app.repositories.PurchaseExpenseRepositoryImpl;
 
 @Component
@@ -25,6 +29,9 @@ public class ExpenseService extends AbstractService<ExpenseEntity> {
 	@Autowired
 	private IExpenseRepository expenseRepository;
 
+	@Autowired
+	private ExpenseRepositoryImpl expenseRepositoryImpl;
+	
 	@Autowired
 	private PurchaseExpenseRepositoryImpl purchaseExpenseRepositoryImpl;
 
@@ -97,5 +104,9 @@ public class ExpenseService extends AbstractService<ExpenseEntity> {
 			entity.setPaymentDate(null);
 		}
 		return expenseRepository.save(entity);
+	}
+	
+	public List<ValueByInterval> getTotalByInterval(String startDate, String endDate, IntervalType type) {
+		return expenseRepositoryImpl.getTotalByInterval(startDate, endDate, type);
 	}
 }

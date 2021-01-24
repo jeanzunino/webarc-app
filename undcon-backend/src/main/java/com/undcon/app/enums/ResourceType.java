@@ -51,5 +51,8 @@ public enum ResourceType {
 	BACK_CHECK,
 
 	/** 16 - Vendedor de Sistema */
-	SYSTEM_SALESMAN
+	SYSTEM_SALESMAN,
+	
+	/** 17 - Centro de Custo */
+	COST_CENTER
 }

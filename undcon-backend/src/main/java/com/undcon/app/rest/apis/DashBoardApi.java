@@ -1,18 +1,26 @@
 package com.undcon.app.rest.apis;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.stereotype.Component;
 
 import com.undcon.app.dtos.ProductSaledInfoDto;
 import com.undcon.app.dtos.SaleInfoDto;
+import com.undcon.app.dtos.ValueByInterval;
+import com.undcon.app.enums.IntervalType;
 import com.undcon.app.services.DashBoardService;
+import com.undcon.app.services.ExpenseService;
+import com.undcon.app.services.IncomeService;
+import com.undcon.app.services.PurchaseService;
 import com.undcon.app.services.SaleService;
 
 /**
@@ -27,6 +35,15 @@ public class DashBoardApi {
 
 	@Autowired
 	private SaleService saleService;
+	
+	@Autowired
+	private PurchaseService purchaseService;
+	
+	@Autowired
+	private IncomeService incomeService;
+	
+	@Autowired
+	private ExpenseService expenseService;
 	
 	@GET
 	@Path("/countCustomersTotal")
@@ -54,6 +71,48 @@ public class DashBoardApi {
 	@Produces(MediaType.APPLICATION_JSON)
 	public SaleInfoDto getSaleTotal() {
 		return saleService.getTotalSale();
+	}
+	
+	@GET
+	@Path("/sale/totalSaledProductByInterval")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<ValueByInterval> getSaledProductTotal(@QueryParam("startDate")String startDate, @QueryParam("endDate")String endDate, @QueryParam("type")IntervalType type) {
+		return saleService.getTotalSaledProductByInterval(startDate, endDate, type);
+	}
+	
+	@GET
+	@Path("/sale/totalSaledServiceByInterval")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<ValueByInterval> getSaledServiceTotal(@QueryParam("startDate")String startDate, @QueryParam("endDate")String endDate, @QueryParam("type")IntervalType type) {
+		return saleService.getTotalSaledServiceByInterval(startDate, endDate, type);
+	}
+	
+	@GET
+	@Path("/purchase/totalPurchasedProductByInterval")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<ValueByInterval> getTotalPurchasedProductByInterval(@QueryParam("startDate")String startDate, @QueryParam("endDate")String endDate, @QueryParam("type")IntervalType type) {
+		return purchaseService.getTotalPurchasedProductByInterval(startDate, endDate, type);
+	}
+	
+	@GET
+	@Path("/purchase/totalPurchasedServiceByInterval")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<ValueByInterval> getTotalPurchasedServiceByInterval(@QueryParam("startDate")String startDate, @QueryParam("endDate")String endDate, @QueryParam("type")IntervalType type) {
+		return purchaseService.getTotalPurchasedServiceByInterval(startDate, endDate, type);
+	}
+	
+	@GET
+	@Path("/income/totalIncomeByInterval")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<ValueByInterval> totalIncomeByInterval(@QueryParam("startDate")String startDate, @QueryParam("endDate")String endDate, @QueryParam("type")IntervalType type) {
+		return incomeService.getTotalByInterval(startDate, endDate, type);
+	}
+	
+	@GET
+	@Path("/expense/totalExpenseByInterval")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<ValueByInterval> totalExpenseByInterval(@QueryParam("startDate")String startDate, @QueryParam("endDate")String endDate, @QueryParam("type")IntervalType type) {
+		return expenseService.getTotalByInterval(startDate, endDate, type);
 	}
 
 	@GET

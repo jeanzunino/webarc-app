@@ -2,7 +2,9 @@ package com.undcon.app.repositories;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -24,6 +26,8 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.undcon.app.dtos.ItemType;
 import com.undcon.app.dtos.ProductSaledInfoDto;
 import com.undcon.app.dtos.SaleItemDto;
+import com.undcon.app.dtos.ValueByInterval;
+import com.undcon.app.enums.IntervalType;
 import com.undcon.app.model.QSaleItemProductEntity;
 import com.undcon.app.model.QSaleItemServiceEntity;
 import com.undcon.app.model.SaleItemProductEntity;
@@ -167,6 +171,30 @@ public class SaleRepositoryImpl {
 			return 0;
 		}
 		return count;
+	}
+
+	public List<ValueByInterval> getTotalSaledProductByInterval(String startDate, String endDate, IntervalType type) {
+		type = type == null ? IntervalType.MONTHLY : type;
+		String groupBy =type.getGroupBy();
+		TypedQuery<ValueByInterval> query = em.createQuery(
+				"SELECT new com.undcon.app.dtos.ValueByInterval(to_char(s.sale.saleDate, :groupBy) as saleDate, SUM((s.quantity * s.price)) AS totalSaled ) from SaleItemProductEntity s where s.sale.saleDate >= :startDate AND s.sale.saleDate <= :endDate GROUP BY 1 ORDER BY 1",
+				ValueByInterval.class);
+		query.setParameter("startDate", Date.from(Instant.parse(startDate)));
+		query.setParameter("endDate", Date.from(Instant.parse(endDate)));
+		query.setParameter("groupBy", groupBy);
+		return query.getResultList();
+	}
+	
+	public List<ValueByInterval> getTotalSaledServiceByInterval(String startDate, String endDate, IntervalType type) {
+		type = type == null ? IntervalType.MONTHLY : type;
+		String groupBy =type.getGroupBy();
+		TypedQuery<ValueByInterval> query = em.createQuery(
+				"SELECT new com.undcon.app.dtos.ValueByInterval(to_char(s.sale.saleDate, :groupBy) as saleDate, SUM((s.quantity * s.price)) AS totalSaled ) from SaleItemServiceEntity s where s.sale.saleDate >= :startDate AND s.sale.saleDate <= :endDate GROUP BY 1 ORDER BY 1",
+				ValueByInterval.class);
+		query.setParameter("startDate", Date.from(Instant.parse(startDate)));
+		query.setParameter("endDate", Date.from(Instant.parse(endDate)));
+		query.setParameter("groupBy", groupBy);
+		return query.getResultList();
 	}
 
 }

@@ -112,6 +112,9 @@
     "name": "Nome",
     "phone": "Telefone"
   },
+  "cost-center": {
+    "name": "Nome"
+  },
   "user": {
     "entity": "Usuário",
     "id": "Id",
@@ -123,7 +126,7 @@
 
   "menu": {
     "home": "Home",
-	"pdv": "PDV",
+	  "pdv": "PDV",
     "compra": {
       "title": "Compras",
       "fornecedores": "Fornecedores",
@@ -152,7 +155,8 @@
       "tenants": "Tenants",
       "permissoes": "Permissões",
       "funcionarios": "Funcionários",
-      "usuarios": "Usuários"
+      "usuarios": "Usuários",
+      "centroCustos":"Centros de Custos"
     },
 
     "sair": "Sair"

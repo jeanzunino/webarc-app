@@ -23,8 +23,10 @@ import com.undcon.app.dtos.SaleInfoDto;
 import com.undcon.app.dtos.SaleItemDto;
 import com.undcon.app.dtos.SaleRequestDto;
 import com.undcon.app.dtos.SaleSimpleDto;
+import com.undcon.app.dtos.ValueByInterval;
 import com.undcon.app.dtos.AmountTotalDto;
 import com.undcon.app.enums.BillingStatus;
+import com.undcon.app.enums.IntervalType;
 import com.undcon.app.enums.PaymentStatus;
 import com.undcon.app.enums.PaymentType;
 import com.undcon.app.enums.ResourceType;
@@ -77,10 +79,10 @@ public class SaleService extends AbstractService<SaleEntity> {
 
 	@Autowired
 	private BankCheckService bankCheckService;
-	
+
 	@Autowired
 	private ISaleItemProductRepository saleItemProductRepository;
-	
+
 	@Autowired
 	private ISaleItemServiceRepository saleItemServiceRepository;
 
@@ -113,9 +115,9 @@ public class SaleService extends AbstractService<SaleEntity> {
 		SaleEntity sale = new SaleEntity(null, customer, saleDate, billed, status, user, salesman, pdv);
 		return saleRepository.save(sale);
 	}
-	
+
 	public boolean hasItem(SaleEntity sale) {
-		if(saleItemProductRepository.existsBySale(sale)) {
+		if (saleItemProductRepository.existsBySale(sale)) {
 			return true;
 		}
 		return saleItemServiceRepository.existsBySale(sale);
@@ -132,13 +134,13 @@ public class SaleService extends AbstractService<SaleEntity> {
 		permissionService.checkPermission(ResourceType.SALE);
 		SaleEntity sale = findById(saleDto.getId());
 
-		//TODO falta ajustar o Frontend pra chamar outro serviço para finalizar a venda
+		// TODO falta ajustar o Frontend pra chamar outro serviço para finalizar a venda
 //		if(sale.getStatus() != saleDto.getStatus()) {
 //			throw new UndconException(UndconError.SALE_INVALID_STATUS);
 //		}
 		CustomerEntity customer = customerService.findById(saleDto.getCustomer().getId());
 		validateClient(customer);
-		
+
 		EmployeeEntity salesman;
 		if (saleDto.getSalesman() != null && NumberUtils.longIsPositiveValue(saleDto.getSalesman().getId())) {
 			salesman = employeeService.findById(saleDto.getSalesman().getId());
@@ -146,11 +148,11 @@ public class SaleService extends AbstractService<SaleEntity> {
 			UserEntity user = userService.getCurrentUser();
 			salesman = user.getEmployee();
 		}
-		
+
 		sale.setCustomer(customer);
 		sale.setSalesman(salesman);
 		sale.setStatus(saleDto.getStatus());
-		
+
 		return saleRepository.save(sale);
 	}
 
@@ -284,17 +286,17 @@ public class SaleService extends AbstractService<SaleEntity> {
 		SaleSimpleDto saleDto = saleMapper.toSimpleDto(sale);
 		return saleDto;
 	}
-	
+
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-	public SaleSimpleDto finalize(long id) throws UndconException{
+	public SaleSimpleDto finalize(long id) throws UndconException {
 		permissionService.checkPermission(ResourceType.SALE);
 
 		SaleEntity sale = findById(id);
 		if (sale == null) {
 			throw new UndconException(UndconError.SALE_NOT_FOUND);
 		}
-		
-		if(!hasItem(sale)) {
+
+		if (!hasItem(sale)) {
 			throw new UndconException(UndconError.SALE_WITHOUT_ITENS_INVALID_TO_BILL);
 		}
 		sale.setStatus(BillingStatus.TO_BILL);
@@ -304,6 +306,14 @@ public class SaleService extends AbstractService<SaleEntity> {
 	@Override
 	protected ResourceType getResourceType() {
 		return ResourceType.SALE;
+	}
+
+	public List<ValueByInterval> getTotalSaledProductByInterval(String startDate, String endDate, IntervalType type) {
+		return saleRepositoryImpl.getTotalSaledProductByInterval(startDate, endDate, type);
+	}
+	
+	public List<ValueByInterval> getTotalSaledServiceByInterval(String startDate, String endDate, IntervalType type) {
+		return saleRepositoryImpl.getTotalSaledServiceByInterval(startDate, endDate, type);
 	}
 
 }

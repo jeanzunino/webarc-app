@@ -21,8 +21,10 @@ import com.undcon.app.dtos.PurchaseExpenseResponseDto;
 import com.undcon.app.dtos.PurchaseItemDto;
 import com.undcon.app.dtos.PurchaseRequestDto;
 import com.undcon.app.dtos.PurchaseSimpleDto;
+import com.undcon.app.dtos.ValueByInterval;
 import com.undcon.app.dtos.AmountTotalDto;
 import com.undcon.app.enums.BillingStatus;
+import com.undcon.app.enums.IntervalType;
 import com.undcon.app.enums.PaymentStatus;
 import com.undcon.app.enums.PaymentType;
 import com.undcon.app.enums.ResourceType;
@@ -129,7 +131,7 @@ public class PurchaseService extends AbstractService<PurchaseEntity> {
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 	public PurchaseExpenseResponseDto toBill(long id, List<PurchaseExpenseRequestDto> purchaseExpenseDtoList)
 			throws UndconException {
-		permissionService.checkPermission(ResourceType.SALE);
+		permissionService.checkPermission(ResourceType.PURCHASE);
 		List<ExpenseDto> expenses = new ArrayList<ExpenseDto>();
 		PurchaseExpenseResponseDto dtoResponse = null;
 		for (PurchaseExpenseRequestDto purchaseExpenseDto : purchaseExpenseDtoList) {
@@ -143,7 +145,7 @@ public class PurchaseService extends AbstractService<PurchaseEntity> {
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 	public PurchaseExpenseResponseDto toBill(long id, PurchaseExpenseRequestDto purchaseExpenseDto)
 			throws UndconException {
-		permissionService.checkPermission(ResourceType.SALE);
+		permissionService.checkPermission(ResourceType.PURCHASE);
 
 		PurchaseEntity purchase = findById(id);
 		if (purchase == null) {
@@ -242,7 +244,7 @@ public class PurchaseService extends AbstractService<PurchaseEntity> {
 
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 	public PurchaseSimpleDto finalize(long id) throws UndconException {
-		permissionService.checkPermission(ResourceType.SALE);
+		permissionService.checkPermission(ResourceType.PURCHASE);
 
 		PurchaseEntity purchase = findById(id);
 		if (purchase == null) {
@@ -256,6 +258,14 @@ public class PurchaseService extends AbstractService<PurchaseEntity> {
 		return purchaseMapper.toSimpleDto(purchase);
 	}
 
+	public List<ValueByInterval> getTotalPurchasedProductByInterval(String startDate, String endDate, IntervalType type) {
+		return purchaseRepositoryImpl.getTotalPurchasedProductByInterval(startDate, endDate, type);
+	}
+	
+	public List<ValueByInterval> getTotalPurchasedServiceByInterval(String startDate, String endDate, IntervalType type) {
+		return purchaseRepositoryImpl.getTotalPurchasedServiceByInterval(startDate, endDate, type);
+	}
+	
 	public boolean hasItem(PurchaseEntity purchase) {
 		if (purchaseItemProductRepository.existsByPurchase(purchase)) {
 			return true;

@@ -1,0 +1,7 @@
+DROP TABLE IF EXISTS centro_custo;
+
+CREATE TABLE IF NOT EXISTS centro_custo
+(
+    id SERIAL PRIMARY KEY,
+    nome VARCHAR(255) NOT NULL
+);

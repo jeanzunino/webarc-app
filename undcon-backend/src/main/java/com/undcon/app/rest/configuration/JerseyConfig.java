@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 
 import com.undcon.app.rest.apis.BankCheckApi;
 import com.undcon.app.rest.apis.ConfigApi;
+import com.undcon.app.rest.apis.CostCenterApi;
 import com.undcon.app.rest.apis.CustomerApi;
 import com.undcon.app.rest.apis.DashBoardApi;
 import com.undcon.app.rest.apis.EmployeeApi;
@@ -12,6 +13,7 @@ import com.undcon.app.rest.apis.ExpenseApi;
 import com.undcon.app.rest.apis.IncomeApi;
 import com.undcon.app.rest.apis.LoginApi;
 import com.undcon.app.rest.apis.MenuTemplateApi;
+import com.undcon.app.rest.apis.PdvApi;
 import com.undcon.app.rest.apis.PermissionApi;
 import com.undcon.app.rest.apis.ProductApi;
 import com.undcon.app.rest.apis.ProductCategoryApi;
@@ -62,6 +64,7 @@ public class JerseyConfig extends ResourceConfig {
 		
 		register(ExpenseApi.class);
 		register(IncomeApi.class);
+		register(CostCenterApi.class);
 
 		register(PurchaseApi.class);
 		register(PurchaseItemProductApi.class);

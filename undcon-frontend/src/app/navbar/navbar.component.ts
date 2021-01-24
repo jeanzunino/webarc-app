@@ -48,7 +48,7 @@ export class NavbarComponent {
         return this.verifyPermissionMenu('SERVICE_TYPE') || this.verifyPermissionMenu('PRODUCT_CATEGORY') || this.verifyPermissionMenu('PRODUCT');
       case 'configuracao':
         return this.verifyPermissionMenu('TENANT') || this.verifyPermissionMenu('PERMISSION')
-          || this.verifyPermissionMenu('EMPLOYEE') || this.verifyPermissionMenu('USER');
+          || this.verifyPermissionMenu('EMPLOYEE') || this.verifyPermissionMenu('USER') || this.verifyPermissionMenu('COST_CENTER');
       default:
         return false;
     }

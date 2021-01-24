@@ -23,30 +23,33 @@ export enum ResourceTypeEnum {
 	/** 7 - Tipo de serviço */
 	SERVICE_TYPE = 'SERVICE_TYPE',
 
-	/** 8 - */
+	/** 8 - Tenant*/
 	TENANT = 'TENANT',
 
-	/** 9 - */
+	/** 9 - Usuário */
 	USER = 'USER',
 
-	/** 10 - */
+	/** 10 - Despesa*/
 	EXPENSE = 'EXPENSE',
 
-	/** 11 - */
+	/** 11 - Receita*/
 	INCOME = 'INCOME',
 
-	/** 12 - */
+	/** 12 - Permissão*/
 	PERMISSION = 'PERMISSION',
 
-	/** 13 - */
+	/** 13 - Compra*/
 	PURCHASE = 'PURCHASE',
 
-	/** 14 - */
+	/** 14 - Venda*/
 	SALE = 'SALE',
 
-	/** 15 - */
+	/** 15 - Cheque Bancário*/
 	BACK_CHECK = 'BACK_CHECK',
 
-	/** 16 - */
-	SYSTEM_SALESMAN = 'SYSTEM_SALESMAN'
+	/** 16 - Vendedor do Sistema*/
+	SYSTEM_SALESMAN = 'SYSTEM_SALESMAN',
+
+	/** 17 - Centro de Custo*/
+	COST_CENTER = 'COST_CENTER'
 }

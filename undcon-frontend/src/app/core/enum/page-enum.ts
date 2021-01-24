@@ -17,5 +17,6 @@ export enum PageEnum {
   MENU_TEMPLATE = 'menu-template',
   CONFIG = 'config',
   TENANT = 'tenant',
-  BANK_CHECK = 'bank-check'
+  BANK_CHECK = 'bank-check',
+  COST_CENTER = 'cost-center'
 }

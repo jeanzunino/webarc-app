@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { IntervalType } from '@app/core/enum/interval-type';
+import { ItemDashboardInfoDto } from '@app/core/service/dtos/item-dashboard-info-dto';
 import { DashBoardService } from '@app/core/service/dashboard/dashboard.service';
+import { ValueByInterval } from '@app/core/service/dtos/value-by-interval';
 import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
@@ -12,6 +15,8 @@ export class HomeComponent implements OnInit{
   public chartTypeDoughnut: string = 'doughnut';
 
   public chartTypePie: string = 'pie';
+
+  public chartTypeLine: string = 'line';
 
   constructor(
     public spinner: NgxSpinnerService,
@@ -26,27 +31,27 @@ export class HomeComponent implements OnInit{
     { data: [30, 60, 90, 5, 36, 45, 0], label: 'Estoque Atual' },
   ];
 
-  public chartDatasetsProdSales: Array<any> = [
-    { data: [200, 100, 100, 200, 560, 505], label: 'Produtos Vendidos' },
-  ];
+  public chartDatasetsCustomers: Array<any> = [{ data: [0]}];
 
-  public chartDatasetsCustomers: Array<any> = [{ data: [15, 10, 20]}];
-
-  pruductsCount: Number = 0; 
   public chartDatasetsProviders: Array<any> = [{ data: [0] }];
 
   public chartDatasetsProducts: Array<any>= [{ data: [0] }];
 
-  public chartLabels: Array<any> = [
-    'Skol lt 350ml',
-    'Coca-cola 2L',
-    'Kaiser lt 350ml',
-    'Arroz 5kg',
-    'Trigo',
-    'Subzero lt 350ml',
-  ];
+  public chartDatasetsTotalSaledProduct: Array<any> = [{ data: [0] }];
+  public chartDatasetsTotalSaledProductLabels: Array<any> = [];
 
-  public chartLabelsPie: Array<any> = ['Teste'];
+  public chartDatasetsTotalSaledService: Array<any> = [{ data: [0] }];
+  public chartDatasetsTotalSaledServiceLabels: Array<any> = [];
+
+  public chartDatasetsTotalIncome: Array<any> = [{ data: [0] }];
+  public chartDatasetsTotalIncomeLabels: Array<any> = [];
+
+  public chartDatasetsTotalExpense: Array<any> = [{ data: [0] }];
+  public chartDatasetsTotalExpenseLabels: Array<any> = [];
+
+  public chartDatasetsTopSaledProductRS: Array<any> = [{ data: [0] }];
+  public chartDatasetsTopSaledProductQtde: Array<any> = [{ data: [0] }];
+  public chartDatasetsTopSaledProductLabels: Array<any> = [];
 
   public chartColors: Array<any> = [
     {
@@ -147,6 +152,77 @@ export class HomeComponent implements OnInit{
     this.service.getCountProvidersTotal().toPromise().then((result) => {
       this.chartDatasetsProviders = [{ data: [result]}];
     });
+
+    let startDate = "2020-01-01T10:15:30.00Z";
+    let endDate = "2021-01-24T10:15:30.00Z";
+    let type = IntervalType.MONTHLY;
+    this.service.getTotalSaledProductByInterval(startDate, endDate, type).toPromise().then((result: ValueByInterval[]) => {
+      let dataArray = new Array();
+      let labels = new Array();
+      result.forEach((value: ValueByInterval) => {
+        if (value) {
+          dataArray.push(value.value);
+          labels.push(value.interval);
+        }
+      });
+      this.chartDatasetsTotalSaledProduct = [{ data: dataArray, label: 'Produtos'}];
+      this.chartDatasetsTotalSaledProductLabels = labels;
+    });
+
+    this.service.getTotalSaledServiceByInterval(startDate, endDate, type).toPromise().then((result: ValueByInterval[]) => {
+      let dataArray = new Array();
+      let labels = new Array();
+      result.forEach((value: ValueByInterval) => {
+        if (value) {
+          dataArray.push(value.value);
+          labels.push(value.interval);
+        }
+      });
+      this.chartDatasetsTotalSaledService = [{ data: dataArray, label: 'Serviços'}];
+      this.chartDatasetsTotalSaledServiceLabels = labels;
+    });
+
+    this.service.getTotalIncomeByInterval(startDate, endDate, type).toPromise().then((result: ValueByInterval[]) => {
+      let dataArray = new Array();
+      let labels = new Array();
+      result.forEach((value: ValueByInterval) => {
+        if (value) {
+          dataArray.push(value.value);
+          labels.push(value.interval);
+        }
+      });
+      this.chartDatasetsTotalIncome = [{ data: dataArray, label: 'Receitas'}];
+      this.chartDatasetsTotalIncomeLabels = labels;
+    });
+
+    this.service.getTotalExpenseByInterval(startDate, endDate, type).toPromise().then((result: ValueByInterval[]) => {
+      let dataArray = new Array();
+      let labels = new Array();
+      result.forEach((value: ValueByInterval) => {
+        if (value) {
+          dataArray.push(value.value);
+          labels.push(value.interval);
+        }
+      });
+      this.chartDatasetsTotalExpense = [{ data: dataArray, label: 'Despesas'}];
+      this.chartDatasetsTotalExpenseLabels = labels;
+    });
+
+    this.service.getTopProductSaled(startDate, endDate, 10).toPromise().then((result: ItemDashboardInfoDto[]) => {
+      let dataArray1 = new Array();
+      let dataArray2 = new Array();
+      let labels = new Array();
+      result.forEach((value: ItemDashboardInfoDto) => {
+        if (value) {
+          dataArray1.push(value.totalSaled);
+          dataArray2.push(value.quantity);
+          labels.push(value.productName);
+        }
+      });
+      this.chartDatasetsTopSaledProductRS = [{ data: dataArray1, label: 'Produtos Mais Vendidos (R$)'}];
+      this.chartDatasetsTopSaledProductQtde = [{ data: dataArray2, label: 'Produtos Mais Vendidos (Qtde)'}];
+      this.chartDatasetsTopSaledProductLabels = labels;
+    });
   }
 
   public getChartOptionsBar(chartTitle: string) {
@@ -158,6 +234,21 @@ export class HomeComponent implements OnInit{
     this.chartOptionsPie.title.text = chartTitle;
     return this.chartOptionsPie;
   }
+
+  public getChartOptionsLine(chartTitle: string) {
+    this.chartLineOptions.title.text = chartTitle;
+    return this.chartLineOptions;
+  }
+
+  public chartLineOptions: any = {
+    responsive: true,
+    title: {
+      display: true,
+      text: '',
+      fontSize: 30,
+      fontStyle: 'bold',
+    },
+  };
 
   private chartOptionsPie: any = {
     responsive: true,

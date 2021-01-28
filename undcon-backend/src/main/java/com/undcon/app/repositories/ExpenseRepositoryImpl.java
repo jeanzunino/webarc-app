@@ -24,7 +24,7 @@ import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.undcon.app.dtos.ItemType;
-import com.undcon.app.dtos.ProductSaledInfoDto;
+import com.undcon.app.dtos.ItemDashboardInfoDto;
 import com.undcon.app.dtos.SaleItemDto;
 import com.undcon.app.dtos.ValueByInterval;
 import com.undcon.app.enums.IntervalType;
@@ -43,7 +43,7 @@ public class ExpenseRepositoryImpl {
 		type = type == null ? IntervalType.MONTHLY : type;
 		String groupBy =type.getGroupBy();
 		TypedQuery<ValueByInterval> query = em.createQuery(
-				"SELECT new com.undcon.app.dtos.ValueByInterval(to_char(s.duaDate, :groupBy) as saleDate, SUM((s.value)) AS totalSaled ) from ExpenseEntity s where s.sale.saleDate >= :startDate AND s.sale.saleDate <= :endDate GROUP BY 1 ORDER BY 1",
+				"SELECT new com.undcon.app.dtos.ValueByInterval(to_char(s.duaDate, :groupBy) as saleDate, SUM((s.value)) AS totalSaled ) from ExpenseEntity s where s.purchase.purchaseDate >= :startDate AND s.purchase.purchaseDate <= :endDate GROUP BY 1 ORDER BY 1",
 				ValueByInterval.class);
 		query.setParameter("startDate", Date.from(Instant.parse(startDate)));
 		query.setParameter("endDate", Date.from(Instant.parse(endDate)));

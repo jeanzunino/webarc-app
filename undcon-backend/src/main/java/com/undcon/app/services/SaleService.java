@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import com.undcon.app.dtos.IncomeDto;
-import com.undcon.app.dtos.ProductSaledInfoDto;
+import com.undcon.app.dtos.ItemDashboardInfoDto;
 import com.undcon.app.dtos.SaleIncomeRequestDto;
 import com.undcon.app.dtos.SaleIncomeResponseDto;
 import com.undcon.app.dtos.SaleInfoDto;
@@ -164,8 +164,8 @@ public class SaleService extends AbstractService<SaleEntity> {
 		saleRepository.save(sale);
 	}
 
-	public List<ProductSaledInfoDto> getTopProductSaled(boolean billed) {
-		return saleRepositoryImpl.getTopProductSaled(billed);
+	public List<ItemDashboardInfoDto> getTopProductSaled(String startDate, String endDate, int size) {
+		return saleRepositoryImpl.getTopProductSaled(startDate, endDate,size);
 	}
 
 	public Page<SaleItemDto> getItens(Long id, Integer page, Integer size) {

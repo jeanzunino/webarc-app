@@ -26,13 +26,14 @@ export class UserEditComponent extends DefaultEditViewComponent<User> {
   permissions: Permission[];
   data: Modal;
   tenant;
+  public tokenResetarSenha;
 
   constructor(
     public userModalRef: MDBModalRef,
     modalOptions: ModalOptions,
     toastr: ToastrService,
     translate: TranslateService,
-    userService: UserService,
+    public userService: UserService,
     private employeeService: EmployeeService,
     private permissionService: PermissionService,
     private storageService: StorageService
@@ -48,17 +49,18 @@ export class UserEditComponent extends DefaultEditViewComponent<User> {
       confirmPassword: new FormControl('', Validators.required),
       employee: new FormControl(null, Validators.required),
       permission: new FormControl(null, Validators.required),
-      active: new FormControl(false),
+      active: new FormControl(false)
     });
   }
 
   onLoadValuesEdit(user: User) {
+    this.tokenResetarSenha = user.tokenResetarSenha;
     this.getFormGroup().patchValue({
       id: user.id,
       login: user.login,
       employee: user.employee.id,
       permission: user.permission.id,
-      active: user.active,
+      active: user.active
     });
     this.passwordForm.clearValidators();
     this.confirmPasswordForm.clearValidators();
@@ -112,5 +114,9 @@ export class UserEditComponent extends DefaultEditViewComponent<User> {
 
   get permissionForm() {
     return this.getFormGroup().get('permission');
+  }
+
+  public async onAlterPassword() {
+    this.tokenResetarSenha = await this.userService.alterPassword(this.getFormGroup().get('id').value).toPromise();
   }
 }

@@ -23,4 +23,12 @@ export class UserService extends EntityService<User> {
       Array<ResourceTypeEnum>
     >;
   }
+
+  public alterPassword(id: number): Observable<string> {
+    return this.http.put(`${this.baseUrl}/${this.entityUrl}/${id}/generateTokenPassword`, null, {responseType: 'text'});
+  }
+
+  public resetPassword(reset: any) {
+    this.putCustomUrl(`${this.baseUrl}/${this.entityUrl}/resetPassword`, reset).toPromise()
+  }
 }

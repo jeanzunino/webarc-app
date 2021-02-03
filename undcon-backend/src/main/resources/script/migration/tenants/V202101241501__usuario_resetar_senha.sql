@@ -1,0 +1,1 @@
+ALTER TABLE usuario ADD COLUMN token_resetar_senha character varying(255);

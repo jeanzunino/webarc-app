@@ -21,6 +21,7 @@ export class UserComponent extends GridViewComponent<User> {
     .set('employee.name', 'user.employee-name')
     .set('permission.name', 'user.permission')
     .set('active', 'user.active', FormatEnum.YES_NO)
+    .set('tokenResetarSenha', 'user.tokenResetarSenha', FormatEnum.YES_NO)
     .get();
 
   modalRef: MDBModalRef;
@@ -34,8 +35,12 @@ export class UserComponent extends GridViewComponent<User> {
     super(userService, activatedRoute, modalService);
   }
 
-  onClickItem(item) {
-    this.openDialog(item, UserEditComponent);
+  async onClickItem(item) {
+    let user = null;
+    if (item != null) {
+      user = await this.userService.get(item.id).toPromise();
+    }
+    this.openDialog(user, UserEditComponent);
   }
 
   open() {

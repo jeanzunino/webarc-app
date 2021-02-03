@@ -19,4 +19,6 @@ public interface IUserRepository extends JpaRepository<UserEntity, Long>, QueryD
 	Page<UserEntity> findAllByLoginContainingIgnoreCase(String login, Pageable pageable);
 
 	UserEntity findAllByLoginAndPassword(String login, String password);
+
+	UserEntity findByLoginAndTokenResetarSenha(String user, String token);
 }

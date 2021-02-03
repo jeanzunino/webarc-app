@@ -8,4 +8,5 @@ export class User extends Entity {
   employee: Employee;
   permission: Permission;
   active: boolean;
+  tokenResetarSenha: string;
 }

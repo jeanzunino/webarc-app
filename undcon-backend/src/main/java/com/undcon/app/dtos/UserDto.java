@@ -9,14 +9,16 @@ public class UserDto {
 	private PersonDto employee;
 	private PermissionEntity permission;
 	private boolean active;
+	private String tokenResetarSenha;
 
-	public UserDto(Long id, String login, boolean active, PersonDto employee, PermissionEntity permission) {
+	public UserDto(Long id, String login, boolean active, PersonDto employee, PermissionEntity permission, String tokenResetarSenha) {
 		super();
 		this.id = id;
 		this.login = login;
 		this.active = active;
 		this.employee = employee;
 		this.permission = permission;
+		this.tokenResetarSenha = tokenResetarSenha;
 	}
 
 	public Long getId() {
@@ -37,6 +39,14 @@ public class UserDto {
 	
 	public boolean isActive() {
 		return active;
+	}
+
+	public String getTokenResetarSenha() {
+		return tokenResetarSenha;
+	}
+
+	public void setTokenResetarSenha(String tokenResetarSenha) {
+		this.tokenResetarSenha = tokenResetarSenha;
 	}
 
 }

@@ -11,14 +11,26 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.nimbusds.jose.JOSEException;
+import com.nimbusds.jose.JWSAlgorithm;
+import com.nimbusds.jose.JWSHeader;
+import com.nimbusds.jose.JWSObject;
+import com.nimbusds.jose.JWSSigner;
+import com.nimbusds.jose.KeyLengthException;
+import com.nimbusds.jose.Payload;
+import com.nimbusds.jose.crypto.MACSigner;
+import com.undcon.app.dtos.ResetPasswordDto;
 import com.undcon.app.enums.ResourceType;
 import com.undcon.app.enums.UndconError;
+import com.undcon.app.exceptions.LoginException;
 import com.undcon.app.exceptions.UndconException;
 import com.undcon.app.model.EmployeeEntity;
 import com.undcon.app.model.UserEntity;
 import com.undcon.app.multitenancy.ThreadLocalStorage;
 import com.undcon.app.repositories.IUserRepository;
 import com.undcon.app.utils.NumberUtils;
+
+import net.minidev.json.JSONObject;
 
 @Component
 public class UserService extends AbstractService<UserEntity>{
@@ -113,11 +125,16 @@ public class UserService extends AbstractService<UserEntity>{
 	}
 
 	@Transactional
-	public void resetPassword(long id) throws UndconException {
-		permissionService.checkPermission(ResourceType.CONFIGURATION);
-		UserEntity find = findById(id);
-		find.setResetPassword(true);
-		userRepository.save(find);
+	public void resetPassword(ResetPasswordDto dto) throws UndconException, NoSuchAlgorithmException, UnsupportedEncodingException {
+		UserEntity user = userRepository.findByLoginAndTokenResetarSenha(dto.getLogin().split("@")[0], dto.getToken());
+		
+		if (user == null) {
+			throw new UndconException(UndconError.INVALID_USER_OR_TOKEN);
+		}
+		
+		user.setTokenResetarSenha(null);
+		user.setPassword(criptyPassword(dto.getPassword()));
+		userRepository.save(user);
 	}
 
 	public UserEntity getCurrentUser() {
@@ -138,4 +155,38 @@ public class UserService extends AbstractService<UserEntity>{
 		return ResourceType.USER;
 	}
 
+	public String generateTokenPassword(long id) throws UndconException, NoSuchAlgorithmException, UnsupportedEncodingException {
+		UserEntity user = this.findById(id);
+		String tokenGerado = this.generateTokenPassword(user);
+		user.setTokenResetarSenha(this.criptyPassword(tokenGerado));
+		userRepository.save(user);
+		return user.getTokenResetarSenha();
+	}
+
+	private String generateTokenPassword(UserEntity user) throws UndconException {
+		String login = user.getLogin() + "@" + ThreadLocalStorage.getTenantName();
+		
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put("login", login);
+		jsonObject.put("data", System.currentTimeMillis());
+		Payload payload = new Payload(jsonObject);
+
+		JWSHeader header = new JWSHeader(JWSAlgorithm.HS256);
+		JWSObject jwsObject = new JWSObject(header, payload);
+
+		JWSSigner signer = null;
+		try {
+			signer = new MACSigner(SHARED_KEY.getBytes());
+		} catch (KeyLengthException e1) {
+			e1.printStackTrace();
+		}
+
+		try {
+			jwsObject.sign(signer);
+		} catch (JOSEException e) {
+			System.err.println("Couldn't sign JWS object: " + e.getMessage());
+			throw new RuntimeException("Erro ao gerar o Token", e);
+		}
+		return jwsObject.serialize();
+	}
 }

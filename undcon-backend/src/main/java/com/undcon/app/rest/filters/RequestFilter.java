@@ -1,6 +1,7 @@
 package com.undcon.app.rest.filters;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.ParseException;
 
 import javax.ws.rs.WebApplicationException;
@@ -10,8 +11,13 @@ import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.google.common.base.Charsets;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWSObject;
 import com.nimbusds.jose.JWSVerifier;
@@ -44,9 +50,20 @@ public class RequestFilter implements ContainerRequestFilter {
         if (headers == null) {
             return;
         }
-
+        
         if (ctx.getUriInfo().getAbsolutePath().getPath().contains("login")) {
             return;
+        }
+        
+        if (ctx.getUriInfo().getAbsolutePath().getPath().contains("resetPassword")) {
+        	String json = IOUtils.toString(ctx.getEntityStream(), Charsets.UTF_8);
+            InputStream in = IOUtils.toInputStream(json);
+            JsonObject jsonObject = JsonParser.parseString(json).getAsJsonObject();
+        	ThreadLocalStorage.setTenantName(jsonObject.get("login").getAsString().split("@")[1]);
+            ctx.setEntityStream(in);
+        	
+        	
+        	return;
         }
         
         if (!headers.containsKey("Authorization")) {

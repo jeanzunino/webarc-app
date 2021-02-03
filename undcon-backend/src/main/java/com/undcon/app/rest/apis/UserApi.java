@@ -20,6 +20,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
+import com.undcon.app.dtos.ResetPasswordDto;
 import com.undcon.app.dtos.UserDto;
 import com.undcon.app.enums.ResourceType;
 import com.undcon.app.exceptions.UndconException;
@@ -81,6 +82,7 @@ public class UserApi {
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public UserDto put(UserEntity user) throws UndconException, NoSuchAlgorithmException, UnsupportedEncodingException {
+		user.setTokenResetarSenha(service.criptyPassword(user.getTokenResetarSenha()));
 		return mapper.toDto(service.update(user));
 	}
 
@@ -92,9 +94,17 @@ public class UserApi {
 	}
 
 	@PUT
-	@Path("/{id}/resetPassword")
+	@Path("/resetPassword")
 	@Produces(MediaType.APPLICATION_JSON)
-	public void resetPassword(@PathParam("id") long id) throws UndconException {
-		service.resetPassword(id);
+	public void resetPassword(ResetPasswordDto dto) throws UndconException, NoSuchAlgorithmException, UnsupportedEncodingException {
+		service.resetPassword(dto);
 	}
+	
+	@PUT
+	@Path("/{id}/generateTokenPassword")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String generateTokenPassword(@PathParam("id") long id) throws UndconException, NoSuchAlgorithmException, UnsupportedEncodingException {
+		return service.generateTokenPassword(id);
+	}
+	
 }

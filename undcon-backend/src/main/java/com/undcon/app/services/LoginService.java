@@ -66,6 +66,10 @@ public class LoginService {
 		if (user == null) {
 			throw new LoginException(UndconError.INVALID_USER_OR_PASSWORD);
 		}
+		
+		if (user.getTokenResetarSenha() != null) {
+			throw new LoginException(UndconError.INVALID_USER_RESET_PASSWORD);
+		}
 
 		if (!user.isActive()) {
 			throw new LoginException(UndconError.USER_BLOCKED);
@@ -74,6 +78,7 @@ public class LoginService {
 		if (user.isResetPassword()) {
 			resetPassword = true;
 		}
+		
 		// Create payload
 		JSONObject jsonObject = new JSONObject();
 		jsonObject.put("userId", user.getId());

@@ -64,6 +64,15 @@
         </div>
       </div>
     </div>
+
+    <div class="row" style="border: none; border-top: 3px dotted white;" *ngIf="data.content">
+      <div class="col-12 col-md-12">
+        <button mdbBtn type="button" color="primary" outline="true" (click)="onAlterPassword()" style="margin-left: 0;" mdbWavesEffect>Resetar Senha</button>
+      </div>
+      <div class="col-12 col-md-12">
+        {{tokenResetarSenha}}
+      </div>
+    </div>
   </form>
 
   <div footer>

@@ -18,7 +18,7 @@ public class UserMapper {
 
 	public UserDto toDto(UserEntity entity) {
 		PersonDto employee = employeeMapper.toDto(entity.getEmployee());
-		return new UserDto(entity.getId(), entity.getLogin(), entity.isActive(), employee, entity.getPermission());
+		return new UserDto(entity.getId(), entity.getLogin(), entity.isActive(), employee, entity.getPermission(), entity.getTokenResetarSenha());
 	}
 
 	public List<UserDto> toDto(List<UserEntity> entityList) {

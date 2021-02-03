@@ -1,4 +1,4 @@
-<section class="view login-template">
+<!-- <section class="view login-template">
     <div class="full-bg-img mask rgba-gradient">
         <div class="container flex-center">
             <div class="d-flex align-items-center content-height w-100">
@@ -10,38 +10,40 @@
                         <mdb-card class="wow fadeInRight" data-wow-delay="0.3s">
 
                             <mdb-card-body>
-                                <form [formGroup]="loginGroup" (ngSubmit)="signin()">
-                                    <div class="text-center">
-                                        <h3 class="white-text">
-                                            Login</h3>
-                                        <hr class="hr-light">
-                                    </div>
-                                    <div class="md-form">
-                                        <mdb-icon fas icon="user" class="text-white active prefix"></mdb-icon>
-                                        <input type="email" id="user" class="text-white form-control" formControlName="login" mdbInput mdbValidate>
-                                        <label for="user" class="text-white">Usuário</label>
-                                        <mdb-error *ngIf="loginForm.invalid && (loginForm.dirty || loginForm.touched)">
-                                            Usuário inválido
-                                        </mdb-error>
-                                        <mdb-success *ngIf="loginForm.valid && (loginForm.dirty || loginForm.touched)">
-                                            Usuário válido
-                                        </mdb-success>
-                                    </div>
-                                    <div class="md-form">
-                                        <mdb-icon fas icon="lock" class="text-white active prefix"></mdb-icon>
-                                        <input type="password" id="password" class="text-white form-control" formControlName="password" mdbInput mdbValidate>
-                                        <label for="password" class="text-white">Senha</label>
-                                        <mdb-error *ngIf="passwordForm.invalid && (passwordForm.dirty || passwordForm.touched)">
-                                            Senha inválida
-                                        </mdb-error>
-                                        <mdb-success *ngIf="passwordForm.valid && (passwordForm.dirty || passwordForm.touched)">
-                                            Senha válida
-                                        </mdb-success>
-                                    </div>
-                                    <div class="text-center mt-4">
-                                        <button mdbBtn color="indigo" mdbWavesEffect>Entrar</button>
-                                    </div>
-                                </form>
+                                <div *ngIf="!resetPassword">
+                                  <form [formGroup]="loginGroup" (ngSubmit)="signin()">
+                                      <div class="text-center">
+                                          <h3 class="white-text">
+                                              Login</h3>
+                                          <hr class="hr-light">
+                                      </div>
+                                      <div class="md-form">
+                                          <mdb-icon fas icon="user" class="text-white active prefix"></mdb-icon>
+                                          <input type="email" id="user" class="text-white form-control" formControlName="login" mdbInput mdbValidate>
+                                          <label for="user" class="text-white">Usuário</label>
+                                          <mdb-error *ngIf="loginForm.invalid && (loginForm.dirty || loginForm.touched)">
+                                              Usuário inválido
+                                          </mdb-error>
+                                          <mdb-success *ngIf="loginForm.valid && (loginForm.dirty || loginForm.touched)">
+                                              Usuário válido
+                                          </mdb-success>
+                                      </div>
+                                      <div class="md-form">
+                                          <mdb-icon fas icon="lock" class="text-white active prefix"></mdb-icon>
+                                          <input type="password" id="password" class="text-white form-control" formControlName="password" mdbInput mdbValidate>
+                                          <label for="password" class="text-white">Senha</label>
+                                          <mdb-error *ngIf="passwordForm.invalid && (passwordForm.dirty || passwordForm.touched)">
+                                              Senha inválida
+                                          </mdb-error>
+                                          <mdb-success *ngIf="passwordForm.valid && (passwordForm.dirty || passwordForm.touched)">
+                                              Senha válida
+                                          </mdb-success>
+                                      </div>
+                                      <div class="text-center mt-4">
+                                          <button mdbBtn color="indigo" mdbWavesEffect>Entrar</button>
+                                      </div>
+                                  </form>
+                                </div>
                             </mdb-card-body>
 
                         </mdb-card>
@@ -50,4 +52,112 @@
             </div>
         </div>
     </div>
+</section> -->
+
+<section class="view">
+  <div class="container-fluid height-100">
+    <div class="row height-100">
+      <div class="col-md-9 login-template"></div>
+      <div class="col-md-3 pad-login">
+
+        <div *ngIf="!resetPassword">
+          <div class="text-center">
+            <h3 class="white-text">Undcon</h3>
+          </div>
+
+          <form [formGroup]="loginGroup" (ngSubmit)="signin()">
+              <div class="md-form">
+                  <mdb-icon fas icon="user" class="text-white active prefix"></mdb-icon>
+                  <input type="email" id="user" class="text-white form-control" formControlName="login" mdbInput mdbValidate>
+                  <label for="user" class="text-white">Usuário</label>
+                  <mdb-error *ngIf="loginForm.invalid && (loginForm.dirty || loginForm.touched)">
+                      Usuário inválido
+                  </mdb-error>
+                  <mdb-success *ngIf="loginForm.valid && (loginForm.dirty || loginForm.touched)">
+                      Usuário válido
+                  </mdb-success>
+              </div>
+              <div class="md-form">
+                  <mdb-icon fas icon="lock" class="text-white active prefix"></mdb-icon>
+                  <input type="password" id="password" class="text-white form-control" formControlName="password" mdbInput mdbValidate>
+                  <label for="password" class="text-white">Senha</label>
+                  <mdb-error *ngIf="passwordForm.invalid && (passwordForm.dirty || passwordForm.touched)">
+                      Senha inválida
+                  </mdb-error>
+                  <mdb-success *ngIf="passwordForm.valid && (passwordForm.dirty || passwordForm.touched)">
+                      Senha válida
+                  </mdb-success>
+              </div>
+              <div class="text-white text-align-right">
+                <a (click)="resetPassword = true">Redefinir senha</a>
+              </div>
+              <div class="text-center mt-4">
+                  <button mdbBtn color="indigo" mdbWavesEffect>Entrar</button>
+              </div>
+          </form>
+        </div>
+
+        <div *ngIf="resetPassword">
+          <div class="text-center">
+            <h3 class="white-text">Undcon</h3>
+          </div>
+
+          <form [formGroup]="resetGroup" (ngSubmit)="onResetPassword()">
+              <div class="md-form">
+                <mdb-icon fas icon="key" class="text-white active prefix"></mdb-icon>
+                <input type="email" id="token" class="text-white form-control" formControlName="token" mdbInput mdbValidate>
+                <label for="token" class="text-white">Token</label>
+                <mdb-error *ngIf="resetTokenForm.invalid && (resetTokenForm.dirty || resetTokenForm.touched)">
+                  Token inválido
+                </mdb-error>
+                <mdb-success *ngIf="resetTokenForm.valid && (resetTokenForm.dirty || resetTokenForm.touched)">
+                  Token válido
+                </mdb-success>
+              </div>
+              <div class="md-form">
+                  <mdb-icon fas icon="user" class="text-white active prefix"></mdb-icon>
+                  <input type="email" id="user" class="text-white form-control" formControlName="login" mdbInput mdbValidate>
+                  <label for="user" class="text-white">Usuário</label>
+                  <mdb-error *ngIf="resetLoginForm.invalid && (resetLoginForm.dirty || resetLoginForm.touched)">
+                    Usuário inválido
+                  </mdb-error>
+                  <mdb-success *ngIf="resetLoginForm.valid && (resetLoginForm.dirty || resetLoginForm.touched)">
+                    Usuário válido
+                  </mdb-success>
+              </div>
+              <div class="md-form">
+                  <mdb-icon fas icon="lock" class="text-white active prefix"></mdb-icon>
+                  <input type="password" id="password" class="text-white form-control" formControlName="password" mdbInput mdbValidate>
+                  <label for="password" class="text-white">Senha</label>
+                  <mdb-error *ngIf="resetPasswordForm.invalid && (resetPasswordForm.dirty || resetPasswordForm.touched)">
+                    Senha inválida
+                  </mdb-error>
+                  <mdb-success *ngIf="resetPasswordForm.valid && (resetPasswordForm.dirty || resetPasswordForm.touched)">
+                    Senha válida
+                  </mdb-success>
+              </div>
+              <div class="md-form">
+                <mdb-icon fas icon="lock" class="text-white active prefix"></mdb-icon>
+                <input type="password" id="confirmPassword" class="text-white form-control" formControlName="confirmPassword" mdbInput mdbValidate>
+                <label for="confirmPassword" class="text-white">Confirmar Senha</label>
+                <mdb-error *ngIf="resetConfirmPasswordForm.invalid && (resetConfirmPasswordForm.dirty || resetConfirmPasswordForm.touched)">
+                  Senha inválida
+                </mdb-error>
+                <mdb-success *ngIf="resetConfirmPasswordForm.valid && (resetPasswordForm.dirty || resetConfirmPasswordForm.touched)">
+                  Senha válida
+                </mdb-success>
+              </div>
+              <div class="row">
+                <div class="col-md-6 pad-0">
+                  <a (click)="resetPassword = false"><mdb-icon fas icon="arrow-left" class="text-white back-icon"></mdb-icon></a>
+                </div>
+                <div class="col-md-6 pad-0 text-align-right">
+                    <button mdbBtn color="indigo" mdbWavesEffect>Redefinir</button>
+                </div>
+              </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>

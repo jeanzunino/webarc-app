@@ -77,7 +77,11 @@ public enum UndconError {
 
 	SALE_INCOME_TO_BILL_SALE_TOTAL_BILLED("Não é possível gerar novo pagamento para venda totalmente faturada"),
 
-	SALE_INCOME_CANCELED_SALE("Não é possível gerar novo pagamento para venda cancelada");
+	SALE_INCOME_CANCELED_SALE("Não é possível gerar novo pagamento para venda cancelada"),
+	
+	INVALID_USER_RESET_PASSWORD("Sua senha precisa ser redefinida"),
+	
+	INVALID_USER_OR_TOKEN("Usuário ou token inválido");
 
 	private String message;
 

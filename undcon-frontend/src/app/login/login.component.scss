@@ -18,11 +18,11 @@
 .full-bg-img {
     height: 100%;
 }
-  
+
 .card {
-    background-color: rgba(229, 228, 255, 0.2);
+    background-color: rgba(52, 51, 70, 0.2);
 }
-  
+
 .md-form {
     font-size: 1.5rem;
     margin-top: 1rem;
@@ -33,8 +33,34 @@
     .full-height,
     .full-height body,
     .full-height header,
-    .full-height header 
+    .full-height header
     .view {
       height: 1040px;
     }
+}
+
+.height-100 {
+  height: 100%;
+}
+
+.pad-login {
+  padding: 120px;
+  padding-top: 350px;
+}
+
+.text-align-right {
+  text-align: right;
+}
+
+.pad-0 {
+  padding: 0;
+}
+
+.marg-0 {
+  margin: 0;
+}
+
+.back-icon {
+  padding-top: 19px;
+  padding-left: 15px;
 }

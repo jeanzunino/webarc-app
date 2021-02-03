@@ -1,13 +1,13 @@
 package com.undcon.app.dtos;
 
-public class ProductSaledInfoDto {
+public class ItemDashboardInfoDto {
 
 	private Long productId;
 	private String productName;
 	private Long quantity;
 	private Double totalSaled;
 
-	public ProductSaledInfoDto(Long productId, String productName, Long quantity, Double totalSaled) {
+	public ItemDashboardInfoDto(Long productId, String productName, Long quantity, Double totalSaled) {
 		super();
 		this.productId = productId;
 		this.productName = productName;

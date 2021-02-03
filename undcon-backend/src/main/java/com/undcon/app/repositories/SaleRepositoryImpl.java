@@ -24,7 +24,7 @@ import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.undcon.app.dtos.ItemType;
-import com.undcon.app.dtos.ProductSaledInfoDto;
+import com.undcon.app.dtos.ItemDashboardInfoDto;
 import com.undcon.app.dtos.SaleItemDto;
 import com.undcon.app.dtos.ValueByInterval;
 import com.undcon.app.enums.IntervalType;
@@ -54,12 +54,15 @@ public class SaleRepositoryImpl {
 		return b;
 	}
 
-	public List<ProductSaledInfoDto> getTopProductSaled(boolean billed) {
-		TypedQuery<ProductSaledInfoDto> query = em.createQuery(
-				"SELECT new com.undcon.app.dtos.ProductSaledInfoDto(s.product.id as productId, s.product.name as productName, SUM((s.quantity )) AS quantity, SUM((s.quantity * s.price)) AS totalSaled ) from SaleItemProductEntity s where s.sale.billed = :billed GROUP BY s.product.id, s.product.name",
-				ProductSaledInfoDto.class);
-		query.setParameter("billed", billed);
-		List<ProductSaledInfoDto> b = query.getResultList();
+	public List<ItemDashboardInfoDto> getTopProductSaled(String startDate, String endDate, int size) {
+		String orderBy = " ORDER BY quantity";
+		TypedQuery<ItemDashboardInfoDto> query = em.createQuery(
+				"SELECT new com.undcon.app.dtos.ItemDashboardInfoDto(s.product.id as productId, s.product.name as productName, SUM((s.quantity )) AS quantity, SUM((s.quantity * s.price)) AS totalSaled ) FROM SaleItemProductEntity s WHERE s.sale.saleDate >= :startDate AND s.sale.saleDate <= :endDate GROUP BY s.product.id, s.product.name "+orderBy,
+				ItemDashboardInfoDto.class);
+		query.setParameter("startDate", Date.from(Instant.parse(startDate)));
+		query.setParameter("endDate", Date.from(Instant.parse(endDate)));
+		query.setMaxResults(size);
+		List<ItemDashboardInfoDto> b = query.getResultList();
 		return b;
 	}
 

@@ -108,7 +108,17 @@ export class LoginComponent implements OnInit {
 
   public onResetPassword() {
     if (this.passAndConfirmValido()) {
-      this.userService.resetPassword(this.resetGroup.getRawValue());
+      this.userService.resetPassword(this.resetGroup.getRawValue()).then(() => {
+        this.toastr.success(
+          'Senha resetada com sucesso!',
+          'Sucesso'
+        );
+        this.resetPassword = false;
+
+        this.passwordForm.setValue('');
+        document.getElementById('password').focus();
+        
+      });
     } else {
       this.toastr.error(
         this.translate.instant('A senha e a confirmação não são iguais.'),

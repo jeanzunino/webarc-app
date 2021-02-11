@@ -52,6 +52,23 @@
     "subTotalItem": "Subtotal"
   },
 
+  "service-order": {
+    "id": "N° OS",
+    "description": "Descrição",
+    "defect": "Defeito",
+    "guarantee": "Garantia",
+    "technicalReport": "Laudo Técnico",
+    "observations": "Observações",
+    "customer": "Cliente",
+    "startDate": "Data inicial",
+    "endDate": "Data final",
+    "registerDate": "Registro",
+    "paymentStatus": "Status de Pagamento",
+    "status": "Status da OS",
+    "user": "Criado por"
+  },
+
+
   "COMENTARIO_FONANCEIRO": "Traduções das telas do Menu Financeiro",
   "bank-check": {
     "number": "Número do Cheque",
@@ -135,7 +152,8 @@
     "venda": {
       "title": "Vendas",
       "clientes": "Clientes",
-      "vendas": "Vendas"
+      "vendas": "Vendas",
+      "os": "Ordens de Serviços"
     },
     "finance": {
       "title": "Financeiro",
@@ -203,6 +221,14 @@
       "TOTAL_BILLED": "Totalmente faturado",
       "CANCELED": "Cancelado"
     },
+    "service-order-status": {
+      "OPENED":"Aberto", 
+      "IN_PROGRESS":"Em andamento", 
+      "BUDGET":"Orçamento",
+      "CANCELED":"Cancelado", 
+      "FINISHED":"Concluída", 
+      "SETTLED":"Faturada"
+    },
     "resource-type": {
       "CONFIGURATION": "Configuração",
       "MENU_TEMPLATE": "Template Menu",
@@ -220,7 +246,9 @@
       "PURCHASE": "Compra",
       "SALE": "Venda",
       "BACK_CHECK": "Cheque bancário",
-      "SYSTEM_SALESMAN": "Vendedor do sistema"
+      "SYSTEM_SALESMAN": "Vendedor do sistema",
+      "COST_CENTER": "Centro de custo",
+      "SERVICE_ORDER": "Ordem de serviço"
     }
 	
   }

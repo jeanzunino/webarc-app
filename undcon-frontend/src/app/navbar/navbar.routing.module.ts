@@ -102,9 +102,6 @@ const routes: Routes = [
     loadChildren: () =>
       import('@app/purchase/purchase.module').then((m) => m.PurchaseModule),
   },
-
-  //{ path: PageEnum.MENU_TEMPLATE, loadChildren: '@app/menuTemplate/menuTemplate.module#ManuTemplateModule'},
-  //{ path: PageEnum.CONFIG, loadChildren: '@app/config/config.module#ConfigModule'},
   {
     path: PageEnum.TENANT,
     loadChildren: () =>
@@ -114,6 +111,11 @@ const routes: Routes = [
     path: PageEnum.COST_CENTER,
     loadChildren: () =>
       import('@app/cost-center/cost-center.module').then((m) => m.CostCenterModule),
+  },
+  {
+    path: '',
+    loadChildren: () =>
+      import('@app/service-order/service-order.module').then((m) => m.ServiceOrderModule),
   },
   { path: 'forbidden', component: PageForbiddenComponent, canActivate: [AuthGuard] },
   { path: '**', component: PageNotFoundComponent, canActivate: [AuthGuard] }

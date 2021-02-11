@@ -51,5 +51,8 @@ export enum ResourceTypeEnum {
 	SYSTEM_SALESMAN = 'SYSTEM_SALESMAN',
 
 	/** 17 - Centro de Custo*/
-	COST_CENTER = 'COST_CENTER'
+	COST_CENTER = 'COST_CENTER',
+
+	/** 18 - Ordem de Serviço*/
+	SERVICE_ORDER = 'SERVICE_ORDER'
 }

@@ -17,7 +17,7 @@
             <option selected></option>
             <option *ngFor="let productCategory of productCategories" [value]="productCategory.id">{{productCategory.name}}</option>
           </select>
-          <label for="productCategories" class="text-light">Categoria do Produto</label>
+          <label for="productCategories" class="text-light">Subcategoria De</label>
           <app-validation [form]="parentForm" [validMessage]="'Válido'" [invalidMessage]="'Inválido'"></app-validation>
         </div>
       </div>

@@ -1,0 +1,52 @@
+<app-simple-panel [panelTitle]="getTitle()" [panelTitleColor]="'color-black'" [showHeader]="showPanelHeader"
+                  [icon]="iconPanelHeader" [headerColor]="colorPanelHeader">
+  <form body id="editForm" [formGroup]="formGroup">
+
+    <div class="row">
+      <div class="col-4 ng-autocomplete">
+        <label for="customers" class="text-light">Cliente</label>
+        <ng-autocomplete id="customers" [data]="customers" [searchKeyword]="customerKeyword" [initialValue]="customerInitialValue" [itemTemplate]="customerTemplate"
+                        [notFoundTemplate]="customerNotFoundTemplate" (selected)='customerSelectEvent($event)'
+                        (inputChanged)="customerChangeEvent($event)" notFoundText="Nenhum cliente encontrado"
+                        (inputCleared)="customerInputCleared()" [disabled]="!isNew()" #ngAutoCompleteCustomer
+                        placeHolder="Buscar cliente" [isLoading]="isLoadingCustomer">
+        </ng-autocomplete>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <div class="md-form">
+          <input type="text" id="description" [(ngModel)]="entity.description"  class="form-control text-light" formControlName="description"  mdbInput mdbValidate />
+          <label for="description" class="text-light">Descrição</label>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-6">
+        <div class="md-form">
+          <input type="text" id="defect" [(ngModel)]="entity.defect"  class="form-control text-light" formControlName="defect"  mdbInput mdbValidate />
+          <label for="defect" class="text-light">Defeito</label>
+        </div>
+      </div>
+      <div class="col-2">
+        <div class="md-form">
+          <input type="text" id="guarantee" [(ngModel)]="entity.guarantee"  class="form-control text-light" formControlName="guarantee"  mdbInput mdbValidate />
+          <label for="guarantee" class="text-light">Garantia</label>
+        </div>
+      </div>
+    </div>
+    <div footer>
+      <button mdbBtn type="button" *ngIf="!isNew()" color="danger" outline="true" (click)="onDelete()" mdbWavesEffect>Excluir</button>
+      <button mdbBtn *ngIf="isNew()" type="button" color="primary" outline="true" (click)="onConfirmSave()" mdbWavesEffect>Salvar</button>
+    </div>
+  </form>
+
+  
+</app-simple-panel>
+
+<ng-template #customerTemplate let-item>
+  <a [innerHTML]="item.name"></a>
+</ng-template>
+<ng-template #customerNotFoundTemplate let-notFound>
+  <div [innerHTML]="notFound"></div>
+</ng-template>

@@ -66,6 +66,9 @@ export class TableComponent {
       finalValue = item[tableValue.field];
     }
 
+    if(!finalValue){
+      return "";
+    }
     if (tableValue.formatEnum) {
       if (tableValue.formatEnum === FormatEnum.PHONE_MASK) {
         return this.maskPipe.transform(finalValue, this.translate.instant(tableValue.formatEnum + finalValue.length));
@@ -83,6 +86,8 @@ export class TableComponent {
         return this.translate.instant('enums.payment-status.' + finalValue);
       } else if (tableValue.formatEnum === FormatEnum.SALE_STATUS) {
         return this.translate.instant('enums.billing-status.' + finalValue);
+      } else if (tableValue.formatEnum === FormatEnum.SERVICE_ORDER_STATUS) {
+        return this.translate.instant('enums.service-order-status.' + finalValue);
       }
     }
 

@@ -51,7 +51,7 @@ public class PurchaseItemProductService extends AbstractService<PurchaseItemProd
 		UserEntity user = userService.getCurrentUser();
 
 		PurchaseItemProductEntity item = new PurchaseItemProductEntity(null, product, purchase, user,
-				product.getSalePrice(), itemDto.getQuantity());
+				product.getPurchasePrice(), itemDto.getQuantity());
 		item = purchaseItemProductRepository.save(item);
 
 		stockService.addProductInStock(product, itemDto.getQuantity());

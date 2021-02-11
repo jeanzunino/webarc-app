@@ -18,5 +18,6 @@ export enum PageEnum {
   CONFIG = 'config',
   TENANT = 'tenant',
   BANK_CHECK = 'bank-check',
-  COST_CENTER = 'cost-center'
+  COST_CENTER = 'cost-center',
+  SERVICE_ORDER = 'service-order'
 }

@@ -38,6 +38,7 @@
           role="menu">
           <a *ngIf="verifyPermissionMenu('CUSTOMER')" class="dropdown-item waves-light text-light" mdbWavesEffect routerLink="/customer">{{ 'menu.venda.clientes' | translate }}</a>
           <a *ngIf="verifyPermissionMenu('SALE')" class="dropdown-item waves-light text-light" mdbWavesEffect routerLink="/sale">{{ 'menu.venda.vendas' | translate }}</a>
+          <a *ngIf="verifyPermissionMenu('SERVICE_ORDER')" class="dropdown-item waves-light text-light" mdbWavesEffect routerLink="/service-order">{{ 'menu.venda.os' | translate }}</a>
         </div>
       </li>
 

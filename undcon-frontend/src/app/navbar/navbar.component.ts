@@ -41,7 +41,7 @@ export class NavbarComponent {
       case 'compra':
         return this.verifyPermissionMenu('PROVIDER') || this.verifyPermissionMenu('PURCHASE');
       case 'venda':
-        return this.verifyPermissionMenu('CUSTOMER') || this.verifyPermissionMenu('SALE');
+        return this.verifyPermissionMenu('CUSTOMER') || this.verifyPermissionMenu('SALE') || this.verifyPermissionMenu('SERVICE_ORDER');
       case 'financeiro':
         return this.verifyPermissionMenu('BACK_CHECK') || this.verifyPermissionMenu('INCOME') || this.verifyPermissionMenu('EXPENSE');
       case 'geral':

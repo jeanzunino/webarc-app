@@ -29,6 +29,6 @@ export class UserService extends EntityService<User> {
   }
 
   public resetPassword(reset: any) {
-    this.putCustomUrl(`${this.baseUrl}/${this.entityUrl}/resetPassword`, reset).toPromise()
+    return this.putCustomUrl(`${this.baseUrl}/${this.entityUrl}/resetPassword`, reset).toPromise();
   }
 }

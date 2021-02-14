@@ -18,6 +18,7 @@ public class ProductRepositoryImpl{
 	
 	public List<ProductEntity> getStockMin(){
 		Query query = em.createQuery("SELECT p FROM ProductEntity p WHERE p.stock < p.stockMin AND p.stockMin > 0", ProductEntity.class);
+		query.setMaxResults(10);
 		List<ProductEntity> c = query.getResultList();
 		return c;
 	}

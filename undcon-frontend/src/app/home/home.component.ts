@@ -4,6 +4,7 @@ import { ItemDashboardInfoDto } from '@app/core/service/dtos/item-dashboard-info
 import { DashBoardService } from '@app/core/service/dashboard/dashboard.service';
 import { ValueByInterval } from '@app/core/service/dtos/value-by-interval';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { Product } from '@app/core/model/product';
 
 @Component({
   selector: 'app-home',
@@ -25,11 +26,8 @@ export class HomeComponent implements OnInit{
     
   }
 
-  /** INÍCIO - DADOS FIXOS */
-  public chartDatasetsStock: Array<any> = [
-    { data: [65, 70, 100, 20, 56, 55, 40], label: 'Estoque Mínimo' },
-    { data: [30, 60, 90, 5, 36, 45, 0], label: 'Estoque Atual' },
-  ];
+  public chartDatasetsStock: Array<any> = [{ data: [0]}];
+  public chartDatasetsStockLabels: Array<any> = [];
 
   public chartDatasetsCustomers: Array<any> = [{ data: [0]}];
 
@@ -121,7 +119,7 @@ export class HomeComponent implements OnInit{
       yAxes: [
         {
           ticks: {
-            beginAtZero: true,
+            beginAtZero: false,
           },
         },
       ],
@@ -133,8 +131,6 @@ export class HomeComponent implements OnInit{
       fontStyle: 'bold',
     },
   };
-
-  /** FIM - DADOS FIXOS */
 
   ngOnInit() {
     this.loadData();
@@ -151,6 +147,22 @@ export class HomeComponent implements OnInit{
 
     this.service.getCountProvidersTotal().toPromise().then((result) => {
       this.chartDatasetsProviders = [{ data: [result]}];
+    });
+
+    this.service.getProductsStockMin().toPromise().then((result: Product[]) => {
+      let dataArray1 = new Array();
+      let dataArray2 = new Array();
+      let labels = new Array();
+      result.forEach((value: Product) => {
+        if (value) {
+          dataArray1.push(value.stock);
+          dataArray2.push(value.stockMin);
+          labels.push(value.name);
+        }
+      });
+      this.chartDatasetsStock = [ { data: dataArray1, label: 'Saldo Estoque'},
+                                  { data: dataArray2, label: 'Estoque Mínimo'}];
+      this.chartDatasetsStockLabels = labels;
     });
 
     let startDate = "2020-01-01T10:15:30.00Z";

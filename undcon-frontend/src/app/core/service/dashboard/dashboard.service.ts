@@ -78,4 +78,9 @@ export class DashBoardService extends EntityService<ValueByInterval> {
     params = {startDate: startDate, endDate: endDate, type: intervalType.toString() };
     return this.http.get(`${this.baseUrl}/${this.entityUrl}/expense/totalByInterval`, { params });
   }
+
+  getProductsStockMin() {
+    let params: {};
+    return this.http.get(`${this.baseUrl}/${this.entityUrl}/products/stockMin`, { params });
+  }
 }

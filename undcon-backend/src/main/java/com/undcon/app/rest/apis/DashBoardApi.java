@@ -15,9 +15,11 @@ import com.undcon.app.dtos.ItemDashboardInfoDto;
 import com.undcon.app.dtos.SaleInfoDto;
 import com.undcon.app.dtos.ValueByInterval;
 import com.undcon.app.enums.IntervalType;
+import com.undcon.app.model.ProductEntity;
 import com.undcon.app.services.DashBoardService;
 import com.undcon.app.services.ExpenseService;
 import com.undcon.app.services.IncomeService;
+import com.undcon.app.services.ProductService;
 import com.undcon.app.services.PurchaseService;
 import com.undcon.app.services.SaleService;
 
@@ -42,6 +44,9 @@ public class DashBoardApi {
 
 	@Autowired
 	private ExpenseService expenseService;
+	
+	@Autowired
+	private ProductService productService;
 
 	@GET
 	@Path("/countCustomersTotal")
@@ -85,6 +90,13 @@ public class DashBoardApi {
 	public List<ValueByInterval> getSaledServiceTotal(@QueryParam("startDate") String startDate,
 			@QueryParam("endDate") String endDate, @QueryParam("type") IntervalType type) {
 		return saleService.getTotalSaledServiceByInterval(startDate, endDate, type);
+	}
+	
+	@GET
+	@Path("/products/stockMin")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<ProductEntity> get() {
+		return productService.getStockMin();
 	}
 
 	@GET

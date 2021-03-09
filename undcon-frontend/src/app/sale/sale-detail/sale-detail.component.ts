@@ -210,7 +210,14 @@ export class SaleDetailComponent implements OnInit, OnDestroy {
   productSelectEvent(product: Product) {
     this.productSelect = product;
     this.productPrice = product.salePrice.toFixed(2);
+    this.focusById('qtsProduct');
     this.updateProductTotal();
+  }
+
+  private focusById(field: string) {
+    setTimeout(()=>{
+      document.getElementById(field).focus();
+    },0);
   }
 
   updateProductTotal() {
@@ -220,6 +227,7 @@ export class SaleDetailComponent implements OnInit, OnDestroy {
   serviceSelectEvent(serviceType: ServiceType) {
     this.serviceSelect = serviceType;
     this.servicePrice = serviceType.price.toFixed(2);
+    this.focusById('qtsService');
     this.updateServiceTotal();
   }
 

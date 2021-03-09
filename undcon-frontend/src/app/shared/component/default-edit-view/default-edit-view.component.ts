@@ -1,4 +1,4 @@
-import { OnInit, OnDestroy } from '@angular/core';
+import { OnInit, OnDestroy, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MDBModalRef, ModalOptions } from 'angular-bootstrap-md';
 import { ToastrService } from 'ngx-toastr';
@@ -10,11 +10,12 @@ import { EntityService } from '@service/entity/entity.service';
 import { Modal } from '@shared/model/modal';
 import { CloseDialogValues } from '@shared/model/close-dialog-values';
 
-export abstract class DefaultEditViewComponent<T> implements OnInit, OnDestroy {
+export abstract class DefaultEditViewComponent<T> implements OnInit, OnDestroy, AfterViewInit {
   private closeDialogValues = new CloseDialogValues();
   formGroup: FormGroup;
   data: Modal;
   onClose = new Subject<CloseDialogValues>();
+  @ViewChild('firstInput') firstInput: ElementRef;
 
   constructor(
     public modalRef: MDBModalRef,
@@ -23,6 +24,12 @@ export abstract class DefaultEditViewComponent<T> implements OnInit, OnDestroy {
     public translate: TranslateService,
     protected service: EntityService<T>
   ) {}
+
+  ngAfterViewInit() {
+    setTimeout(()=>{ // this will make the execut
+      this.firstInput.nativeElement.focus();
+    },0);
+  }
 
   ngOnInit() {
     this.formGroup = this.createFormGroup();

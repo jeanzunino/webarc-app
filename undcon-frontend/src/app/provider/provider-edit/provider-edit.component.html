@@ -3,8 +3,8 @@
     <div class="row">
       <div class="col-12">
         <div class="md-form">
-          <input type="text" id="name" class="form-control text-light" formControlName="name" mdbInput mdbValidate />
-          <label for="name" class="text-light">Nome</label>
+          <input type="text" id="providerName" #firstInput class="form-control text-light" formControlName="name" mdbInput mdbValidate />
+          <label for="providerName" class="text-light">Nome</label>
           <app-validation [form]="nameForm" [validMessage]="'Válido'" [invalidMessage]="'Inválido'"></app-validation>
         </div>
       </div>

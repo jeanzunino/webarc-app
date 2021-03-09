@@ -2,12 +2,33 @@
   <div class="h2 text-light">
     Home
   </div>
-  <div class="row row-stat">
-    <div class="col-lg-5">
+
+  <ngx-slick-carousel class="carousel"
+                        #slickModal="slick-carousel"
+                        [config]="slideConfig"
+                        (init)="slickInit($event)"
+                        (breakpoint)="breakpoint($event)"
+                        (afterChange)="afterChange($event)"
+                        (beforeChange)="beforeChange($event)">
+        <div ngxSlickItem *ngFor="let slide of slides" class="slide">
+              <img src="{{ slide.img }}" alt="" width="100%">
+        </div>
+    </ngx-slick-carousel>
+
+    <button (click)="addSlide()">Add</button>
+    <button (click)="removeSlide()">Remove</button>
+    <button (click)="slickModal.slickGoTo(2)">slickGoto 2</button>
+    <button (click)="slickModal.unslick()">unslick</button>
+  <!-- <div class="row row-stat">
+    <div class="col-lg-12">
       <div class="panel panel-light">
         <canvas mdbChart [chartType]="chartTypeBar" [datasets]="chartDatasetsStock" [labels]="chartDatasetsStockLabels" [colors]="chartColors" [options]="getChartOptionsBar('Estoque Baixo')" [legend]="true" (chartHover)="chartHovered($event)" (chartClick)="chartClicked($event)">
           </canvas>
       </div>
+    </div>
+
+    <div class="col-lg-5">
+
       <div class="panel panel-light">
         <canvas mdbChart [chartType]="chartTypeBar" [datasets]="chartDatasetsTopSaledProductRS" [labels]="chartDatasetsTopSaledProductLabels" [colors]="chartColors" [options]="getChartOptionsBar('Faturamento por Produtos (R$)')" [legend]="false" (chartHover)="chartHovered($event)" (chartClick)="chartClicked($event)">
           </canvas>
@@ -34,7 +55,7 @@
         <canvas mdbChart [chartType]="chartTypeLine" [datasets]="chartDatasetsTotalExpense" [labels]="chartDatasetsTotalExpenseLabels" [colors]="chartColorsPie" [options]="getChartOptionsLine('Despesas')" [legend]="false">
         </canvas>
       </div>
-      
+
     </div>
     <div class="col-lg-3">
       <div class="panel panel-light">
@@ -50,5 +71,5 @@
           </canvas>
       </div>
     </div>
-  </div>
+  </div> -->
 </div>

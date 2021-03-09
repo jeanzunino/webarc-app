@@ -33,9 +33,11 @@ export class PermissionEditComponent extends DefaultEditViewComponent<
   }
 
   async loadPage() {
-    await this.service.getPermissionItems(this.permission.id).toPromise()
-      .then(pi => pi.forEach(val => this.resourceTypePermissionItem.push(val.resourceType)))
-    
+    if (this.permission) {
+      await this.service.getPermissionItems(this.permission.id).toPromise()
+        .then(pi => pi.forEach(val => this.resourceTypePermissionItem.push(val.resourceType)));
+    }
+
     this.resourceTypeEnumLista = await this.service.getPermissionItemsResource().toPromise();
   }
 

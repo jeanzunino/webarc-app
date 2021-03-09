@@ -196,6 +196,7 @@ export class PurchaseDetailComponent implements OnInit, OnDestroy {
   productSelectEvent(product: Product) {
     this.productSelect = product;
     this.productPrice = product.purchasePrice.toFixed(2);
+    this.focusById('qtsProduct');
     this.updateProductTotal();
   }
 
@@ -206,6 +207,7 @@ export class PurchaseDetailComponent implements OnInit, OnDestroy {
   serviceSelectEvent(serviceType: ServiceType) {
     this.serviceSelect = serviceType;
     this.servicePrice = serviceType.price.toFixed(2);
+    this.focusById('qtsService');
     this.updateServiceTotal();
   }
 
@@ -719,5 +721,11 @@ export class PurchaseDetailComponent implements OnInit, OnDestroy {
 
   isCreated() {
     return this.isNew() ? false : this.entity.status === BillingStatus.CREATED;
+  }
+
+  private focusById(field: string) {
+    setTimeout(()=>{
+      document.getElementById(field).focus();
+    },0);
   }
 }

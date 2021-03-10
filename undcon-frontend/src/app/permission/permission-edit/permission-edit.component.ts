@@ -18,7 +18,7 @@ export class PermissionEditComponent extends DefaultEditViewComponent<
   Permission
 > {
 
-  private permission: Permission;
+  public permission: Permission;
   public resourceTypeEnumLista: ResourceTypeEnum[];
   public resourceTypePermissionItem: ResourceTypeEnum[] = [];
 

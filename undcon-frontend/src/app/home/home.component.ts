@@ -119,10 +119,23 @@ export class HomeComponent implements OnInit{
       yAxes: [
         {
           ticks: {
-            beginAtZero: false,
-          },
+            fontColor: "white",
+            fontSize: 18,
+            stepSize: 1,
+            beginAtZero: false
+          }
         },
       ],
+      xAxes: [
+        {
+          ticks: {
+              fontColor: "white",
+              fontSize: 18,
+              stepSize: 1,
+              beginAtZero: false
+          }
+        }
+      ]
     },
     title: {
       display: true,
@@ -130,6 +143,13 @@ export class HomeComponent implements OnInit{
       fontSize: 30,
       fontStyle: 'bold',
     },
+    legend: {
+      display: true,
+      labels: {
+          fontColor: 'white',
+          fontSize: 14
+      }
+    }
   };
 
   ngOnInit() {
@@ -174,7 +194,7 @@ export class HomeComponent implements OnInit{
       result.forEach((value: ValueByInterval) => {
         if (value) {
           dataArray.push(value.value);
-          labels.push(value.interval);
+          labels.push(this.getDate(value.interval));
         }
       });
       this.chartDatasetsTotalSaledProduct = [{ data: dataArray, label: 'Produtos'}];
@@ -187,7 +207,7 @@ export class HomeComponent implements OnInit{
       result.forEach((value: ValueByInterval) => {
         if (value) {
           dataArray.push(value.value);
-          labels.push(value.interval);
+          labels.push(this.getDate(value.interval));
         }
       });
       this.chartDatasetsTotalSaledService = [{ data: dataArray, label: 'Serviços'}];
@@ -200,7 +220,7 @@ export class HomeComponent implements OnInit{
       result.forEach((value: ValueByInterval) => {
         if (value) {
           dataArray.push(value.value);
-          labels.push(value.interval);
+          labels.push(this.getDate(value.interval));
         }
       });
       this.chartDatasetsTotalIncome = [{ data: dataArray, label: 'Receitas'}];
@@ -213,7 +233,7 @@ export class HomeComponent implements OnInit{
       result.forEach((value: ValueByInterval) => {
         if (value) {
           dataArray.push(value.value);
-          labels.push(value.interval);
+          labels.push(this.getDate(value.interval));
         }
       });
       this.chartDatasetsTotalExpense = [{ data: dataArray, label: 'Despesas'}];
@@ -254,6 +274,28 @@ export class HomeComponent implements OnInit{
 
   public chartLineOptions: any = {
     responsive: true,
+    scales: {
+      yAxes: [
+        {
+          ticks: {
+            fontColor: "white",
+            fontSize: 14,
+            stepSize: 1,
+            beginAtZero: false
+          }
+        },
+      ],
+      xAxes: [
+        {
+          ticks: {
+              fontColor: "white",
+              fontSize: 18,
+              stepSize: 1,
+              beginAtZero: false
+          }
+        }
+      ]
+    },
     title: {
       display: true,
       text: '',
@@ -271,10 +313,23 @@ export class HomeComponent implements OnInit{
       yAxes: [
         {
           ticks: {
-            beginAtZero: true,
-          },
+            fontColor: "white",
+            fontSize: 14,
+            stepSize: 1,
+            beginAtZero: true
+          }
         },
       ],
+      xAxes: [
+        {
+          ticks: {
+              fontColor: "white",
+              fontSize: 18,
+              stepSize: 1,
+              beginAtZero: true
+          }
+        }
+      ]
     },
     pieceLabel: {
       mode: 'value',
@@ -303,4 +358,38 @@ export class HomeComponent implements OnInit{
 
   public chartClicked(e: any): void {}
   public chartHovered(e: any): void {}
+
+  private getDate(date) {
+    const dateFormat = date.replaceAll("'", '');
+    const dateSeparate = dateFormat.split('-')
+    const year = dateSeparate[0].substring(2, 4);
+
+    switch (dateSeparate[1]) {
+      case '01':
+        return 'jan/' + year;
+      case '02':
+        return 'fev/' + year;
+      case '03':
+        return 'mar/' + year;
+      case '04':
+        return 'abr/' + year;
+      case '05':
+        return 'mai/' + year;
+      case '06':
+        return 'jun/' + year;
+      case '07':
+        return 'jul/' + year;
+      case '08':
+        return 'ago/' + year;
+      case '09':
+        return 'set/' + year;
+      case '10':
+        return 'out/' + year;
+      case '11':
+        return 'nov/' + year;
+      default:
+        return 'dez/' + year;
+    }
+
+  }
 }
